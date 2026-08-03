@@ -1,89 +1,151 @@
 import { inject, injectable } from "inversify";
 
+import { BaseService } from "./base.service";
 import { ProdutoDAO } from "../dao/produto.dao";
 import { Produto } from "../models/Produto";
 import { HttpError } from "../utils/httpError";
+import { LicitacaoProdutoDAO } from "../dao/licitacaoProduto.dao";
+
 
 @injectable()
-export class ProdutoService {
+export class ProdutoService extends BaseService<Produto> {
+
 
     constructor(
+
         @inject(ProdutoDAO)
-        private produtoDAO: ProdutoDAO
-    ) { }
+        produtoDAO: ProdutoDAO,
 
-    async find(options?: {
-        page?: number;
-        limit?: number;
-        where?: Record<string, unknown>;
-        orderBy?: string;
-        order?: "ASC" | "DESC";
-    }): Promise<Produto[]> {
 
-        return await this.produtoDAO.find(options);
+        @inject(LicitacaoProdutoDAO)
+        private licitacaoProdutoDAO: LicitacaoProdutoDAO
+
+    ) {
+
+        super(
+            produtoDAO,
+            "Produto"
+        );
 
     }
 
-    async findById(id: number): Promise<Produto | null> {
-        const produto = await this.produtoDAO.findById(id);
 
-        if (!produto) {
-            throw new HttpError(404, "Produto não encontrado.");
+
+    async insert(
+        produto: Omit<Produto, "ID">
+    ) {
+
+
+        const existente =
+            await this.dao.find({
+
+                where: {
+
+                    CODIGO_PRODUTO:
+                        produto.CODIGO_PRODUTO
+
+                },
+
+                limit: 1
+
+            });
+
+
+
+        if (existente.data.length > 0) {
+
+            throw new HttpError(
+                409,
+                "Já existe um produto com esse código."
+            );
+
         }
 
-        return produto;
-    }
 
-    async insert(produto: Omit<Produto, "ID">) {
-
-        const existente = await this.produtoDAO.find({
-            where: {
-                CODIGO_PRODUTO: produto.CODIGO_PRODUTO
-            }
-        });
-
-        if (existente.length > 0) {
-            throw new HttpError(409, "Já existe um produto com esse código.");
-        }
 
         if (produto.PRECO_BASE <= 0) {
-            throw new HttpError(400, "Preço inválido.");
+
+            throw new HttpError(
+                400,
+                "Preço inválido."
+            );
+
         }
 
-        const id = await this.produtoDAO.insert(produto);
 
-        return { ID: id };
+
+        return super.insert(
+            produto
+        );
+
     }
 
-    async update(id: number, produto: Partial<Produto>) {
 
-        if (produto.PRECO_BASE) {
-            if (produto.PRECO_BASE <= 0) {
-                throw new HttpError(
-                    400,
-                    "Preço inválido."
-                );
-            }
+
+    async update(
+        id: number,
+        produto: Partial<Produto>
+    ) {
+
+
+        if (
+            produto.PRECO_BASE !== undefined &&
+            produto.PRECO_BASE <= 0
+        ) {
+
+            throw new HttpError(
+                400,
+                "Preço inválido."
+            );
+
         }
 
-        return await this.produtoDAO.update(id, produto);
+
+
+        return super.update(
+            id,
+            produto
+        );
+
     }
 
-    async delete(id: number) {
-        /*
-        const utilizado = await this.licitacaoProdutoDAO.find({
-            where: {
-                CODIGO_PRODUTO: id
-            }
-        });
 
-        if (utilizado.length > 0) {
+
+    async delete(
+        id: number
+    ) {
+
+
+        const utilizado =
+            await this.licitacaoProdutoDAO.find({
+
+                where: {
+
+                    CODIGO_PRODUTO: id
+
+                },
+
+                limit: 1
+
+            });
+
+
+
+        if (utilizado.data.length > 0) {
+
             throw new HttpError(
                 409,
                 "Produto está vinculado a uma licitação."
             );
-        }*/
 
-        return await this.produtoDAO.delete(id);
+        }
+
+
+
+        return super.delete(
+            id
+        );
+
     }
+
 }

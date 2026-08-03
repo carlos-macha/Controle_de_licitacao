@@ -27,6 +27,14 @@ const errorHandler = (
         })
     }
 
+    if (error instanceof SyntaxError && "body" in error) {
+        return res.status(400).json({
+            error: {
+                message: "JSON malformado."
+            }
+        });
+    }
+
     const status =
         error.status || 500
 

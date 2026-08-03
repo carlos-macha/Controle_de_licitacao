@@ -10,54 +10,30 @@ import {
 } from "../schemas/usuario.schema";
 
 import { loginSchema } from "../schemas/login.schema";
-import { idParamSchema } from "../schemas/id.schema";
-import { authenticate } from "../middlewares/auth";
+import { createCrudRoutes } from "../utils/createCrudRoutes";
 
 const usuarioRouter = Router();
 
-const controller = container.get(UsuarioController);
+const controller =
+    container.get(UsuarioController);
 
-usuarioRouter.get(
-    "/usuarios",
-    authenticate,
-    controller.find.bind(controller)
-);
-
-usuarioRouter.get(
-    "/usuarios/:id",
-    authenticate,
-    validate({
-        params: idParamSchema
-    }),
-    controller.findById.bind(controller)
+createCrudRoutes(
+    usuarioRouter,
+    "usuarios",
+    controller,
+    {
+        create: createUsuarioSchema,
+        update: updateUsuarioSchema
+    }
 );
 
 usuarioRouter.post(
-    "/usuarios",
+    "/registrar-usuario",
     validate({
         body: createUsuarioSchema
     }),
     controller.insert.bind(controller)
-);
-
-usuarioRouter.put(
-    "/usuarios/:id",
-    authenticate,
-    validate({
-        params: idParamSchema,
-        body: updateUsuarioSchema
-    }),
-    controller.update.bind(controller)
-);
-
-usuarioRouter.delete(
-    "/usuarios/:id",
-    authenticate,
-    validate({
-        params: idParamSchema
-    }),
-    controller.delete.bind(controller)
-);
+)
 
 usuarioRouter.post(
     "/login",
@@ -66,5 +42,6 @@ usuarioRouter.post(
     }),
     controller.login.bind(controller)
 );
+
 
 export default usuarioRouter;

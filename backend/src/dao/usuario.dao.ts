@@ -24,14 +24,28 @@ export class UsuarioDAO extends BaseDAO<Usuario> {
         );
     }
 
-    async findByLogin(login: string): Promise<Usuario | null> {
 
-        const result = await this.find({
-            where: {
-                LOGIN: login
-            }
-        });
 
-        return result[0] ?? null;
+    async findByLogin(
+        login: string
+    ): Promise<Usuario | null> {
+
+
+        const result =
+            await this.find({
+
+                where: {
+                    LOGIN: login
+                },
+
+                limit: 1
+
+            });
+
+
+
+        return result.data[0] ?? null;
+
     }
+
 }

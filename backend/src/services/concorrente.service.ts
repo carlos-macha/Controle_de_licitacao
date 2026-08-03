@@ -1,97 +1,155 @@
 import { inject, injectable } from "inversify";
 
+import { BaseService } from "./base.service";
 import { ConcorrenteDAO } from "../dao/concorrente.dao";
 import { Concorrente } from "../models/Concorrente";
+import { ResultadoLicitacaoDAO } from "../dao/resultadoLicitacao.dao";
 import { HttpError } from "../utils/httpError";
 
+
 @injectable()
-export class ConcorrenteService {
+export class ConcorrenteService extends BaseService<Concorrente> {
+
 
     constructor(
+
         @inject(ConcorrenteDAO)
-        private concorrenteDAO: ConcorrenteDAO
-    ) { }
+        concorrenteDAO: ConcorrenteDAO,
 
-    async find(options?: {
-        page?: number;
-        limit?: number;
-        where?: Record<string, unknown>;
-        orderBy?: string;
-        order?: "ASC" | "DESC";
-    }): Promise<Concorrente[]> {
 
-        return await this.concorrenteDAO.find(options);
+        @inject(ResultadoLicitacaoDAO)
+        private resultadoLicitacaoDAO: ResultadoLicitacaoDAO
+
+    ) {
+
+        super(
+            concorrenteDAO,
+            "Concorrente"
+        );
 
     }
 
-    async findById(id: number): Promise<Concorrente | null> {
 
-        const concorrente = await this.concorrenteDAO.findById(id);
 
-        if (!concorrente) {
-            throw new HttpError(404, "Concorrente não encontrado.");
+    async insert(
+        concorrente: Omit<Concorrente, "ID">
+    ) {
+
+
+        const existente =
+            await this.dao.find({
+
+                where: {
+                    CNPJ: concorrente.CNPJ
+                },
+
+                limit: 1
+
+            });
+
+
+        if (existente.data.length > 0) {
+
+            throw new HttpError(
+                409,
+                "Já existe um concorrente com esse CNPJ."
+            );
+
         }
 
-        return concorrente;
+
+        return await super.insert(
+            concorrente
+        );
 
     }
 
-    async insert(concorrente: Omit<Concorrente, "ID">) {
 
-        const existente = await this.concorrenteDAO.find({
-            where: {
-                CNPJ: concorrente.CNPJ
-            }
-        });
 
-        if (existente.length > 0) {
-            throw new HttpError(409, "Já existe um concorrente com esse CNPJ.");
-        }
 
-        const id = await this.concorrenteDAO.insert(concorrente);
 
-        return { ID: id };
+    async update(
+        id: number,
+        concorrente: Partial<Concorrente>
+    ) {
 
-    }
-
-    async update(id: number, concorrente: Partial<Concorrente>) {
 
         if (concorrente.CNPJ) {
 
-            const existente = await this.concorrenteDAO.find({
-                where: {
-                    CNPJ: concorrente.CNPJ
-                }
-            });
 
-            if (existente.length > 0 && existente[0].ID !== id) {
-                throw new HttpError(409, "Já existe um concorrente com esse CNPJ.");
+            const existente =
+                await this.dao.find({
+
+                    where: {
+                        CNPJ: concorrente.CNPJ
+                    },
+
+                    limit: 1
+
+                });
+
+
+
+            if (
+
+                existente.data.length > 0 &&
+
+                existente.data[0].ID !== id
+
+            ) {
+
+
+                throw new HttpError(
+                    409,
+                    "Já existe um concorrente com esse CNPJ."
+                );
+
             }
 
         }
 
-        return await this.concorrenteDAO.update(id, concorrente);
+
+        return await super.update(
+            id,
+            concorrente
+        );
 
     }
 
-    async delete(id: number) {
 
-        /*
-        const utilizado = await this.resultadoLicitacaoDAO.find({
-            where: {
-                CODIGO_CONCORRENTE: id
-            }
-        });
 
-        if (utilizado.length > 0) {
+
+
+
+    async delete(
+        id: number
+    ) {
+
+
+        const utilizado =
+            await this.resultadoLicitacaoDAO.find({
+
+                where: {
+                    CODIGO_CONCORRENTE: id
+                }
+
+            });
+
+
+
+        if (utilizado.data.length > 0) {
+
+
             throw new HttpError(
                 409,
                 "Concorrente está vinculado a um resultado de licitação."
             );
-        }
-        */
 
-        return await this.concorrenteDAO.delete(id);
+        }
+
+
+
+        return await super.delete(id);
 
     }
 

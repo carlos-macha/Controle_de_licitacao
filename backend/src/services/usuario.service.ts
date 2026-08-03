@@ -2,156 +2,193 @@ import { inject, injectable } from "inversify";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+import { BaseService } from "./base.service";
 import { UsuarioDAO } from "../dao/usuario.dao";
-import { HttpError } from "../utils/httpError";
 import { Usuario } from "../models/Usuario";
+import { HttpError } from "../utils/httpError";
+
 
 @injectable()
-export class UsuarioService {
+export class UsuarioService extends BaseService<Usuario> {
+
 
     constructor(
         @inject(UsuarioDAO)
         private usuarioDAO: UsuarioDAO
-    ) {}
+    ){
 
-    async find() {
-        return this.usuarioDAO.find();
+        super(
+            usuarioDAO,
+            "Usuário"
+        );
+
     }
 
-    async findById(id: number) {
 
-        const usuario = await this.usuarioDAO.findById(id);
 
-        if (!usuario) {
-            throw new HttpError(404, "Usuário não encontrado.");
-        }
+    async findSafe(options?: any){
 
-        return usuario;
+        const result =
+            await this.dao.find(options);
+
+
+        return {
+
+            ...result,
+
+            data: result.data.map(usuario=>{
+
+                const {
+                    SENHA_HASH,
+                    ...rest
+                } = usuario;
+
+
+                return rest;
+
+            })
+
+        };
+
     }
 
-    async insert(data: {
-        LOGIN: string;
-        NOME: string;
-        SENHA: string;
-    }) {
 
-        const existe = await this.usuarioDAO.findByLogin(data.LOGIN);
 
-        if (existe) {
+
+    async findSafeById(id:number){
+
+        const usuario =
+            await this.findById(id);
+
+
+        const {
+            SENHA_HASH,
+            ...rest
+        } = usuario;
+
+
+        return rest;
+
+    }
+
+
+
+
+    async insert(usuario: Omit<Usuario,"ID">){
+
+
+        const existe =
+            await this.usuarioDAO.findByLogin(
+                usuario.LOGIN
+            );
+
+
+        if(existe){
+
             throw new HttpError(
                 409,
                 "Login já cadastrado."
             );
+
         }
 
-        const senhaHash = await bcrypt.hash(
-            data.SENHA,
-            10
-        );
 
-        const id = await this.usuarioDAO.insert({
-            LOGIN: data.LOGIN,
-            NOME: data.NOME,
-            SENHA_HASH: senhaHash,
-            ATIVO: "S"
-        });
-
-        return {
-            id
-        };
-    }
-
-    async update(
-        id: number,
-        data: {
-            LOGIN?: string;
-            NOME?: string;
-            SENHA?: string;
-            ATIVO?: "S" | "N";
-        }
-    ) {
-
-        const updateData: Record<string, unknown> = {};
-
-        if (data.LOGIN !== undefined)
-            updateData.LOGIN = data.LOGIN;
-
-        if (data.NOME !== undefined)
-            updateData.NOME = data.NOME;
-
-        if (data.ATIVO !== undefined)
-            updateData.ATIVO = data.ATIVO;
-
-        if (data.SENHA) {
-            updateData.SENHA_HASH = await bcrypt.hash(
-                data.SENHA,
+        const senhaHash =
+            await bcrypt.hash(
+                usuario.SENHA_HASH,
                 10
             );
-        }
 
-        await this.usuarioDAO.update(
-            id,
-            updateData
-        );
+
+        return super.insert({
+
+            LOGIN: usuario.LOGIN,
+
+            NOME: usuario.NOME,
+
+            SENHA_HASH: senhaHash,
+
+            ATIVO:"S"
+
+        });
+
     }
 
-    async delete(id: number) {
-        await this.usuarioDAO.delete(id);
-    }
+
+
 
     async login(
-        login: string,
-        senha: string
-    ) {
+        login:string,
+        senha:string
+    ){
 
-        const usuario = await this.usuarioDAO.findByLogin(login);
 
-        if (!usuario) {
+        const usuario =
+            await this.usuarioDAO.findByLogin(
+                login
+            );
+
+
+        if(!usuario){
+
             throw new HttpError(
                 401,
                 "Login ou senha inválidos."
             );
+
         }
 
-        if (usuario.ATIVO === "N") {
-            throw new HttpError(
-                403,
-                "Usuário desativado."
+
+        const senhaValida =
+            await bcrypt.compare(
+                senha,
+                usuario.SENHA_HASH
             );
-        }
 
-        const senhaValida = await bcrypt.compare(
-            senha,
-            usuario.SENHA_HASH
-        );
 
-        if (!senhaValida) {
+        if(!senhaValida){
+
             throw new HttpError(
                 401,
                 "Login ou senha inválidos."
             );
+
         }
 
-        const token = jwt.sign(
-            {
-                id: usuario.ID,
-                login: usuario.LOGIN,
-                nome: usuario.NOME
-            },
-            process.env.JWT_SECRET!,
-            {
-                expiresIn: "8h"
-            }
-        );
+
+        const token =
+            jwt.sign(
+
+                {
+                    id:usuario.ID,
+                    login:usuario.LOGIN
+                },
+
+                process.env.JWT_SECRET!,
+
+                {
+                    expiresIn:"7d"
+                }
+
+            );
+
 
         return {
+
             token,
-            usuario: {
-                id: usuario.ID,
-                login: usuario.LOGIN,
-                nome: usuario.NOME
+
+            usuario:{
+
+                ID:usuario.ID,
+
+                LOGIN:usuario.LOGIN,
+
+                NOME:usuario.NOME
+
             }
+
         };
+
     }
 
 }

@@ -26,57 +26,107 @@ export class BaseDAO<T> {
     where?: Record<string, unknown>;
     orderBy?: string;
     order?: "ASC" | "DESC";
-  }): Promise<T[]> {
+  }) {
 
-    let sql = `
-      SELECT *
-      FROM ${this.tableName}
-    `;
+    const page =
+      options?.page && options.page > 0
+        ? options.page
+        : 1;
+
+    const limit =
+      options?.limit && options.limit > 0
+        ? options.limit
+        : 50;
+
+    let whereSQL = "";
 
     const params: unknown[] = [];
 
-    if (options?.where && Object.keys(options.where).length > 0) {
+    if (
+      options?.where &&
+      Object.keys(options.where).length > 0
+    ) {
 
       const fields = Object.keys(options.where);
 
       this.validateColumns(fields);
 
       const conditions = fields.map(field => {
+
         params.push(options.where![field]);
+
         return `${field} = ?`;
+
       });
 
-      sql += `
-        WHERE ${conditions.join(" AND ")}
-      `;
+      whereSQL = `WHERE ${conditions.join(" AND ")}`;
     }
+
+
+    const totalResult =
+      await this.db.query<{ TOTAL: number }>(
+        `
+        SELECT COUNT(ID) AS TOTAL
+        FROM ${this.tableName}
+        ${whereSQL}
+        `,
+        [...params]
+      );
+
+    const total =
+      Number(totalResult[0]?.TOTAL ?? 0);
+
+
+    let sql = `
+        SELECT *
+        FROM ${this.tableName}
+        ${whereSQL}
+    `;
+
 
     if (options?.orderBy) {
 
-      this.validateColumns([options.orderBy]);
-
-      const order = options.order === "DESC"
-        ? "DESC"
-        : "ASC";
+      this.validateColumns([
+        options.orderBy
+      ]);
 
       sql += `
-        ORDER BY ${options.orderBy} ${order}
-      `;
+            ORDER BY ${options.orderBy}
+            ${options.order === "DESC" ? "DESC" : "ASC"}
+        `;
+
     }
 
-    if (options?.limit) {
 
-      const page = options.page ?? 1;
+    const first =
+      ((page - 1) * limit) + 1;
 
-      const first = ((page - 1) * options.limit) + 1;
-      const last = page * options.limit;
 
-      sql += `
+    const last =
+      page * limit;
+
+
+    sql += `
         ROWS ${first} TO ${last}
-      `;
-    }
+    `;
 
-    return this.db.query<T>(sql, params);
+
+    const data =
+      await this.db.query<T>(
+        sql,
+        [...params]
+      );
+
+
+    return {
+      data,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit)
+      }
+    };
 
   }
 
@@ -121,6 +171,12 @@ export class BaseDAO<T> {
       values
     );
 
+    if (!result) {
+      throw new Error(
+        "Não foi possível recuperar o ID inserido."
+      );
+    }
+
     return result.ID;
   }
 
@@ -154,12 +210,25 @@ export class BaseDAO<T> {
 
   }
 
-  async delete(id: number) {
+  async delete(id: number): Promise<number> {
 
-    return this.db.query(`
-      DELETE FROM ${this.tableName}
-      WHERE ID = ?
-    `, [id]);
+    const existente = await this.findById(id);
+
+    if (!existente) {
+      return 0;
+    }
+
+
+    await this.db.query(
+      `
+        DELETE FROM ${this.tableName}
+        WHERE ID = ?
+        `,
+      [id]
+    );
+
+
+    return 1;
 
   }
 
