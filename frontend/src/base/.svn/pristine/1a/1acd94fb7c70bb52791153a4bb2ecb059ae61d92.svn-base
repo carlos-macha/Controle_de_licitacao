@@ -1,0 +1,9 @@
+export interface IModelSis005 {
+   LOG_USUARIO: string,
+   LOG_SISTEMA: string,
+   LOG_PROGRAMA: string,
+   LOG_DATA: number,
+   LOG_HORA: number,
+   LOG_TIPO: string,
+   LOG_HISTORICO?: string
+}

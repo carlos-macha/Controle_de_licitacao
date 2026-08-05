@@ -1,0 +1,15 @@
+import { ImodelRegraConversao } from "../models/modelRegraConversao";
+import DAO from "./dao";
+
+export default class DAOProduto extends DAO {
+
+   converterUnidadeMedida = (regra: ImodelRegraConversao) => new Promise<ImodelRegraConversao>((resolve, reject) => {
+
+      this.Put<ImodelRegraConversao>('produto/ConverterUnidadeMedida', regra).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+
+   });
+}

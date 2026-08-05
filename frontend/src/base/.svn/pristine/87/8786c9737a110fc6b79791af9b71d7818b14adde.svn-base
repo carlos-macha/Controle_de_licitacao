@@ -1,0 +1,97 @@
+import ControllerPropriedades from "../controllers/controllerpropriedades";
+import { IModelPpd003 } from "../models/modelPPD003";
+
+type PropriedadeName = string;
+
+export const PAR_PCP_DASHBOARD: PropriedadeName = 'PAR_PCP_DASHBOARD';
+export const PAR_INTEGRACAO_APS_PROGRAMACAO: PropriedadeName = 'PAR_INTEGRACAO_APS_PROGRAMACAO';
+export const PAR_PCP_USA_ACOMP_CUSTOS: PropriedadeName = 'PAR_PCP_USA_ACOMP_CUSTOS';
+export const PAR_CRM_LINK_PESQUISA: PropriedadeName = 'PAR_CRM_LINK_PESQUISA';
+
+export const PAR_PESSOAJURIDICA_SOCIOS: PropriedadeName = 'PAR_PESSOAJURIDICA_SOCIOS';
+export const PAR_CONFIGURACOES_CONTATO_PESSOA: PropriedadeName = 'PAR_CONFIGURACOES_CONTATO_PESSOA';
+export const PAR_MODELOTELACONTATOS: PropriedadeName = 'PAR_MODELOTELACONTATOS';
+
+interface IPropriedadeService {
+   propriedade: (propriedade: PropriedadeName, empresa?: number, usuario?: string) => Promise<IModelPpd003 | undefined>,
+   valueFromPar: <T>(propriedade: PropriedadeName, name: string, empresa?: number, usuario?: string) => Promise<T | undefined>
+}
+
+const PropriedadeService = (function () {
+   var instance: IPropriedadeService;
+   var propriedades: Array<IModelPpd003> = [];
+
+   const createInstance = (): IPropriedadeService => {
+
+      return {
+         propriedade(propriedade: PropriedadeName, empresa: number = 0, usuario: string = '') {
+
+            return new Promise<IModelPpd003 | undefined>((resolve, reject) => {
+
+               let emp: number | null = empresa === 0 ? null : empresa;
+               let user: string | null = usuario === '' ? null : usuario;
+
+               let ppd003 = propriedades.find(prop => {
+                  return (prop.VLP_PROPRIEDADE === propriedade && prop.VLP_EMPRESA === emp && prop.VLP_USUARIO === user)
+               })
+
+               if (ppd003) {
+                  resolve(ppd003);
+                  return;
+               }
+
+               let controllerPropriedade = new ControllerPropriedades();
+               controllerPropriedade.DAO.Propriedade(propriedade, empresa, usuario).then(prop => {
+                  // console.log(prop);
+                  propriedades.push(prop);
+                  resolve(prop);
+               }).catch(error => {
+                  console.log(error);
+                  resolve(undefined);
+               });
+            });
+         },
+         valueFromPar<T>(propriedade: PropriedadeName, name: string, empresa: number = 0, usuario: string = '') {
+            return new Promise<T | undefined>(async (resolve, reject) => {
+               try {
+                  let prop = await this.propriedade(propriedade, empresa, usuario);
+                  if (!prop) {
+                     resolve(undefined);
+                     return;
+                  }
+
+                  let value: string = prop.VLP_VALOR;
+                  // console.log(value)
+
+                  let cfg = value.split(/\r?\n|\r/);
+                  // console.log(cfg)
+                  cfg.forEach(c => {
+                     // console.log(c)
+                     if (c.toUpperCase().startsWith(`${name}=`.toUpperCase())) {
+                        let parValor = c.split('=');
+                        // console.log(name, parValor[1] as T)
+                        resolve(parValor[1] as T)
+                        return
+                     }
+                  })
+               } catch (error) {
+                  console.log(error);
+                  resolve(undefined);
+               }
+            });
+         },
+      }
+
+   }
+
+   return {
+      getInstance: function () {
+         if (!instance) {
+            instance = createInstance();
+         }
+         return instance;
+      }
+   };
+})();
+
+export default PropriedadeService;

@@ -1,0 +1,8 @@
+export interface IModelAux039 {
+   UMS_USUARIO: string,
+   UMS_EMPRESA: number,
+   UMS_STATUSORIGEM: number,
+   UMS_STATUSDESTINO: number,
+   UMS_DH_ALTERACAO: number,
+   UMS_ID: number
+}

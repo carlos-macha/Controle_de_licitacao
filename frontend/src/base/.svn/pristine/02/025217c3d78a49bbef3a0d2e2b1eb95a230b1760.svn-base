@@ -1,0 +1,59 @@
+export enum EnumRecadosPrioridade {
+  EnumRecadosPrioridade_BAIXA = 'BAIXA',
+  EnumRecadosPrioridade_NORMAL = 'NORMAL',
+  EnumRecadosPrioridade_ALTA = 'ALTA',
+  EnumRecadosPrioridade_ALERTA = 'ALERTA',
+}
+
+export enum EnumRecadosEnviadoRecebido {
+  EnumRecadosEnviadoRecebido_Enviado = 'E',
+  EnumRecadosEnviadoRecebido_Recebido = 'R',
+}
+
+export enum EnumRecadosTpDocOrigem {
+  EnumRecadosTpDocOrigem_ACAO_COMERCIAL = "AC",
+  EnumRecadosTpDocOrigem_DEVOLUCAO = "DV",
+  EnumRecadosTpDocOrigem_MANUAL = "MN",
+  EnumRecadosTpDocOrigem_WORKFLOW = "WF",
+  EnumRecadosTpDocOrigem_CONTABILIDADE = "CT",
+  EnumRecadosTpDocOrigem_GERAL = "GR",
+  EnumRecadosTpDocOrigem_ASSISTENCIA_TEC = "AT",
+  EnumRecadosTpDocOrigem_SAC ="SA",
+  EnumRecadosTpDocOrigem_NOTA_FISCAL = "NF",
+  EnumRecadosTpDocOrigem_SAC_PORTAL = "SP",
+  EnumRecadosTpDocOrigem_MOVIMENTACAO_ESTOQUE = "ET",
+  EnumRecadosTpDocOrigem_OBRA = "OB",
+  EnumRecadosTpDocOrigem_PEDIDO_DE_COMPRA = "PC",
+  EnumRecadosTpDocOrigem_NECESSIDADE_DE_COMPRA = "NC",
+  EnumRecadosTpDocOrigem_COTACAO_DE_PREÇO = "CO",
+  EnumRecadosTpDocOrigem_SOLICITACAO_DE_COMPRA = "SC",
+  EnumRecadosTpDocOrigem_TITULO = "TI",
+  EnumRecadosTpDocOrigem_ASSISTENCIA_TECNICA_PORTAL = "AP",
+  EnumRecadosTpDocOrigem_CONTROLE_ETAPAS = "CE",
+  EnumRecadosTpDocOrigem_NAO_IDENTIFICADO = "XX",
+  EnumRecadosTpDocOrigem_AGENDADOR_DE_PROCESSOS = "AG",
+  EnumRecadosTpDocOrigem_PEDIDO_PORTAL = "PP",
+  EnumRecadosTpDocOrigem_DEVOLUCAO_PORTA = "DP",
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

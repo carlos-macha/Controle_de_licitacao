@@ -1,0 +1,15 @@
+import DAO from "./dao";
+
+export default class DAOAcaoComercial extends DAO {
+
+   tiposAcaoComercial = (id: number = 0, empresa: number = 0, where: string = '', first: number = 0, skip: number = 0) => new Promise<any>((resolve, reject) => {
+      
+      this.List<any>(`acaocomercial/tiposacaocomercial/${id}/${empresa}/${where}/${first}/${skip}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+}

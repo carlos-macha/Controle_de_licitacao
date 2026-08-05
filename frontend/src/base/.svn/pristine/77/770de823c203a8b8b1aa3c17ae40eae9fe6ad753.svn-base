@@ -1,0 +1,24 @@
+import React from 'react';
+import TiposdeCompromissoContainer from './tiposdecompromissoContainer';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { PageBase } from '../../../template/pagebase/pagebase';
+
+interface TiposdeCompromissoProps {
+   heightGrid?: string | number
+}
+
+const TiposdeCompromisso: React.FC<TiposdeCompromissoProps> = (props) => {
+   const { heightGrid } = props;
+   return (
+      <PageBase>
+         <CrudProvider>
+            <TiposdeCompromissoContainer
+               typeRender='search'
+               params={heightGrid}
+            />
+         </CrudProvider>
+      </PageBase>
+   );
+}
+
+export default TiposdeCompromisso;

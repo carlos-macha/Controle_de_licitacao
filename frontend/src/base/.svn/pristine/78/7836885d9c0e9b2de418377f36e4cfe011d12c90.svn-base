@@ -1,0 +1,16 @@
+import { IModelCrm045 } from "./modelCRM045";
+
+export interface IModelCrm047 {
+   VAP_CODIGO: number,
+   VAP_APRESENTACAO: number,
+   VAP_VIDEO: number,
+   VAP_ORDEM_VISUALIZACAO: number,
+   VAP_QTD_LIMITE_VISUALIZACAO: number,
+   VAP_QTD_VISUALIZADA: number,
+   VAP_DATA_CADASTRO: number,
+   VAP_USUARIO_CADASTRO: string,
+   VAP_QTD_LIMITE_VER_NOVAMENTE: number,
+   VAP_QTD_SOLICIT_VER_NOVAMENTE: number,
+   VAP_QTD_INC_LIMITE_VISUALIZACAO: number,
+   VIDEO: IModelCrm045
+}

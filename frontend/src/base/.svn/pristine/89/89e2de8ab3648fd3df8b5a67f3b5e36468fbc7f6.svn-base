@@ -1,0 +1,8 @@
+import { EnumOperacaoPermissao } from "../enums/enums";
+import { EnumPermissoes } from "../enums/enumscontroldoc";
+
+export interface IModelValidarPermissao {
+   PERMISSAO: EnumPermissoes,
+   OPERACAO: EnumOperacaoPermissao | 'I' | 'A' | 'E' | 'V',
+   OBSERVACAO: string
+}

@@ -1,0 +1,11 @@
+export interface IModelPOR002 {
+   PCO_ID: number,
+   PCO_ID_PERMISSAO: number,
+   PCO_ID_CONTATO: number,
+   PCO_INCLUIR: string,
+   PCO_ALTERAR: string,
+   PCO_EXCLUIR: string,
+   PCO_ID_CONTATO_LIB: number,
+   PER_ID: number,
+   PER_DESCRICAO: string
+}

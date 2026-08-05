@@ -1,0 +1,39 @@
+import { EnumTpDocOrigemEtapa, EnumTpEtapa, EnumTpNotificacao, EnumTpStatusEtapa } from "../enums/enumcontroleetapas";
+import { EnumSimNao } from "../enums/enums";
+import { IModelEST302 } from "./modelEST302";
+import { IModelEST318 } from "./modelEST318";
+import { IModelEST535 } from "./modelEST535";
+import { IModelEtapaAnexos } from "./modelEtapaAnexos";
+
+export interface IModelEtapasPedido {
+   MEP_ID_MOVETAPA: number,
+   MEP_TP_DOC_ORIGEM: EnumTpDocOrigemEtapa,
+   MEP_ID_DOC_ORIGEM: number,
+   MEP_NR_SEQ_ETAPA: number,
+   MEP_CD_ETAPA?: number,
+   MEP_DT_PREVISTA: number,
+   MEP_DT_ENTRADA?: number,
+   MEP_DT_SAIDA?: number,
+   MEP_VL_TOTAL_DESPESA: number,
+   MEP_TP_STATUS: EnumTpStatusEtapa,
+   MEP_TP_ETAPA: EnumTpEtapa,
+   MEP_PERC_REALIZACAO?: number,
+   MEP_DT_PREVISAO_INICIAL?: number,
+   MEP_BO_ETAPA_MARCO: EnumSimNao,
+   MEP_TP_NOTIF_MARCO: EnumTpNotificacao,
+   MEP_OCULTA_DIARIO_ATIVIDADE: EnumSimNao,
+   MEP_ETAPA_PAI?: number,
+   MEP_NRNIVEL?: number,
+   MEP_CLASSIFICACAO?: string,
+   MEP_CLASSIFICACAOREDUZIDA?: number,
+   MEP_ETAPA_FINAL: EnumSimNao,
+   MEP_DIAS_PREVISTOS: number,
+   MEP_DS_ETAPA: string,
+   MEP_DIAS_REALIZACAO: number,
+   DESPESAS_ETAPA: Array<IModelEST302>,
+   ATIVIDADES_ETAPA: Array<IModelEST535>,
+   OBSERVACAO_ETAPA: Array<IModelEST318>,
+   PED_SEQ: string,
+   PED_EMPRESA: number,
+   ANEXOS: Array<IModelEtapaAnexos>
+}

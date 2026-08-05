@@ -1,0 +1,9 @@
+
+export interface IModelTipoSolicitacao {
+  DESCRICAO: string;
+  PERGUNTAS: Array<IModelTipoSolicitacaoPergunta>;
+}
+
+export interface IModelTipoSolicitacaoPergunta {
+  PERGUNTA: string;
+}

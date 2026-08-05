@@ -1,0 +1,71 @@
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { Ribbon } from 'react-ribbons';
+import Spinners from '../../components/spinners/spinners';
+import MemoryFotos, { IDataFotos } from '../../services/memoryfotos';
+import { utilities } from '../../utils/utilities';
+
+interface ProdutoFotoViewProps {
+   idProduto: number,
+   description?: string,
+   className?: string,
+   fotoCSS?: React.CSSProperties,
+   showRibbon?: boolean,
+   textRibbon?: string,
+   onLoadPhoto?: (data: IDataFotos) => void
+}
+
+const ProdutoFotoView: React.FC<ProdutoFotoViewProps> = (props) => {
+   const { fotoCSS, className, showRibbon, idProduto, description, textRibbon, onLoadPhoto } = props;
+
+   const [src, setSrc] = useState<string | null>(null);
+   const [loading, setLoading] = useState(true);
+
+   useEffect(() => {
+      let mounted = true;
+      setLoading(true);
+      console.log('carregando', loading)
+      MemoryFotos.instance().fotos(idProduto)
+         .then(data => {
+            if (!mounted) return;
+
+            if (data.fotoPrincipal) {
+               setSrc(`data:image/png;base64,${data.fotoPrincipal}`);
+               onLoadPhoto?.(data);
+            }
+         })
+         .catch(console.log)
+         .finally(() => {
+            if (mounted) setLoading(false);
+         });
+
+      return () => {
+         mounted = false;
+      };
+   }, [idProduto]);
+
+   return (
+      <Fragment>
+         {showRibbon && (
+            <Ribbon side="right" type="corner" size="normal" backgroundColor="#c82333" color="#fff" fontFamily="Poppins" withStripes={false}>
+               {textRibbon}
+            </Ribbon>
+         )}
+
+         <div className="text-center" style={{ width: "100%" }}>
+            {loading ? (
+               <div style={{ width: fotoCSS?.width, height: fotoCSS?.height, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+                  <Spinners size={20} />
+               </div>
+            ) : (
+               <img className={`img-fluid ${className}`} src={src ?? `${utilities.baseURL()}images/Icone-Produto-Sem-Foto-cpPortal.webp`} alt={description} style={fotoCSS} loading="lazy" />
+            )}
+         </div>
+      </Fragment>
+   );
+};
+
+ProdutoFotoView.defaultProps = {
+   className: ''
+}
+
+export default ProdutoFotoView;

@@ -1,0 +1,9 @@
+export interface IModelEST535 {
+   RAT_CODIGO: number,
+   RAT_ID_MOVETAPA: number,
+   RAT_DT_CADASTRO: number,
+   RAT_DT_DIARIO: number,
+   RAT_ALERTA_LIDO: string,
+   RAT_HISTORICO: string,
+   RAT_USUARIO: string
+}

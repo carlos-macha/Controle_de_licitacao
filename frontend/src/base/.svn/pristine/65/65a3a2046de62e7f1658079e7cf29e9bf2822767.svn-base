@@ -1,0 +1,24 @@
+import { EnumAtivoInativo } from "../enums/enums";
+import { EnumNotaFiscal_TpCalcDifal } from "../enums/enumsnotafiscal";
+
+export interface IModelAux001 {
+   EST_SIGLA: string,
+   EST_DESCRICAO: string,
+   EST_FATORREDUCAO: number,
+   EST_REDUCAOICMS: number,
+   EST_REDUCAOPRODCESTABASICA: number,
+   EST_REDUCAOPRODUSADO: number,
+   EST_ALIQ_REDUCAO_SUBST_SIMPLES?: number,
+   EST_IBGE_CODIGO: string,
+   EST_ATIVO: EnumAtivoInativo,
+   EST_GNRE_CODIGO_ICMSST: string,
+   EST_SIGNATARIO_ICMS_ST_PROT49: string,
+   EST_ICMS_ST_PROTOCOLO: string,
+   EST_FUSO_HORARIO: number,
+   EST_BO_PARTICIPA_HORARIO_VERAO: string,
+   EST_DIAS_VCTO_GUIA_GNRE?: number,
+   EST_VL_MAX_NFCE_SEM_DEST: number,
+   EST_PERC_FUNDO_POBREZA: number,
+   EST_TIPO_CALC_DIFAL_ST: EnumNotaFiscal_TpCalcDifal,
+   EST_TIPO_CALC_DIFAL_ICMS: EnumNotaFiscal_TpCalcDifal
+}

@@ -1,0 +1,7 @@
+export interface IModelCrm021 {
+   RPT_PESQUISA: number,
+   RPT_PERGUNTA: number,
+   RPT_CODRESPOSTA: number,
+   RPT_RESPOSTA: string,
+   RPT_PONTOS: number
+}

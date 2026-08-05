@@ -1,0 +1,4 @@
+export interface IModelDoc003 {
+   GFU_USUARIO: string,
+   GFU_GRUPO: number
+}

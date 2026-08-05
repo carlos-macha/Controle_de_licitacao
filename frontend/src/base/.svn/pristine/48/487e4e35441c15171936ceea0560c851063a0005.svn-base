@@ -1,0 +1,38 @@
+import { IModelAux001 } from "../models/modelAUX001";
+import { IModelAux041 } from "../models/modelAUX041";
+import { IModelEst001 } from "../models/modelEST001";
+import DAO from "./dao";
+
+export default class DAOEmpresa extends DAO {
+
+   Estados = () => new Promise<Array<IModelAux001>>((resolve, reject) => {
+      this.List<IModelAux001>(`empresa/estados`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+   });
+
+   Cidades = (uf?: string) => new Promise<Array<IModelAux041>>((resolve, reject) => {
+      let url: string = 'empresa/cidades';
+      if (uf)
+         url = `${url}/${uf}`;
+
+      this.api.get<Array<IModelAux041>>(url).then(async response => {
+         resolve(response.data);
+      }).catch(error => {
+         reject(error.data);
+      });
+   });
+
+   EmpresasDoUsuario = (usuario: string = "", where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelEst001>>((resolve, reject) => {
+
+      this.Get<Array<IModelEst001>>(`/empresa/empresasdousuario/${usuario}/${where}/${first}/${skip}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+
+   });
+
+}

@@ -1,0 +1,8 @@
+export interface IModelEtapaAnexos {
+   DOC_CODIGO: number,
+   DOC_CHAVELEGADO?: string,
+   DOC_NOMEDOCUMENTO: string,
+   DOC_NOMEORIGINALARQUIVO: string,
+   DOC_DTCRIACAO: number,
+   DOC_ARQUIVOBINARIO: string
+}

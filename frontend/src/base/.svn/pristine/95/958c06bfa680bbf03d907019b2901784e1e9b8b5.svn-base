@@ -1,0 +1,10 @@
+import { EnumAtivoInativo, EnumSimNao } from "../enums/enums";
+import { EnumPublicoPrivado } from "../enums/enumscontroldoc";
+
+export interface IModelDoc004 {
+   TPD_CODIGO: number,
+   TPD_DESCRICAO: string,
+   TPD_PUBLICO: EnumPublicoPrivado,
+   TPD_AVISOEMCASCATA: EnumSimNao,
+   TPD_ATIVOINATIVO: EnumAtivoInativo
+}

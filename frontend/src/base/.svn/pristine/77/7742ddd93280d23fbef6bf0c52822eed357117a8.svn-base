@@ -1,0 +1,44 @@
+import React, { Fragment, useEffect } from 'react';
+import Crudpesquisa, { PesquisaProps } from '../../../components/crud/pesquisa/crudpesquisa';
+import { IModelCrm052 } from '../../../models/modelCRM052';
+import { useModalContext } from '../../../hooks/useModalContext';
+import { IResultadosdoRelatorioContainerEvents } from './resultadosdorelatorioContainer';
+
+interface ResultadosdoRelatorioPesquisaProps extends PesquisaProps {
+   heightGrid?: string | number
+}
+
+const ResultadosdoRelatorioPesquisa: React.FC<ResultadosdoRelatorioPesquisaProps> = (props) => {
+   const { events, onDataChange, heightGrid, crudContainer } = props;
+
+   const { modalDispash } = useModalContext();
+
+   useEffect(() => {
+      (crudContainer!.events as IResultadosdoRelatorioContainerEvents) = {
+         onClickViewRelatorioResultadosPesquisa(pesquisa) {
+            modalDispash({
+               type: 'relatorioResultadosPesquisa',
+               pesquisa: pesquisa
+            })
+         },
+      }
+   }, [])
+
+   return (
+      <Fragment>
+         <Crudpesquisa
+            autoLoad
+            heightGrid={heightGrid ? heightGrid : 'calc(100vh - 24rem)'}
+            events={events}
+            typePagination='limit-offset'
+            onDataChange={(data: IModelCrm052) => {
+               if (onDataChange)
+                  onDataChange(data);
+            }}
+            prefixId='grid-resultadosdorelatorio-pesquisa'
+         />
+      </Fragment>
+   );
+}
+
+export default ResultadosdoRelatorioPesquisa;

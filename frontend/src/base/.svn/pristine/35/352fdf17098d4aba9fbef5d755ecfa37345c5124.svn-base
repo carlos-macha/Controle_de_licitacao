@@ -1,0 +1,47 @@
+.custom-btn-transparent {
+   display: inline-block;
+   text-align: center;
+   border: 1px solid transparent;
+   padding: .375rem 1rem;
+   border-radius: .25rem;
+}
+
+.custom-btn-transparent-primary:hover {
+   color: #ffffff !important;
+   background: #0084ff !important;
+}
+
+.custom-btn-transparent-secondary:hover {
+   color: #ffffff !important;
+   background: #777D74 !important;
+}
+
+.custom-btn-transparent-success:hover {
+   color: #ffffff !important;
+   background: #00ca00 !important;
+}
+
+.custom-btn-transparent-danger:hover {
+   color: #ffffff !important;
+   background: #e64141 !important;
+}
+
+.custom-btn-transparent-warning:hover {
+   color: #ffffff !important;
+   background: #ffd400 !important;
+}
+
+.custom-btn-transparent-info:hover {
+   color: #ffffff !important;
+   background: #00d0ff !important;
+}
+
+.custom-btn-transparent-light:hover {
+   color: #ffffff !important;
+   background: #E9EDF4 !important;
+}
+
+.custom-btn-transparent-dark:hover {
+   color: #ffffff !important;
+   background: #374948 !important;
+}

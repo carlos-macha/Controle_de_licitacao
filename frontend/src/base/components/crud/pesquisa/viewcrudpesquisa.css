@@ -1,0 +1,16 @@
+.btn-options-dropdown,
+.btn-options-dropdown>button {
+   font-size: x-large;
+   padding-top: 2px;
+   padding-left: 0;
+   padding-right: 0;
+   padding-bottom: 0;
+}
+
+.dark .btn-options-dropdown>button {
+   color: #fff;
+}
+
+.btn-options-dropdown>button::after {
+   display: none;
+}

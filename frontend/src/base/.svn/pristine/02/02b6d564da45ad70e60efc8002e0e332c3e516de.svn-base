@@ -1,0 +1,12 @@
+import { EnumVisibilidadeTreinamento } from "../enums/enumscallcenter";
+
+export interface IModelCallcenterCALL035 {
+   TRE_CODIGO: number,
+   TRE_DESCRICAO: string,
+   TRE_CONTEUDO: string,
+   TRE_DATACADASTRO: number,
+   TRE_PUBLICOPRIVADO: EnumVisibilidadeTreinamento,
+   TRE_CONSTRUCAO: string,
+   TRE_ORDEM: number,
+   TRE_TIPO: string
+}

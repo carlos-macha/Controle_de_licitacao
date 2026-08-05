@@ -1,0 +1,7 @@
+.crudcontainer-loader {
+   height: calc(100vh - 12.5rem);
+}
+
+.iframe-mode-fullscreen .crudcontainer-loader {
+   height: calc(100vh - 4.5rem);
+}

@@ -1,0 +1,22 @@
+import { EnumAtivoInativo } from "../enums/enums"
+
+export interface IModelMOB015 {
+   END_ID: number,
+   END_ID_PESSOA: number,
+   END_TIPO: string,
+   END_ENDERECO: string,
+   END_NUMERO: string,
+   END_COMPLEMENTO?: string,
+   END_CIDADE: string,
+   END_ESTADO: string,
+   END_BAIRRO: string,
+   END_CEP: string,
+   END_FONE?: string,
+   END_CELULAR?: string,
+   END_FAX?: string,
+   END_EMAIL?: string,
+   END_CIDADE_PK?: number,
+   END_ATIVO: EnumAtivoInativo
+   END_LEGADO_CODIGO?: number,
+
+}

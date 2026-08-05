@@ -1,0 +1,9 @@
+import { EnumSimNao } from "../enums/enums";
+
+export interface IModelDoc011 {
+   VDG_DOCUMENTO: number,
+   VDG_GRUPO: number,
+   VDG_EDICAO: EnumSimNao,
+   GRU_DESCRICAO: string,
+   DOC_NOMEDOCUMENTO: string
+}

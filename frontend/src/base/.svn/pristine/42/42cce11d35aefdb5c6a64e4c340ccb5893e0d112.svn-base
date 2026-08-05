@@ -1,0 +1,30 @@
+import React, { Fragment } from 'react';
+import Crudpesquisa, { PesquisaProps } from '../../../components/crud/pesquisa/crudpesquisa';
+import { IModelCrm009 } from '../../../models/modelCRM009';
+import { IModelCrm052 } from '../../../models/modelCRM052';
+
+interface LinksdePesquisaPesquisaProps extends PesquisaProps {
+   heightGrid?: string | number
+}
+
+const LinksdePesquisaPesquisa: React.FC<LinksdePesquisaPesquisaProps> = (props) => {
+   const { events, onDataChange, heightGrid } = props;
+
+   return (
+      <Fragment>
+         <Crudpesquisa
+            autoLoad
+            heightGrid={heightGrid ? heightGrid : 'calc(100vh - 24rem)'}
+            events={events}
+            typePagination='limit-offset'
+            onDataChange={(data: IModelCrm052) => {
+               if (onDataChange)
+                  onDataChange(data);
+            }}
+            prefixId='grid-linksdepesquisa-pesquisa'
+         />
+      </Fragment>
+   );
+}
+
+export default LinksdePesquisaPesquisa;

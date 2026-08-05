@@ -1,0 +1,14 @@
+import { EnumRecadosPrioridade, EnumRecadosTpDocOrigem } from "../enums/enumrecados";
+import { EnumSimNao } from "../enums/enums";
+
+export interface ModelRecados {
+  Mensagem: string,
+  Assunto: string,
+  Pessoa?: string,
+  ConfirmacaoLeitura: EnumSimNao,
+  TipoRecado: EnumSimNao,
+  Prioridade: EnumRecadosPrioridade,
+  TipoDocOrigem: EnumRecadosTpDocOrigem,
+  IdDocOrigem?: number,
+  Destinatarios: Array<{ Usuario: string }>
+}

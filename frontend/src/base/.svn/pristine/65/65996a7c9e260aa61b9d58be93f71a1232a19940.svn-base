@@ -1,0 +1,44 @@
+import { Fragment, useEffect, useState } from "react";
+import { InputCheckbox, RadioButtons } from "../../../../components/form/form";
+import { IModelCrm021 } from "../../../../models/modelCRM021";
+import { nanoid } from "nanoid";
+
+interface PesquisaRespostasSimplesProps {
+   respostas: Array<IModelCrm021>,
+   onChange?: (resposta: IModelCrm021) => void
+}
+
+const PesquisaRespostasSimples: React.FC<PesquisaRespostasSimplesProps> = (props) => {
+   const { respostas, onChange } = props;
+
+   const [selected, setSelected] = useState<number>();
+
+   return (
+      <Fragment>
+         {respostas.map(value => {
+            return (
+               <div key={nanoid()}>
+                  <RadioButtons
+                     className='custom-control-input'
+                     // classNameGroup='custom-control custom-radio d-inline-block'
+                     // classNameLabel='custom-control-label mr-4'
+                     checked={value.RPT_CODRESPOSTA === selected}
+                     label={value.RPT_RESPOSTA}
+                     onChange={() => {
+                        if (onChange)
+                           onChange(value);
+
+                        setSelected(value.RPT_CODRESPOSTA);
+                     }}
+                     name={'RADIO_' + value.RPT_PESQUISA + '_' + value.RPT_PERGUNTA}
+                     // id={'RADIO_' + value.RPT_PESQUISA + '_' + value.RPT_PERGUNTA + '_' + value.RPT_CODRESPOSTA}
+                     id={nanoid()}
+                  />
+               </div>
+            )
+         })}
+      </Fragment>
+   )
+}
+
+export default PesquisaRespostasSimples;

@@ -11,6 +11,8 @@ import {
 
 import { loginSchema } from "../schemas/login.schema";
 import { createCrudRoutes } from "../utils/createCrudRoutes";
+import { unlockSchema } from "../schemas/unlock.schema";
+import { authenticate } from "../middlewares/auth";
 
 const usuarioRouter = Router();
 
@@ -33,7 +35,7 @@ usuarioRouter.post(
         body: createUsuarioSchema
     }),
     controller.insert.bind(controller)
-)
+);
 
 usuarioRouter.post(
     "/login",
@@ -41,6 +43,15 @@ usuarioRouter.post(
         body: loginSchema
     }),
     controller.login.bind(controller)
+);
+
+usuarioRouter.post(
+    "/unlock",
+    authenticate,
+    validate({
+        body: unlockSchema
+    }),
+    controller.unlock.bind(controller)
 );
 
 

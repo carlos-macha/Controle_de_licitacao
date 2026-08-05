@@ -1,0 +1,11 @@
+export interface IModelEST052 {
+   ICD_EMPRESA: number,
+   ICD_SEQ: string,
+   ICD_PRODUTO: string,
+   ICD_VALOR: number,
+   ICD_TOTAL: number,
+   ICD_QTD: number,
+   ICD_QTDRETORNO: number,
+   ICD_QTDVENDIDA: number,
+   PRO_DESCRICAO: string
+}

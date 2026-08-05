@@ -1,0 +1,9 @@
+export interface IModelMOB103 {
+   PPR_PESSOA: string,
+   PPR_TIPOPREFERENCIA: number,
+   PPR_USUARIO?: string,
+   PPR_DATA?: number,
+   PPR_HORA?: number,
+   TPR_DESCRICAO: string,
+
+}

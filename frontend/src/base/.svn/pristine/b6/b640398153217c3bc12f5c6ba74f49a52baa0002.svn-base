@@ -1,0 +1,46 @@
+import { ReactNode } from "react";
+import AsyncSelect from "react-select/async";
+
+export interface OptionInputSelect {
+  label: string;
+  value: string;
+}
+
+interface InputSelectAsyncProps {
+  placeholder?: string;
+  promiseOptions: (inputValue: string) => Promise<OptionInputSelect[]>;
+  onChange: (value: OptionInputSelect | null) => void;
+  defaultValue?: OptionInputSelect | null;
+  isClearable?: boolean;
+  buttonModal?: ReactNode;
+  onMenuOpen?: () => void;
+}
+
+const InputSelectAsync: React.FC<InputSelectAsyncProps> = ({ placeholder = "Selecione...", promiseOptions, onChange, defaultValue, isClearable = true, buttonModal, onMenuOpen }) => {
+  return (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <div style={{ flex: 1 }}>
+        <AsyncSelect
+          cacheOptions
+          defaultOptions
+          loadOptions={promiseOptions}
+          classNamePrefix="select"
+          placeholder={placeholder}
+          isClearable={isClearable}
+          defaultValue={defaultValue ?? null}
+          noOptionsMessage={() => "Sem opções"}
+          loadingMessage={() => "Carregando..."}
+          onChange={(value) => onChange(value as OptionInputSelect | null)}
+          onMenuOpen={onMenuOpen}
+        />
+      </div>
+      {buttonModal && (
+        <div style={{ marginLeft: "4px" }}>
+          {buttonModal}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default InputSelectAsync;

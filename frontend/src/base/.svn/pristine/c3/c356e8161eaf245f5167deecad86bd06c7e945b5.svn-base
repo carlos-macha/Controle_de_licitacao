@@ -1,0 +1,19 @@
+export interface MaquinasResumidoOEE {
+   OEE_CODIGO: number,
+   OEE_DATA: number,
+   OEE_MAQUINA: number,
+   OEE_TEMPO_PRODUCAO?: number,
+   OEE_TEMPO_PREVISTO?: number,
+   OEE_INDICE_DISPONIBILIDADE?: number,
+   OEE_QTD_PRODUZIDA: number,
+   OEE_QTD_PERCA: number,
+   OEE_INDICE_QUALIDADE: number,
+   OEE_QTD_PRODUZIDA_UN_MAQ?: number,
+   OEE_CAPACIDADE_PRODUCAO_DIA?: number,
+   OEE_INDICE_PERFORMACE?: number,
+   OEE_DH_ALTERACAO: number,
+   OEE_OBSERVACAO?: string,
+   OEE_TEMPO_SETUP?: number,
+   OEE_TEMPO_PRODUTIVO?: number,
+   OEE_INDICE_GERAL?: number
+}

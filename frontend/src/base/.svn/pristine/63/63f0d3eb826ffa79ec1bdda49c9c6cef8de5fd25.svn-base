@@ -1,0 +1,36 @@
+import React, { Fragment } from 'react';
+import Crudpesquisa, { PesquisaProps } from '../../../components/crud/pesquisa/crudpesquisa';
+import { IModelMOB012 } from '../../../models/modelMOB012';
+
+interface UsuariosPesquisaProps extends PesquisaProps {
+   usuarioLogado?: string,
+   heightGrid?: string | number
+}
+
+const UsuariosPesquisa: React.FC<UsuariosPesquisaProps> = (props) => {
+   const { events, onDataChange, usuarioLogado, heightGrid } = props;
+
+   return (
+      <Fragment>
+         <Crudpesquisa
+            autoLoad
+            heightGrid={heightGrid ? heightGrid : 'calc(100vh - 24rem)'}
+            urlGetMount={(url: string, id: string | number, where: string, page: number, limit: number, offset: number, data?: any): string => {
+               return `${url}/${where}/${limit}/${offset}/${usuarioLogado ? usuarioLogado : ''}`;
+            }}
+
+            // showViewButton
+            // onClickViewButton={onClickViewButton}
+            events={events}
+            typePagination='limit-offset'
+            onDataChange={(data: IModelMOB012) => {
+               if (onDataChange)
+                  onDataChange(data);
+            }}
+            prefixId='grid-usuarios-pesquisa'
+         />
+      </Fragment>
+   );
+}
+
+export default UsuariosPesquisa;

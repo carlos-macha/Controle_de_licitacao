@@ -1,0 +1,30 @@
+import { EnumPessoa_TpPessoaProspect } from "../enums/enumspessoa";
+import { EnumWorkFlow_KanbanTipo } from "../enums/enumsworkflow";
+
+export interface IModelKanbanItens {
+   TIPO: EnumWorkFlow_KanbanTipo,
+   CHAVE: number,
+   DATA: number,
+   DATA_ENTREGA?: number,
+   STATUS: number,
+   STATUS_DH_ENTRADA: number,
+   STATUS_NR_DIAS: number,
+   PESSOA_TP: EnumPessoa_TpPessoaProspect,
+   PESSOA: number,
+   PESSOA_CODIGO: string,
+   PESSOA_NOME: string,
+   CONTATO?: number,
+   CONTATO_NOME?: string,
+   EMAIL?: string,
+   NR_FONE?: string,
+   ENDERECO?: string,
+   CIDADE?: string,
+   ESTADO?: string,
+   BAIRRO?: string,
+   VALOR?: number,
+   VENDEDOR: string,
+   VENDEDOR_NOME: string,
+   DOC_TP: string,
+   DOC_TP_DESC: string,
+   DOC_NR: string
+}

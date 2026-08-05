@@ -16,7 +16,7 @@ export class UsuarioController {
     constructor(
         @inject(UsuarioService)
         private usuarioService: UsuarioService
-    ) {}
+    ) { }
 
 
 
@@ -41,7 +41,7 @@ export class UsuarioController {
             return res.json(result);
 
 
-        } catch(error) {
+        } catch (error) {
 
             next(error);
 
@@ -68,7 +68,7 @@ export class UsuarioController {
             return res.json(result);
 
 
-        } catch(error) {
+        } catch (error) {
 
             next(error);
 
@@ -97,7 +97,7 @@ export class UsuarioController {
                 .json(result);
 
 
-        } catch(error) {
+        } catch (error) {
 
             next(error);
 
@@ -125,7 +125,7 @@ export class UsuarioController {
             return res.json(result);
 
 
-        } catch(error) {
+        } catch (error) {
 
             next(error);
 
@@ -156,7 +156,7 @@ export class UsuarioController {
             });
 
 
-        } catch(error) {
+        } catch (error) {
 
             next(error);
 
@@ -187,12 +187,32 @@ export class UsuarioController {
             return res.json(result);
 
 
-        } catch(error) {
+        } catch (error) {
 
             next(error);
 
         }
 
+    }
+
+    async unlock(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+
+            const result =
+                await this.usuarioService.unlock(
+                    req.user!.id,
+                    req.body.SENHA
+                );
+
+            return res.json(result);
+
+        } catch (error) {
+            next(error);
+        }
     }
 
 }

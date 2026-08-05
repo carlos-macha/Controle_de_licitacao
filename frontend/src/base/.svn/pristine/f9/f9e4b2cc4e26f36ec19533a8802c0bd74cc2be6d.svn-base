@@ -1,0 +1,23 @@
+import DAOPCP from "../daos/daopcp";
+import { MaquinasResumido } from "../models/MaquinasResumido";
+import { utilities } from "../utils/utilities";
+import Controller from "./controller";
+
+export default class ControllerPCP extends Controller<DAOPCP> {
+
+   constructor() {
+      super(DAOPCP);
+   }
+
+   maquinasResumido = (where: string = '', first: number = 0, skip: number = 0) => new Promise<Array<MaquinasResumido>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.maquinasResumido(where, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+
+   });
+
+}

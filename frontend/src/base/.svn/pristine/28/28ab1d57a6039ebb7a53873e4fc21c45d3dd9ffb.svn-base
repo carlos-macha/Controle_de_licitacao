@@ -1,0 +1,65 @@
+import { EnumProduto_MinMultVenda } from "../enums/enumsproduto";
+
+export interface IModelPortalFiltroACProdutos {
+   TBP_CD_TABELAPRECO: number,
+   TBP_DS_TABELA: string,
+   TIR_VL_TABELA: number,
+   PRO_ID: number,
+   PRO_EMPRESA: number,
+   PRO_CODIGO: string,
+   PRO_DESCRICAO: string,
+   PRO_DESCRICAOTECNICA: string,
+   PRO_DESCONTOAVISTA: number,
+   PRO_SUBGRUPO: number,
+   PRO_COMPORT_VENDA_MIN_MULTIPLO: EnumProduto_MinMultVenda,
+   PRO_MINIMO_VENDA: number,
+   PRO_PESOBRUTO: number,
+   PRO_UNIDADEMEDIDA: string,
+   PRO_UNDCOMPRA?: string,
+   PRO_INETDESC?: string,
+   CLP_CODIGO: string,
+   CLP_DESCRICAO: string,
+   GRU_GRUPO: number,
+   GRU_DESCRICAO: string,
+   // IPR_BLOBFOTOPEQUENA?: string | null,
+   TIR_ID_PROMOCAO_VALIDA: number | null,
+   IRP_PROMOCAO_VLR: number | null,
+   IRP_PROMOCAO_TITULO: string | null,
+   KIT_ID: number | null,
+   IKI_ID: number | null,
+   IKI_PORTAL_UND: string | null,
+   IKI_PORTAL_QTD: number | null,
+   SALDO_REAL: number
+}
+
+export type IModelTPortalFiltroACGruposProduto = {
+   GRU_EMPRESA: number,
+   GRU_GRUPO: number,
+   GRU_DESCRICAO: string,
+   QTD_ITENS: number
+}
+
+export type IModelPortalFiltroACClassesProduto = {
+   CLP_CODIGO: string,
+   CLP_DESCRICAO: string,
+   QTD_ITENS: number
+}
+
+export type IModelPortalFiltroACLinhasProduto = {
+   LIN_CD_LINHAPRODUTO: number,
+   LIN_DS_LINHAPRODUTO: string,
+   QTD_ITENS: number
+}
+
+export type IModelPortalFiltroACCategoriasProduto = {
+   CPS_CODIGO: number,
+   CPS_DESCRICAO: string,
+   QTD_ITENS: number
+}
+
+export type IModelPortalFiltrosACProduto = {
+   Grupos: Array<IModelTPortalFiltroACGruposProduto>,
+   Classes: Array<IModelPortalFiltroACClassesProduto>,
+   Linhas: Array<IModelPortalFiltroACLinhasProduto>,
+   Categorias: Array<IModelPortalFiltroACCategoriasProduto>
+}

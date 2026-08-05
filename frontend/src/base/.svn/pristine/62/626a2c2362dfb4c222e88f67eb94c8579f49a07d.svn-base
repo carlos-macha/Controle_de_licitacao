@@ -1,0 +1,67 @@
+import { IModelIMAGENS_PRODUTO } from "../models/modelMOB034";
+import { IModelPortalCodigoAcesso } from "../models/modelPortal";
+import { IModelPortalConfiguracao } from "../models/modelPortalConfiguracoes";
+import { IModelPortalHistoricoConsignacao, IModelPortalRemessaConsignada } from "../models/modelPortalConsignacao";
+import DAO from "./dao";
+
+export default class DAOPortal extends DAO {
+
+   Configuracoes = () => new Promise<IModelPortalConfiguracao>((resolve, reject) => {
+      this.Get<IModelPortalConfiguracao>('portal/configuracoes').then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+   });
+
+   RemessasConsignada = (codigoPessoa: string) => new Promise<Array<IModelPortalRemessaConsignada>>((resolve, reject) => {
+      this.Get<Array<IModelPortalRemessaConsignada>>(`portal/RemessasConsignada/${codigoPessoa}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+   });
+
+   HistoricoConsignacao = (codigoPessoa: string) => new Promise<Array<IModelPortalHistoricoConsignacao>>((resolve, reject) => {
+      this.Get<Array<IModelPortalHistoricoConsignacao>>(`portal/ReservasConsignacao/${codigoPessoa}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+   });
+
+   RemoverReservaConsignacao = (historicos: Array<IModelPortalHistoricoConsignacao>) => new Promise<Array<IModelPortalHistoricoConsignacao>>((resolve, reject) => {
+      this.Post<Array<IModelPortalHistoricoConsignacao>>(`portal/RemoverReservaConsignacao`, historicos).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+   });
+
+   GerarReservaConsignacao = (historicos: Array<IModelPortalHistoricoConsignacao>) => new Promise<Array<IModelPortalHistoricoConsignacao>>((resolve, reject) => {
+      this.Put<Array<IModelPortalHistoricoConsignacao>>(`portal/GerarReservaConsignacao`, historicos).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+   });
+
+   ImagensProdutos = (produtos: Array<IModelIMAGENS_PRODUTO>) => new Promise<Array<IModelIMAGENS_PRODUTO>>((resolve, reject) => {
+      this.Post<Array<IModelIMAGENS_PRODUTO>>(`/mobile/imagemprodutosinc`, produtos).then(data => {
+         resolve(data);
+      }).catch(error => {
+         console.log(error)
+         reject(error?.data?.error ?? error);
+      });
+   });
+
+   GerarCodigoAcesso = (aDadosAcesso: IModelPortalCodigoAcesso) => new Promise<IModelPortalCodigoAcesso>((resolve, reject) => {
+      this.Put<IModelPortalCodigoAcesso>(`portal/GerarCodigoValidacaoEmail`, aDadosAcesso).then(data => {
+         resolve(data);
+      }).catch(error => {
+         console.log(error)
+         reject(error.data.error);
+      });
+   });
+
+}

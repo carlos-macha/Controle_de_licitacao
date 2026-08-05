@@ -1,0 +1,18 @@
+import { IModelCrm047 } from "./modelCRM047";
+
+export interface IModelCrm046 {
+   APR_CODIGO: number,
+   APR_DESCRICAO: string,
+   APR_CONTEUDO: string,
+   APR_DATA_CADASTRO: number,
+   APR_USUARIO_CADASTRO: string,
+   APR_TOKEN: string,
+   APR_EXPECTADOR_TIPO: string,
+   APR_EXPECTADOR_ID: number,
+   APR_EXPECTADOR_NOME: string,
+   APR_EXPECTADOR_EMAIL: string,
+   APR_EXPECTADOR_FONE: number,
+   APR_DATA_LIMITE: number,
+   APR_ATIVO: string,
+   VIDEOS: Array<IModelCrm047>
+}

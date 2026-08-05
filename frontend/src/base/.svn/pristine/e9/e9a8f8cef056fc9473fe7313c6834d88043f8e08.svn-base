@@ -1,0 +1,16 @@
+import { IModelAux012 } from "../models/modelAUX012";
+import DAO from "./dao";
+
+export default class DAOFaturamento extends DAO {
+
+   Vendedores = (where: string = '', first: number = 0, skip: number = 0) => new Promise<Array<IModelAux012>>((resolve, reject) => {
+      
+      this.Get<Array<IModelAux012>>(`faturamento/Vendedores/${where}/${first}/${skip}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+}

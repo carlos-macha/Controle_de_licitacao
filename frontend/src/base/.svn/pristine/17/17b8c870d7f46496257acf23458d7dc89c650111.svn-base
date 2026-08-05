@@ -1,0 +1,19 @@
+import { IModelCallcenterCall002 } from "./modelCallcenterCALL002";
+
+export interface IModelCallcenterCall020 {
+   SOL_CHAMADO: number,
+   SOL_SEQ: number,
+   SOL_PROJETO: number,
+   SOL_VERSAO?: string,
+   SOL_HORAINICIAL: string,
+   SOL_HORAFINAL: string,
+   SOL_QTDSEGUNDOS: number,
+   SOL_HISTORICOSOLUCAO: string,
+   SOL_FUNCIONARIOSOLUCAO: string,
+   SOL_DATA: number,
+   SOL_FUNCIONARIO_RESPONSAVEL: string,
+   SOL_CD_STATUS_WF?: number,
+   SOL_ID_ATIVIDADECHAMADO?: number,
+   SOL_TPD_CODIGO?: number,
+   FUNCIONARIO_SOLUCAO: IModelCallcenterCall002
+}

@@ -1,0 +1,91 @@
+export enum EnumContato_EstadoCivil {
+  emCRM_EstadoCivil_Solteiro = '1',
+  emCRM_EstadoCivil_Casado = '2',
+  emCRM_EstadoCivil_Divorciado = '3',
+  emCRM_EstadoCivil_Viuvo = '4',
+  emCRM_EstadoCivil_Separado = '5',
+  emCRM_EstadoCivil_Outros = '6',
+}
+
+export enum EnumContato_Ativo {
+  emCRM_CntAtivo = 'A',
+  emCRM_CntInativo = 'I',
+}
+
+export enum EnumContato_RecebeNewsLetter {
+  emCRM_Recebe = 'S',
+  emCRM_NaoRecebe = 'N',
+}
+
+export enum EnumContato_PrimeiroAcesso {
+  emCRM_PrimeiroAcesso_Sim = 'S',
+  emCRM_PrimeiroAcesso_Nao = 'N',
+}
+
+export enum EnumContato_Soc_IndicadorDeQualificacao {
+  emCRM_Soc_IndicadorDeQualificacao_PFisica = 'PF',
+  emCRM_Soc_IndicadorDeQualificacao_PJuridica = 'PJ',
+  emCRM_Soc_IndicadorDeQualificacao_FInventimento = 'FI',
+}
+
+export enum EnumContato_Qualificacao {
+  emCRM_Qualificacao_AcionistaPFDomicilioBrasil = '01',
+  emCRM_Qualificacao_SocioPFDomicilioBrasil = '02',
+  emCRM_Qualificacao_AcionistaPJDomicilioBrasil = '03',
+  emCRM_Qualificacao_SocioPJDomicilioBrasil = '04',
+  emCRM_Qualificacao_AcionistaPFExterior = '05',
+  emCRM_Qualificacao_SocioPFExterior = '06',
+  emCRM_Qualificacao_AcionistaPJExterior = '07',
+  emCRM_Qualificacao_SocioPJExterior = '08',
+  emCRM_Qualificacao_Titular = '09',
+  emCRM_Qualificacao_AdministradorSemVinculo = '10',
+  emCRM_Qualificacao_DiretorSemVinculo = '11',
+  emCRM_Qualificacao_PresidenteSemVinculo = '12',
+  emCRM_Qualificacao_AdministradorComVinculo = '13',
+  emCRM_Qualificacao_ConselheiroAdministracaoOuFiscal = '14',
+  emCRM_Qualificacao_DiretorComVinculo = '15',
+  emCRM_Qualificacao_Fundador = '16',
+  emCRM_Qualificacao_PresidenteComVinculo = '17'
+}
+
+export enum EnumContato_QualifRespLegal {
+  emCRM_QualifRespLegal_Procurador = '01',
+  emCRM_QualifRespLegal_Curador = '02',
+  emCRM_QualifRespLegal_Mae = '03',
+  emCRM_QualifRespLegal_Pai = '04',
+  emCRM_QualifRespLegal_Tutor = '05',
+  emCRM_QualifRespLegal_Outro = '06'
+}
+
+export enum EnumContato_TpAcesso {
+  emCRM_TpAcesso_A = 'A',
+  emCRM_TpAcesso_N = 'N'
+}
+
+export enum EnumContato_AtivacaoCadastroInternet {
+  emCRM_AtivacaoCadastroInternet_Nao = 'N',
+}
+
+export enum EnumContato_TpContato {
+  emCRM_TpContato_Outro = 'OUTRO',
+  emCRM_TpContato_Funcionario = 'FUNCIONARIO',
+  emCRM_TpContato_Contador = 'CONTADOR',
+  emCRM_TpContato_Socio = 'SOCIO',
+  emCRM_TpContato_SocioAdmin = 'SOCIO ADMIN',
+  emCRM_TpContato_Dentista = 'DENTISTA/PROTETICO'
+}
+
+export enum EnumContatoCargo_StatusAtivo {
+  emCRM_StatusAtivo = "A",
+  emCRM_StatusInativo = "I"
+}
+
+export enum EnumContatoCargo_Descricao {
+  emCRM_CargoDescricao_SemCargo = "SEM CARGO DEFINIDO",
+  emCRM_CargoDescricao_Contador = "CONTADOR",
+  emCRM_CargoDescricao_Diretor = "DIRETOR",
+  emCRM_CargoDescricao_PromotoraDeVendas = "PROMOTORA DE VENDAS",
+  emCRM_CargoDescricao_Vendedor = "VENDEDOR"
+}
+
+

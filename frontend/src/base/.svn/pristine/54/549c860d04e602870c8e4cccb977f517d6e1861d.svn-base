@@ -1,0 +1,829 @@
+@media (max-width: 1065px) {
+   .maxOptionsTab, .optionsTab {
+      display: none !important;
+   }
+
+   .customToolbar {
+      width: 100% !important;
+      transition: all 1s;
+   }
+
+   .rbc-month-view {
+      width: 100% !important;
+      transition: all 1s;
+   }
+   
+   .rbc-time-view {
+      width: 100% !important;
+      transition: all 1s;
+   }
+}
+
+@media (min-width: 1066px) {
+   .showOptions:not(.fullShowing) {
+      display: none;
+   }
+}
+
+.postNavAgenda {
+   container: navAgenda / inline-size;
+}
+
+@container navAgenda (width < 764px) {
+   .more {
+      display: flex !important;
+   }
+
+   .button-6 {
+      display: none !important;
+   }
+      
+   .button-6-drop {
+      display: flex !important;
+   }
+
+   @container (width < 714px) {
+
+      .button-5 {
+         display: none !important;
+      }
+      
+      .button-5-drop {
+         display: flex !important;
+      }
+
+   } 
+
+   @container (width < 628px) {
+      .button-4 {
+         display: none !important;
+      }
+      
+      .button-4-drop {
+         display: flex !important;
+      }
+   }
+
+   @container (width < 518px) {
+      .button-3 {
+         display: none !important;
+      }
+      
+      .button-3-drop {
+         display: flex !important;
+      }
+   }
+
+   @container (width < 332px) {
+      .button-2 {
+         display: none !important;
+      }
+      
+      .button-2-drop {
+         display: flex !important;
+      }
+   }
+
+   @container (width < 252px) {
+      .button-1 {
+         display: none !important;
+      }
+      
+      .button-1-drop {
+         display: flex !important;
+      }
+   }
+}
+
+
+
+.agenda-datatable-view {
+   width: 69%;
+   padding-right: 27.5px;
+}
+
+@media (min-width: 1870px) {
+   .agenda-datatable-view {
+      width: calc(100% - 476px);
+   }
+}
+
+.fullShowing .agenda-datatable-view {
+   width: 100%;
+   padding-right: 40px;
+}
+
+.customToolbar {
+   width: 69%;
+}
+
+@media (min-width: 1870px) {
+   .customToolbar {
+      width: calc(100% - 476px);
+   }
+}
+
+.fullShowing .customToolbar {
+   width: 100%;
+}
+
+.maxOptionsTab {
+   position: absolute;
+   left: 69%;
+   width: calc(31% - 1.2rem);
+   height: calc(100% - 2.5rem);
+}
+
+@media (min-width: 1870px) {
+   .maxOptionsTab {
+      width: 468px;
+      left: calc(100% - 488px);
+   }
+}
+
+.optionsTab {
+   height: 100%;
+   border: 1px solid #ddd;
+   border-radius: 5px;
+}
+
+.dark .optionsTab {
+   border: 2px solid #525252 !important;
+}
+
+.dark .rbc-header {
+   border: 1px solid #525252 !important;
+}
+
+.dark .rbc-month-row {
+   border-top: 1px solid #525252;
+}
+
+.rbc-today {
+   background: none;
+}
+
+.day-bg {
+   height: 100%;
+}
+
+.rbc-time-view .day-bg {
+   height: calc(100% - 2px);
+}
+
+.rbc-day-bg {
+   background: none;
+}
+
+.dark .rbc-day-bg {
+   border-left: 1px solid #525252;
+}
+
+.rbc-day-bg.rbc-selected-day .day-bg {
+   background: #eaf6ff;
+   border: 1px solid #aaa;
+}
+
+.dark .rbc-day-bg.rbc-selected-day .day-bg {
+   background: #25294a;
+   border: 1px solid #479ef5;
+}
+
+.rbc-time-view .rbc-day-bg.rbc-selected-day .day-bg {
+   border: 1px solid #aaa;
+}
+
+.dark .rbc-time-view .rbc-day-bg.rbc-selected-day .day-bg {
+   border: 1px solid #479ef5;
+}
+
+.rbc-header {
+   cursor: default;
+}
+
+.rbc-row-segment {
+   margin-top: 2px;
+}
+
+.rbc-button-link {
+   pointer-events: none;
+   cursor: default;
+   margin-left: 1px;
+   width: calc(100% - 1px) !important;
+}
+
+.dark .rbc-button-link.rbc-show-more {
+   background: #2d325a;
+}
+
+/* .rbc-date-cell:hover {
+   border: 1px solid #aaa;
+   margin-left: -0.5px !important;
+   padding-right: 4px !important;
+} */
+
+/* .rbc-day-bg {
+   background: none !important;
+} */
+
+/* .rbc-off-range {
+   background: #eeeeee;
+} */
+
+.rbc-event-content[title] {
+   pointer-events: none;
+}
+
+.rbc-event-label {
+   display: none;
+}
+
+.dateHeader-text {
+   font-weight: 500;
+   padding-top: 2px;
+   margin: 2px;
+}
+
+.dark .dateHeader-text, .dark .dateHeader-month {
+   color: #adadad
+}
+
+@media (max-width: 640px) {
+   .dateHeader-month {
+      display: none !important;
+   }
+}
+
+.rbc-date-cell {
+   padding: 0px;
+}
+
+.rbc-now .dateHeader-text {
+   color: white;
+   border-radius: 50%;
+   background: #0084ff;
+}
+
+/**/
+.rbc-event:has(.rbc-event-content.yellow) {
+   background: linear-gradient(to right, yellow 22px, #bad9f1 20px);
+}
+
+.rbc-event:has(.rbc-event-content.isProspect.yellow) {
+   background: linear-gradient(to right, yellow 22px, #a0bbce 20px);
+}
+
+.dark .rbc-event:has(.rbc-event-content.yellow) {
+   background: linear-gradient(to right, rgb(190, 190, 0) 22px, #004299 20px);
+}
+
+.dark .rbc-event:has(.rbc-event-content.isProspect.yellow) {
+   background: linear-gradient(to right, rgb(190, 190, 0) 22px, #002299 20px);
+}
+
+.rbc-event:has(.rbc-event-content.orange) {
+   background: linear-gradient(to right, orange 22px, #bad9f1 20px);
+}
+
+.rbc-event:has(.rbc-event-content.isProspect.orange) {
+   background: linear-gradient(to right, orange 22px, #a0bbce 20px);
+}
+
+.dark .rbc-event:has(.rbc-event-content.orange) {
+   background: linear-gradient(to right, rgb(190, 125, 0) 22px, #004299 20px);
+}
+
+.dark .rbc-event:has(.rbc-event-content.isProspect.orange) {
+   background: linear-gradient(to right, rgb(190, 125, 0) 22px, #002299 20px);
+}
+
+.rbc-event:has(.rbc-event-content.red) {
+   background: linear-gradient(to right, red 22px, #bad9f1 20px);
+}
+
+.rbc-event:has(.rbc-event-content.isProspect.red) {
+   background: linear-gradient(to right, red 22px, #a0bbce 20px);
+}
+
+.dark .rbc-event:has(.rbc-event-content.red) {
+   background: linear-gradient(to right, rgb(190, 0, 0) 22px, #004299  20px);
+}
+
+.dark .rbc-event:has(.rbc-event-content.isProspect.red) {
+   background: linear-gradient(to right, rgb(190, 0, 0) 22px, #002299  20px);
+}
+
+/**/
+
+.rbc-event.secondary:has(.rbc-event-content.yellow) {
+   background: linear-gradient(to right, yellow 22px, #ddd 20px);
+}
+
+.rbc-event.secondary:has(.rbc-event-content.isProspect.yellow) {
+   background: linear-gradient(to right, yellow 22px, #bbb 20px);
+}
+
+.dark .rbc-event.secondary:has(.rbc-event-content.yellow) {
+   background: linear-gradient(to right, rgb(190, 190, 0) 22px, #525252 20px);
+}
+
+.dark .rbc-event.secondary:has(.rbc-event-content.isProspect.yellow) {
+   background: linear-gradient(to right, rgb(190, 190, 0) 22px, #323232 20px);
+}
+
+.rbc-event.secondary:has(.rbc-event-content.orange) {
+   background: linear-gradient(to right, orange 22px, #ddd 20px);
+}
+
+.rbc-event.secondary:has(.rbc-event-content.isProspect.orange) {
+   background: linear-gradient(to right, orange 22px, #bbb 20px);
+}
+
+.dark .rbc-event.secondary:has(.rbc-event-content.orange) {
+   background: linear-gradient(to right, rgb(190, 125, 0) 22px, #525252 20px);
+}
+
+.dark .rbc-event.secondary:has(.rbc-event-content.isProspect.orange) {
+   background: linear-gradient(to right, rgb(190, 125, 0) 22px, #323232 20px);
+}
+
+.rbc-event.secondary:has(.rbc-event-content.red) {
+   background: linear-gradient(to right, red 22px, #ddd 20px);
+}
+
+.rbc-event.secondary:has(.rbc-event-content.isProspect.red) {
+   background: linear-gradient(to right, red 22px, #bbb 20px);
+}
+
+.dark .rbc-event.secondary:has(.rbc-event-content.red) {
+   background: linear-gradient(to right, rgb(190, 0, 0) 22px, #525252  20px);
+}
+
+.dark .rbc-event.secondary:has(.rbc-event-content.isProspect.red) {
+   background: linear-gradient(to right, rgb(190, 0, 0) 22px, #323232  20px);
+}
+
+/**/
+
+.rbc-event-content {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   padding-left: 0px;
+   color: black;
+}
+
+.dark .rbc-event-content {
+   color: #ddd;
+}
+
+.rbc-event {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   outline: none !important;
+   margin-left: 2px;
+}
+
+@media (max-width: 500px) {
+   .rbc-month-view .rbc-event {
+      height: 75%;
+   }
+
+   .rbc-month-view .rbc-event-content {
+      margin-left: -10px;
+      margin-top: -2.5px;
+   }
+
+   .rbc-month-view .eventIconOutside {
+      margin: 2px !important;
+      margin-left: 4.5px !important;
+      height: 7.5px !important;
+      width: 7.5px !important;
+   }
+
+   .rbc-month-view .eventIconOutside i {
+      font-size: 15px !important;
+   }
+
+   .rbc-month-view .eventIconInside {
+      margin-top: -25px !important;
+      margin-left: 14% !important;
+   }
+
+   .rbc-month-view .eventHour, .rbc-month-view .eventServiceIcon {
+      display: none;
+   }
+
+   .rbc-month-view .rbc-event:has(.rbc-event-content.yellow) {
+      background: linear-gradient(to right, yellow 5.5px, #bad9f1 5px);
+   }
+   
+   .rbc-month-view .rbc-event:has(.rbc-event-content.isProspect.yellow) {
+      background: linear-gradient(to right, yellow 5.5px, #a0bbce 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event:has(.rbc-event-content.yellow) {
+      background: linear-gradient(to right, rgb(190, 190, 0) 5.5px, #004299 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event:has(.rbc-event-content.isProspect.yellow) {
+      background: linear-gradient(to right, rgb(190, 190, 0) 5.5px, #002299 5px);
+   }
+   
+   .rbc-month-view .rbc-event:has(.rbc-event-content.orange) {
+      background: linear-gradient(to right, orange 5.5px, #bad9f1 5px);
+   }
+   
+   .rbc-month-view .rbc-event:has(.rbc-event-content.isProspect.orange) {
+      background: linear-gradient(to right, orange 5.5px, #a0bbce 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event:has(.rbc-event-content.orange) {
+      background: linear-gradient(to right, rgb(190, 125, 0) 5.5px, #004299 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event:has(.rbc-event-content.isProspect.orange) {
+      background: linear-gradient(to right, rgb(190, 125, 0) 5.5px, #002299 5px);
+   }
+   
+   .rbc-month-view .rbc-event:has(.rbc-event-content.red) {
+      background: linear-gradient(to right, red 5.5px, #bad9f1 5px);
+   }
+   
+   .rbc-month-view .rbc-event:has(.rbc-event-content.isProspect.red) {
+      background: linear-gradient(to right, red 5.5px, #a0bbce 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event:has(.rbc-event-content.red) {
+      background: linear-gradient(to right, rgb(190, 0, 0) 5.5px, #004299  5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event:has(.rbc-event-content.isProspect.red) {
+      background: linear-gradient(to right, rgb(190, 0, 0) 5.5px, #002299  5px);
+   }
+   
+   /**/
+   
+   .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.yellow) {
+      background: linear-gradient(to right, yellow 5.5px, #ddd 5px);
+   }
+   
+   .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.isProspect.yellow) {
+      background: linear-gradient(to right, yellow 5.5px, #bbb 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.yellow) {
+      background: linear-gradient(to right, rgb(190, 190, 0) 5.5px, #525252 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.isProspect.yellow) {
+      background: linear-gradient(to right, rgb(190, 190, 0) 5.5px, #323232 5px);
+   }
+   
+   .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.orange) {
+      background: linear-gradient(to right, orange 5.5px, #ddd 5px);
+   }
+   
+   .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.isProspect.orange) {
+      background: linear-gradient(to right, orange 5.5px, #bbb 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.orange) {
+      background: linear-gradient(to right, rgb(190, 125, 0) 5.5px, #525252 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.isProspect.orange) {
+      background: linear-gradient(to right, rgb(190, 125, 0) 5.5px, #323232 5px);
+   }
+   
+   .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.red) {
+      background: linear-gradient(to right, red 5.5px, #ddd 5px);
+   }
+   
+   .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.isProspect.red) {
+      background: linear-gradient(to right, red 5.5px, #bbb 5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.red) {
+      background: linear-gradient(to right, rgb(190, 0, 0) 5.5px, #525252  5px);
+   }
+   
+   .dark .rbc-month-view .rbc-event.secondary:has(.rbc-event-content.isProspect.red) {
+      background: linear-gradient(to right, rgb(190, 0, 0) 5.5px, #323232  5px);
+   }
+}
+
+.rbc-month-view .rbc-event, .rbc-event-allday {
+   width: calc(100% - 4px) !important;
+}
+
+.rbc-event.rbc-selected {
+   border: 2px solid #777D74 !important;
+   padding-top: 0px !important;
+   padding-bottom: 0px !important;
+   padding-left: 3px !important;
+   padding-right: 3px !important;
+   z-index: 1;
+}
+
+.dark .rbc-event.rbc-selected {
+   border: 2px solid rgb(215, 215, 215) !important;
+}
+
+/***********/
+
+.fullShowing .rbc-month-view, .fullShowing .rbc-time-view {
+   width: 100% !important;
+}
+
+.fullShowing .showOptions {
+   display: inline !important;
+}
+
+.showOptions.inForm {
+   display: none !important;
+}
+
+.calendarInForm .rbc-month-view {
+   width: 100%;
+}
+
+.calendarInForm .rbc-time-view {
+   width: 100%;
+}
+
+.rbc-header div {
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+.rbc-off-range-bg {
+   background: #eeeeee;
+}
+
+.dark .rbc-off-range-bg {
+   background: #191b31;
+}
+
+.rbc-month-view {
+   width: 69%;
+}
+
+@media (min-width: 1870px) {
+   .rbc-month-view {
+      width: calc(100% - 476px);
+   }
+}
+
+.dark .rbc-month-view, .dark .rbc-time-view {
+   border-top: 1px solid #525252;
+   border-bottom: 2px solid #525252;
+   border-left: 1px solid #525252;
+   border-right: 2px solid #525252;
+}
+
+.rbc-month-row, .rbc-time-header-content {
+   cursor: pointer;
+}
+
+.rbc-time-view {
+   width: 69%;
+}
+
+@media (min-width: 1870px) {
+   .rbc-time-view {
+      width: calc(100% - 476px);
+   }
+}
+
+.rbc-navbar {
+   border-top: 1px solid #ddd;
+   border-left: 1px solid #ddd;
+   border-right: 1px solid #ddd;
+}
+
+.dark .rbc-navbar {
+   border-top: 2px solid #525252;
+   border-left: 2px solid #525252;
+   border-right: 2px solid #525252;
+}
+
+.dark .rbc-timeslot-group {
+   border-bottom: 1px solid #525252;
+}
+
+.dark .rbc-day-slot .rbc-time-slot {
+   border-top: 1px solid #525252;
+}
+
+.dark .rbc-time-header-content {
+   border-left: 1px solid #525252;
+}
+
+.dark .rbc-time-header.rbc-overflowing {
+   border-right: 1px solid #525252;
+}
+
+.rbc-time-content {
+   border-top: 1px solid #ddd;
+}
+
+.dark .rbc-time-content {
+   border-top: 1px solid #525252;
+}
+
+.dark .rbc-time-content > * + * > * {
+   border-left: 1px solid #525252;
+}
+
+/******************************************************************************* *** DatePicker *** *******************************************************************************/
+
+/*- Botão de Selecionar -*/
+
+.pick-date:hover, .pick-date.selected, .pick-more:hover {
+   background: #ddd;
+   border-radius: 5px;
+}
+
+.dark .pick-date:hover, .dark .pick-date.selected, .dark .pick-more:hover {
+   background: #2a2d47;
+}
+
+/*- Geral -*/
+
+.react-datepicker-popper {
+   z-index: 9999;
+   border-radius: 0.3rem;
+   box-sizing: border-box;
+   box-shadow: rgba(0, 0, 0, 0.133) 0px 6.4px 14.4px 0px, rgba(0, 0, 0, 0.11) 0px 1.2px 3.6px 0px;
+}
+
+.react-datepicker__month-text, .react-datepicker__current-month, .react-datepicker__month-read-view--selected-month, .react-datepicker__day-name, .react-datepicker__month-option {
+   text-transform: capitalize;
+}
+
+.react-datepicker__current-month, .react-datepicker__day-name {
+   cursor: default;
+}
+
+/*- Mês -*/
+
+.react-datepicker__month-text {
+   height: 40px !important;
+   width: 72.5px !important;
+   padding-top: 5% !important;
+}
+
+.react-datepicker__month-text:hover {
+   background: #ddd !important;
+}
+
+.dark .react-datepicker__month-text:hover {
+   background: #2a2d47 !important;
+}
+
+.react-datepicker__month-text--today {
+   font-weight: normal;
+}
+
+.react-datepicker__month-text--selected {
+   background: #bad9f1 !important;
+   color: black;
+   font-weight: bold;
+}
+
+.dark .react-datepicker__month-text--selected {
+   background: #004299 !important;
+}
+
+.react-datepicker__month-text--selected:hover {
+   background: #bad9f1 !important;
+}
+
+.dark .react-datepicker__month-text--selected:hover {
+   background: #004299 !important;
+}
+
+.react-datepicker__month-text--keyboard-selected, .react-datepicker__day--keyboard-selected {
+   background: white;
+}
+
+.dark .react-datepicker__month-text--keyboard-selected, .dark .react-datepicker__day--keyboard-selected {
+   background: black;
+}
+
+/*- Dia -*/
+
+.react-datepicker__day--selected {
+   background: #bad9f1 !important;
+   color: black !important;
+}
+
+.dark .react-datepicker__day--selected {
+   background: #004299 !important;
+   color: white !important;
+}
+
+.react-datepicker__day:hover {
+   background: #ddd !important;
+}
+
+.dark .react-datepicker__day:hover {
+   background: #2a2d47 !important;
+}
+
+.react-datepicker__day--today, .react-datepicker__day--today:hover {
+   background: #0084ff !important;
+   border-radius: 5px;
+   color: white !important;
+   font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+   font-size: 0.8rem;
+}
+
+.dark .react-datepicker__day--today, .dark .react-datepicker__day--today:hover {
+   background: #0084ff !important;
+   border-radius: 5px;
+   color: white !important;
+   font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+   font-size: 0.8rem;
+}
+
+/*- Semana e dia -*/
+
+.react-datepicker__month-container.week-mode .react-datepicker__week:hover {
+   background: #ddd !important;
+   border-radius: 5px;
+}
+
+.dark .react-datepicker__month-container.week-mode .react-datepicker__week:hover {
+   background: #2a2d47 !important;
+}
+
+.react-datepicker__month-container.week-mode .react-datepicker__week:hover .react-datepicker__day--keyboard-selected {
+   background: #ddd !important;
+}
+
+.dark .react-datepicker__month-container.week-mode .react-datepicker__week:hover .react-datepicker__day--keyboard-selected {
+   background: #2a2d47 !important;
+}
+
+.react-datepicker__month-container.week-mode .react-datepicker__week:hover .react-datepicker__day--selected {
+   background: #ddd !important;
+}
+
+.dark .react-datepicker__month-container.week-mode .react-datepicker__week:hover .react-datepicker__day--selected {
+   background: #2a2d47 !important;
+}
+
+.react-datepicker__month-container.week-mode .react-datepicker__week:has(.react-datepicker__day--selected) {
+   background: #bad9f1;
+   border: 1px solid black;
+   border-radius: 5px;
+   margin: 0px;
+}
+
+.dark .react-datepicker__month-container.week-mode .react-datepicker__week:has(.react-datepicker__day--selected) {
+   background: #004299;
+}
+
+.react-datepicker__month-container.week-mode .react-datepicker__week:has(.react-datepicker__day--selected) .react-datepicker__day--keyboard-selected {
+   background: #bad9f1 !important;
+}
+
+.dark .react-datepicker__month-container.week-mode .react-datepicker__week:has(.react-datepicker__day--selected) .react-datepicker__day--keyboard-selected {
+   background: #004299 !important;
+}
+
+.react-datepicker__month-container:not(.week-mode) .react-datepicker__day--selected {
+   background: #bad9f1;
+   border: 1px solid black;
+}
+
+.dark .react-datepicker__month-container:not(.week-mode) .react-datepicker__day--selected {
+   background: #004299;
+}
+
+/*- Restante do modo dark -*/
+
+.dark .react-datepicker {
+   border: 0.125rem solid #525252;
+}
+
+.dark .react-datepicker__header, .dark .react-datepicker__year-option {
+   background-color: #131425;
+   color: white;
+}
+
+.dark .react-datepicker__month-text, .dark .react-datepicker__current-month, .dark .react-datepicker__day-name, .dark .react-datepicker__day {
+   color: white !important;
+}
+
+.dark .react-datepicker__month {
+   margin: 0px;
+   padding: 0.4rem;
+   background: #191b31;
+}
+
+/**********************************************************************************************************************************************************************************/

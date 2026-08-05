@@ -1,0 +1,33 @@
+import React, { Fragment, useRef } from 'react';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { PageBase, PageBaseProps } from '../../../template/pagebase/pagebase';
+import RecadosContainer, { RecadosContainerParams } from './recadoscontainer';
+
+export interface RecadosProps extends PageBaseProps {
+   prefixId?: string
+   heightGrid?: string | number
+
+}
+
+const Recados: React.FC<RecadosProps> = (props) => {
+   const { prefixId, heightGrid } = props;
+
+   return (
+      <PageBase >
+         <CrudProvider>
+            <RecadosContainer
+
+               typeRender='crud'
+               params={
+                  {
+                     prefixId,
+                     heightGrid
+                  } as RecadosContainerParams
+               }
+            />
+         </CrudProvider>
+      </PageBase>
+   );
+}
+
+export default Recados;

@@ -1,0 +1,316 @@
+import React, { Fragment, useEffect, useState } from 'react';
+import Button, { ValidateFields, DataSearchCEP, InputSelect, EnumCharcasetypes, InputCEP, Input, InputSelectCidade, InputSelectUF } from '../../../components/form/form';
+import { EnumAtivoInativo } from '../../../enums/enums';
+import { IModelMOB015 } from '../../../models/modelMOB015';
+import { InputDataValue } from '../../../types/types';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../components/modal/modal';
+import PortalService from '../../../services/portal';
+import { useModalContext } from '../../../hooks/useModalContext';
+import { EnumCrudStateRecordType } from '../../../components/crud/enums';
+
+interface PessoaEnderecoManutencaoModalProps { }
+
+const PessoaEnderecoManutencaoModal: React.FC<PessoaEnderecoManutencaoModalProps> = (props) => {
+
+   const novoEndereco = (idPessoa?: number) => new Promise<IModelMOB015>((resolve, reject) => {
+      var textoRuaPadrao: string = '';
+      var textoBairroPadrao: string = '';
+      var textoCidadePadrao: string = '';
+      var textoNumeroPadrao: string = '';
+      var textoFonePadrao: string = '';
+      var textoCEPPadrao: string = '';
+      var textoEmailPadrao: string = '';
+
+      PortalService.getInstance().configuracoes().then(configuracoes => {
+         if (configuracoes) {
+            if (configuracoes.PAR_PORTAL_CONFIG_PESSOAS?.SUGERE_DADOS_ENDERECO === 'S') {
+               textoRuaPadrao = 'NAO INFORMADO';
+               textoBairroPadrao = 'NAO INFORMADO';
+               textoCidadePadrao = 'NAO INFORMADO';
+               textoNumeroPadrao = 'S/N';
+               textoFonePadrao = '(99)9999-9999';
+               textoCEPPadrao = '99999-999';
+               textoEmailPadrao = 'naoinformado@email.com';
+            }
+            if (configuracoes.PAR_PORTAL_CONFIG_PESSOAS?.CIDADE_PADRAO! > 0) {
+               textoCidadePadrao = configuracoes.PAR_PORTAL_CONFIG_PESSOAS?.CIDADE_PADRAO_NOME!;
+            }
+         }
+
+         resolve({
+            END_ID: 0,
+            END_TIPO: "RES",
+            END_ENDERECO: textoRuaPadrao,
+            END_NUMERO: textoNumeroPadrao,
+            END_COMPLEMENTO: "",
+            END_CIDADE: textoCidadePadrao,
+            END_ESTADO: configuracoes?.PAR_PORTAL_CONFIG_PESSOAS?.UF_PADRAO!,
+            END_BAIRRO: textoBairroPadrao,
+            END_CEP: textoCEPPadrao,
+            END_EMAIL: textoEmailPadrao,
+            END_CIDADE_PK: configuracoes?.PAR_PORTAL_CONFIG_PESSOAS?.CIDADE_PADRAO!,
+            END_ATIVO: EnumAtivoInativo.ATIVO,
+            END_LEGADO_CODIGO: 0,
+            END_CELULAR: "",
+            END_FAX: "",
+            END_FONE: textoFonePadrao,
+            END_ID_PESSOA: idPessoa ? idPessoa : modalState.pessoaId!,
+         })
+      }).catch(error => {
+         reject(error);
+      })
+   });
+
+   const { modalState } = useModalContext();
+   const [data, setData] = useState<IModelMOB015>({
+      END_ID: 0,
+      END_TIPO: "RES",
+      END_ENDERECO: '',
+      END_NUMERO: '',
+      END_CIDADE: '',
+      END_ESTADO: '',
+      END_BAIRRO: '',
+      END_CEP: '',
+      END_ATIVO: EnumAtivoInativo.ATIVO,
+      END_ID_PESSOA: 0
+   });
+   const dataModel: InputDataValue<IModelMOB015> = { data, setData }
+   const [validateFields, setValidateFields] = useState<ValidateFields>(new ValidateFields());
+   const [ibgeFromCEP, setIbgeFromCEP] = useState<string | undefined>();
+
+   useEffect(() => {
+      if (modalState.type === 'pessoaEnderecoManutencaoModal') {
+
+         if (modalState.state === EnumCrudStateRecordType.INCLUIR)
+            novoEndereco().then(data => {
+               dataModel.setData(data)
+            })
+
+         if (modalState.state === EnumCrudStateRecordType.ALTERAR && modalState.endereco)
+            dataModel.setData(modalState.endereco);
+
+      }
+
+   }, [modalState.endereco, modalState.state])
+
+   useEffect(() => {
+      novoEndereco().then(data => {
+         dataModel.setData(data)
+      })
+   }, [])
+
+   const onSearchCEP = (data: DataSearchCEP): void => {
+      let modelEndereco: IModelMOB015 = {
+         ...dataModel.data,
+
+         END_COMPLEMENTO: data.complemento,
+         END_BAIRRO: data.bairro,
+         END_ENDERECO: data.logradouro,
+         END_ESTADO: data.uf
+      }
+      dataModel.setData(modelEndereco);
+      setIbgeFromCEP(data.ibge);
+   }
+
+   return (
+      <Modal id="pessoa-endereco-manutencao-modal" className="fade" largeType={'large'}>
+         <ModalHeader
+            showCloseTools={true}
+            title="Endereço"
+         />
+         <ModalBody>
+            {modalState.type === 'pessoaEnderecoManutencaoModal' &&
+               <Fragment>
+                  <div className='row'>
+                     <div className='col-12 col-lg-3 mb-3'>
+                        <InputSelect
+                           id="END_TIPO"
+                           label="Tipo de Endereço"
+                           options={[
+                              { value: 'RES', label: 'Comercial' },
+                              { value: 'ENT', label: 'Entrega' },
+                              { value: 'TRA', label: 'Faturamento' },
+                              { value: 'OUT', label: 'Cobrança' }
+                           ]}
+                           dataModel={dataModel}
+                           validator={validateFields}
+                           validations={{
+                              required: true,
+                           }}
+                           isDisabled={modalState.isProspect}
+                        />
+                     </div>
+                     <div className='col-6 col-md-3 col-lg-2 mb-3'>
+                        <InputCEP
+                           label="CEP"
+                           dataModel={dataModel}
+                           id="END_CEP"
+                           validator={validateFields}
+                           onSearchCEP={onSearchCEP}
+                           validations={{
+                              required: true,
+                           }}
+                           maxLength={9}
+                        />
+                     </div>
+                     <div className='col-12 col-md-7 col-lg-5 mb-3'>
+                        <Input
+                           label="Endereço"
+                           charCase={EnumCharcasetypes.UPPERCASE}
+                           id="END_ENDERECO"
+                           placeholder="Informe o Endereço"
+                           dataModel={dataModel}
+                           validator={validateFields}
+                           validations={{
+                              required: true,
+                           }}
+                           maxLength={60}
+                        />
+                     </div>
+                     <div className='col-6 col-md-2 col-lg-2 mb-3'>
+                        <Input
+                           label="Nº"
+                           charCase={EnumCharcasetypes.UPPERCASE}
+                           dataModel={dataModel}
+                           id="END_NUMERO"
+                           validator={validateFields}
+                           validations={{
+                              required: true,
+                           }}
+                           maxLength={10}
+                        />
+                     </div>
+                  </div>
+                  <div className='row'>
+                     <div className='col-lg-4 mb-3'>
+                        <Input
+                           label="Bairro"
+                           charCase={EnumCharcasetypes.UPPERCASE}
+                           dataModel={dataModel}
+                           id="END_BAIRRO"
+                           placeholder="Informe o Bairro"
+                           validator={validateFields}
+                           validations={{
+                              required: true,
+                           }}
+                           maxLength={60}
+                        />
+                     </div>
+                     <div className='col-12 col-md-4 col-lg-4 mb-3'>
+                        <InputSelectUF
+                           label="Estado"
+                           placeholder="Estado"
+                           dataModel={dataModel}
+                           id="END_ESTADO"
+                           name="END_ESTADO"
+                           validator={validateFields}
+                           validations={{
+                              required: true,
+                           }}
+                        />
+
+                     </div>
+                     <div className='col-12 col-md-8 col-lg-4 mb-3'>
+                        <InputSelectCidade
+                           label="Cidade"
+                           placeholder="Cidade"
+                           uf={dataModel.data.END_ESTADO}
+                           id="END_CIDADE_PK"
+                           name="END_CIDADE_PK"
+                           dataModel={dataModel}
+                           ibge={ibgeFromCEP}
+                           onChange={e => {
+                              let data = { ...dataModel.data };
+                              data.END_CIDADE = e.label!;
+                              dataModel.setData(data);
+                           }}
+                           onSelectIBGE={(cidade) => {
+                              let data = { ...dataModel.data };
+                              data.END_CIDADE = cidade.CID_NOMECIDADE;
+                              data.END_CIDADE_PK = cidade.CID_CODIGO;
+                              dataModel.setData(data);
+                           }}
+                           validator={validateFields}
+                           validations={{
+                              required: true,
+                           }}
+                        />
+                     </div>
+                  </div>
+                  <div className='row'>
+                     <div className='col-12 mb-3'>
+                        <Input
+                           label="Complemento"
+                           charCase={EnumCharcasetypes.UPPERCASE}
+                           dataModel={dataModel}
+                           id="END_COMPLEMENTO"
+                           placeholder="Informe o Complemento"
+                           maxLength={20}
+                        />
+                     </div>
+                  </div>
+                  <div className='row'>
+                     <div className='col-6 col-lg-3 mb-3'>
+                        <Input
+                           label="Fone Fixo"
+                           dataModel={dataModel}
+                           id="END_FONE"
+                           mask="(99) 9999-9999"
+                           validator={validateFields}
+                           validations={{
+                              required: true,
+                           }}
+                        />
+                     </div>
+                     <div className='col-6 col-lg-3 mb-3'>
+                        <Input
+                           label="Celular"
+                           dataModel={dataModel}
+                           id="END_CELULAR"
+                           mask="(99) 99999-9999"
+                        />
+                     </div>
+                     <div className='col-lg-6 mb-3'>
+                        <Input
+                           label="Email"
+                           id="END_EMAIL"
+                           dataModel={dataModel}
+                           validator={validateFields}
+                           validations={{
+                              required: true,
+                           }}
+                           maxLength={60}
+                        />
+                     </div>
+                  </div>
+               </Fragment>
+            }
+         </ModalBody>
+         <ModalFooter
+            showCloseBtn={true}
+         >
+            <Button
+               onClick={() => {
+                  if (modalState.onSave) {
+                     if (!validateFields.validateAll())
+                        return;
+
+
+                     modalState.onSave(data, modalState.state).then(() => {
+                        if (modalState.state === EnumCrudStateRecordType.INCLUIR)
+                           novoEndereco(0).then(data => {
+                              dataModel.setData(data)
+                           })
+                     });
+                  }
+               }}
+               className="btn btn-primary"
+               classIcon="mdi mdi-check"
+               caption="Salvar"
+            />
+         </ModalFooter>
+      </Modal >
+   );
+}
+
+export default PessoaEnderecoManutencaoModal;

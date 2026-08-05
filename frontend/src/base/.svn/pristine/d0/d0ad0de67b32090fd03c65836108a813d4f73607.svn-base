@@ -1,0 +1,28 @@
+export enum EnumPessoa_ContatoTipoAcessoPortal {
+   emPessoa_ContatoTipoAcessoPortal_Admin = 'A',
+   emPessoa_ContatoTipoAcessoPortal_Normal = 'N'
+}
+
+export enum EnumPessoa_FisicaJuridica {
+   emPessoa_FisJur_Fisica = 'F',
+   emPessoa_FisJur_Juridica = 'J'
+}
+
+export enum EnumPessoa_ObservacoesAlerta {
+   emPessoa_Observacoes_AlertaComercial = 'C',
+   emPessoa_Observacoes_AlertaFinanceiro = 'F',
+   emPessoa_Observacoes_AlertaGeral = 'G'
+}
+
+export enum EnumPessoa_TipoPessoa {
+   emPessoa_TpPessoa_Clientes = 'C',
+   emPessoa_TpPessoa_Fornecedores = 'F',
+   emPessoa_TpPessoa_Transportadoras = 'T',
+   emPessoa_TpPessoa_Funcionarios = 'U',
+   emPessoa_TpPessoa_Outros = 'O'
+}
+
+export enum EnumPessoa_TpPessoaProspect {
+   emPessoa_TpPessoaProspect_Pessoa = 'PESSOA',
+	emPessoa_TpPessoaProspect_Prospect = 'PROSPECT'
+}

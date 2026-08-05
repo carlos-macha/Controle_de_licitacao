@@ -1,0 +1,56 @@
+export interface ICartItem {
+  idProduto: number;
+  quantidade: number;
+  preco: number;
+}
+
+interface ICart {
+  get: () => ICartItem[];
+  add: (item: ICartItem) => void;
+  remove: (idProduto: number) => void;
+  clear: () => void;
+}
+
+const Cart = (function () {
+  let instance: ICart;
+  let data: ICartItem[];
+
+  const createInstance = (): ICart => {
+    data = [];
+
+    return {
+      get: () => data,
+
+      add: (item) => {
+        const existente = data.find(i => i.idProduto === item.idProduto);
+
+        if (existente) {
+          existente.quantidade += item.quantidade;
+          existente.preco = item.preco; // atualiza preço se mudou
+          return;
+        }
+
+        data.push(item);
+      },
+
+      remove: (idProduto) => {
+        data = data.filter(i => i.idProduto !== idProduto);
+      },
+
+      clear: () => {
+        data = [];
+      }
+    };
+  };
+
+  return {
+    instance: () => {
+      if (!instance) {
+        instance = createInstance();
+      }
+      return instance;
+    }
+  };
+})();
+
+export default Cart;

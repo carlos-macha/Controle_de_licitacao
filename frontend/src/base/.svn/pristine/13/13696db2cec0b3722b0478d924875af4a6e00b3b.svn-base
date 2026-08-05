@@ -1,0 +1,21 @@
+import { EnumAtivoInativo } from "../enums/enums";
+import { IModelCallcenterCall022 } from "./modelCallcenterCALL022";
+
+export interface IModelCallcenterCall007 {
+   PRG_PROJETO: number,
+   PRG_SISTEMA: number,
+   PRG_PROGRAMA: string,
+   PRG_DTINICIAL: number,
+   PRG_DTFINAL?: number,
+   PRG_OBJETIVO: string,
+   PRG_DESCRICAOINTERNET: string,
+   PRG_HELPONLINE: string,
+   PRG_FUNCIONARIOCRIACAO: string,
+   PRG_LINGUAGEM: number,
+   PRG_VERSAO: string,
+   PRG_ATIVOINATIVO: EnumAtivoInativo,
+   PRG_DESCRICAO: string,
+   PRG_SUBSISTEMA: number,
+   PRG_INTERVALO_EXECUCAO?: number,
+   SUBSISTEMA: IModelCallcenterCall022
+}

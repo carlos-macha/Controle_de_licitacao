@@ -1,0 +1,21 @@
+import DAOContatos from "../daos/daocontato";
+import { IModelAux099 } from "../models/modelAUX099";
+import { utilities } from "../utils/utilities";
+import Controller from "./controller";
+
+export default class ControllerContatos extends Controller<DAOContatos>  {
+  cargos = (id: number = 0, where: string = '', first: number = 0, skip: number = 0) =>
+    new Promise<Array<IModelAux099>>((resolve, reject) => {
+      try {
+        where = utilities.base64(where);
+
+        this.DAO.ChamaCargos(id, where, first, skip).then(data => {
+          resolve(data);
+        }).catch(error => {
+          reject(error);
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+}

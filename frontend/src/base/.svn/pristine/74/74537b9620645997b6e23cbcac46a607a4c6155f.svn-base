@@ -1,0 +1,8 @@
+export interface IModelCALL022 {
+SBS_PROJETO: number,
+SBS_SISTEMA: number,
+SBS_CODIGO: number,
+SBS_DESCRICAO: string,
+SBS_DESCRICAOINTERNET: string,
+SIS_DESCRICAO: string
+}

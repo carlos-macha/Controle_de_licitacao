@@ -1,0 +1,59 @@
+import md5 from 'md5';
+import React, { useState, Fragment } from 'react';
+import { DataRoutesHome } from '../../routes/dataroutes';
+import ViewLock from './viewlock';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import { Navigate } from 'react-router-dom';
+import { AlertTypes } from '../../base/components/alert/alert';
+
+const Lock: React.FC = () => {
+
+   const { authState, authDispatch: dispatch } = useAuthContext();
+   const [pass, setPass] = useState<string>('');
+   const [redirectHome, setRedirectHome] = useState<boolean>(false);
+   const [alertMessage, setAlertMessage] = useState<string | undefined>(undefined);
+   const [alertType, setAlertType] = useState<AlertTypes | undefined>();
+
+   const onValidatePass = (): void => {
+      if (md5(pass) !== authState.user.USU_SENHA) {
+         setAlertType("danger");
+         setAlertMessage("A senha informada é inválida");
+         setRedirectHome(false);
+      } else {
+         setAlertType(undefined);
+         setAlertMessage(undefined);
+         dispatch({
+            type: "unlock"
+         });
+         setRedirectHome(true);
+      }
+   }
+
+   const onCloseAlert = (): void => {
+      setAlertType(undefined);
+   }
+
+   const onLogin = (): void => {
+      dispatch({
+         type: "logoff"
+      });
+      setRedirectHome(true);
+   }
+
+   return (
+      <Fragment>
+         <ViewLock
+            user={authState.user.USU_USUARIO}
+            pass={{ data: pass, setData: setPass }}
+            onValidatePass={onValidatePass}
+            onCloseAlert={onCloseAlert}
+            onLogin={onLogin}
+            alertMessage={alertMessage}
+            alertType={alertType}
+         />
+         {redirectHome && (<Navigate to={DataRoutesHome.path} />)}
+      </Fragment>
+   );
+}
+
+export default Lock;

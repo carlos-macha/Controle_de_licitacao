@@ -1,0 +1,13 @@
+import { EnumAtivoInativo } from "../enums/enums"
+import { EnumWorkFlow_TipoWorkFlow } from "../enums/enumsworkflow"
+
+export interface IModelAux044 {
+   CST_EMPRESA: number,
+   CST_CODIGO: number,
+   CST_TIPO: EnumWorkFlow_TipoWorkFlow,
+   CST_DESCRICAO: string,
+   CST_ATIVO: EnumAtivoInativo,
+   CST_STATUSINICIAL: number,
+   CST_CFG_INTEGRACAO?: string,
+   EMP_RAZAO: string
+}

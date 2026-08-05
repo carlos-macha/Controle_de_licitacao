@@ -1,0 +1,31 @@
+import { EnumRecadosTpDocOrigem } from "../../../enums/enumrecados";
+
+const labelDocOrigem: Record<EnumRecadosTpDocOrigem, string> = {
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_ACAO_COMERCIAL]: "Ação Comercial",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_DEVOLUCAO]: "Devolução",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_MANUAL]: "Manual",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_WORKFLOW]: "Workflow",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_CONTABILIDADE]: "Contabilidade",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_GERAL]: "Geral",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_ASSISTENCIA_TEC]: "Assistência Técnica",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_SAC]: "SAC",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_NOTA_FISCAL]: "Nota Fiscal",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_SAC_PORTAL]: "SAC Portal",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_MOVIMENTACAO_ESTOQUE]: "Movimentação de Estoque",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_OBRA]: "Obra",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_PEDIDO_DE_COMPRA]: "Pedido de Compra",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_NECESSIDADE_DE_COMPRA]: "Necessidade de Compra",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_COTACAO_DE_PREÇO]: "Cotação de Preço",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_SOLICITACAO_DE_COMPRA]: "Solicitação de Compra",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_TITULO]: "Título",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_ASSISTENCIA_TECNICA_PORTAL]: "Assistência Técnica Portal",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_CONTROLE_ETAPAS]: "Controle de Etapas",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_NAO_IDENTIFICADO]: "Não Identificado",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_AGENDADOR_DE_PROCESSOS]: "Agendador de Processos",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_PEDIDO_PORTAL]: "Pedido Portal",
+  [EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_DEVOLUCAO_PORTA]: "Devolução Porta",
+};
+
+export function getLabelDocOrigem(valor: EnumRecadosTpDocOrigem): string {
+  return labelDocOrigem[valor] ?? "Desconhecido"; 
+}

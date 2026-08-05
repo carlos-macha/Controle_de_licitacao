@@ -1,0 +1,19 @@
+export enum EnumPortalPermissoes {
+   PER_001_PESSOAS = 1,
+   PER_002_SAC = 2,
+   PER_003_ASSISTENCIA = 3,
+   PER_004_NOTAS = 4,
+   PER_005_TITULOS = 5,
+   PER_008_AC = 8,
+   PER_009_VISUALIZAR_TODAS_ACS = 9,
+   PER_010_DEVOLUCOES = 10,
+   PER_011_CONSIGNACOES = 11
+}
+
+export enum EnumPortalTpConversacaoChat {
+   ASSISTENCIA_TECNICA = 'AP',
+   SAC = 'SP',
+   ACAO_COMERCIAL = 'PP',
+   DEVOLUCAO = 'DP'
+}
+

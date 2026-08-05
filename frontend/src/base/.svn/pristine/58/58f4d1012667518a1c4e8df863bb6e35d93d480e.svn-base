@@ -1,0 +1,12 @@
+export interface IModelMOB033 {
+   NPC_ID: number,
+   NPC_CONTATO_ID: number,
+   NPC_CODIGO_LEGADO?: number,
+   NPC_TIPO_NOTIFICACAO: number,
+   NPC_CONTATO_ID_PESSOA: number,
+   NPC_INCLUSAO_DATA: number,
+   NPC_INCLUSAO_HORA: number,
+   NPC_INCLUSAO_USUARIO: string,
+   NPC_ATIVO?: string
+
+}

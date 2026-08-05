@@ -1,0 +1,379 @@
+import { storageGetUser } from '../../../../utils/storage';
+import { CrudContainer } from '../../../components/crud/container/crudcontainer';
+import { EnumCrudStateRecordType } from '../../../components/crud/enums';
+import { CrudUrl, CrudPesquisaEvents, CrudManutencaoEvents } from '../../../components/crud/types';
+import { DataSearchType, OperatorSearchTypes } from '../../../components/datasearch/datasearch';
+import { DataTableColumns } from '../../../components/datatable/datatable';
+import { EnumCharcasetypes, OptionInputSelect, OptionsInputSelect } from '../../../components/form/form';
+import ControllerCRM from '../../../controllers/controllercrm';
+import { EnumRecadosPrioridade, EnumRecadosTpDocOrigem } from '../../../enums/enumrecados';
+import { EnumSimNao } from '../../../enums/enums';
+import { IModelUsuario } from '../../../models/modelUsuario';
+import { utilities } from '../../../utils/utilities';
+import RecadosManutencao from './recadosmanutencao';
+import RecadosManutencaoModal from './recadosmanutencaomodal';
+import RecadosPesquisa from './recadospesquisa';
+
+interface IDataValue {
+  usuarios?: Array<IModelUsuario>,
+  tipoRecado?: string
+}
+
+export interface RecadosContainerParams {
+  heightGrid?: string | number
+  prefixId?: string,
+  tipo?: string,
+  docTpOrigem?: string,
+  pessoaCod?: string,
+  pessoaNome?: string,
+  codOrigem?: number,
+  descricao?: string,
+  assuntoProp?: string,
+  onClose?: () => void
+}
+
+
+class RecadosContainer extends CrudContainer {
+
+  onMount = async () => new Promise<void>(async (resolve, reject) => {
+    let dataValue: IDataValue = { tipoRecado: 'R' };
+    const apenasAtivos = utilities.base64('SENHA_ATIVOINATIVO;=;A');
+    const controller = new ControllerCRM();
+    this.setState({
+      loading: true
+    });
+    let usuarios = await controller.DAO.usuarios(apenasAtivos);
+
+    dataValue.usuarios = usuarios;
+
+    this.setState({
+      dataValue,
+      loading: false
+    });
+
+    resolve();
+  });
+
+  crudUrl = (): CrudUrl | undefined => {
+    return {
+      GET: '/recados/recados',
+      PUT: '/recados/enviarrecados'
+    }
+  }
+
+  columns = (): DataTableColumns | undefined => {
+
+    const { dataValue } = this.state;
+
+    let empresas: Array<IModelUsuario> = (dataValue as IDataValue)?.usuarios!;
+    let optionsUsuarios: OptionsInputSelect = [];
+    if (empresas) {
+      empresas.forEach(emp => {
+        optionsUsuarios.push({
+          value: emp.SENHA_USUARIO,
+          label: emp.SENHA_USUARIO
+        })
+      });
+    }
+
+    return [
+      {
+        title: 'Usuários',
+        type: 'string',
+        field: 'DESTINATARIOS_EMITENTES',
+        width: 120,
+        visible: false,
+        // visible:true,
+        search: {
+          type: 'COMBOBOX',
+          operator: OperatorSearchTypes.EQUAL,
+          options: optionsUsuarios,
+          width: 150,
+        }
+      },
+
+      {
+        title: 'Tipo',
+        type: 'string',
+        field: 'ENVIADO_RECEBIDO',
+        visible: false,
+        search: {
+          type: 'COMBOBOX',
+          options: [{
+            label: 'Enviados',
+            value: 'E'
+          }, {
+            label: 'Recebidos',
+            value: 'R'
+          }],
+          defaultValue: 'R',
+          operator: OperatorSearchTypes.EQUAL,
+          width: 200,
+        }
+      },
+
+      {
+        title: 'Prioridade',
+        type: 'string',
+        field: 'REC_TP_PRIORIDADE',
+        width: 120,
+        search: {
+          type: 'COMBOBOX',
+          operator: OperatorSearchTypes.EQUAL,
+          options: [{
+            label: 'Baixa',
+            value: EnumRecadosPrioridade.EnumRecadosPrioridade_BAIXA
+          },
+          {
+            label: 'Normal',
+            value: EnumRecadosPrioridade.EnumRecadosPrioridade_NORMAL
+          },
+          {
+            label: 'Alta',
+            value: EnumRecadosPrioridade.EnumRecadosPrioridade_ALTA
+          },
+          {
+            label: 'Alerta',
+            value: EnumRecadosPrioridade.EnumRecadosPrioridade_ALERTA
+          },
+          ],
+          width: 150
+        }
+      },
+
+      {
+        title: 'Data',
+        type: 'date',
+        field: 'RDE_DATA',
+        width: 100,
+        search: {
+          type: 'BETWEEN',
+          operator: OperatorSearchTypes.EQUAL,
+          charCase: EnumCharcasetypes.UPPERCASE,
+          width: 200
+        }
+      },
+
+      {
+        title: 'Criados',
+        type: 'string',
+        field: 'REC_RECADO_MANUAL',
+        formatter: (cell) => {
+          let strValue = cell.getValue();
+          return strValue === 'S' ? 'Manual' : 'Automático';
+        },
+        search: {
+          type: 'COMBOBOX',
+          // defaultValue: EnumSimNao.SIM,
+          options: [{
+            label: 'Manuais',
+            value: EnumSimNao.SIM
+          }, {
+            label: 'Automáticos',
+            value: EnumSimNao.NAO
+          }, {
+            label: 'Ambos',
+            value: ''
+          }],
+          operator: OperatorSearchTypes.EQUAL,
+          width: 170
+        }
+      },
+
+      {
+        title: 'Emitentes',
+        type: 'string',
+        field: 'REC_USUARIOREGISTRO',
+        width: 120,
+      },
+
+      {
+        title: 'Hora',
+        type: 'time',
+        field: 'RDE_HORA',
+        width: 100,
+      },
+      {
+        title: 'Destinatários',
+        type: 'string',
+        field: 'RDE_USUARIODESTINO',
+        width: 120,
+      },
+      {
+        title: 'Origem',
+        type: 'string',
+        field: 'REC_TP_DOC_ORIGEM',
+        width: 100,
+        visible: false,
+        search: {
+          type: 'COMBOBOX',
+          operator: OperatorSearchTypes.EQUAL,
+          width: 200,
+          options: Object.entries(EnumRecadosTpDocOrigem).map(([key, value]) => ({
+            label: ({
+              AC: 'Ação comercial',
+              DV: 'Devolução',
+              MN: 'Manual',
+              WF: 'Workflow',
+              CT: 'Contabilidade',
+              GR: 'Geral',
+              AT: 'Assistência técnica',
+              SA: 'S.A.C.',
+              NF: 'Nota fiscal',
+              SP: 'S.A.C. Portal',
+              ET: 'Movimentação estoque',
+              OB: 'Obra',
+              PC: 'Pedido de compra',
+              NC: 'Necessidade de compra',
+              CO: 'Cotação de preço',
+              SC: 'Solicitação de compra',
+              TI: 'Título',
+              AP: 'Assistência técnica portal',
+              CE: 'Controle etapas',
+              XX: 'Não identificado',
+              AG: 'Agendador de processos',
+              PP: 'Pedido portal',
+              DP: 'Devolução portal'
+            } as Record<string, string>)[value] || value,
+            value
+          }))
+        }
+      },
+      {
+        title: 'Conf. Leitura',
+        type: 'string',
+        field: 'REC_CONFIRMACAO_LEITURA',
+        width: 100,
+        formatter: (cell) => {
+          let strValue = cell.getValue();
+          return strValue === 'S' ? 'SIM' : 'NÃO';
+        },
+        search: {
+          type: 'COMBOBOX',
+          operator: OperatorSearchTypes.EQUAL,
+          width: 180,
+          defaultValue: '',
+          options: [{
+            value: 'S',
+            label: 'Com confirmação de leitura'
+          },
+          {
+            value: 'N',
+            label: 'Sem confirmação de leitura'
+          },
+          {
+            value: '',
+            label: 'Ambos'
+          }
+          ]
+        }
+      },
+      {
+        title: 'Lido',
+        type: 'string',
+        field: 'RDE_MENSAGEMLIDA',
+        width: 100,
+        formatter: (cell) => {
+          let strValue = cell.getValue();
+          return strValue === 'S' ? 'SIM' : 'NÃO';
+        },
+        search: {
+          type: 'COMBOBOX',
+          operator: OperatorSearchTypes.EQUAL,
+          width: 150,
+          defaultValue: '',
+          options: [{
+            value: 'S',
+            label: 'Lidos'
+          },
+          {
+            value: 'N',
+            label: 'Não Lidos'
+          },
+          {
+            value: '',
+            label: 'Ambos'
+          }
+          ]
+        }
+      },
+      {
+        title: 'Assunto',
+        type: 'string',
+        field: 'REC_ASSUNTO',
+        width: 200,
+      },
+      {
+        title: 'Razão Social',
+        type: 'string',
+        field: 'PES_RAZAO',
+        width: 300,
+      },
+      {
+        title: 'Pessoa',
+        type: 'integer',
+        field: 'REC_PESSOA',
+        width: 100,
+      },
+      // {
+      //   title: 'Origem',
+      //   type: 'string',
+      //   field: 'REC_CODIGO_ORIGEM',
+      //   width: 100,
+      // },
+      {
+        title: 'Nrº Recado',
+        type: 'integer',
+        field: 'RDE_CODIGO',
+        width: 150,
+        search: {
+          operator: OperatorSearchTypes.EQUAL,
+          charCase: EnumCharcasetypes.UPPERCASE,
+          width: 200
+        }
+      },
+      // {
+      //   title: 'Cód. Recado',
+      //   type: 'integer',
+      //   field: 'RDE_CODIGORECADO',
+      //   width: 150,
+      //   search: {
+      //     operator: OperatorSearchTypes.EQUAL,
+      //     charCase: EnumCharcasetypes.UPPERCASE,
+      //     width: 200
+      //   }
+      // },
+    ];
+  }
+
+  pesquisa = (events: CrudPesquisaEvents): JSX.Element => {
+    const { params, onDataChange } = this.props;
+
+    return <RecadosPesquisa
+      events={events}
+      onDataChange={onDataChange}
+      heightGrid={params?.heightGrid}
+    />;
+  }
+
+  manutencao = (events: CrudManutencaoEvents): JSX.Element => {
+    const { params } = this.props;
+
+    if (params?.tipo === 'modal') {
+      events.onCancelButton = params.onClose;
+      events.url = this.crudUrl() as any;
+      events.state = EnumCrudStateRecordType.INCLUIR;
+    }
+
+    return (
+      <RecadosManutencao
+        events={events}
+        params={params}
+        prefixId={(this.props.params as RecadosContainerParams).prefixId}
+      />
+    )
+  }
+
+}
+
+export default RecadosContainer;

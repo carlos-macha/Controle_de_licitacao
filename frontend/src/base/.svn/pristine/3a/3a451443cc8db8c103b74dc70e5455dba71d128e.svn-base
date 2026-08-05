@@ -1,0 +1,12 @@
+import { EnumAtivoInativo } from "../enums/enums"
+import { IModelERPSIS009 } from "./modelERPsis009"
+
+export interface IModelERPSIS007 {
+  PER_CODIGO: string,
+  PER_DESCRICAO: string,
+  PER_ATIVO: EnumAtivoInativo,
+  PER_USUARIO: string,
+  USUARIOS: IModelERPSIS009[]
+}
+
+

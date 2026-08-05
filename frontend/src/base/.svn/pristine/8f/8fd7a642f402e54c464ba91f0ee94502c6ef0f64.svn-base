@@ -1,0 +1,33 @@
+import { EnumCRM_StatusSAC_AbertoFechado } from "../enums/enumscrm"
+import { IModelAnexos } from "./modelAnexos"
+import { IModelPortalEquipamento } from "./modelPortalEquipamento"
+
+export interface IModelPortalFuncionarioReclamacaoSAC {
+   PES_RAZAO: string
+}
+
+export interface IModelPortalSAC {
+   SAC_EMPRESA: number,
+   SAC_PESSOA: string,
+   SAC_PESSOA_CONTATO?: number | null,
+   SAC_SEQ: string,
+   SAC_ID: number,
+   SAC_RECLAMACAO: string,
+   SAC_DATA_PROBLEMA: number
+   SAC_STATUS: EnumCRM_StatusSAC_AbertoFechado,
+   SAC_ID_SERIEPRODUTO?: number,
+   SAC_DATA_COMPRA?: number,
+   SAC_DS_EQUIPAMENTO?: string,
+   SAC_NR_SERIE?: string,
+   SAC_REVENDEDOR_FONE?: string,
+   SAC_REVENDEDOR_EMAIL?: string,
+   SAC_REVENDEDOR_NOME?: string,
+   SAC_REVENDEDOR_NR_NOTAFISCAL?: number,
+   SAC_REVENDEDOR_CNPJ?: string,
+   SAC_QUANTIDADE: number,
+   SAC_CONTATO: string | null,
+   FUNCRECLAMADO: IModelPortalFuncionarioReclamacaoSAC,
+   EQUIPAMENTO?: IModelPortalEquipamento,
+   ANEXOS: Array<IModelAnexos>,
+   NOME_PESSOA: string | null
+}

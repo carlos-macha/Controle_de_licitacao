@@ -1,0 +1,19 @@
+import { EnumCRM_LiberarRestringir } from "../enums/enumscrm";
+
+export interface IModelSis004_Add {
+   PER_USUARIO: string,
+   PER_SISTEMA: string,
+   PER_PROGRAMA: string,
+}
+
+export interface IModelSis004 extends IModelSis004_Add {
+   PER_INCLUSAO?: string | null,
+   PER_ALTERACAO?: string | null,
+   PER_EXCLUSAO?: string | null,
+   PER_DATAPERMISSAO: number,
+   PER_QUENLIBEROU: string,
+   PER_EXPORTAR?: string,
+   PER_LIBERAR_RESTRINGIR: EnumCRM_LiberarRestringir,
+   PRG_DESCRICAO: string,
+   SENHA_NOME: string
+}

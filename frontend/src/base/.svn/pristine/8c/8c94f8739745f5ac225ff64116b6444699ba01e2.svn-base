@@ -1,0 +1,23 @@
+import DAOControleEtapas from "../daos/daocontroleetapas";
+import { IModelControleEtapas } from "../models/modelControleEtapas";
+import { utilities } from "../utils/utilities";
+import Controller from "./controller";
+
+export default class ControllerControleEtapas extends Controller<DAOControleEtapas>  {
+
+   constructor() {
+      super(DAOControleEtapas);
+   }
+
+   ControleEtapas = (usuario: string, where: string) => new Promise<Array<IModelControleEtapas>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.ControleEtapas(usuario, where).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+
+   });
+
+}

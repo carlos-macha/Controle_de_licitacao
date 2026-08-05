@@ -1,0 +1,12 @@
+import React from "react";
+import { ChatContextProps, ChatStateContext } from "../context/chatcontext";
+
+export function useChatContext(): ChatContextProps {
+   const context = React.useContext<ChatContextProps | undefined>(ChatStateContext);
+
+   if (context === undefined) {
+      throw new Error('useChatContext must be used within a ChatProvider')
+   }
+
+   return context
+}

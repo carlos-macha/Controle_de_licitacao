@@ -1,0 +1,81 @@
+import { EnumAcaoComercial_Faturado, EnumAcaoComercial_TipoFrete } from "../enums/enumacaocoemrcial";
+import { EnumSimNao } from "../enums/enums";
+import { IModelPortalFiltroACProdutos } from "./modelPortalFiltroACProdutos";
+
+export interface IModelPortalAcaoComercialVinculoItemKit {
+   KAI_ITP_ID: number,
+   KAI_IKI_ID: number,
+   KAI_QUANTIDADE: number,
+   IKI_KIT_ID: number,
+   IKI_PRODUTO: string,
+   IKI_PORTAL_UND?: string,
+   IKI_PORTAL_QTD?: number
+}
+
+export interface IModelPortalAcaoComercialItem {
+   ITP_LEGADO_ID_ITEM_PED: number,
+   ITP_PRODUTO: string,
+   ITP_QTD: number,
+   ITP_VLRUNITARIOBRUTO: number,
+   ITP_VLRUNITARIOBASE: number,
+   ITP_PERCDESC_ITEM: number,
+   ITP_VLRDESC_ITEM: number,
+   ITP_VLRUNITARIOLIQUIDO: number,
+   ITP_VLRTOTALLIQUIDO: number,
+   ITP_VLRTOTALLIQUIDO_ITEM: number,
+   ITP_VLRTOTALBASE: number,
+   ITP_VLRTOTALBRUTO: number,
+   ITP_ID_TABELA_PRECO: number,
+   ITP_REG_ICMS_PROMOCAO: number | null,
+   ITP_TP_COMP_DESCONTO: string,
+   ITP_ID_PRODUTO?: number,
+   PRO_DESCRICAO: string,
+   DADOS_PRODUTO?: IModelPortalFiltroACProdutos,
+   VINCULO_ITENS_KIT?: Array<IModelPortalAcaoComercialVinculoItemKit>
+}
+
+export interface IModelPortalAcaoComercial {
+   PED_LEGADO_ID_PEDIDO?: number,
+   PED_ID_PESSOA_LEGADO?: number,
+   // PED_ID_CONTATO_LEGADO?: number,
+   PED_EMPRESA: number,
+   PED_SEQ: string,
+   PED_DATA: number,
+   PED_VLRTOTALBRUTO: number,
+   PED_VLRTOTALDESC_GERAL: number,
+   PED_VLRTOTALLIQUIDO: number,
+   PED_VLRFRETEDESTACADO: number,
+   PED_ID_CONDPAGTO: number,
+   PED_ID_TIPOPEDIDO: number,
+   TPE_DESCRICAO?: string,
+   TPE_CONSIDERA_VENDA?: EnumSimNao,
+   PED_OBS?: string,
+   PED_PESSOA?: string,
+   PED_FATURADO: EnumAcaoComercial_Faturado,
+   PED_TRANSPORTADORA?: string,
+   PED_FRETEEMITDEST: EnumAcaoComercial_TipoFrete
+   PED_TRANSREDESPACHO?: string,
+   PED_FRETEEMITDESTREDESP: EnumAcaoComercial_TipoFrete,
+   PES_RAZAO?: string,
+   PED_WF_STATUS_CODIGO: number,
+   PED_PESOBRUTO?: number,
+   PED_USUARIO_ID_ORIGEM?: number,
+   STT_DESCRICAO?: string,
+   PES_CODIGO_TRANSPORTADORA?: string,
+   PES_RAZAO_TRANSPORTADORA?: string,
+   PES_RAZAO_TRANSPORTADORA_REDESP?: string,
+   ITENS: Array<IModelPortalAcaoComercialItem>,
+   PED_DATA_GE?: number,
+   PED_DATA_LE?: number,
+   PED_PESSOACONTATO?: number,
+   CNT_NOME?: string,
+   CNT_FONE?: string,
+   CNT_CELULAR?: string
+}
+
+export interface IModelPortalTipoAcaoComercial {
+   TPE_EMPRESA: number
+   TPE_CODIGO: number,
+   TPE_DESCRICAO: string,
+   TPE_STATUS_INICIAL?: number
+}

@@ -1,0 +1,67 @@
+import { nanoid } from 'nanoid';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import $ from 'jquery';
+import Card, { CardBody, CardHeader } from '../../../components/card/card';
+import { EnumCrudStateRecordType } from '../../../components/crud/enums';
+import DataTable, { DataTableColumns, Formatters } from '../../../components/datatable/datatable';
+import Tabs, { TabContent, TabItem, TabPanel } from '../../../components/tab/tab';
+import { useSweetAlertContext } from '../../../hooks/useSweetAlertContext';
+import Button from '../../../components/form/form';
+import { useModalContext } from '../../../hooks/useModalContext';
+import { IModelEST016 } from '../../../models/modelEST016';
+import { EmptyCallback } from 'tabulator-tables';
+
+interface CondicionaisDetalheProps {
+   data: IModelEST016
+}
+
+const CondicionaisDetalhe: React.FC<CondicionaisDetalheProps> = (props) => {
+   const { data } = props;
+
+   const id = useRef(nanoid());
+
+   let columnsItens: DataTableColumns = [
+      { title: "Produto", field: "ICD_PRODUTO", width: 100, type: 'string' },
+      { title: "Desc. Produto", field: "PRO_DESCRICAO", width: 100, type: 'string' },
+      { title: "Qtd.", field: "ICD_QTD", width: 100, type: 'integer' },
+      { title: "Qtd. Dev.", field: "ICD_QTDRETORNO", width: 100, type: 'integer' },
+      { title: "Qtd. Vend.", field: "ICD_QTDVENDIDA", width: 100, type: 'integer' },
+      { title: "Valor", field: "ICD_VALOR", width: 100, type: 'float', formatter: Formatters.formatterNumber, formatterParams: Formatters.money(undefined, undefined, 2, true), },
+      { title: "Total", field: "ICD_TOTAL", width: 100, type: 'integer' }
+   ];
+
+   return (
+      <Fragment>
+         <Card className='iq-card'>
+            <CardHeader className="iq-card-header p-2 border" >
+               <Tabs className="nav nav-pills">
+                  <TabItem className='nav-item' classNameLink='nav-link' tabPanelRef={`dadosItens-${id.current}`} selected={true}> Itens </TabItem>
+               </Tabs>
+            </CardHeader>
+            <CardBody className='border iq-card-body'>
+               <TabContent className="tab-content">
+                  <TabPanel className='tab-pane fade' show={true} id={`dadosItens-${id.current}`}>
+                     {data &&
+                        <DataTable
+                           title='Itens'
+                           useRowId
+                           columns={columnsItens}
+                           options={{
+                              height: 200,
+                              pagination: false,
+                              layout: 'fitDataFill',
+                              selectable: 1
+
+                           }}
+                           data={data.ITENS}
+                        />
+                     }
+                  </TabPanel>
+               </TabContent>
+            </CardBody>
+         </Card>
+      </Fragment>
+   );
+}
+
+export default CondicionaisDetalhe;

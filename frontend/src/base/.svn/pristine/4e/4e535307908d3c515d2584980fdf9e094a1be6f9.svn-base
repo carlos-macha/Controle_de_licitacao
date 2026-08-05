@@ -1,0 +1,10 @@
+export interface IModelAux041 {
+   CID_CODIGO: number,
+   CID_ESTADO: string,
+   CID_NOMECIDADE: string,
+   CID_CODIBGE: string,
+   CID_LATITUDE?: number,
+   CID_LONGITUDE?: number,
+   CID_DH_ALTERACAO: number,
+   EST_IBGE_CODIGO: string,
+}

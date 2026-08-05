@@ -1,0 +1,8 @@
+export interface IModelMOB003 {
+   SIF_ID_PESSOA: number,
+   SIF_TOTAL_ABERTO?: number,
+   SIF_TOTAL_ATRASADO?: number,
+   SIF_LIMITE_CREDITO?: number,
+   SIF_SALDO_LIMITE_CREDITO?: number
+
+}

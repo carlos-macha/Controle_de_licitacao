@@ -1,0 +1,77 @@
+import React, { Fragment, useState } from 'react';
+import PessoaContainer, { PessoaContainerParams } from './pessoacontainer';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { Modal, ModalBody, ModalFooter, ModalHeader, ModalLargeType } from '../../../components/modal/modal';
+import { EnumPessoa_TipoPessoa } from '../../../enums/enumspessoa';
+import { useSweetAlertContext } from '../../../hooks/useSweetAlertContext';
+import { IModelMOB001 } from '../../../models/modelMOB001';
+import Button from '../../../components/form/form';
+import { useModalContext } from '../../../hooks/useModalContext';
+
+interface PessoaModalProps {
+   largeType?: ModalLargeType
+}
+
+const PessoaModal: React.FC<PessoaModalProps> = (props) => {
+   const { largeType } = props;
+   const { modalState } = useModalContext();
+   const [pessoa, setPessoa] = useState<IModelMOB001>();
+   const { sweetAlertdispatch } = useSweetAlertContext();
+   return (
+      <Fragment>
+         <Modal id='modal-pessoas' largeType={largeType}>
+            <ModalHeader
+               showCloseTools={true}
+               title={modalState.tipoPessoa === EnumPessoa_TipoPessoa.emPessoa_TpPessoa_Transportadoras ? 'Transportadoras' : 'Clientes'}
+            />
+            <ModalBody className="p-0">
+               {modalState.type === 'pessoas' &&
+                  <CrudProvider>
+                     <PessoaContainer
+                        params={{ tipoPessoa: modalState.tipoPessoa } as PessoaContainerParams}
+                        typeRender='search'
+                        onDataChange={(pessoa: IModelMOB001) => {
+                           setPessoa(pessoa);
+                        }}
+                        searchOnly
+                     />
+                  </CrudProvider>
+               }
+            </ModalBody>
+            <ModalFooter
+               showCloseBtn={true}
+            >
+               <Button
+                  onClick={() => {
+                     if (pessoa) {
+                        if (modalState.onBtnSelecionar) {
+                           modalState.onBtnSelecionar(pessoa).then(() => {
+                              $(`#modal-pessoas .close`).click();
+                              setPessoa(undefined);
+                           })
+                        }
+                     } else {
+                        sweetAlertdispatch({
+                           type: 'show',
+                           msg: 'Selecione uma pessoa',
+                           props: {
+                              title: 'Atenção!',
+                              type: 'error',
+                              onConfirm(response) {
+                                 sweetAlertdispatch({ type: 'close' })
+                              },
+                           }
+                        });
+                     }
+                  }}
+                  className="btn btn-primary"
+                  classIcon="mdi mdi-arrow-down-left-bold"
+                  caption="Selecionar"
+               />
+            </ModalFooter>
+         </Modal>
+      </Fragment>
+   );
+}
+
+export default PessoaModal;

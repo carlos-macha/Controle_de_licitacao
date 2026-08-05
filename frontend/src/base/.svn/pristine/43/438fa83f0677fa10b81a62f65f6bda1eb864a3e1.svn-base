@@ -1,0 +1,90 @@
+import React, { Fragment, useEffect, useRef } from 'react';
+import PessoaDetalhe from './pessoadetalhe';
+import { nanoid } from 'nanoid';
+import Crudpesquisa, { PesquisaProps, CrudPesquisaRef } from '../../../components/crud/pesquisa/crudpesquisa';
+import { EnumPessoa_TipoPessoa } from '../../../enums/enumspessoa';
+import { IModelMOB001 } from '../../../models/modelMOB001';
+import { utilities } from '../../../utils/utilities';
+import { EnumOperacaoPermissao } from '../../../enums/enums';
+
+interface PessoaPesquisaProps extends PesquisaProps {
+   tipoPessoa?: EnumPessoa_TipoPessoa,
+   codigoVendedor?: string,
+   permission?: any,
+   viewProspect?: boolean,
+   checkPermission?: (permission?: any, operacao?: EnumOperacaoPermissao | undefined, observacao?: string | undefined) => Promise<boolean>,
+   heightGrid?: string | number
+}
+
+const PessoaPesquisa: React.FC<PessoaPesquisaProps> = (props) => {
+   const { events, onDataChange, searchOnly, tipoPessoa, codigoVendedor, permission, checkPermission, viewProspect, heightGrid } = props;
+   const crudPesquisaRef = useRef<CrudPesquisaRef>(null);
+   const id = useRef<string>(nanoid());
+
+   useEffect(() => {
+      if (tipoPessoa) {
+         crudPesquisaRef.current?.clearData();
+         crudPesquisaRef.current?.refresh();
+      }
+   }, [tipoPessoa])
+
+   const containerBottom = (data: IModelMOB001): JSX.Element => {
+      if (!data || tipoPessoa === EnumPessoa_TipoPessoa.emPessoa_TpPessoa_Transportadoras)
+         return <Fragment />;
+
+      return (
+         <Fragment>
+            <PessoaDetalhe
+               data={data}
+               viewProspect={viewProspect}
+            />
+         </Fragment>
+      )
+   }
+
+   const internalCheckPermission = (operation: 0 | 1 | 2 | 3) => new Promise<void>((resolve, reject) => {
+      if (checkPermission) {
+         checkPermission(permission, operation).then(() => {
+            resolve();
+         }).catch(error => {
+            reject(error)
+         })
+      } else {
+         resolve();
+      }
+   });
+
+   return <Crudpesquisa
+      checkPermission={internalCheckPermission}
+      ref={crudPesquisaRef}
+      showNewButton={!searchOnly}
+      showChangeButton={!searchOnly}
+      heightGrid={heightGrid ? heightGrid : 'calc(100vh - 32rem)'}
+      autoLoad
+      urlGetMount={(url: string, id: string | number, where: string, page: number, limit: number, offset: number, data?: any) => {
+
+         if (viewProspect) {
+            if (id === 0)
+               id = '';
+            return `${url}/${where}/${id}/${limit}/${offset}`;
+         }
+
+         if (tipoPessoa === EnumPessoa_TipoPessoa.emPessoa_TpPessoa_Transportadoras) {
+            let whereDecode: string = utilities.base64Decode(where).concat('|TPP_TIPO;=;T')
+            where = utilities.base64(whereDecode);
+            return `${url}/${where}//${limit}/${offset}`;
+         }
+
+         return `${url}/${where}/${codigoVendedor?codigoVendedor:''}/${limit}/${offset}/10000001`;
+      }}
+      containerBottom={containerBottom}
+      onDataChange={(pessoa: IModelMOB001) => {
+         if (onDataChange)
+            onDataChange(pessoa);
+      }}
+      events={events}
+      prefixId={id.current}
+   />;
+}
+
+export default PessoaPesquisa;

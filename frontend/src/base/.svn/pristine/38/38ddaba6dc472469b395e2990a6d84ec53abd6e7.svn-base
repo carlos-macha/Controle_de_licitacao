@@ -1,0 +1,281 @@
+import DAO from "./dao";
+import { IModelCrm031 } from "../models/modelCRM031";
+import { IModelMOB012 } from "../models/modelMOB012";
+import { utilities } from "../utils/utilities";
+import { IModelUsuario } from "../models/modelUsuario";
+import { IModelCrm009 } from "../models/modelCRM009";
+import { IModelMOB001 } from "../models/modelMOB001";
+import { IModelCrm038 } from "../models/modelCRM038";
+import { IModelCrm037 } from "../models/modelCRM037";
+import { IModelAux030 } from "../models/modelAUX030";
+import { IModelEst001 } from "../models/modelEST001";
+import { IModelKanban } from "../models/modelKanban";
+import { IModelAux039 } from "../models/modelAUX039";
+import { IModelAux012 } from "../models/modelAUX012";
+import { IModelCrm019 } from "../models/modelCRM019";
+import { IModelCrm052 } from "../models/modelCRM052";
+import { IModelCrm023 } from "../models/modelCRM023";
+import { IModelRelatorioPDF } from "../models/modelRelatorioPDF";
+import { EnumSimNao } from "../enums/enums";
+import { IModelKanbanItens } from "../models/modelKanbanItens";
+
+export default class DAOCRM extends DAO {
+
+   htmlpadrao = (esteriotipo: string) => new Promise<IModelCrm031>((resolve, reject) => {
+
+      this.Get<IModelCrm031>(`/crm/htmlpadrao/0/${esteriotipo}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   agendas = (where: string, first: number = 0, skip: number = 0, visualizarTodasAgendas: boolean = false, tipoOutrasAgendas: string = 'A') => new Promise<Array<IModelMOB012>>((resolve, reject) => {
+      // console.log(`/mobile/agendavendedor/${where}/${first}/${skip}/${visualizarTodasAgendas}/${tipoOutrasAgendas}`);
+      this.Get<Array<IModelMOB012>>(`/mobile/agendavendedor/${where}/${first}/${skip}/${visualizarTodasAgendas}/${tipoOutrasAgendas}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   CriarAgenda = (evento: IModelMOB012) => new Promise<IModelMOB012>((resolve, reject) => {
+
+      this.Put<IModelMOB012>(`mobile/agendavendedor`, evento).then(data => {
+         resolve(data);
+      }).catch(error => {
+         console.log(error);
+         reject(error);
+      });
+
+   });
+
+
+   AlterarAgenda = (evento: IModelMOB012) => new Promise<IModelMOB012>((resolve, reject) => {
+
+      this.Post<IModelMOB012>(`mobile/agendavendedor`, evento).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   RemoverAgenda = (id: number) => new Promise<string>((resolve, reject) => {
+
+      this.Delete<string>(`crm/agenda/${id}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   cadastros = (viewProspect: boolean, where: string) => new Promise<Array<IModelMOB001>>((resolve, reject) => {
+
+      this.Get<Array<IModelMOB001>>(`/mobile/${viewProspect ? 'prospect' : 'pessoas'}/${where}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   usuarios = (where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelUsuario>>((resolve, reject) => {
+      //usuarios -> refatorar dependencias
+      const newLocal = this;
+      newLocal.Get<Array<IModelUsuario>>(`/usuario/usuarios/${where}/${first}/${skip}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   tiposdeCompromisso = (id: number = 0, where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelCrm009>>((resolve, reject) => {
+      // console.log(`/crm/tiposdecompromisso/${id}/${where}/${first}/${skip}`);
+      this.Get<Array<IModelCrm009>>(`/crm/tiposdecompromisso/${id}/${where}/${first}/${skip}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   assuntosCompromisso = (id: number = 0, where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelCrm037>>((resolve, reject) => {
+      // console.log(`/crm/tiposdecompromisso/${id}/${where}/${first}/${skip}`);
+      this.Get<Array<IModelCrm037>>(`/crm/assuntoscompromisso/${id}/${where}/${first}/${skip}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   assuntosVinculoCompromisso = (AGE_SEQUENCIA: string) => new Promise<Array<IModelCrm038>>((resolve, reject) => {
+      // console.log(`/crm/tiposdecompromisso/${id}/${where}/${first}/${skip}`);
+      this.Get<Array<IModelCrm038>>(`/crm/assuntosvinculocompromisso/${AGE_SEQUENCIA}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+
+   pesquisasCRM = (cod_pesquisa: number, where: string = '', first: number = 0, skip: number = 0) => new Promise<IModelCrm019>((resolve, reject) => {
+
+      this.Get<IModelCrm019>(`/crm/pesquisascrm/${cod_pesquisa}/${where}/${first}/${skip}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   tokenRepostaLinkPesquisaCRM = (token: string, body: Array<IModelCrm023>) => new Promise<IModelCrm052>((resolve, reject) => {
+
+      this.Post<IModelCrm052>(`/crm/tokenrepostalinkpesquisacrm/${token}`, body as any).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   relatorioFichaPesquisa = (idPesquisa: number, nrFicha: string) => new Promise<IModelRelatorioPDF>((resolve, reject) => {
+
+      this.Get<IModelRelatorioPDF>(`/crm/relatoriofichapesquisa/${idPesquisa}/${nrFicha}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   relatorioResultadosPesquisaCRM = (idPesquisa: number, dtInicial: number, dtFinal: number, mostraNomeFantasia: EnumSimNao, mostraGraficos: EnumSimNao, listarComplementos: EnumSimNao) => new Promise<IModelRelatorioPDF>((resolve, reject) => {
+
+      this.Get<IModelRelatorioPDF>(`/crm/RelatorioResultadosPesquisaCRM/${idPesquisa}/${dtInicial}/${dtFinal}/${mostraNomeFantasia}/${mostraGraficos}/${listarComplementos}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+
+   workflowStatus = (id: number = 0, where: string = "", empresa: number = 0, categoria: number = 0, first: number = 0, skip: number = 0) => new Promise<Array<IModelAux030>>((resolve, reject) => {
+
+      this.Get<Array<IModelAux030>>(`/workflow/status/${id}/${where}/${empresa}/${categoria}/${first}/${skip}/STT_KANBAN_ORDEM`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   workflowKanban = (empresa: number, status: number, data_inicial: number = 0, data_final: number = 0, vendedor: string = '', where: string = '', page: number = 0) => new Promise<IModelKanban>((resolve, reject) => {
+
+      this.Get<IModelKanban>(`/workflow/kanban/${empresa}/${status}/${data_inicial}/${data_final}/${vendedor}/${where}/${page}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   workflowKanbanPorStatus = (empresa: number, categoria: number, status: number, data_inicial: number = 0, data_final: number = 0, vendedor: string = '', whereBase: string = '', page: number = 1
+   ): Promise<Array<{ statusId: number, statusNome: string, cards: IModelKanbanItens[] }>> => {
+
+
+      return new Promise(async (resolve, reject) => {
+         try {
+            const statusList = await this.workflowStatus(
+               0,
+               `STT_TIPO;=;PED|STT_ATIVO;=;A`,
+               empresa,
+               categoria
+            );
+
+            const results = await Promise.all(
+               statusList.map(async (stt) => {
+                  const where = whereBase ? `${whereBase}` : '';
+
+                  try {
+                     const response = await this.workflowKanban(
+                        empresa,
+                        stt.STT_CODIGO,
+                        data_inicial,
+                        data_final,
+                        vendedor,
+                        where,
+                        page
+                     );
+
+                     return {
+                        statusId: stt.STT_CODIGO,
+                        statusNome: stt.STT_DESCRICAO,
+                        cards: response.ITENS || []
+                     };
+                  } catch {
+                     return {
+                        statusId: stt.STT_CODIGO,
+                        statusNome: stt.STT_DESCRICAO,
+                        cards: []
+                     };
+                  }
+               })
+            );
+
+            resolve(results);
+         } catch (error) {
+            reject(error);
+         }
+      });
+   };
+
+
+   workflowTransicoes = (id: number, where: string = '', usuario: string = '', empresa: number = 0, first: number = 0, skip: number = 0) => new Promise<Array<IModelAux039>>((resolve, reject) => {
+      // console.log(`/workflow/transicoes/${id}/${where}/${usuario}/${empresa}/${first}/${skip}`);
+
+      this.Get<Array<IModelAux039>>(`/workflow/transicoes/${id}/${where}/${usuario}/${empresa}/${first}/${skip}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   sendWorkflowKanban = (body: IModelKanbanItens) => new Promise<IModelKanbanItens>((resolve, reject) => {
+
+      this.Post<IModelKanbanItens>(`/workflow/kanban`, body).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   sendWorkflowAtualizarOrdemColunaKanban = (id: string, index: number) => new Promise<IModelKanban>((resolve, reject) => {
+
+      this.Post<IModelKanban>(`/workflow/AtualizarOrdemColunaKanban/${id}/${index}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   tokenLinkPesquisaCRM = (token: string) => new Promise<any>((resolve, reject) => {
+
+      this.Get<any>(`/crm/tokenlinkpesquisacrm/${token}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+}

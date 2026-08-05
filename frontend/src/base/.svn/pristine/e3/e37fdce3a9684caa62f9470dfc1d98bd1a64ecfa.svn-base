@@ -1,0 +1,5 @@
+export interface IModelCrm048 {
+   LVV_CODIGO: number,
+   LVV_VIDEO_APRESENTACAO: number,
+   LVV_DATA_VISUALIZACAO: number
+}

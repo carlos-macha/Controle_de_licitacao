@@ -1,0 +1,64 @@
+import { EnumSimNao } from "../enums/enums"
+import { EnumCAT_EquipSolGarantiaTpServico, EnumCAT_EquipSolGarantiaStatus } from "../enums/enumsassistenciatecnica"
+
+export interface IModelPortalSolucaoEquipamento {
+   SEA_DH_INICIO: number,
+   SEA_DH_FINAL: number,
+   SEA_DS_SOLUCAO: string,
+   SEA_QT_TEMPO: number
+}
+
+export interface IModelPortalEquipamento {
+   EQP_CODIGO: number,
+   EQP_DESCRICAO: string,
+   EQP_CDSERIEPRODUTO?: string
+   PNS_NUMEROSERIE: string
+}
+
+export interface IModelPortalProdutoUtilizadoEquipamento {
+   PAE_CODIGO: number,
+   PAE_QTD: number,
+   PAE_VALORUNITARIO: number,
+   PAE_VALORTOTAL: number,
+   PAE_PERCDESCONTO: number,
+   PAE_VALORUNITARIOBRUTO: number,
+   PRO_CODIGO: string,
+   PRO_DESCRICAO: string,
+   ACA_CODIGO: number,
+   ACA_DESCRICAO: string
+}
+
+export interface IModelPortalItemNFEquipamento {
+   INF_DATA: number,
+   INF_NUMERO: number,
+   INF_PRODUTO: string,
+   PRO_DESCRICAO: string,
+   INF_QTD: number,
+   INF_UNITARIO: number,
+   INF_TOTAL: number,
+   INF_TOTALICMS: number,
+   INF_TOTALIPI: number,
+   INF_TOTALICMSUBTRIB: number,
+   INF_PIS_VLR: number,
+   INF_COFINS_VLR: number,
+   INF_VLR_CONTABIL: number
+}
+
+export interface IModelPortalMultiplosEquipamento {
+   EQUIPAMENTO: IModelPortalEquipamento,
+   EAT_CODIGO: number,
+   EAT_DESCRICAO_PROBLEMA: string,
+   EAT_VL_TOTALLIQUIDO: number,
+   EAT_GARANTIA: EnumSimNao,
+   EAT_QUANTIDADE: number,
+   EAT_ID_MOVEST_ITEM?: number,
+   EAT_ID_NF_VENDA_ITEM?: number,
+   EAT_SOLIC_GARAN_TP_SERVICO?: EnumCAT_EquipSolGarantiaTpServico,
+   EAT_SOLIC_GARAN_PROD_APLIC?: EnumSimNao,
+   EAT_SOLIC_GARAN_PROD_VLR_SOL?: number,
+   EAT_SOLIC_GARAN_PROD_VLR_APROV?: number,
+   EAT_SOLIC_GARAN_STATUS?: EnumCAT_EquipSolGarantiaStatus,
+   SOLUCOES?: Array<IModelPortalSolucaoEquipamento>,
+   PRODUTOS_UTILIZADOS?: Array<IModelPortalProdutoUtilizadoEquipamento>
+   ITEM_NV_VENDA?: IModelPortalItemNFEquipamento
+}

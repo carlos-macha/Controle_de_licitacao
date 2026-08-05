@@ -1,0 +1,5 @@
+export interface IModelMOB104 {
+   PTD_EMPRESA: number,
+   PTD_TABELA_ID: number
+
+}

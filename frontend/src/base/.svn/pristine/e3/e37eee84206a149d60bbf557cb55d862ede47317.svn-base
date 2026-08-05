@@ -1,0 +1,5 @@
+export interface IModelSis000 {
+   UPR_UNIT: string,
+   UPR_SISTEMA: string,
+   UPR_PERMISSAO: string
+}

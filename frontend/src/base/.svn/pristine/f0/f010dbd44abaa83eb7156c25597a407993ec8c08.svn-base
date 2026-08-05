@@ -1,0 +1,529 @@
+import { nanoid } from 'nanoid';
+import React, { Fragment, useState, useRef, useEffect } from 'react';
+import SweetAlert from 'react-bootstrap-sweetalert';
+import Card, { CardBody, CardHeader } from '../../card/card';
+import { SearchEvent } from '../../datasearch/datasearch';
+import DataTable, { DataTableColumns } from '../../datatable/datatable';
+import Tabs, { TabContent, TabItem, TabPanel } from '../../tab/tab';
+import ViewCrudPesquisa from './viewcrudpesquisa';
+import { CrudPesquisaEvents, CrudUrl } from '../types';
+import { crudUtils } from '../utils';
+import { utilities } from '../../../utils/utilities';
+import HTMLReactParser from 'html-react-parser';
+import { ContentTabs, SweetAlertMessage } from '../../../types/types';
+import { useCrudContext } from '../hook/useCrudContext';
+import Api from '../../../services/api';
+
+export interface PesquisaProps {
+   events?: CrudPesquisaEvents,
+   onDataChange?: (data: any) => void,
+   searchOnly?: boolean,
+   dataValue?: any
+}
+
+export interface CrudPesquisaDefaultProps {
+   autoLoad?: boolean,
+   columns?: DataTableColumns,
+   className?: string,
+   consultationOnly?: boolean,
+   heightGrid?: string | number | false | undefined,
+   showAllButtons?: boolean,
+   showNewButton?: boolean,
+   showChangeButton?: boolean,
+   showDeleteButton?: boolean,
+   showViewButton?: boolean,
+   showOnDemandButton?: boolean,
+   containerBottom?: (data: any | undefined) => JSX.Element,
+   containerButtons?: JSX.Element,
+   numberOfRecordsPerDemand?: number,
+   fieldNameDetail?: string,
+   displayTextDetail?: string,
+   typePagination?: "page" | "limit-offset"
+}
+
+interface CrudPesquisaProps extends CrudPesquisaDefaultProps {
+   sweetMessage?: SweetAlertMessage,
+   columnsDetail?: DataTableColumns,
+   events?: CrudPesquisaEvents,
+   onSearch?: (id: number | string, where: string, page: number, limit: number, offset: number, data?: any) => Promise<Array<any>>,
+   urlGetMount?: (url: string, id: number | string, where: string, page: number, limit: number, offset: number, data?: any) => string,
+   urlDeleteMount?: (url: string, id: number | string, data?: any) => string,
+   onDataChange?: (data: any) => void
+}
+
+interface DataSearch {
+   id: number | string | undefined;
+   where: string;
+   page: number,
+   limit: number | undefined;
+   offset: number;
+   data?: any;
+   isDemand: boolean
+}
+
+const CrudPesquisa: React.FC<CrudPesquisaProps> = (props) => {
+   const { typePagination, numberOfRecordsPerDemand, sweetMessage, displayTextDetail, fieldNameDetail, columnsDetail, events,
+      onSearch, urlGetMount, urlDeleteMount, onDataChange: onChangeData, ...CrudPesquisa } = props;
+   const { crudState, crudDispash } = useCrudContext();
+   const [loading, setLoading] = useState<boolean | undefined>();
+   const [sweetAlert, setSweetAlert] = useState<SweetAlertMessage | undefined>();
+   const [dataSearch, setDataSearch] = useState<DataSearch>({
+      id: 0,
+      where: ' ',
+      page: 1,
+      limit: numberOfRecordsPerDemand,
+      offset: 0,
+      data: undefined,
+      isDemand: false
+   });
+   const [data, setData] = useState<Array<any>>([]);
+   const [rowSelected, setRowSelected] = useState<any | undefined>();
+   const crudUrl = useRef<CrudUrl>(events?.url!);
+   const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
+   const [addData, setAddData] = useState<any | undefined>();
+   const [uptData, setUptData] = useState<any | undefined>();
+   const [delData, setDelData] = useState<any | undefined>();
+
+   const onNewButtonClick = (): void => {
+      if (events)
+         events.onNewButton();
+   };
+
+   const onChangeButtonClick = (): void => {
+      if (!rowSelected) {
+         setSweetAlert({
+            type: 'error',
+            title: 'Atenção',
+            msg: 'Selecione um registro para edição!',
+            onConfirm: onConfirm
+         });
+         return;
+      }
+
+      if (events)
+         events.onChangeButton(rowSelected);
+   };
+
+   const onDeleteButtonClick = (): void => {
+      if (!rowSelected) {
+         setSweetAlert({
+            type: 'error',
+            title: 'Atenção',
+            msg: 'Selecione um registro para exclusão!',
+            onConfirm: onConfirm
+         });
+         return;
+      }
+
+      setShowConfirmDelete(true);
+
+      // if (events)
+      //    events.onDeleteButton(rowSelected);
+   }
+
+   const onViewButtonClick = (): void => {
+      if (!rowSelected) {
+         setSweetAlert({
+            type: 'error',
+            title: 'Atenção',
+            msg: 'Selecione um registro para visualizar!',
+            onConfirm: onConfirm
+         });
+         return;
+      }
+
+      if (events)
+         events.onViewButton(rowSelected);
+   }
+
+   const onSearchView = (e: SearchEvent): void => {
+      setDataSearch({
+         id: e.id,
+         where: (e.whereBase64 !== '' ? e.whereBase64 : ' '),
+         page: 1,
+         limit: numberOfRecordsPerDemand,
+         offset: 0,
+         data: e.data,
+         isDemand: false
+      });
+   }
+
+   const onDemand = () => {
+      setDataSearch({
+         id: dataSearch.id,
+         where: dataSearch.where,
+         page: dataSearch.page + 1,
+         limit: numberOfRecordsPerDemand,
+         offset: dataSearch.offset + (numberOfRecordsPerDemand ? numberOfRecordsPerDemand : 0),
+         data: dataSearch.data,
+         isDemand: true
+      });
+   }
+
+   // const onRowSelect = (row: any) => {
+
+   // }
+
+   const internalUrlDeleteMount = (url: string, id: number | string, data: any): string => {
+
+      if (urlDeleteMount)
+         return urlDeleteMount(url, id, data);
+
+      return `${url}/${id}`;
+   }
+
+   const internalUrlGetMount = (url: string, id: number | string = 0, where: string = ' ', page: number = 1, limit: number = 0, offset: number = 0, data: any = undefined): string => {
+
+      if (urlGetMount)
+         return urlGetMount(url, id, where, page, limit, offset, data);
+
+      if (typePagination === "page")
+         return `${url}/${where}/${page}`;
+
+      return `${url}/${id}/${where}/${limit}/${offset}`;
+   }
+
+   const onConfirm = () => {
+      setSweetAlert(undefined);
+   }
+
+   const onConfirmCancelDelete = (del: boolean = false) => {
+      try {
+
+         if (del) {
+
+            const id = crudUtils.findId(rowSelected, events?.columns!);
+            let urlDelete = internalUrlDeleteMount(crudUrl.current.DELETE!, id!, rowSelected);
+
+            if (!urlDelete)
+               throw new Error("url delete is not defined");
+
+            Api.getInstance().conn()?.delete(urlDelete).then(async response => {
+
+               if (events)
+                  events.onDeleteButton(rowSelected);
+
+               setRowSelected(undefined);
+            }).catch(error => {
+               console.log(error);
+               let body = error.response.data;
+
+               switch (error.response.status) {
+                  case 403:
+                     setSweetAlert({
+                        type: 'warning',
+                        title: 'Atenção',
+                        msg: <span>{HTMLReactParser(body.error.replace(/(\r\n|\n|\r)/gm, "<br>"))}</span>,
+                        onConfirm: onConfirm
+                     });
+
+                     break;
+                  case 404:
+                     setSweetAlert({
+                        type: 'warning',
+                        title: 'Atenção',
+                        msg: `O ID ${id} não foi encontrado. É provável que o mesmo já foi excluído do sistema. Clique em Cancelar e refaça a consulta.`,
+                        onConfirm: onConfirm
+                     });
+
+                     break;
+                  case 405:
+                     setSweetAlert({
+                        type: 'error',
+                        title: 'Atenção',
+                        msg: `Ocorreu um erro e não foi possível gravar esse registro. Método ${urlDelete} inválido`,
+                        onConfirm: onConfirm
+                     });
+
+                     break;
+                  case 499:
+                     let message = crudUtils.formarErrorListMessage(body.ResponseMessage.Error.Itens);
+
+                     setSweetAlert({
+                        type: 'error',
+                        title: 'Atenção',
+                        msg: `Ocorreram erros ao tentar gravar esse registro
+                                   ${message}`,
+                        onConfirm: onConfirm
+                     });
+
+                     break;
+                  default:
+                     setSweetAlert({
+                        type: 'error',
+                        title: 'Atenção',
+                        msg: <span>Ocorreu um erro e não foi possível excluir esse registro<br />
+                           Erro: {HTMLReactParser(body.error.replace(/(\r\n|\n|\r)/gm, "<br>"))!}</span>,
+                        onConfirm: onConfirm
+                     });
+               }
+            });
+         }
+
+         setShowConfirmDelete(false);
+      } catch (error: any) {
+         setSweetAlert({
+            type: 'error',
+            title: 'Atenção',
+            msg: error,
+            onConfirm: onConfirm
+         });
+      }
+   }
+
+   const resolveResponseData = (respondeData: any, isDemand: boolean) => {
+      if (!Array.isArray(respondeData)) {
+         respondeData = [respondeData];
+      }
+
+      if (isDemand && data.length > 0)
+         respondeData = data.concat(respondeData);
+
+      setData(respondeData);
+   }
+
+   const resolveResponseError = (id: string | number, error: any) => {
+      console.log(error.message);
+      let body = error.response.data;
+      switch (error.response.status) {
+         case 404:
+            setSweetAlert({
+               type: 'warning',
+               title: 'Atenção',
+               msg: `O ID ${id} não foi encontrado. É provável que o mesmo já foi excluído do sistema. Entre em contato com nosso suporte.`,
+               onConfirm: onConfirm
+            })
+
+            break;
+
+         case 405:
+            setSweetAlert({
+               type: 'error',
+               title: 'Atenção',
+               msg: `Ocorreu um erro e não foi possível gravar esse registro. Método inválido`,
+               onConfirm: onConfirm
+            });
+
+            break;
+
+         case 499:
+            let message = utilities.formarErrorListMessage(body.ResponseMessage.Error.Itens);
+
+            setSweetAlert({
+               type: 'error',
+               title: 'Atenção',
+               msg: `Opps, ocorreram algum erros: ${message}`,
+               onConfirm: onConfirm
+            })
+
+            break;
+         default:
+            setSweetAlert({
+               type: 'error',
+               title: 'Atenção',
+               msg: `Opps, ocorreu um erro: ${body.error}`,
+               onConfirm: onConfirm
+            })
+      }
+   }
+
+   const resolveFinally = () => {
+      setLoading(false);
+      // this.setState({
+      //    loading: false,
+      //    clearData: false,
+      //    rowSelected: null
+      // });
+   }
+
+   const search = (id: number | string = 0, where: string = ' ', page: number = 1, limit: number = 0, offset: number = 0, data: any = undefined, isDemand: boolean = false) => {
+
+      setLoading(true);
+
+      if (onSearch) {
+         onSearch(id, where, page, limit, offset, data).then(response => {
+            resolveResponseData(response, isDemand);
+         }).catch(error => {
+            resolveResponseError(id, error);
+         }).finally(() => {
+            resolveFinally();
+         })
+      } else {
+         if (!crudUrl.current.GET)
+            throw new Error("url get is not defined");
+
+         let url: string = internalUrlGetMount(crudUrl.current.GET, id, where, page, limit, offset, data);
+
+         // console.log(url)
+
+         Api.getInstance().conn()?.get<any>(url).then(async response => {
+            let body = await response.data;
+            resolveResponseData(body, isDemand);
+         }).catch(error => {
+            resolveResponseError(id, error);
+         }).finally(() => {
+            resolveFinally();
+         })
+      }
+   }
+
+   const renderContainerDetail = (): JSX.Element => {
+      let title = displayTextDetail !== '' ? displayTextDetail : 'Selecione um registro na listagem acima';
+
+      let data: Array<any> = [];
+      if (rowSelected && fieldNameDetail) {
+         if (rowSelected[fieldNameDetail]) {
+            data = rowSelected[fieldNameDetail];
+         }
+      }
+
+      let tabs: ContentTabs = [];
+
+      // this.addTabsContainerDetail(tabs);
+
+      let renderTabs: Array<JSX.Element> = [];
+      let renderTabPanels: Array<JSX.Element> = [];
+
+      tabs.forEach(tab => {
+         let id = tab.id ? tab.id : nanoid();
+
+         renderTabs.push(
+            <TabItem key={`tab-${id}`} tabPanelRef={`${id}`} selected={tab.selected}> {tab.title} </TabItem>
+         );
+
+         renderTabPanels.push(
+            <TabPanel key={`tabpanel-${id}`} id={`${id}`} show={tab.selected}>
+               {tab.content}
+            </TabPanel>
+         );
+      });
+
+      let idTabDetail: string = nanoid();
+      return (
+         <Fragment>
+            {data.length > 0 &&
+               <Card className='iq-card'>
+                  <CardHeader className="iq-card-header p-2 border"  >
+                     <Tabs className="nav nav-pills">
+                        <TabItem className='nav-item' classNameLink='nav-link' tabPanelRef={idTabDetail} selected={true}> {title} </TabItem>
+                        {renderTabs}
+                     </Tabs>
+                  </CardHeader>
+                  <CardBody className='border iq-card-body'>
+                     <TabContent className="tab-content">
+                        <TabPanel className='tab-pane fade' show={true} id={idTabDetail}>
+                           {columnsDetail ?
+                              <DataTable
+                                 columns={columnsDetail}
+                                 data={data}
+                                 options={{
+                                    layout: 'fitDataFill',
+                                    height: 200,
+                                    selectable: false
+                                 }}
+                              /> :
+                              'Property columnsDetail is not defined'
+                           }
+                        </TabPanel>
+                        {renderTabPanels}
+                     </TabContent>
+                  </CardBody>
+               </Card>
+            }
+         </Fragment>
+      );
+   }
+
+   useEffect(() => {
+      // console.log(dataSearch)
+      if (dataSearch.where !== ' ' || dataSearch.id || (dataSearch.data && Object.keys(dataSearch.data).length > 0)) {
+         search(dataSearch.id, dataSearch.where, dataSearch.page, dataSearch.limit, dataSearch.offset, dataSearch.data, dataSearch.isDemand);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [dataSearch])
+
+   useEffect(() => {
+      setSweetAlert(sweetMessage)
+   }, [sweetMessage])
+
+   useEffect(() => {
+      if (onChangeData)
+         onChangeData(rowSelected);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [rowSelected])
+
+   useEffect(() => {
+      if (crudState.data) {
+         switch (crudState.type) {
+            case 'actInsert': setAddData(crudState.data)
+               break;
+
+            case 'actEdit': setUptData(crudState.data)
+
+               break;
+
+            default:
+               break;
+         }
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [crudState.data])
+
+   return (
+      <Fragment>
+         <ViewCrudPesquisa
+            {...CrudPesquisa}
+            columns={events?.columns!}
+            data={data}
+            loading={loading}
+            numberOfRecordsPerDemand={numberOfRecordsPerDemand}
+            rowSelected={{ data: rowSelected, setData: setRowSelected }}
+            containerDetail={renderContainerDetail()}
+            onNewButtonClick={onNewButtonClick}
+            onChangeButtonClick={onChangeButtonClick}
+            onDeleteButtonClick={onDeleteButtonClick}
+            onViewButtonClick={onViewButtonClick}
+            onSearch={onSearchView}
+            onDemand={onDemand}
+            addData={addData}
+            uptData={uptData}
+            delData={delData}
+         />
+         {sweetAlert &&
+            <SweetAlert
+               type={sweetAlert.type}
+               title={sweetAlert.title}
+               onConfirm={() => {
+                  if (sweetAlert.onConfirm)
+                     sweetAlert.onConfirm();
+               }}
+               show={Boolean(sweetAlert.msg)}>
+               {sweetAlert.msg}
+            </SweetAlert>
+         }
+         <SweetAlert
+            warning
+            showCancel
+            confirmBtnText="Sim, confirmo!"
+            cancelBtnText="Cancelar!"
+            confirmBtnBsStyle="danger"
+            title="Confirma exclusão desse registro?"
+            onConfirm={() => onConfirmCancelDelete(true)}
+            onCancel={onConfirmCancelDelete}
+            focusCancelBtn
+            show={showConfirmDelete} >
+            Não será possível recuperar esse registro após exclusão!
+         </SweetAlert>
+      </Fragment>
+   );
+}
+
+CrudPesquisa.defaultProps = {
+   numberOfRecordsPerDemand: 15,
+   showOnDemandButton: true,
+   autoLoad: false,
+   typePagination: "limit-offset"
+}
+
+
+export default CrudPesquisa;

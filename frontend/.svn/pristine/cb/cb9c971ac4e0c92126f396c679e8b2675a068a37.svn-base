@@ -1,0 +1,72 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { DataRoutesLogin } from '../../routes/dataroutes';
+import ContainerPageAuth from '../components/containerpageauth/containerpageauth';
+import { InputDataValue } from '../../base/types/types';
+import Alert, { AlertTypes } from '../../base/components/alert/alert';
+import Button, { InputPassWord } from '../../base/components/form/form';
+import { utilities } from '../../base/utils/utilities';
+
+interface ViewLockProps {
+   user: string,
+   pass: InputDataValue<string>,
+   alertType?: AlertTypes,
+   alertMessage?: string,
+   onCloseAlert?: () => void,
+   onValidatePass: () => void,
+   onLogin: () => void
+}
+
+const ViewLock: React.FC<ViewLockProps> = (props) => {
+   const { user, pass, alertType, alertMessage, onValidatePass, onCloseAlert, onLogin } = props;
+
+   return (
+      <ContainerPageAuth>
+         <div className="sign-in-from">
+            {/* <img src="/images/user/1.jpg" alt="user-image" className="rounded-circle" /> */}
+            <h4 className="mt-3 mb-0">Olá {user}</h4>
+            <p>Pronto para voltar?</p>
+            <form className="mt-4">
+               <label htmlFor="senha">Senha</label>
+               <InputPassWord
+                  viewPass
+                  placeholder='Informe sua senha para retornar à sua sessão'
+                  dataValue={pass}
+                  onClick={onCloseAlert}
+                  id="senha"
+                  onChange={(e: any) => {
+                     utilities.handleChange(e, pass);
+                  }}
+               />
+
+               <div className="d-inline-block w-100 mt-3">
+                  <Button
+                     className="btn btn-primary float-right"
+                     caption='Login'
+                     onClick={onValidatePass}
+                  />
+               </div>
+
+               {
+                  alertType && alertMessage &&
+                  <Alert
+                     type={alertType}
+                     title="Atenção"
+                     message={alertMessage}
+                     onClickClose={onCloseAlert}
+                  />
+               }
+
+            </form>
+            <div className="text-center">
+               Informe sua senha para retornar à sua sessão
+            </div>
+            <div className="text-center">
+               <Link to={DataRoutesLogin.path} onClick={onLogin}>Ou realize login com um usuário diferente</Link>
+            </div>
+         </div>
+      </ContainerPageAuth>
+   );
+}
+
+export default ViewLock;

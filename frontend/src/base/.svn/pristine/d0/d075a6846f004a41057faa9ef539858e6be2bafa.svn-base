@@ -1,0 +1,28 @@
+import { IModelPOR001 } from "./modelPOR001"
+import { IModelPortalContato } from "./modelPortalContato"
+
+export interface IModelPessoaPortal {
+   ID?: number,
+   CODIGO?: string,
+   RAZAO_SOCIAL: string,
+   CPF_CNPJ: string,
+   EMAIL: string,
+   CEP: string,
+   UF: string,
+   CIDADE: number,
+   CIDADE_NOME: string,
+   BAIRRO: string,
+   LOGRADOURO: string,
+   NUMERO: string,
+   COMPLEMENTO?: string,
+   TELEFONE: string,
+   CELULAR: string,
+   CONTATO_NOME?: string,
+   TIPO_OPERACAO?: string,
+   USUARIO: string,
+   SENHA: string,
+   SENHA_DESCRIPTOGRAFADA?: string,
+   CONTATO_ID?: number,
+   PERMISSOES?: Array<IModelPOR001>
+   CONTATOS?: Array<IModelPortalContato>
+}

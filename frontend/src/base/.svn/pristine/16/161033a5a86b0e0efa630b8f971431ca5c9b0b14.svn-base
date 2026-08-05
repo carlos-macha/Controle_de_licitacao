@@ -1,0 +1,24 @@
+import { EnumAtivoInativo } from "../enums/enums"
+import { IModelMOB033 } from "./modelMOB033";
+
+export interface IModelMOB002 {
+   CNT_ID: number,
+   CNT_ID_PESSOA?: number,
+   CNT_LEGADO_ID?: number,
+   CNT_NOME: string,
+   CNT_CARGO?: string,
+   CNT_NASCIMENTO?: number,
+   CNT_FONE?: string,
+   CNT_RAMAL?: string,
+   CNT_CELULAR?: string,
+   CNT_EMAIL?: string,
+   CNT_FONE2?: string,
+   CNT_CELULAR2?: string,
+   CNT_EMAIL2?: string,
+   CNT_RAMALFONE2?: string,
+   CNT_ATIVO: EnumAtivoInativo,
+   CNT_ALTERACAO_DATA?: number,
+   CNT_SEQ?: number,
+   LISTA_NOTIFICACOES?: Array<IModelMOB033>,
+
+}

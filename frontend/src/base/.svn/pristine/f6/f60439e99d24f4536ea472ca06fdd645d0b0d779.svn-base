@@ -1,0 +1,7 @@
+import { IModelCALL005 } from "./modelCALL005";
+
+export interface IModelCALL028 {
+PPR_PESSOA: "02594330000188",
+PPR_PROJETO: 1,
+PROJETO?: IModelCALL005
+}

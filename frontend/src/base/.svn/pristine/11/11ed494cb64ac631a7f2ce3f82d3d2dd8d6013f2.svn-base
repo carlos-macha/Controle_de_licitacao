@@ -1,0 +1,8 @@
+export interface IModelPortalDashBoardClienteQtdMovimentos {
+   ACOESCOMERCIAIS: number,
+   SAC: number,
+   ASSISTENCIATECNICA: number,
+   NOTASFISCAIS: number,
+   TITULOS: number,
+   DEVOLUCOES: number
+}

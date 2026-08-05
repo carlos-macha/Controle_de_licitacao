@@ -1,0 +1,23 @@
+import { IModelEST020 } from "../models/modelEST020";
+import { IModelEST021 } from "../models/modelEST021";
+import DAO from "./dao";
+
+export default class DAOPedidoDeCompra extends DAO {
+
+  pedidosDeCompra = (id: number = 0, where: string = '', pagina: number = 1) => new Promise<Array<IModelEST020>>((resolve, reject) => {
+    const whereBase64 = btoa(where.toString())
+    this.Get<Array<IModelEST020>>(`pedidocompra/pedidoscompra/${id}/${whereBase64}/${pagina}`).then(data => {
+      resolve(data);
+    }).catch(error => {
+      reject(error);
+    });
+
+  });
+
+  pedidoDeCompra = (pedidoId: number, where: string = '', pagina: number = 1) => new Promise<IModelEST020>((resolve, reject) => {
+    this.Get<IModelEST020>(`pedidocompra/pedidoscompra/${pedidoId}/${where}/${pagina}`)
+      .then(data => resolve(data))
+      .catch(err => reject(err));
+  });
+
+}

@@ -1,0 +1,16 @@
+export enum EnumWorkFlow_TipoWorkFlow {
+   emWorkFlow_TpPedidoVenda = 'PED',
+   emWorkFlow_TpPedidoExpedicao = 'PEX',
+   emWorkFlow_TpAssistenciaTecnica = 'CAT',
+   emWorkFlow_TpPedidoCompra = 'PDC'
+}
+
+export enum EnumWorkFlow_AssumeAuto {
+   emWorkFlow_AssumeAutoNao = 'N',
+   emWorkFlow_AssumeAutoCapacitado = 'S',
+   emWorkFlow_AssumeAutoDono = 'D'
+}
+
+export enum EnumWorkFlow_KanbanTipo {
+   emWorkFlow_KanbanTipo_AC = 'AC'
+}

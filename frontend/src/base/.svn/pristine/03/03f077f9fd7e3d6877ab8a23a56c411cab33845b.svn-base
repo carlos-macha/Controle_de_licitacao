@@ -1,0 +1,10 @@
+import DAORecados from "../daos/daorecados";
+import Controller from "./controller";
+
+export default class ControllerRecados extends Controller<DAORecados>  {
+
+   constructor() {
+      super(DAORecados);
+   }
+
+}

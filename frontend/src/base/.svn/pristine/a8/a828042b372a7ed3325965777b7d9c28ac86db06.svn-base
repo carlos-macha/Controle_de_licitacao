@@ -1,0 +1,132 @@
+import ControllerPortal from "../controllers/controllerportal";
+import { IModelIMAGENS_PRODUTO } from "../models/modelMOB034";
+
+export interface IDataFotos {
+  idProduto: number,
+  fotoPrincipal?: string,
+  fotos?: Array<string>,
+  error?: boolean
+}
+
+interface IMemoryFotos {
+  add: (dataFotos: IDataFotos) => void,
+  fotos: (idProduto: number) => Promise<IDataFotos>,
+  getFotos: (ids: number[]) => Promise<void>,
+  reload: (idProduto: number) => Promise<IDataFotos>
+}
+
+const MemoryFotos = (function () {
+  var memoryFotos: IMemoryFotos;
+  var data: Map<number, IDataFotos>;
+  var carregando: Map<number, Promise<IDataFotos>>;
+
+  const createInstance = (): IMemoryFotos => {
+    data = new Map<number, IDataFotos>();
+    carregando = new Map<number, Promise<IDataFotos>>();
+
+    return {
+      add: (dataFotos) => {
+        const dataProduto = data.get(dataFotos.idProduto);
+
+        if (dataProduto) {
+          if (dataFotos.fotoPrincipal)
+            dataProduto.fotoPrincipal = dataFotos.fotoPrincipal;
+
+          if (dataFotos.fotos)
+            dataProduto.fotos = dataFotos.fotos;
+
+          data.set(dataFotos.idProduto, dataProduto);
+          return;
+        }
+        data.set(dataFotos.idProduto, dataFotos);
+      },
+
+      async fotos(idProduto) {
+        const dataProduto = data.get(idProduto);
+        const promiseEmAndamento = carregando.get(idProduto);
+
+        if (dataProduto) return dataProduto;
+        if (promiseEmAndamento) return promiseEmAndamento;
+
+        const promise = (async () => {
+          const imagensProdutos: Array<IModelIMAGENS_PRODUTO> = [{ PRO_ID: idProduto }];
+
+          try {
+            const controller = new ControllerPortal();
+            const listaFotos = await controller.DAO.ImagensProdutos(imagensProdutos);
+
+            const fotos = listaFotos[0]?.LISTA_IMAGENS?.map(f => f.IPR_IMAGEM) ?? [];
+            const dataFoto: IDataFotos = { idProduto, fotos, fotoPrincipal: fotos[0] };
+
+            data.set(idProduto, dataFoto);
+            return dataFoto;
+
+          } catch (error) {
+            console.log(error);
+            const vazio = { idProduto, error: true };
+            return vazio;
+
+          } finally {
+            carregando.delete(idProduto);
+          }
+
+        })();
+
+        carregando.set(idProduto, promise);
+
+        return promise;
+      },
+
+      getFotos: async (ids: number[]) => {
+        const idsNovos = ids.filter(id => !data.has(id) && !carregando.has(id));
+        if (idsNovos.length === 0) return;
+      
+        const limiteImagens = 5;
+        const controller = new ControllerPortal();
+      
+        for (let i = 0; i < idsNovos.length; i += limiteImagens) {
+          const lote = idsNovos.slice(i, i + limiteImagens);
+          await Promise.all(
+            lote.map(async id => {
+              const promise: Promise<IDataFotos> = (async () => {
+                try {
+                  const listaFotos = await controller.DAO.ImagensProdutos([{ PRO_ID: id }]);
+                  const item = listaFotos[0];
+                  const fotos = item?.LISTA_IMAGENS?.map(f => f.IPR_IMAGEM) ?? [];
+                  const dataFoto: IDataFotos = { idProduto: id, fotoPrincipal: fotos[0], fotos };
+                  data.set(id, dataFoto);
+                  return dataFoto;
+                } catch {
+                  return { idProduto: id, error: true } as IDataFotos;
+                }
+              })();
+      
+              carregando.set(id, promise);
+              await promise.finally(() => {
+                carregando.delete(id);
+              });
+            })
+          );
+        }
+      },
+
+      reload: async (idProduto: number) => {
+        data.delete(idProduto);
+        carregando.delete(idProduto);
+
+        return await memoryFotos.fotos(idProduto);
+      },
+    }
+  }
+
+  return {
+    instance: function () {
+      if (!memoryFotos) {
+        memoryFotos = createInstance();
+      }
+      return memoryFotos;
+    }
+  };
+})();
+
+export default MemoryFotos;

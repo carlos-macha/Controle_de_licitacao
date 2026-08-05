@@ -1,0 +1,21 @@
+import DAOEmpresa from "../daos/daoempresa";
+import { IModelEst001 } from "../models/modelEST001";
+import Controller from "./controller";
+
+export default class ControllerEmpresa extends Controller<DAOEmpresa>  {
+
+   constructor() {
+      super(DAOEmpresa);
+   }
+
+   EmpresasDoUsuario = (usuario: string = "", where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelEst001>>((resolve, reject) => {
+
+      this.DAO.EmpresasDoUsuario(usuario, where, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+
+   });
+
+}

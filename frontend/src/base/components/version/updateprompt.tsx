@@ -1,0 +1,54 @@
+import { useRegisterSW } from 'virtual:pwa-register/react';
+
+const UpdatePrompt = () => {
+  const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW({
+    onRegistered(r) {
+      if (r) {
+        console.log('checkVersion')
+        setInterval(() => {
+          console.log('checkversion')
+          r.update()
+        }, 5000);
+      }
+    },
+  });
+
+  return (
+    <div
+      className="toast-container position-fixed"
+      style={{ zIndex: 9999, left: "1rem", bottom: "1rem" }}
+    >
+      <div className={`toast ${needRefresh ? "show" : "hide"}`}>
+        <div className="p-0">
+          <div className="d-flex align-items-center justify-content-between border border-info alert alert-info p-3 rounded-3 mb-0 shadow-sm">
+
+            <div className="d-flex align-items-center">
+              <div
+                className="bg-info rounded-circle d-flex align-items-center justify-content-center mr-2"
+                style={{ width: "32px", height: "32px" }}
+              >
+                <i className="mdi mdi-refresh text-white" style={{ fontSize: "24px" }} />
+              </div>
+              <h6 className="mb-0 fs-10 fw-semibold text-info mr-3">
+                Atualização disponível
+              </h6>
+            </div>
+
+            <button
+              className="btn btn-info btn-sm fw-semibold text-white rounded-2 mr-2"
+              onClick={() => {
+                updateServiceWorker(true);
+                setTimeout(() => window.location.reload(), 500);
+              }}
+              style={{ fontSize: "14px" }}
+            >
+              Atualizar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UpdatePrompt;

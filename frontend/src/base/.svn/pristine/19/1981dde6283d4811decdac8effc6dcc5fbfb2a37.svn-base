@@ -1,0 +1,32 @@
+export interface IModelPortalRemessaConsignada {
+   PRO_ID: number,
+   PRO_CODIGO: string,
+   PRO_DESCRICAO: string,
+   NOT_NUMERO: number,
+   IME_ID: number,
+   LIA_CODIGO?: number,
+   NR_MOVIMENTO: string,
+   QTD_CONSIGNACAO: number,
+   QTD_CONSIGNACAO_UTILIZADA: number,
+   QTD_CONSIGNACAO_SALDO: number
+}
+
+export interface IModelPortalRemessaConsignadaQtdAgrupada {
+   PRO_ID: number,
+   PRO_CODIGO: string,
+   PRO_DESCRICAO: string,
+   QTD_CONSIGNACAO: number,
+   QTD_CONSIGNACAO_UTILIZADA: number,
+   QTD_CONSIGNACAO_SALDO: number
+}
+
+export interface IModelPortalHistoricoConsignacao {
+   HRC_CODIGO: number,
+   HRC_PES_CODIGO: string,
+   HRC_IME_ID: number,
+   HRC_LIA_CODIGO?: number,
+   HRC_DATA_HORA: number,
+   HRC_QUANTIDADE: number,
+   HRC_IDE_CODIGO?: number,
+   IME_PRODUTO: string
+}

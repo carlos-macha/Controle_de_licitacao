@@ -1,0 +1,13 @@
+import { IModelEtapasPedido } from "./modelEtapasPedido";
+
+export interface IModelControleEtapas {
+   PED_ID: number,
+   PED_EMPRESA: number,
+   PED_SEQ: string,
+   PED_DATA: number,
+   PED_USUARIO_REP_PROJETO: string,
+   PED_FATURADO: string,
+   PES_CODIGO: number,
+   PES_RAZAO: string,
+   ETAPAS_PEDIDO: Array<IModelEtapasPedido>
+}

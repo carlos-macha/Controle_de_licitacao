@@ -1,0 +1,10 @@
+import { EnumSimNao } from "../enums/enums";
+
+export interface IModelDoc006 {
+   VOC_DOCUMENTO: number,
+   VOC_USUARIO: string,
+   VOC_EDICAO: EnumSimNao,
+   VOC_BO_VISIVEL: EnumSimNao,
+   USU_NOME: string,
+   DOC_NOMEDOCUMENTO: string
+}

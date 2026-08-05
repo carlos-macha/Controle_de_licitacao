@@ -1,0 +1,171 @@
+.component-input-uppercase {
+   text-transform: uppercase !important;
+}
+
+.component-input-uppercase::placeholder {
+   text-transform: none !important;
+}
+
+.component-input-lowercase {
+   text-transform: lowercase !important;
+}
+
+.component-input-lowercase:placeholder {
+   text-transform: none !important;
+}
+
+/* 
+   MULTCHECKBOX
+   ==========================================================
+ */
+
+.multicheckbox>button {
+   background: #e9edf4 !important;
+   border: 0px solid #d7dbda !important;
+   font-size: 14px !important;
+   color: #777D74 !important;
+   border-radius: .25rem !important;
+   line-height: 30px;
+   font-weight: 400 !important;
+   transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+   font-family: inherit;
+}
+
+.multicheckbox.btn-primary:not(:disabled):not(.disabled).active,
+.multicheckbox.btn-primary:not(:disabled):not(.disabled).active:focus,
+.multicheckbox.show>.btn-primary.dropdown-toggle.active:focus,
+.multicheckbox.show>.btn-primary.dropdown-toggle:focus {
+   box-shadow: none !important;
+}
+
+/* .multicheckbox>button:hover {
+    color: #777D74 !important; 
+} */
+
+.dark .multicheckbox>button {
+   background: #25294a !important;
+   border: unset !important;
+   color: #8c91b6 !important;
+   border: 1px solid #333 !important;
+}
+
+.dark .multicheckbox>button {
+   background: #25294a !important;
+   border: unset !important;
+   color: #8c91b6 !important;
+   border: 1px solid #333 !important;
+}
+
+.multicheckbox .dropdown-toggle::after {
+   margin-left: 1.255em !important;
+}
+
+.dark .multicheckbox .dropdown-item:hover {
+   background: #0084ff !important;
+   color: #fff !important;
+}
+
+/* 
+   SELECT
+   ==========================================================
+ */
+
+/* .is-invalid .select__control {
+   border: 1px solid #dc3545 !important;
+} */
+
+.dark .is-invalid .select__control {
+   border: unset !important;
+}
+
+.select__control {
+   background: #e9edf4 !important;
+   border: 0px solid #d7dbda !important;
+   font-size: 14px;
+   color: #8c91b6 !important;
+   border-radius: .25rem !important;
+   padding: 0px 2px;
+   line-height: 33px;
+}
+
+
+.dark .select__control {
+   background: #25294a !important;
+   border: unset !important;
+   color: #8c91b6 !important;
+   border: 1px solid #333 !important;
+}
+
+.select__control--is-disabled {
+   background-color: #e9ecef !important;
+   opacity: 1 !important;
+}
+
+.dark .select__control--is-disabled {
+   background-color: #252847 !important;
+   border-color: #262626 !important;
+   color: #8c91b6 !important;
+}
+
+.select__control--is-focused {
+   box-shadow: 0 0 0 0px #0084ff !important;
+}
+
+.select__single-value--is-disabled {
+   color: #495057 !important;
+}
+
+
+.dark .select__single-value--is-disabled {
+   color: #8f9198 !important;
+}
+
+.dark .select__single-value,
+.dark .select__placeholder {
+   color: #8c91b6 !important;
+}
+
+.select__control--menu-is-open {
+   box-shadow: 0 0 0 0px #0084ff !important;
+}
+
+.select__option:hover {
+   background: #0084ff !important;
+   color: #fff !important;
+}
+
+.select__option--is-selected {
+   /* background: var(--bs-secondary) !important; */
+   background: #0084ff !important;
+   opacity: .8;
+}
+
+.select__option--is-selected:hover {
+   /* background: var(--bs-secondary) !important; */
+   background: #0084ff !important;
+   opacity: .8;
+}
+
+
+.select__option--is-focused {
+   background: #0084ff !important;
+   color: #fff !important;
+}
+
+
+body[data-layout-mode=dark] .select__indicator-separator {
+   color: #8f9198 !important;
+}
+
+.select__menu {
+   z-index: 9999999999999999999 !important;
+}
+
+.dark .select__menu {
+   background: #25294a !important;
+}
+
+.dark .custom-control-label::before {
+   background-color: #25294a;
+   border: #262626 solid 1px;
+}

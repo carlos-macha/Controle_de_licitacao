@@ -1,0 +1,15 @@
+import { EnumTpDespesa, EnumTpLancamentoDespesa } from "../enums/enumcontroleetapas";
+
+export interface IModelEST302 {
+   DEP_ID_MOVETAPADESP: number,
+   DEP_ID_MOVETAPA: number,
+   DEP_CD_TIPODESPESA: number,
+   DEP_DT_DESPESA: number,
+   DEP_ID_PESSOA?: number,
+   DEP_TP_DESPESA: EnumTpDespesa,
+   DEP_VL_REFERENCIA?: number,
+   DEP_VL_BASE?: number,
+   DEP_VL_TOTAL_DESPESA: number,
+   DEP_TP_LANCAMENTO: EnumTpLancamentoDespesa,
+   DEP_OBSERVACAO: string
+}

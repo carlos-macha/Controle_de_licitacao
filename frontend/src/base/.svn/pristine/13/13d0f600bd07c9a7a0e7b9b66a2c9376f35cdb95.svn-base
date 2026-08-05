@@ -1,0 +1,13 @@
+import DAO from "./dao";
+import { IModelArquivo } from "../models/modelArquivo";
+
+export default class DAONotaFiscal extends DAO {
+
+   DocumentoFiscalNfe = (idNf: number, tpDocFiscal: "xml" | "pdf") => new Promise<IModelArquivo>((resolve, reject) => {
+      this.Get<IModelArquivo>(`/notafiscal/documentofiscalnfe/${idNf}/${tpDocFiscal}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+   });
+}

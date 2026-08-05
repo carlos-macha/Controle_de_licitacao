@@ -1,0 +1,462 @@
+import moment from 'moment';
+import 'moment/dist/locale/pt-br';
+
+import { Calendar, EventPropGetter, EventProps, EventWrapperProps, momentLocalizer, Navigate, NavigateAction, SlotInfo, ToolbarProps, View, ViewStatic } from 'react-big-calendar';
+import withDragAndDrop, { DragFromOutsideItemArgs, EventInteractionArgs, OnDragStartArgs } from 'react-big-calendar/lib/addons/dragAndDrop';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+import './calendario.css';
+import Button from '../form/form';
+import { useEffect, useState } from 'react';
+
+import { ptBR } from "date-fns/locale/pt-BR";
+
+import { Dropdown, DropdownButton } from 'react-bootstrap';
+import Tippy from '@tippyjs/react';
+
+export interface IEvent {
+   allDay?: boolean,
+   title?: React.ReactNode,
+   start?: Date,
+   end?: Date,
+   resource?: any
+}
+
+interface CalendarioProps {
+   defaultDate: string | Date,
+   calendarDate: Date,
+   events: Array<IEvent>,
+   selected?: any,
+   onFocus?: () => void,
+   onAddEventClick?: () => void,
+   showOptions: boolean,
+   onClickShowOptions?: () => void,
+   optionsTab?: (toolbar: ToolbarProps<Event, object>) => JSX.Element,
+   height?: string | number,
+   eventWrapper: React.ComponentType<EventProps<IEvent>>,
+   onSelectEvent?: ((event: IEvent, e: React.SyntheticEvent<HTMLElement, Event>) => void),
+   onDoubleClickEvent?: ((event: IEvent) => void),
+   onSelectSlot?: ((slotInfo: SlotInfo) => void),
+   onView?: ((view: View) => void),
+   onNavigate?: ((newDate: Date, view: View, action: NavigateAction) => void),
+   eventPropGetter?: EventPropGetter<IEvent>,
+   extraContent?: React.ReactNode;
+
+   onEventDrop?: ((args: EventInteractionArgs<IEvent>) => void),
+   onDropFromOutside?: ((args: DragFromOutsideItemArgs) => void),
+   dragFromOutsideItem?: (() => keyof IEvent | ((event: IEvent) => Date)),
+   handleDragStart?: ((event: IEvent) => void),
+
+   agenda?: boolean | (React.ComponentType<any> & ViewStatic) | undefined
+}
+
+const DragAndDropCalendar = withDragAndDrop(Calendar as any);
+
+const Calendario: React.FC<CalendarioProps> = (props) => {
+   const { defaultDate, calendarDate, events, selected, extraContent, onFocus, onAddEventClick, showOptions, onClickShowOptions, optionsTab, height, eventWrapper,
+      onSelectEvent, onDoubleClickEvent, onSelectSlot, onView, onNavigate, eventPropGetter, onEventDrop, onDropFromOutside, dragFromOutsideItem, handleDragStart, agenda } = props;
+
+   const [view, setView] = useState<View>('month');
+   // const [resourceEvents, setResourceEvents] = useState<Array<any>>([]);
+
+   // useEffect(() => {
+   //    setResourceEvents(events.map(event => event.resource));
+   // }, [events])
+
+
+   // const [optionsInForm, setOptionsInForm] = useState<boolean>(false);
+
+   // const [editEvent, setEditEvent] = useState<boolean>(false);
+   // const [deleteEvent, setDeleteEvent] = useState<boolean>(false);
+
+   const localizer = momentLocalizer(moment);
+
+   registerLocale("pt-BR", ptBR);
+
+   useEffect(() => {
+      const lidarComRetorno = () => {
+         if (document.visibilityState === 'visible') {
+            onFocus?.();
+         }
+      };
+
+      document.addEventListener('visibilitychange', lidarComRetorno);
+      window.addEventListener('focus', lidarComRetorno);
+
+      return () => {
+         document.removeEventListener('visibilitychange', lidarComRetorno);
+         window.removeEventListener('focus', lidarComRetorno);
+      };
+   }, [onFocus]);
+
+   const CustomToolbar = (toolbar: ToolbarProps) => {
+      // const viewToUnit =
+      //    ((toolbar.view === 'agenda') || (toolbar.view === 'day')) ? 'day' :
+      //       (toolbar.view === 'month' || toolbar.view === 'agenda') ? 'month' :
+      //          (toolbar.view === 'week') ? 'week' :
+      //             'week';
+
+      useEffect(() => {
+         setView(toolbar.view);
+
+         if (onView)
+            onView(toolbar.view);
+      }, [toolbar.view])
+
+      return (
+         <div style={{ display: 'flex', zIndex: 9999 }}>
+            <div className='customToolbar'
+               onMouseEnter={() => {
+                  for (var i = 0; i < document.getElementsByClassName('rbc-day-bg').length; i++) {
+                     if (document.getElementsByClassName('rbc-day-bg')[i].classList.contains('selecting')) {
+                        document.getElementsByClassName('rbc-day-bg')[i].classList.remove('selecting');
+                     }
+                  }
+               }}
+            >
+               <div className='postNavAgenda' style={{ paddingBottom: 10, position: 'relative', zIndex: 9000 }}>
+                  <nav className='navAgendaButtons' style={{ boxShadow: '0 1px 3px 1px rgba(0,0,0,.2)', paddingLeft: 10, paddingTop: 10, paddingBottom: 10, borderRadius: 5, height: 56, display: 'flex', justifyContent: 'flex-start', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+
+                     <div className='button-1' style={{ paddingRight: 10 }}>
+                        <Button className={`btn btn-${onAddEventClick ? 'primary' : 'secondary'}`} classIcon='mdi mdi-calendar-blank-outline' caption='Novo evento'
+                           onClick={onAddEventClick}
+                        />
+                     </div>
+                     <div className='button-2' style={{ paddingRight: 10 }}>
+                        <Button className={`btn btn-${(toolbar.view === 'day') ? '' : 'outline-'}primary`} classIcon='mdi mdi-calendar-today-outline' caption='Dia'
+                           onClick={() => toolbar.onView('day')}
+                        />
+                     </div>
+                     <div className='button-3' style={{ paddingRight: 10 }}>
+                        <Button className={`btn btn-${(toolbar.view === 'work_week') ? '' : 'outline-'}primary`} classIcon='mdi mdi-calendar-week-outline' caption='Semana de trabalho'
+                           onClick={() => toolbar.onView('work_week')}
+                        />
+                     </div>
+                     <div className='button-4' style={{ paddingRight: 10 }}>
+                        <Button className={`btn btn-${(toolbar.view === 'week') ? '' : 'outline-'}primary`} classIcon='mdi mdi-calendar-weekend-outline' caption='Semana'
+                           onClick={() => toolbar.onView('week')}
+                        />
+                     </div>
+                     <div className='button-5' style={{ paddingRight: 10 }}>
+                        <Button className={`btn btn-${(toolbar.view === 'month') ? '' : 'outline-'}primary`} classIcon='mdi mdi-calendar-month-outline' caption='Mês'
+                           onClick={() => toolbar.onView('month')}
+                        />
+                     </div>
+                     <div className='button-5' style={{ paddingRight: 10 }}>
+                        <Button className={`btn btn-${(toolbar.view === 'agenda') ? '' : 'outline-'}primary`} classIcon='mdi mdi-view-agenda-outline' caption='Agenda'
+                           onClick={() => toolbar.onView('agenda')}
+                        />
+                     </div>
+
+                     <div className='more' style={{ display: 'none', position: 'absolute', left: 'calc(100% - 6.75rem)' }}>
+                        <div style={{ paddingRight: 5 }}>
+                           <span style={{ paddingLeft: 0.5, paddingRight: 0.5, paddingTop: 2.5, paddingBottom: 12.5, background: '#ddd' }} />
+                        </div>
+
+                        <h4 className='pick-more' style={{ paddingLeft: 5, cursor: 'pointer' }}>
+                           <DropdownButton
+                              title={<i className='mdi mdi-dots-horizontal' />}
+                              className='btn nav-btn btn-options-dropdown p-0'
+                              style={{ height: 40, marginTop: -5 }}
+                              variant=''
+                           >
+                              <Dropdown.Item className='button-6-drop p-0' style={{ display: 'none' }} active={(toolbar.view === 'agenda')}>
+                                 <Button className="dropdown-item"
+                                    showCaptionButtonOnLoading
+                                    onClick={() => toolbar.onView('agenda')}
+                                    data-rr-ui-dropdown-item=""
+                                    classIcon='mdi mdi-view-agenda-outline'
+                                    caption='Agenda'
+                                 />
+                              </Dropdown.Item>
+                              <Dropdown.Item className='button-5-drop p-0' style={{ display: 'none' }} active={(toolbar.view === 'month')}>
+                                 <Button className="dropdown-item"
+                                    showCaptionButtonOnLoading
+                                    onClick={() => toolbar.onView('month')}
+                                    data-rr-ui-dropdown-item=""
+                                    classIcon='mdi mdi-calendar-month-outline'
+                                    caption='Mês'
+                                 />
+                              </Dropdown.Item>
+                              <Dropdown.Item className='button-4-drop p-0' style={{ display: 'none' }} active={(toolbar.view === 'week')}>
+                                 <Button className="dropdown-item"
+                                    showCaptionButtonOnLoading
+                                    onClick={() => toolbar.onView('week')}
+                                    data-rr-ui-dropdown-item=""
+                                    classIcon='mdi mdi-calendar-weekend-outline'
+                                    caption='Semana'
+                                 />
+                              </Dropdown.Item>
+                              <Dropdown.Item className='button-3-drop p-0' style={{ display: 'none' }} active={(toolbar.view === 'work_week')}>
+                                 <Button className="dropdown-item"
+                                    showCaptionButtonOnLoading
+                                    onClick={() => toolbar.onView('work_week')}
+                                    data-rr-ui-dropdown-item=""
+                                    classIcon='mdi mdi-calendar-week-outline'
+                                    caption='Semana de trabalho'
+                                 />
+                              </Dropdown.Item>
+                              <Dropdown.Item className='button-2-drop p-0' style={{ display: 'none' }} active={(toolbar.view === 'day')}>
+                                 <Button className="dropdown-item"
+                                    showCaptionButtonOnLoading
+                                    onClick={() => toolbar.onView('day')}
+                                    data-rr-ui-dropdown-item=""
+                                    classIcon='mdi mdi-calendar-today-outline'
+                                    caption='Dia'
+                                 />
+                              </Dropdown.Item>
+                              <Dropdown.Item className={`button-1-drop p-0${onAddEventClick ? '' : ' btn-secondary'}`} style={{ display: 'none' }} active>
+                                 <Button className="dropdown-item"
+                                    showCaptionButtonOnLoading
+                                    onClick={onAddEventClick}
+                                    data-rr-ui-dropdown-item=""
+                                    classIcon='mdi mdi-calendar-blank-outline'
+                                    caption='Novo evento'
+                                 />
+                              </Dropdown.Item>
+                           </DropdownButton>
+                        </h4>
+
+                        <div style={{ paddingLeft: 5 }}>
+                           <span style={{ paddingLeft: 0.5, paddingRight: 0.5, paddingTop: 2.5, paddingBottom: 12.5, background: '#ddd' }} />
+                        </div>
+
+                     </div>
+
+                     <Tippy
+                        content={showOptions ? 'Esconder opções' : 'Mostrar opções'}
+                        allowHTML={true}
+                        arrow={true}
+                        placement='top'
+                        animation='shift-away-subtle'
+                     >
+                        <div style={{ position: 'absolute', left: 'calc(100% - 3.1rem)' }}>
+                           <Button className='btn btn-primary' classIcon={`mdi mdi-arrow-expand-${showOptions ? 'right' : 'left'} m-0`}
+                              title={showOptions ? 'Esconder opções' : 'Mostrar opções'}
+                              overlayProps={{
+                                 placement: "top"
+                              }}
+                              onClick={onClickShowOptions}
+                           />
+                        </div>
+                     </Tippy>
+                  </nav>
+               </div>
+
+               <div className='radious'>
+                  {extraContent}
+               </div>
+               
+               <nav className='navbar rbc-navbar' style={{ paddingLeft: 10, paddingBottom: 0, display: 'flex', justifyContent: 'flex-start' }}>
+                  <div className='pb-2 pr-2'>
+                     <Button className='btn btn-outline-secondary' caption='Hoje' style={{ paddingLeft: 20, paddingRight: 20 }}
+                        onClick={() => toolbar.onNavigate(Navigate.TODAY)}
+                     />
+                  </div>
+                  <div className='pb-2 pr-2'>
+                     <Button className='btn btn-outline-secondary' classIcon={'mdi mdi-chevron-' + (((toolbar.view === 'month') || (toolbar.view === 'agenda')) ? 'up' : 'left')} style={{ fontSize: 20, padding: 1, paddingLeft: 5 }}
+                        onClick={() => toolbar.onNavigate(Navigate.PREVIOUS)}
+                     />
+                  </div>
+                  <div className='pb-2 pr-2'>
+                     <Button className='btn btn-outline-secondary' classIcon={'mdi mdi-chevron-' + (((toolbar.view === 'month') || (toolbar.view === 'agenda')) ? 'down' : 'right')} style={{ fontSize: 20, padding: 1, paddingLeft: 5 }}
+                        onClick={() => toolbar.onNavigate(Navigate.NEXT)}
+                     />
+                  </div>
+
+                  <DatePicker
+                     selected={toolbar.date}
+                     onChange={(date, event) => {
+                        if (toolbar.date.getMonth() !== date?.getMonth()) {
+                           date = new Date(date?.getFullYear()!, date?.getMonth()!, (((toolbar.view === 'month') || (toolbar.view === 'agenda')) && (moment().toDate().getMonth() === date?.getMonth())) ? moment().toDate().getDate() : date?.getDate());
+                        }
+
+                        toolbar.onNavigate(Navigate.DATE, date);
+                     }}
+                     customInput={
+                        <div style={{ paddingBottom: 8 }}>
+                           <h4 className='pick-date' style={{ paddingLeft: 5, cursor: 'pointer' }}>
+                              {toolbar.label}
+                              <i style={{ color: 'gray', fontSize: 22 }} className='mdi mdi-chevron-down' />
+                           </h4>
+                        </div>
+                     }
+                     onCalendarOpen={() => {
+                        if (document.getElementsByClassName('pick-date')[0]) {
+                           document.getElementsByClassName('pick-date')[0].classList.add('selected');
+                        }
+
+                        if ((toolbar.view === 'week') || (toolbar.view === 'work_week')) {
+                           for (var i = 0; i < document.getElementsByClassName('react-datepicker__month-container').length; i++) {
+                              document.getElementsByClassName('react-datepicker__month-container')[i].classList.add('week-mode')
+                           }
+                        } else {
+                           for (var i = 0; i < document.getElementsByClassName('react-datepicker__month-container').length; i++) {
+                              document.getElementsByClassName('react-datepicker__month-container')[i].classList.remove('week-mode')
+                           }
+                        }
+                     }}
+                     onCalendarClose={() => {
+                        if (document.getElementsByClassName('pick-date')[0]) {
+                           document.getElementsByClassName('pick-date')[0].classList.remove('selected');
+                        }
+                     }}
+                     showPopperArrow={false}
+                     showMonthYearPicker={((toolbar.view === 'month') || (toolbar.view === 'agenda'))}
+                     showFullMonthYearPicker={true}
+                     showMonthDropdown={((toolbar.view !== 'month') && (toolbar.view !== 'agenda'))}
+                     locale={'pt-BR'}
+                     disabledKeyboardNavigation
+                  />
+               </nav>
+            </div>
+
+            {showOptions &&
+               <div className='maxOptionsTab'>
+                  <div className='optionsTab'
+                     onMouseEnter={() => {
+                        for (var i = 0; i < document.getElementsByClassName('rbc-day-bg').length; i++) {
+                           if (document.getElementsByClassName('rbc-day-bg')[i].classList.contains('selecting')) {
+                              document.getElementsByClassName('rbc-day-bg')[i].classList.remove('selecting');
+                           }
+                        }
+                     }}
+                  >
+                     {optionsTab && optionsTab(toolbar)}
+                  </div>
+               </div>
+            }
+         </div>
+      );
+   };
+
+   return (
+      <div>
+         <div className={'calendarWorkaround' + (showOptions ? '' : ' fullShowing')}>
+            <DragAndDropCalendar
+               localizer={localizer}
+               defaultDate={defaultDate}
+               date={calendarDate}
+               onNavigate={onNavigate}
+               // onView={onView}
+               selectable
+               selected={selected}
+               onSelecting={() => false}
+               onSelectSlot={onSelectSlot}
+               startAccessor="start"
+               endAccessor="end"
+               style={{ height: height, minHeight: 700 }}
+               messages={{
+                  agenda: "Agenda",
+                  allDay: "Dia todo",
+                  date: "Data",
+                  day: "Dia",
+                  event: "Evento",
+                  month: "Mês",
+                  next: "Próximo",
+                  noEventsInRange: "Sem eventos na seleção",
+                  previous: "Anterior",
+                  showMore: (count) => "+" + count,
+                  time: "Tempo",
+                  today: "Hoje",
+                  tomorrow: "Amanhã",
+                  week: "Semana",
+                  work_week: "Semana de trabalho",
+                  yesterday: "Ontem"
+               }}
+               formats={{
+                  monthHeaderFormat: (date, culture, localizer) => {
+                     let data = localizer?.format(date, `MMMM YYYY`, culture);
+
+                     return data!.charAt(0).toUpperCase() + data!.slice(1);
+                  },
+                  dayRangeHeaderFormat: ({ start, end }, culture, localizer) => {
+                     let dataStart = localizer?.format(start, 'DD', culture);
+                     let dataEnd = localizer?.format(end, 'DD', culture);
+                     let dataMonth = localizer?.format(end, 'MMMM', culture);
+                     let dataYear = localizer?.format(end, 'YYYY', culture);
+
+                     return dataStart! + ' - ' + dataEnd! + ' de ' + dataMonth!.charAt(0).toUpperCase() + dataMonth!.slice(1) + ' de ' + dataYear!;
+                  },
+                  dayHeaderFormat: (date, culture, localizer) => {
+                     let dataDay = localizer?.format(date, 'DD', culture);
+                     let dataMonth = localizer?.format(date, 'MMMM', culture);
+                     let dataYearAndDayOfWeek = localizer?.format(date, 'YYYY (dddd)', culture);
+
+                     return dataDay! + ' de ' + dataMonth!.charAt(0).toUpperCase() + dataMonth!.slice(1) + ' de ' + dataYearAndDayOfWeek!;
+                  },
+
+                  weekdayFormat: (date, culture, localizer) => {
+                     let data = localizer?.format(date, 'dddd', culture);
+                     return data!.charAt(0).toUpperCase() + data!.slice(1);
+                  }
+               }}
+               events={events}
+               onSelectEvent={(e, elem) => {
+                  if (onSelectEvent)
+                     onSelectEvent(e, elem);
+               }}
+               onDoubleClickEvent={onDoubleClickEvent}
+               components={{
+                  toolbar: CustomToolbar,
+                  dateCellWrapper: (date) => {
+                     return (
+                        <div id={date.value.toDateString()} className={date.children.props.className}>
+                           <div className='day-bg' />
+                        </div>
+                     )
+                  },
+                  month: {
+                     dateHeader: (dateHeader) => {
+                        var firstDay = new Date(dateHeader.date.getFullYear(), dateHeader.date.getMonth(), 1);
+
+                        return (
+                           <div>
+                              <div className='dateHeader-content d-flex'>
+                                 {(dateHeader.isOffRange ? ((dateHeader.date.getDate() === firstDay.getDate()) || (moment(dateHeader.date).weekday() === 0)) : (dateHeader.date.getDate() === firstDay.getDate())) &&
+                                    <div className='dateHeader-month' style={{ paddingLeft: 5, fontWeight: 600, paddingTop: 2, margin: 2, textTransform: 'capitalize' }}>
+                                       {dateHeader.date.toLocaleString('default', { month: 'short' })}
+                                    </div>
+                                 }
+                                 <div className='dateHeader-text' style={{ width: 27.5, height: 27.5, textAlign: 'center' }}>
+                                    {dateHeader.label}
+                                 </div>
+                              </div>
+                           </div>
+                        )
+                     }
+                  },
+                  event: eventWrapper
+               }}
+               views={{
+                  agenda: agenda,
+                  day: true,
+                  month: true,
+                  week: true,
+                  work_week: true
+               }}
+               allDayMaxRows={1}
+               dayPropGetter={date => (moment(date).format('DDMMYYYY') === moment(calendarDate).format('DDMMYYYY')) ? { className: 'rbc-selected-day' } : {}}
+               eventPropGetter={eventPropGetter}
+               tooltipAccessor={() => ''}
+               resizable={false}
+               onEventDrop={args => {
+                  if ((view === 'month') && onEventDrop) {
+                     onEventDrop(args);
+                  }
+               }}
+               draggableAccessor={() => (view === 'month')}
+               onDropFromOutside={onDropFromOutside}
+               dragFromOutsideItem={dragFromOutsideItem}
+               handleDragStart={handleDragStart}
+            />
+         </div>
+      </div>
+   )
+}
+
+export default Calendario;

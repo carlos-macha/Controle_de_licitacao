@@ -1,0 +1,4 @@
+export enum EnumTipoPagarReceber {
+   emTipoPagarReceber_Pagar = 'P',
+   emTipoPagarReceber_Receber = 'R'
+}

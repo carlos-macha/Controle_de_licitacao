@@ -1,0 +1,11 @@
+import { EnumSimNao } from "../enums/enums"
+
+export interface IModelSis009 {
+   LUS_USUARIO: string,
+   LUS_BO_LIBERADA: EnumSimNao,
+   LUS_LIBERACAO_DH: number | null,
+   LUS_LIBERACAO_USUARIO: string | null,
+   LUS_BLOQUEIO_DH: number | null,
+   LUS_BLOQUEIO_USUARIO: string | null,
+   LUS_BLOQUEIO_COMMAND: EnumSimNao
+}

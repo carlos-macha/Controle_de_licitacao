@@ -1,0 +1,11 @@
+export interface IModelDoc009 {
+   CBI_DOCUMENTO: number,
+   CBI_DATA: number,
+   CBI_HORA: number,
+   CBI_ARQUIVOBINARIO: string,
+   CBI_ID: number
+}
+
+export interface IModelDoc009Versoes extends IModelDoc009 {
+   DOC_NOMEORIGINALARQUIVO: string
+}

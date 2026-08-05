@@ -1,0 +1,4 @@
+export interface IModelEST318 {
+   MEP_ID_MOVETAPA: number,
+   MEP_INF_COMPL?: string
+}

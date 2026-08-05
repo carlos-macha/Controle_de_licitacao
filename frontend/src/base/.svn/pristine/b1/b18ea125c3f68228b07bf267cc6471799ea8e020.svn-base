@@ -1,0 +1,66 @@
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { ManutencaoProps } from '../../../components/crud/manutencao/crudmanutencao';
+import Custommodal, { CustomModalRef } from '../../../components/modal/custommodal';
+import { useModalContext } from '../../../hooks/useModalContext';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import RecadosContainer, { RecadosContainerParams } from './recadoscontainer';
+import Card, { CardBody, CardHeader } from '../../../components/card/card';
+import { momentUtils } from '../../../utils/momentutils';
+import moment from 'moment'
+
+interface RecadosManutencaoModalProps extends ManutencaoProps { }
+
+const RecadosManutencaoModal: React.FC<RecadosManutencaoModalProps> = (props) => {
+
+  const viewRecadosEvent = useRef<CustomModalRef>(null);
+  const { modalState } = useModalContext();
+  const propsModal = modalState;
+  const { recado, docTpOrigem, codOrigem, descricao, pessoaCod, pessoaNome, assuntoProp } = propsModal
+  const [modalKey, setModalKey] = useState(momentUtils.formatOADate(momentUtils.toOADate(moment()), 'time'));
+
+  useEffect(() => {
+    if (modalState.type === 'recado') {
+      setModalKey(momentUtils.formatOADate(momentUtils.toOADate(moment()), 'time'));
+      setTimeout(() => { viewRecadosEvent.current?.open(); }, 0);
+    }
+  }, [modalState]);
+
+  return (
+    <Fragment>
+      <Custommodal
+        ref={viewRecadosEvent}
+        largeType='extra-large'
+        showOverlay={true}
+        className="custom-agenda-recados-modal"
+      >
+        <Card className='iq-card mb-0'>
+          <CardHeader className='d-flex' title={'Recados'} />
+          <CardBody className='inForm p-0'>
+            <CrudProvider>
+              <RecadosContainer
+                key={`${codOrigem}-${modalKey}`}
+                typeRender='maintenance'
+                params={{
+                  prefixId: 'recado-modal',
+                  tipo: 'modal',
+                  docTpOrigem: docTpOrigem,
+                  pessoaCod: pessoaCod,
+                  pessoaNome: pessoaNome,
+                  codOrigem: codOrigem,
+                  descricao: descricao,
+                  assuntoProp: assuntoProp,
+                  onClose: () => viewRecadosEvent.current?.close()
+                } as RecadosContainerParams}
+              />
+            </CrudProvider>
+          </CardBody>
+        </Card>
+
+      </Custommodal>
+
+    </Fragment >
+  );
+}
+
+
+export default RecadosManutencaoModal;

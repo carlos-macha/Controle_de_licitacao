@@ -1,0 +1,211 @@
+import { Fragment, Ref, forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import Spinner from "react-bootstrap/esm/Spinner";
+import ControllerCRM from "../../../../controllers/controllercrm";
+import { IModelCrm019 } from "../../../../models/modelCRM019";
+import { IModelCrm021 } from "../../../../models/modelCRM021";
+import PesquisaPergunta from "./pesquisaCRMPergunta";
+import { IModelCrm023 } from "../../../../models/modelCRM023";
+import { utilities } from "../../../../utils/utilities";
+import Card, { CardHeader, CardBody, CardFooter } from "../../../../components/card/card";
+import Button from "../../../../components/form/form";
+import { nanoid } from "nanoid";
+import { useSweetAlertContext } from "../../../../hooks/useSweetAlertContext";
+import { IModelCrm052 } from "../../../../models/modelCRM052";
+import PropriedadeService, {PAR_CRM_LINK_PESQUISA} from "../../../../services/propriedades";
+
+export type PesquisaCRMRef = {
+   getRespostas?: () => Array<IModelCrm023>
+};
+
+interface PesquisaCRMProps {
+   codigo?: number,
+   token?: string,
+   defaultPesquisa?: IModelCrm019,
+   defaultRespostas?: Array<IModelCrm023>,
+   update?: any,
+   isModal?: boolean,
+   onSave?: (repostaLink: IModelCrm052) => void
+}
+
+const PesquisaCRM: React.ForwardRefRenderFunction<PesquisaCRMRef, PesquisaCRMProps> = (props, ref: Ref<PesquisaCRMRef>) => {
+   const { codigo, token, defaultPesquisa, defaultRespostas, update, isModal, onSave } = props;
+
+   const { sweetAlertdispatch } = useSweetAlertContext();
+
+   // const [loadedPesquisa, setLoadedPesquisa] = useState<boolean>(false);
+
+   const [data, setData] = useState<IModelCrm019>();
+
+   const [selecteds, setSelecteds] = useState<Array<number>>([]);
+
+   const [loadingSalvar, setLoadingSalvar] = useState<boolean>(false);
+
+   const perguntas = useMemo(() => {
+      if (data) {
+         return data.PERGUNTAS.filter(x => (x.RESPOSTAS.length > 0));
+      }
+   }, [data])
+
+   // const [respostas, setRespostas] = useState<Array<IModelCrm021>>([]);
+
+   const respostas = useRef<Array<IModelCrm023>>([]);
+
+   const [nrColunasWeb, setNrColunasWeb] = useState<number>(1);
+
+   const colClasses: Record<number, string> = {
+      1: 'col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mb-2',
+      2: 'col-12 col-md-6 col-lg-6 mb-2',
+   };
+
+   useImperativeHandle(ref, () => ({
+      getRespostas: () => respostas.current
+   }));
+
+   useEffect(() => {
+      if (defaultPesquisa) {
+         setData(defaultPesquisa);
+         setSelecteds([]);
+         respostas.current = [];
+      } else if (codigo && !defaultRespostas) {
+         setData(undefined);
+         setSelecteds([]);
+         respostas.current = [];
+
+         const controllerCRM = new ControllerCRM();
+
+         controllerCRM.DAO.pesquisasCRM(codigo).then((pesquisa) => {
+            setData(pesquisa);
+         })
+      }
+   }, [update])
+
+   useEffect(() => {
+      async function layoutColunasWeb() {
+         const nrCol = await PropriedadeService.getInstance().valueFromPar<number>(PAR_CRM_LINK_PESQUISA, 'NR_COLUNAS_WEB');
+
+         if (nrCol == 1 || nrCol == 2) {
+            setNrColunasWeb(nrCol);
+         }
+      }
+
+      layoutColunasWeb();
+   }, []);
+
+   return (
+      <Card className={"card-pesquisacrm" + (isModal ? ' card-pesquisacrm-isModal' : '')}>
+         {data
+            ?
+            <Fragment>
+               <CardHeader className="card-header-pesquisacrm text-center" title={data.PSQ_DESCRICAO} />
+               <CardBody className="card-body-pesquisacrm p-0">
+                  {((perguntas && (perguntas.length > 0))
+                     ?
+                     <div className="row">
+                        {perguntas.map(value => {
+                           return (
+                              <div key={`pergunta-${value.PGT_CODPERGUNTA}`} className={colClasses[nrColunasWeb]}>
+                                 <PesquisaPergunta
+                                    pergunta={value}
+                                    respostas={respostas}
+                                    selecteds={selecteds}
+                                    setSelecteds={setSelecteds}
+                                    hasSelected={selecteds.includes(value.PGT_CODPERGUNTA)}
+                                    onChange={(resposta, type, checked) => {
+                                       if (type === 'radio') {
+                                          respostas.current = respostas.current.filter(x => (x.RFP_PERGUNTA !== resposta.RFP_PERGUNTA)).concat([resposta]);
+                                       } else {
+                                          respostas.current = checked ? respostas.current.concat([resposta]) : respostas.current.filter(x => !((x.RFP_PESQUISA === resposta.RFP_PESQUISA) && (x.RFP_PERGUNTA === resposta.RFP_PERGUNTA) && (x.RFP_RESPOSTA === resposta.RFP_RESPOSTA)));
+                                       }
+
+                                       if (respostas.current.filter(x => x.RFP_PERGUNTA).length > 0) {
+                                          if (!selecteds.includes(value.PGT_CODPERGUNTA)) {
+                                             setSelecteds(selecteds.concat(value.PGT_CODPERGUNTA));
+                                          }
+                                       } else {
+                                          if (selecteds.includes(value.PGT_CODPERGUNTA)) {
+                                             setSelecteds(selecteds.filter(x => (x !== value.PGT_CODPERGUNTA)));
+                                          }
+                                       }
+                                    }}
+                                    onChangeObservacao={(observacao) => {
+                                       // console.log(observacao)
+                                       value.RESPOSTAS.forEach((resposta) => {
+                                          if (respostas.current.find(x => ((x.RFP_PESQUISA === resposta.RPT_PESQUISA) && (x.RFP_PERGUNTA === resposta.RPT_PERGUNTA) && (x.RFP_RESPOSTA === resposta.RPT_CODRESPOSTA)))) {
+                                             respostas.current = respostas.current.filter(x => !((x.RFP_PESQUISA === resposta.RPT_PESQUISA) && (x.RFP_PERGUNTA === resposta.RPT_PERGUNTA) && (x.RFP_RESPOSTA === resposta.RPT_CODRESPOSTA)))
+                                                .concat([{
+                                                   RFP_PESQUISA: resposta.RPT_PESQUISA,
+                                                   RFP_NRFICHA: 0,
+                                                   RFP_PERGUNTA: resposta.RPT_PERGUNTA,
+                                                   RFP_RESPOSTA: resposta.RPT_CODRESPOSTA,
+                                                   RFP_COMPLEMENTO: btoa(observacao),
+                                                   RFP_PONTOS: resposta.RPT_PONTOS
+                                                }]);
+                                          }
+                                       })
+                                    }}
+                                 />
+                              </div>
+                           )
+                        })}
+                        <div className="col-12">
+
+                        </div>
+                     </div>
+                     :
+                     <div className='pt-3' style={{ height: 'calc(100vh - 16rem)', textAlign: 'center', alignContent: 'center' }}>
+                        {'Sem Perguntas a serem respondidas.'}
+                     </div>
+                  )}
+               </CardBody>
+               {!isModal &&
+                  <div className="card-footer-pesquisacrm pb-3">
+                     <CardFooter className="d-flex justify-content-end">
+                        <Button caption='Salvar' classIcon='mdi mdi-content-save' className='btn btn-primary float-right'
+                           loading={loadingSalvar}
+                           showCaptionButtonOnLoading
+                           onClick={(elem) => {
+                              if (token) {
+                                 setLoadingSalvar(true);
+
+                                 const controllerCRM = new ControllerCRM();
+
+                                 console.log(respostas.current);
+
+                                 controllerCRM.DAO.tokenRepostaLinkPesquisaCRM(token, respostas.current).then((repostaLink) => {
+                                    if (onSave)
+                                       onSave(repostaLink);
+                                 }).catch(error => {
+                                    sweetAlertdispatch({
+                                       type: 'show',
+                                       msg: error.data.error,
+                                       props: {
+                                          type: 'error',
+                                          title: 'Erro',
+                                          onConfirm(response) {
+                                             sweetAlertdispatch({ type: 'close' });
+                                          },
+                                          onCancel() {
+                                             sweetAlertdispatch({ type: 'close' });
+                                          }
+                                       }
+                                    });
+                                 }).finally(() => {
+                                    setLoadingSalvar(false);
+                                 })
+                              }
+                           }}
+                        />
+                     </CardFooter>
+                  </div>
+               }
+            </Fragment>
+            :
+            <div className='status-loader d-flex align-items-center justify-content-center'>
+               <Spinner className='text-primary' style={{ width: 150, height: 150, fontSize: 40 }} />
+            </div>
+         }
+      </Card >
+   )
+}
+
+export default forwardRef(PesquisaCRM);

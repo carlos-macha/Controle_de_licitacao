@@ -1,0 +1,8 @@
+@media (max-width: 1299px) {
+   .iq-top-navbar .iq-navbar-custom .iq-menu-bt {
+      display: inline-block;
+      position: absolute;
+      right: 160px;
+      opacity: 1;
+   }
+}

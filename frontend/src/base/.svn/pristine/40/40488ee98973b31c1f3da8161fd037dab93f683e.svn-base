@@ -1,0 +1,9 @@
+export interface IModelEntregaDashboardCustosPCP {
+   IOP_ORDEM: number,
+   PRO_EMPRESA: number,
+   PRO_CODIGO: string,
+   PRO_DESCRICAO: string,
+   QUANTIDADE: number,
+   CUSTO_UNITARIO_MEDIO: number,
+   CUSTO_TOTAL: number
+}

@@ -1,0 +1,56 @@
+import { EnumAtivoInativo } from "../enums/enums"
+import { EnumPessoa_FisicaJuridica } from "../enums/enumspessoa"
+import { IModelMOB002 } from "./modelMOB002"
+import { IModelMOB003 } from "./modelMOB003"
+import { IModelMOB004 } from "./modelMOB004"
+import { IModelMOB012 } from "./modelMOB012"
+import { IModelMOB015 } from "./modelMOB015"
+import { IModelMOB039 } from "./modelMOB039"
+import { IModelMOB040 } from "./modelMOB040"
+import { IModelMOB043 } from "./modelMOB043"
+import { IModelMOB102 } from "./modelMOB102"
+import { IModelMOB103 } from "./modelMOB103"
+import { IModelMOB104 } from "./modelMOB104"
+
+export interface IModelMOB001 {
+   PES_ID: number,
+   PES_LEGADO_ID?: number,
+   PES_RAZAO_SOCIAL: string,
+   PES_FANTASIA?: string,
+   PES_ATIVOINATIVO: EnumAtivoInativo,
+   PES_CPFCGC: string,
+   PES_TP_INSCRICAOESTADUAL?: string,
+   PES_RGINSCR: string,
+   PES_FISICAJURIDICA: EnumPessoa_FisicaJuridica,
+   PES_DTNASCIMENTO: number,
+   PES_DTCADASTRO: number,
+   PES_DTALTERACAO?: number,
+   PES_VENDEDOR?: string,
+   PES_HOMEPAGE?: string,
+   PES_USUARIO_CAD?: string,
+   PES_FONE?: string,
+   PES_FAX?: string,
+   PES_EMAIL?: string,
+   PES_COND_PAGTO_PADRAO?: number,
+   PES_LIMITE_CREDITO: number,
+   PES_CARENCIA_DIAS?: number,
+   PES_COND_PAGTO_PRAZO_MEDIO?: number,
+   PES_CD_GRUPO_TABPRECO?: number,
+   PES_CODIGO: string,
+   PES_CELULAR?: string,
+   PES_TIPO_OPERACAO_AC?: string,
+   PES_REGIME_TRIBUTARIO?: string,
+   LISTA_CONTATOS: Array<IModelMOB002>,
+   LISTA_ENDERECOS: Array<IModelMOB015>,
+   LISTA_TITULOS?: Array<IModelMOB004>,
+   LISTA_PREFERENCIAS?: Array<IModelMOB103>,
+   SITUACAO_FINANCEIRA?: IModelMOB003,
+   DESCONTO_PORCENTAGEM?: Array<IModelMOB039>,
+   TIPO_PESSOA?: IModelMOB102,
+   LISTA_CURVA_ABC?: Array<IModelMOB040>,
+   LISTA_OBSERVACOES?: Array<IModelMOB043>,
+   LISTA_TAB_DESCONTO?: Array<IModelMOB104>,
+   ULTIMO_AGENDAMENTO_CRM?: IModelMOB012,
+   PES_CIDADE_RES?: string,
+   PES_ESTADO_RES?: string,
+}

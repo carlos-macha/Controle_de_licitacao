@@ -1,0 +1,15 @@
+export enum EnumProduto_MinMultVenda {
+   emProd_MinMultVenda_Minimo = 'MINIMO',
+   emProd_MinMultVenda_MultArredCima = 'MULTIPLO_ARREDONDAMENTO_CIMA',
+   emProd_MinMultVenda_MultArredBaixo = 'MULTIPLO_ARREDONDAMENTO_BAIXO',
+   emProd_MinMultVenda_MultArredMatematico = 'MULTIPLO_ARREDONDAMENTO_MATEMATICO'
+}
+
+export enum EnumFormaUnidadeMedida {
+   emFormaUnidadeMedida_Absoluta = 'A',
+   emFormaUnidadeMedida_Linear = 'L',
+   emFormaUnidadeMedida_Volumetrica = 'V',
+   emFormaUnidadeMedida_VolumetricaM3 = 'O',
+   emFormaUnidadeMedida_VolumetricaM2 = 'Q',
+   emFormaUnidadeMedida_Kilo = 'K'
+}

@@ -1,0 +1,6 @@
+export interface IModelCrm031 {
+   HTM_CODIGO: number,
+   HTM_DESCRICAO: string,
+   HTM_ESTEREOTIPO: string,
+   HTM_CONTEUDO: string
+}

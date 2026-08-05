@@ -1,0 +1,8 @@
+export interface IModelCrm023 {
+   RFP_PESQUISA: number,
+   RFP_NRFICHA: number,
+   RFP_PERGUNTA: number,
+   RFP_RESPOSTA: number | string,
+   RFP_COMPLEMENTO?: string,
+   RFP_PONTOS: number
+}

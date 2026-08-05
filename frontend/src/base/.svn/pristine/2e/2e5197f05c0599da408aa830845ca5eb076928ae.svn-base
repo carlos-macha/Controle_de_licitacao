@@ -1,0 +1,63 @@
+import React, { Fragment, useEffect, useRef } from 'react';
+import Crudpesquisa, { CrudPesquisaRef, PesquisaProps } from '../../../components/crud/pesquisa/crudpesquisa';
+import { IModelEST016 } from '../../../models/modelEST016';
+import CondicionaisDetalhe from './condicionaisDetalhe';
+import { utilities } from '../../../utils/utilities';
+
+interface CondicionaisPesquisaProps extends PesquisaProps {
+   nrOrdem?: number,
+   heightGrid?: string | number
+}
+
+const CondicionaisPesquisa: React.FC<CondicionaisPesquisaProps> = (props) => {
+   const { events, onDataChange, heightGrid, nrOrdem } = props;
+   const pesquisaRef = useRef<CrudPesquisaRef>(null);
+
+   const containerBottom = (data: IModelEST016): JSX.Element => {
+      if (!data)
+         return <Fragment />;
+
+      return (
+         <Fragment>
+            <CondicionaisDetalhe
+               data={data}
+            />
+         </Fragment>
+      )
+   }
+
+   useEffect(() => {
+      if (nrOrdem) {
+         pesquisaRef.current?.refresh();
+      }
+
+   }, [nrOrdem])
+
+   return (
+      <Fragment>
+         <Crudpesquisa
+            ref={pesquisaRef}
+            autoLoad
+            heightGrid={heightGrid ? heightGrid : 'calc(100vh - 24rem)'}
+            urlGetMount={(url: string, id: string | number, where: string, page: number, limit: number, offset: number, data?: any): string => {
+               where = utilities.base64Decode(where);
+               if (nrOrdem) {
+                  where = where + (where ? "|" : "") + "CND_ORDEM_PRODUCAO;=;" + nrOrdem;
+               }
+
+               return `${url}/${id}/${utilities.base64(where)}/${limit}/${offset}`;
+            }}
+            events={events}
+            typePagination='limit-offset'
+            containerBottom={containerBottom}
+            onDataChange={(data: IModelEST016) => {
+               if (onDataChange)
+                  onDataChange(data);
+            }}
+            prefixId='grid-condicionais-pesquisa'
+         />
+      </Fragment>
+   );
+}
+
+export default CondicionaisPesquisa;

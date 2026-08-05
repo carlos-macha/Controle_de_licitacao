@@ -1,0 +1,27 @@
+import { EnumCondicional_Status } from "../enums/enumcondicional";
+import { IModelEST052 } from "./modelEST052"
+
+export interface IModelEST016 {
+   CND_EMPRESA: number,
+   CND_SEQ: string,
+   CND_PESSOA: string,
+   CND_CONTATO?: string,
+   CND_VENDEDOR: string,
+   CND_DATAEMISSAO: number,
+   CND_DTALTERACAO: number,
+   CND_DTRETORNO: number,
+   CND_TOTAL: number,
+   CND_USUARIO: string,
+   CND_NRORCAMENTO?: string,
+   CND_DTPREVDEVOLUCAO: number,
+   CND_STATUS: EnumCondicional_Status,
+   CND_OBSERVACAO: string,
+   CND_ID: number,
+   CND_QTDTOTAL: number,
+   CND_QTDDEVOLVIDA: number,
+   CND_QTDVENDIDA?: number,
+   CND_ORDEM_PRODUCAO?: number,
+   PES_RAZAO: string,
+   VEN_NOME: string,
+   ITENS: Array<IModelEST052>
+}

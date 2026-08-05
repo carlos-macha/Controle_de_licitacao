@@ -1,0 +1,14 @@
+export interface IModelMOB039 {
+   PDS_CODIGO: number,
+   PDS_TIPO: string,
+   PDS_SEMPRE_ATRIBUIR: string,
+   PDS_PESSOA: string,
+   PDS_EMPRESA: number,
+   PDS_CLASSE: string,
+   PDS_GRUPO: number,
+   PDS_SUBGRUPO: number,
+   PDS_PERC_DESCONTO: number,
+   PDS_PRODUTO: string,
+   PDS_ID_PESSOA: number
+
+}

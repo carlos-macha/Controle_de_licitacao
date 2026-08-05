@@ -8,6 +8,20 @@ import { Usuario } from "../models/Usuario";
 import { HttpError } from "../utils/httpError";
 
 
+interface UsuarioUpdate {
+    LOGIN?: string;
+    NOME?: string;
+    SENHA?: string;
+    ATIVO?: "S" | "N";
+}
+
+interface UsuarioInsert {
+    LOGIN: string;
+    NOME: string;
+    SENHA?: string;
+    ATIVO?: "S" | "N";
+}
+
 @injectable()
 export class UsuarioService extends BaseService<Usuario> {
 
@@ -15,7 +29,7 @@ export class UsuarioService extends BaseService<Usuario> {
     constructor(
         @inject(UsuarioDAO)
         private usuarioDAO: UsuarioDAO
-    ){
+    ) {
 
         super(
             usuarioDAO,
@@ -26,7 +40,7 @@ export class UsuarioService extends BaseService<Usuario> {
 
 
 
-    async findSafe(options?: any){
+    async findSafe(options?: any) {
 
         const result =
             await this.dao.find(options);
@@ -36,7 +50,7 @@ export class UsuarioService extends BaseService<Usuario> {
 
             ...result,
 
-            data: result.data.map(usuario=>{
+            data: result.data.map(usuario => {
 
                 const {
                     SENHA_HASH,
@@ -55,7 +69,7 @@ export class UsuarioService extends BaseService<Usuario> {
 
 
 
-    async findSafeById(id:number){
+    async findSafeById(id: number) {
 
         const usuario =
             await this.findById(id);
@@ -74,53 +88,77 @@ export class UsuarioService extends BaseService<Usuario> {
 
 
 
-    async insert(usuario: Omit<Usuario,"ID">){
+    async insert(usuario: Omit<Usuario, "ID"> & UsuarioInsert) {
 
+        const existe = await this.usuarioDAO.findByLogin(usuario.LOGIN);
 
-        const existe =
-            await this.usuarioDAO.findByLogin(
-                usuario.LOGIN
-            );
-
-
-        if(existe){
-
+        if (existe) {
             throw new HttpError(
                 409,
                 "Login já cadastrado."
             );
-
         }
 
-
-        const senhaHash =
-            await bcrypt.hash(
-                usuario.SENHA_HASH,
-                10
-            );
-
+        const senhaHash = await bcrypt.hash(
+            usuario.SENHA!,
+            10
+        );
 
         return super.insert({
-
             LOGIN: usuario.LOGIN,
-
             NOME: usuario.NOME,
-
             SENHA_HASH: senhaHash,
-
-            ATIVO:"S"
-
+            ATIVO: "S"
         });
+    }
 
+    async update(id: number, usuario: UsuarioUpdate) {
+
+        await this.findById(id);
+
+        const updateData: Record<string, unknown> = {};
+
+        if (usuario.LOGIN !== undefined) {
+            const existe = await this.usuarioDAO.findByLogin(usuario.LOGIN);
+
+            if (existe && existe.ID !== id) {
+                throw new HttpError(
+                    409,
+                    "Login já cadastrado."
+                );
+            }
+
+            updateData.LOGIN = usuario.LOGIN;
+        }
+
+        if (usuario.NOME !== undefined) {
+            updateData.NOME = usuario.NOME;
+        }
+
+        if (usuario.ATIVO !== undefined) {
+            updateData.ATIVO = usuario.ATIVO;
+        }
+
+        if (usuario.SENHA !== undefined) {
+            updateData.SENHA_HASH = await bcrypt.hash(
+                usuario.SENHA,
+                10
+            );
+        }
+
+        return super.update(
+            id,
+            updateData
+        );
     }
 
 
 
 
     async login(
-        login:string,
-        senha:string
-    ){
+        login: string,
+        senha: string
+    ) {
 
 
         const usuario =
@@ -129,7 +167,7 @@ export class UsuarioService extends BaseService<Usuario> {
             );
 
 
-        if(!usuario){
+        if (!usuario) {
 
             throw new HttpError(
                 401,
@@ -146,7 +184,7 @@ export class UsuarioService extends BaseService<Usuario> {
             );
 
 
-        if(!senhaValida){
+        if (!senhaValida) {
 
             throw new HttpError(
                 401,
@@ -160,14 +198,14 @@ export class UsuarioService extends BaseService<Usuario> {
             jwt.sign(
 
                 {
-                    id:usuario.ID,
-                    login:usuario.LOGIN
+                    id: usuario.ID,
+                    login: usuario.LOGIN
                 },
 
                 process.env.JWT_SECRET!,
 
                 {
-                    expiresIn:"7d"
+                    expiresIn: "7d"
                 }
 
             );
@@ -177,18 +215,51 @@ export class UsuarioService extends BaseService<Usuario> {
 
             token,
 
-            usuario:{
+            usuario: {
 
-                ID:usuario.ID,
+                ID: usuario.ID,
 
-                LOGIN:usuario.LOGIN,
+                LOGIN: usuario.LOGIN,
 
-                NOME:usuario.NOME
+                NOME: usuario.NOME
 
             }
 
         };
 
+    }
+
+    async unlock(id: number, senha: string) {
+
+        const usuario =
+            await this.usuarioDAO.findById(
+                id
+            );
+
+        if (!usuario) {
+            throw new HttpError(
+                401,
+                "Usuário inválido."
+            );
+        }
+
+        const senhaValida =
+            await bcrypt.compare(
+                senha,
+                usuario.SENHA_HASH
+            );
+
+
+        if (!senhaValida) {
+            throw new HttpError(
+                401,
+                "Senha inválida."
+            );
+        }
+
+        return {
+            UNLOCKED: true
+        };
     }
 
 }

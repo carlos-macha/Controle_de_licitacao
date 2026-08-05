@@ -1,0 +1,4 @@
+export interface IModelRelatorioPDF {
+   REL_NAME: string,
+   REL_PDF: string
+}

@@ -1,0 +1,15 @@
+import React from 'react';
+import Pessoa, { PessoaProps } from '../pessoa/pessoa';
+
+interface ProspectProps extends Omit<PessoaProps, 'viewProspect' | 'tipoPessoa' | 'codigoVendedor'> { }
+
+const Prospect: React.FC<ProspectProps> = (props) => {
+   return (
+      <Pessoa
+         viewProspect
+         {...props}
+      />
+   );
+}
+
+export default Prospect;

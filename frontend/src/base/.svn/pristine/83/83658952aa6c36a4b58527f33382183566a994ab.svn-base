@@ -1,0 +1,7 @@
+import { IModelKanbanItens } from "./modelKanbanItens";
+
+export interface IModelKanban {
+  QUANTIDADE: number;
+  VALOR: number;
+  ITENS: IModelKanbanItens[];
+}

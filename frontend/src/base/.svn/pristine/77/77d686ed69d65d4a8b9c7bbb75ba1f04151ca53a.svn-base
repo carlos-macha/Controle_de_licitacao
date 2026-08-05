@@ -1,0 +1,24 @@
+import React from 'react';
+import LinksdePesquisaContainer from './linksdepesquisaContainer';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { PageBase } from '../../../template/pagebase/pagebase';
+
+interface LinksdePesquisaProps {
+   heightGrid?: string | number
+}
+
+const LinksdePesquisa: React.FC<LinksdePesquisaProps> = (props) => {
+   const { heightGrid } = props;
+   return (
+      <PageBase>
+         <CrudProvider>
+            <LinksdePesquisaContainer
+               typeRender='search'
+               params={heightGrid}
+            />
+         </CrudProvider>
+      </PageBase>
+   );
+}
+
+export default LinksdePesquisa;

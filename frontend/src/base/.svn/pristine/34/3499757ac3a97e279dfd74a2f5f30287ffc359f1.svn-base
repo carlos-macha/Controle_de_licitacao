@@ -1,0 +1,10 @@
+import DAONotaFiscal from "../daos/daonotafiscal";
+import Controller from "./controller";
+
+export default class ControllerNotaFiscal extends Controller<DAONotaFiscal>  {
+
+   constructor() {
+      super(DAONotaFiscal);
+   }
+
+}

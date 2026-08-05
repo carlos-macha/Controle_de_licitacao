@@ -1,0 +1,10 @@
+export interface IModelConversacao {
+  CCS_CHAMADOSITE: number,
+  CCS_CODIGO: number | null,
+  ICS_PESSOA: string | null,
+  ICS_USUARIOINTERNO?: string | null,
+  ICS_USUARIOCLIENTE: string | null,
+  ICS_HISTORICO: string
+  ICS_CONVERSACAO?: number | null,
+  ICS_CODIGO?: number | null
+}

@@ -33,26 +33,17 @@ export const usuarioSchema = z.object({
 
 
 export const createUsuarioSchema = z.object({
-
     LOGIN: z.string().min(3).max(30),
-
     NOME: z.string().min(3).max(100),
-
-    SENHA_HASH: z.string().min(6).max(100)
-
+    SENHA: z.string().min(6).max(100)
 });
 
 
 export const updateUsuarioSchema = z.object({
-
     LOGIN: z.string().min(3).max(30).optional(),
-
     NOME: z.string().min(3).max(100).optional(),
-
-    SENHA_HASH: z.string().min(6).max(100).optional(),
-
+    SENHA: z.string().min(6).max(100).optional(),
     ATIVO: z.enum(["S","N"]).optional()
-
 });
 
 

@@ -1,0 +1,379 @@
+import React, { Fragment, useState, useEffect, Ref, useImperativeHandle, forwardRef, useRef } from 'react';
+import HTMLReactParser from 'html-react-parser';
+import Button, { ValidateFields } from '../../form/form';
+import ViewCrudManutencao from './viewcrudmanutencao';
+import { CrudManutencaoEvents } from '../types';
+import { EnumCrudStateRecordType } from '../enums';
+import SweetAlert from 'react-bootstrap-sweetalert';
+import { crudUtils } from '../utils';
+import { CustomSweetAlertProps, InputDataValue } from '../../../types/types';
+import { useCrudContext } from '../hook/useCrudContext';
+import Api from '../../../services/api';
+import Spinners from '../../spinners/spinners';
+
+
+export interface BodyParamns {
+   dataModel: InputDataValue<any>,
+   validateFields: ValidateFields,
+   state: EnumCrudStateRecordType,
+   spinnerSave: boolean,
+   onSaveButtonClick: () => void,
+   onCancelButtonClick: () => void
+}
+
+export interface ManutencaoProps {
+   events?: CrudManutencaoEvents,
+   dataValue?: any,
+   prefixId?: string
+}
+
+export type CrudManuencaoRef = {
+   showSweetAlert: (customSweetAlertProps: CustomSweetAlertProps | undefined) => void,
+   setData: React.Dispatch<any>
+};
+
+export interface CrudManutencaoDefaultProps {
+   showSaveButton?: boolean,
+   showCancelButton?: boolean,
+   showAllButtons?: boolean,
+   layout?: 'inherited' | 'customized',
+}
+
+export interface CrudManutencaoProps extends CrudManutencaoDefaultProps {
+   ref?: React.Ref<CrudManuencaoRef>,
+   className?: string,
+   events?: CrudManutencaoEvents,
+   showMessageSuccessOnSave?: boolean,
+   loading?: boolean,
+   onBody?: (paramns: BodyParamns) => JSX.Element,
+   onInit?: (data: any, state: EnumCrudStateRecordType, setSweetAlertProps: React.Dispatch<React.SetStateAction<CustomSweetAlertProps | undefined>>) => void,
+   validateOnSave?: (data: any, state: EnumCrudStateRecordType, validateFields: ValidateFields, setSweetAlertProps: React.Dispatch<React.SetStateAction<CustomSweetAlertProps | undefined>>) => boolean,
+   urlPostMount?: (url: string, id: number | string, data: any) => string,
+   urlPutMount?: (url: string, data: any) => string,
+   afterSave?: (data: any) => void,
+   beforeSave?: (data: any, state: EnumCrudStateRecordType) => void
+   transformData?: (data: any) => any
+}
+
+const CrudManutencao: React.ForwardRefRenderFunction<CrudManuencaoRef, CrudManutencaoProps> = (props, ref: Ref<CrudManuencaoRef>) => {
+   const { crudDispash } = useCrudContext();
+   const { events, onBody, onInit, validateOnSave, urlPostMount, urlPutMount, afterSave, beforeSave, showMessageSuccessOnSave, children,
+      showAllButtons = true, ...CrudManutencao } = props;
+   // const [sweetAlert, setSweetAlert] = useState<SweetAlertMessage | undefined>();
+   const [sweetAlertProps, setSweetAlertProps] = useState<CustomSweetAlertProps | undefined>();
+   const [data, setData] = useState<any>(events?.data);
+   const [validateFields] = useState<ValidateFields>(new ValidateFields());
+   const dataModel: InputDataValue<any> = { data, setData };
+   const [spinnerSave, setSpinnerSave] = useState<boolean>(false);
+   const [loading, setLoading] = useState<boolean | undefined>(props.loading);
+
+
+   useEffect(() => {
+      let data = { ...events?.data };
+      if (onInit)
+         onInit(data, events?.state!, setSweetAlertProps)
+      dataModel.setData(data);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [events]);
+
+   useEffect(() => {
+      setLoading(props.loading)
+   }, [props.loading])
+
+   const internalUrlPostMount = (url: string, id: number | string, data: any): string => {
+
+      if (urlPostMount)
+         return urlPostMount(url, id, data);
+
+      return `${url}`;
+   }
+
+   const internalUrlPutMount = (url: string, data: any): string => {
+
+      if (urlPutMount)
+         return urlPutMount(url, data);
+
+      return `${url}`;
+   }
+
+   const showMessageSuccess = () => {
+      if (!showMessageSuccessOnSave)
+         return;
+
+      setSweetAlertProps({
+         props: {
+            type: 'success',
+            title: 'Atenção',
+            onConfirm: onConfirm
+         },
+         msg: 'Operação realizada com sucesso',
+      });
+   }
+
+   const onSaveButtonClick = (): void => {
+      if (spinnerSave) return
+
+      if (!validateFields.validateAll()) {
+
+         setSweetAlertProps({
+            props: {
+               type: 'error',
+               title: 'Atenção',
+               onConfirm: onConfirm
+            },
+            msg: 'Por favor, verifique os campos obrigatórios!',
+         });
+
+         return;
+      }
+
+      if (validateOnSave !== undefined) {
+         if (!validateOnSave(data, events?.state!, validateFields, setSweetAlertProps)) {
+            return;
+         }
+      }
+
+      if (beforeSave)
+         beforeSave(data, events?.state!);
+
+      setSpinnerSave(true);
+
+      // console.log(events)
+
+      if (events?.state === EnumCrudStateRecordType.ALTERAR) {
+
+         let urlPut = internalUrlPutMount(events.url?.PUT!, data);
+
+         if (!urlPut)
+            throw new Error("url put is not defined");
+
+         // console.log(data);
+
+         Api.getInstance().conn()?.put(urlPut, props.transformData ? props.transformData(data) : data)
+            .then(async response => {
+               let responseData = await response.data;
+
+               dataModel.setData(responseData);
+
+               if (events)
+                  events.onSaveButton(responseData);
+
+               crudDispash({
+                  type: 'actInsert',
+                  data: responseData
+               });
+
+               showMessageSuccess();
+
+               if (afterSave)
+                  afterSave(responseData);
+            }).catch(error => {
+               let body = error.response.data;
+
+               switch (error.response.status) {
+                  case 403:
+                     setSweetAlertProps({
+                        props: {
+                           type: 'warning',
+                           title: 'Atenção',
+                           onConfirm: onConfirm
+                        },
+                        msg: <span>{HTMLReactParser(body.error.replace(/(\r\n|\n|\r)/gm, "<br>"))}</span>,
+                     });
+
+                     break;
+
+                  case 405:
+                     setSweetAlertProps({
+                        props: {
+                           type: 'error',
+                           title: 'Atenção',
+                           onConfirm: onConfirm
+                        },
+                        msg: `Ocorreu um erro e não foi possível gravar esse registro. Método ${urlPut} inválido`,
+                     });
+
+                     break;
+
+                  case 499:
+                     // console.log(body.ResponseMessage.Error.Itens);                                    
+                     let message = crudUtils.formarErrorListMessage(body.ResponseMessage.Error.Itens);
+
+                     setSweetAlertProps({
+                        props: {
+                           type: 'error',
+                           title: 'Atenção',
+                           onConfirm: onConfirm
+                        },
+                        msg: <span>Ocorreram erros ao tentar gravar esse registro<br />{message}</span>,
+                     });
+
+                     break;
+                  default:
+                     setSweetAlertProps({
+                        props: {
+                           type: 'error',
+                           title: 'Atenção',
+                           onConfirm: onConfirm
+                        },
+                        msg: <span>Ocorreu um erro e não foi possível gravar esse registro<br />
+                           Erro: {HTMLReactParser(body.error.replace(/(\r\n|\n|\r)/gm, "<br>"))!}</span>,
+                     });
+               }
+            }).finally(() => {
+               setSpinnerSave(false);
+            });
+      } else {
+         let id = crudUtils.findId(data, events?.columns!);
+         let urlPost = internalUrlPostMount(events?.url?.POST!, id!, data);
+
+         if (!urlPost)
+            throw new Error("url post is not defined");
+
+         Api.getInstance().conn()?.post(urlPost, props.transformData ? props.transformData(data) : data)
+            .then(async response => {
+               let responseData = await response.data;
+
+               dataModel.setData(responseData);
+
+               if (events)
+                  events.onSaveButton(responseData);
+
+               crudDispash({
+                  type: 'actEdit',
+                  data: responseData
+               });
+
+               showMessageSuccess();
+
+               if (afterSave)
+                  afterSave(responseData);
+            }).catch(error => {
+               let body = error.response.data;
+
+               switch (error.response.status) {
+                  case 403:
+                     setSweetAlertProps({
+                        props: {
+                           type: 'warning',
+                           title: 'Atenção',
+                           onConfirm: onConfirm
+                        },
+                        msg: <span>{HTMLReactParser(body.error.replace(/(\r\n|\n|\r)/gm, "<br>"))}</span>,
+                     });
+
+                     break;
+
+                  case 405:
+                     setSweetAlertProps({
+                        props: {
+                           type: 'error',
+                           title: 'Atenção',
+                           onConfirm: onConfirm
+                        },
+                        msg: `Ocorreu um erro e não foi possível gravar esse registro. Método ${urlPost} inválido`,
+                     });
+
+                     break;
+                  case 499:
+                     // console.log(body.ResponseMessage.Error.Itens);                                    
+                     let message = crudUtils.formarErrorListMessage(body.ResponseMessage.Error.Itens);
+
+                     setSweetAlertProps({
+                        props: {
+                           type: 'error',
+                           title: 'Atenção',
+                           onConfirm: onConfirm
+                        },
+                        msg: <span>Ocorreram erros ao tentar gravar esse registro<br />{message}</span>,
+                     });
+
+                     break;
+                  default:
+                     setSweetAlertProps({
+                        props: {
+                           type: 'error',
+                           title: 'Atenção',
+                           onConfirm: onConfirm
+                        },
+                        msg: <span>Ocorreu um erro e não foi possível gravar esse registro<br />
+                           Erro: {HTMLReactParser(body.error.replace(/(\r\n|\n|\r)/gm, "<br>"))!}</span>,
+                     });
+               }
+            }).finally(() => {
+               setSpinnerSave(false);
+            });
+      }
+   }
+
+   const onCancelButtonClick = (): void => {
+      if (events)
+         events.onCancelButton();
+   }
+
+   const onConfirm = (): void => {
+      setSweetAlertProps(undefined);
+   }
+
+   const renderBody = (): JSX.Element => {
+      // console.log(loading)
+      if (loading)
+         return (
+            <Spinners size={80} />
+         )
+
+
+      if (onBody) {
+         return onBody({
+            dataModel,
+            validateFields,
+            state: events?.state!,
+            onSaveButtonClick: onSaveButtonClick,
+            onCancelButtonClick: onCancelButtonClick,
+            spinnerSave
+         });
+      }
+
+      return <div>Sobrescrever método body</div>;
+   }
+
+   const showSweetAlert = (customSweetAlertProps: CustomSweetAlertProps | undefined) => {
+      setSweetAlertProps(customSweetAlertProps);
+   }
+
+   useImperativeHandle(ref, () => ({
+      showSweetAlert, setData
+   }), []);
+
+
+   return (
+      <Fragment>
+         <ViewCrudManutencao
+            {...CrudManutencao}
+            showCancelButton={props.showCancelButton}
+            onSaveButtonClick={onSaveButtonClick}
+            onCancelButtonClick={onCancelButtonClick}
+            viewOnly={events?.state === EnumCrudStateRecordType.VISUALIZAR}
+            spinnerSave={spinnerSave}
+            showAllButtons={showAllButtons}
+         >
+            {renderBody()}
+         </ViewCrudManutencao>
+         {sweetAlertProps &&
+            <SweetAlert
+               {...sweetAlertProps.props}
+            >
+               <span>
+                  {
+                     typeof sweetAlertProps.msg === 'string' ?
+                        HTMLReactParser(sweetAlertProps.msg.replace(/(\r\n|\n|\r)/gm, "<br>")) :
+                        sweetAlertProps.msg
+                  }
+               </span>
+            </SweetAlert>
+         }
+      </Fragment>
+   );
+}
+
+export default forwardRef(CrudManutencao);

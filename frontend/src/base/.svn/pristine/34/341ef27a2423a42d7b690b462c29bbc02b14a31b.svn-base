@@ -1,0 +1,21 @@
+import { EnumCallcenterChatOrigemConversa, EnumCallcenterChatStatus } from "../enums/enumscallcenter";
+import { IModelCallcenterChat002 } from "./modelCallcenterCHAT002";
+
+export interface IModelCallcenterChat001 {
+   CCH_ID?: number | null,
+   CCH_EMPRESA_CNPJ: string,
+   CCH_RAZAO_SOCIAL: string,
+   CCH_TP_DOC_ORIGEM: string,
+   CCH_ID_DOC_ORIGEM: number,
+   CCH_RESUMO: string,
+   CCH_STATUS: EnumCallcenterChatStatus,
+   CCH_FEEDBACK?: string | null,
+   CCH_RATING?: number | null,
+   CCH_QUEM_ABRIU: EnumCallcenterChatOrigemConversa,
+   CCH_USUARIO_ABRIU: string,
+   CCH_USUARIO_CLIENTE?: string | null,
+   CCH_USUARIO_SUPORTE?: string | null,
+   CCH_DH_ABERTURA?: number | null,
+   CCH_DH_FECHAMENTO?: number | null,
+   CONVERSAS: Array<IModelCallcenterChat002>
+}

@@ -1,0 +1,17 @@
+export interface IModelMOB034 {
+   IPR_ID?: number,
+   IPR_ID_PRODUTO: number,
+   IPR_SEQ: number,
+   IPR_IMAGEM: string,
+   IPR_NOME?: string,
+   IPR_SEQ_APRESENTACAO: number,
+   IPR_VIDEO_YOUTUBE?: string,
+   IPR_DH_ALTERACAO: number,
+   IPR_IMAGEM_GRANDE: string,
+   IPR_NOME_IMG_GRANDE?: string
+}
+
+export interface IModelIMAGENS_PRODUTO {
+   PRO_ID: number,
+   LISTA_IMAGENS?: Array<IModelMOB034>
+}

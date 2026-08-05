@@ -1,0 +1,15 @@
+{
+   "ambiente": 3,
+   "producao": {
+      "WSCommandBaseUrl": "http://localhost:3000",
+      "WSCommandTimeOut": 60000
+   },
+   "homologacao": {
+      "WSCommandBaseUrl": "http://localhost:3000",
+      "WSCommandTimeOut": 60000
+   },
+   "desenvolvimento": {
+      "WSCommandBaseUrl": "http://localhost:3000",
+      "WSCommandTimeOut": 60000
+   }
+}

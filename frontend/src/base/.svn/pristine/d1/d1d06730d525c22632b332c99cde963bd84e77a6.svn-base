@@ -1,0 +1,133 @@
+import { EmptyCallback } from 'tabulator-tables';
+import { Tabulator } from 'react-tabulator/lib/types/TabulatorTypes';
+import UsuariosPesquisa from './usuariosPesquisa';
+import { CrudContainer } from '../../../components/crud/container/crudcontainer';
+import { CrudUrl, CrudPesquisaEvents } from '../../../components/crud/types';
+import { OperatorSearchTypes } from '../../../components/datasearch/datasearch';
+import { Formatters, DataTableColumns } from '../../../components/datatable/datatable';
+import { EnumCharcasetypes } from '../../../components/form/form';
+import { EnumAtivoInativo, EnumOperacaoPermissao } from '../../../enums/enums';
+import { IModelUsuario } from '../../../models/modelUsuario';
+
+export interface UsuarioContainerParams {
+   usuarioLogado?: string,
+   permission?: any,
+   checkPermission?: (permission?: any, operacao?: EnumOperacaoPermissao | undefined, observacao?: string | undefined) => Promise<boolean>
+   heightGrid?: string | number
+}
+
+class UsuariosContainer extends CrudContainer {
+
+   crudUrl = (): CrudUrl | undefined => {
+      return {
+         GET: '/usuario/usuarios'
+      }
+   }
+
+   columns = (): DataTableColumns | undefined => [
+      {
+         title: 'Usuário',
+         type: 'string',
+         field: 'SENHA_USUARIO',
+         width: 110,
+         hozAlign: 'center',
+         search: {
+            operator: OperatorSearchTypes.EQUAL,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Nome',
+         type: 'string',
+         field: 'SENHA_NOME',
+         width: 210,
+         search: {
+            width: 240,
+            operator: OperatorSearchTypes.LIKE,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Ativo/Inativo',
+         field: 'SENHA_ATIVOINATIVO',
+         type: 'string',
+         width: 110,
+         formatter: (cell) => {
+            const data = (cell.getData() as IModelUsuario);
+
+            let ativoInativo = (data.SENHA_ATIVOINATIVO === EnumAtivoInativo.ATIVO) ? 'ATIVO' : 'INATIVO';
+
+            return `<span title="${ativoInativo}">${ativoInativo}</span>`;
+         },
+         search: {
+            width: 150,
+            operator: OperatorSearchTypes.EQUAL,
+            type: 'COMBOBOX',
+            defaultValue: EnumAtivoInativo.ATIVO,
+            options: [{
+               label: 'Ativo',
+               value: EnumAtivoInativo.ATIVO
+            }, {
+               label: 'Inativo',
+               value: EnumAtivoInativo.INATIVO
+            }],
+         }
+      },
+      {
+         title: 'Data de Cadastro',
+         field: 'SENHA_DTCADASTRO',
+         type: 'date',
+         width: 110,
+         headerSort: true,
+         headerSortStartingDir: "desc",
+         sorter: function (a: any, b: any, aRow: Tabulator.RowComponent, bRow: Tabulator.RowComponent, column: Tabulator.ColumnComponent, dir: Tabulator.SortDirection, sorterParams: {}) {
+            if (String(a) === '0') {
+               return dir === 'asc' ? 1 : -1; // Para '0', retorna 1 se for ascendente, -1 se for descendente
+            }
+            if (String(b) === '0') {
+               return dir === 'asc' ? -1 : 1; // Para '0', retorna -1 se for ascendente, 1 se for descendente
+            }
+            return String(a).localeCompare(String(b));
+         }
+      },
+      {
+         title: 'Data de Alteração',
+         field: 'SENHA_DTALTERACAO',
+         type: 'date',
+         width: 110,
+         headerSort: true,
+         headerSortStartingDir: "desc",
+         sorter: function (a: any, b: any, aRow: Tabulator.RowComponent, bRow: Tabulator.RowComponent, column: Tabulator.ColumnComponent, dir: Tabulator.SortDirection, sorterParams: {}) {
+            if (String(a) === '0') {
+               return dir === 'asc' ? 1 : -1; // Para '0', retorna 1 se for ascendente, -1 se for descendente
+            }
+            if (String(b) === '0') {
+               return dir === 'asc' ? -1 : 1; // Para '0', retorna -1 se for ascendente, 1 se for descendente
+            }
+            return String(a).localeCompare(String(b));
+         }
+      },
+      {
+         title: 'Código do Vendedor',
+         type: 'string',
+         field: 'SENHA_CODVEND',
+         width: 110,
+         hozAlign: "center",
+      }
+   ];
+
+   pesquisa = (events: CrudPesquisaEvents): JSX.Element => {
+      const { params, onDataChange } = this.props;
+
+      return <UsuariosPesquisa
+         crudContainer={this}
+         events={events}
+         onDataChange={onDataChange}
+         usuarioLogado={(params as UsuarioContainerParams).usuarioLogado}
+         heightGrid={(params as UsuarioContainerParams).heightGrid}
+      />;
+   }
+
+}
+
+export default UsuariosContainer;

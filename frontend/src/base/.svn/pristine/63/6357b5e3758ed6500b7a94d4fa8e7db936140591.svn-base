@@ -1,0 +1,518 @@
+import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { EnumCrudStateRecordType } from '../../../components/crud/enums';
+import Crudmanutencao, { ManutencaoProps } from '../../../components/crud/manutencao/crudmanutencao';
+import Button, { Input, InputSelect, InputCheckbox, ValidateFields } from '../../../components/form/form';
+import RecadosDetalhes from './recadosdetalhes';
+import { EnumRecadosPrioridade, EnumRecadosTpDocOrigem } from '../../../enums/enumrecados';
+import { useAuthContext } from '../../../../hooks/useAuthContext';
+import { IModelUsuario } from '../../../models/modelUsuario';
+import ControllerCRM from '../../../controllers/controllercrm';
+import DataTable, { DataTableColumns } from '../../../components/datatable/datatable';
+import { CustomModalRef } from '../../../components/modal/custommodal';
+import RecadosPesquisaPessoaProspectModal from './recadospessoapesquisamodal';
+import { utilities } from '../../../utils/utilities';
+import { IModelERPSIS007 } from '../../../models/modelERPsis007';
+import ControllerRecados from '../../../controllers/controllerrecados';
+import { ModelRecados } from '../../../models/modelRecado';
+import { EnumSimNao } from '../../../enums/enums';
+import { useSweetAlertContext } from '../../../hooks/useSweetAlertContext';
+import { CustomSweetAlertProps } from '../../../types/types';
+import { getLabelDocOrigem } from './recadoutils';
+import Spinners from '../../../components/spinners/spinners';
+
+interface RecadosManutencaoProps extends ManutencaoProps {
+   params?: any
+}
+const RecadosManutencao: React.FC<RecadosManutencaoProps> = (props) => {
+   const { events, params, prefixId } = props;
+   const { authState } = useAuthContext();
+   const { sweetAlertdispatch } = useSweetAlertContext();
+   const { tipo, docTpOrigem, codOrigem, descricao, pessoaCod, pessoaNome, assuntoProp, onClose } = params ?? {}
+
+   const user: any = authState.user;
+   const [perfis, setPerfis] = useState<IModelERPSIS007[]>([]);
+   const [usuarios, setUsuarios] = useState<IModelUsuario[]>([]);
+   const [buscaUsuario, setBuscaUsuario] = useState('');
+   const [perfilSelecionado, setPerfilSelecionado] = useState<IModelERPSIS007 | null>(null);
+   const [perfilSelecionadoCodigo, setPerfilSelecionadoCodigo] = useState('TODOS');
+   const [erroDestinatarios, setErroDestinatarios] = useState(false);
+   const [destinatariosIniciais, setDestinatariosIniciais] = useState<any[]>([]);
+   const [erroMensagem, setErroMensagem] = useState(false);
+   const [usuariosSelecionados, setUsuariosSelecionados] = useState<IModelUsuario[]>([]);
+   const [loading, setLoading] = useState(false);
+
+   const controllerCRM = useMemo(() => new ControllerCRM(), []);
+   const controller = useMemo(() => new ControllerRecados(), []);
+   const viewCadastrosEvent = useRef<CustomModalRef>(null);
+   const isModal: boolean = tipo === 'modal'
+
+   useEffect(() => {
+      const fetchData = async (tentativa = 1): Promise<void> => {
+         try {
+            setLoading(true);
+            const apenasAtivos = utilities.base64('SENHA_ATIVOINATIVO;=;A');
+            const [listaUsuarios, listaPerfis] = await Promise.all([
+               controllerCRM.DAO.usuarios(apenasAtivos),
+               controller.DAO.chamaPerfis()
+            ]);
+
+            if (!listaUsuarios.length || !listaPerfis.length) {
+               throw new Error('Resposta vazia');
+            }
+
+            setUsuarios(listaUsuarios);
+            setPerfis(listaPerfis);
+         } catch (error) {
+            if (tentativa < 3) return fetchData(tentativa + 1);
+            console.error(error);
+         } finally { setLoading(false); }
+      };
+
+      fetchData();
+   }, []);
+
+   useEffect(() => {
+      if (!usuarios.length) return;
+      if (!destinatariosIniciais.length) return;
+
+      const selecionados = usuarios.filter(u =>
+         destinatariosIniciais.some(
+            (d: any) => d.Usuario === u.SENHA_USUARIO
+         )
+      );
+
+      setUsuariosSelecionados(selecionados);
+
+   }, [usuarios, destinatariosIniciais]);
+
+   const onInit = (data: ModelRecados, state: EnumCrudStateRecordType) => {
+
+      data.Assunto = data.Assunto || assuntoProp || '';
+      data.Mensagem = data.Mensagem || '';
+      data.Pessoa = data.Pessoa || pessoaCod || '';
+
+      if (data.Destinatarios?.length) {
+         setDestinatariosIniciais(data.Destinatarios);
+      }
+
+      if (!data.Destinatarios) {
+         data.Destinatarios = [];
+      }
+
+      if (state === EnumCrudStateRecordType.INCLUIR) {
+         data.ConfirmacaoLeitura = data.ConfirmacaoLeitura || EnumSimNao.NAO;
+         data.Prioridade = data.Prioridade || EnumRecadosPrioridade.EnumRecadosPrioridade_NORMAL;
+         data.TipoRecado = data.TipoRecado || EnumSimNao.SIM;
+         data.TipoDocOrigem = data.TipoDocOrigem || docTpOrigem || EnumRecadosTpDocOrigem.EnumRecadosTpDocOrigem_MANUAL;
+         data.IdDocOrigem = data.IdDocOrigem || codOrigem || null;
+      }
+   };
+
+   const usuariosDisponiveis = useMemo(() => {
+      let base = usuarios;
+
+      if (perfilSelecionado?.USUARIOS?.length) {
+         const idsPerfil = new Set(perfilSelecionado.USUARIOS.map(u => u.PUS_USUARIO));
+         base = base.filter(u => idsPerfil.has(u.SENHA_USUARIO));
+      }
+
+      base = base.filter(
+         u => !usuariosSelecionados.some(s => s.SENHA_USUARIO === u.SENHA_USUARIO)
+      );
+
+      if (buscaUsuario) {
+         const termo = buscaUsuario.toLowerCase();
+         base = base.filter(u =>
+            u.SENHA_USUARIO.toLowerCase().includes(termo) ||
+            u.SENHA_NOME.toLowerCase().includes(termo)
+         );
+      }
+
+      return base;
+   }, [usuarios, perfilSelecionado, buscaUsuario, usuariosSelecionados]);
+
+   const columnsUsuarios: DataTableColumns = [
+      { title: 'Usuário', field: 'SENHA_USUARIO', hozAlign: 'left', type: 'string', isKey: true },
+      { title: 'Nome', field: 'SENHA_NOME', hozAlign: 'left', type: 'string', isKey: true },
+   ];
+
+   const columnsPerfis: DataTableColumns = [
+      { title: 'Perfil', field: 'PER_DESCRICAO', hozAlign: 'left', type: 'string', isKey: true },
+   ];
+
+   const perfisComTodos = [
+      { PER_CODIGO: 'TODOS', PER_DESCRICAO: 'TODOS', PER_ATIVO: 'A', PER_USUARIO: '', USUARIOS: [] },
+      ...perfis
+   ];
+
+   const selecionarPerfil = (perfil: IModelERPSIS007) => {
+      setPerfilSelecionadoCodigo(perfil.PER_CODIGO);
+      setPerfilSelecionado(perfil.PER_CODIGO === 'TODOS' ? null : perfil);
+   };
+
+   const prioridadeOptions = [
+      { value: EnumRecadosPrioridade.EnumRecadosPrioridade_BAIXA, label: 'Baixa' },
+      { value: EnumRecadosPrioridade.EnumRecadosPrioridade_NORMAL, label: 'Normal' },
+      { value: EnumRecadosPrioridade.EnumRecadosPrioridade_ALTA, label: 'Alta' },
+      { value: EnumRecadosPrioridade.EnumRecadosPrioridade_ALERTA, label: 'Alerta' },
+   ];
+
+   const validateOnSave = (data: ModelRecados, state: EnumCrudStateRecordType, validateFields: ValidateFields, setSweetAlertProps: React.Dispatch<React.SetStateAction<CustomSweetAlertProps | undefined>>): boolean => {
+
+      let valido = true;
+
+      if (!usuariosSelecionados.length) {
+         setErroDestinatarios(true);
+         valido = false;
+      } else {
+         setErroDestinatarios(false);
+      }
+
+      if (!data.Mensagem?.trim()) {
+         setErroMensagem(true);
+         valido = false;
+      } else {
+         setErroMensagem(false);
+      }
+
+      if (!valido) {
+         sweetAlertdispatch({
+            type: 'show',
+            props: {
+               title: 'Atenção',
+               type: 'error',
+               onConfirm(response) { sweetAlertdispatch({ type: 'close' }) },
+            },
+            msg: 'Por favor, preencha todos os campos obrigatórios!'
+         });
+         return false;
+      }
+
+      if (!data.Assunto?.trim()) {
+         sweetAlertdispatch({
+            type: 'show',
+            props: {
+               title: 'Atenção',
+               type: 'error',
+               onConfirm(response) { sweetAlertdispatch({ type: 'close' }) },
+            },
+            msg: 'Por favor, informe o Assunto!'
+         });
+         return false;
+      }
+
+      return true;
+   };
+
+   const beforeSave = (data: ModelRecados, state: EnumCrudStateRecordType) => {
+      data.Mensagem = utilities.base64(data.Mensagem)
+   }
+
+   return (
+      <Crudmanutencao
+         showSaveButton
+         events={events}
+         validateOnSave={validateOnSave}
+         onInit={onInit}
+         beforeSave={beforeSave}
+         afterSave={onClose}
+         transformData={(data) => [data]}
+         onBody={(params) => {
+            const data = params.dataModel.data;
+
+            const selecionarUsuario = (usuario: IModelUsuario) => {
+               setErroDestinatarios(false);
+               setUsuariosSelecionados(prev => {
+                  const updated = prev.some(u => u.SENHA_USUARIO === usuario.SENHA_USUARIO)
+                     ? prev
+                     : [...prev, usuario];
+
+                  params.dataModel.setData((prev: ModelRecados) => ({
+                     ...prev,
+                     Destinatarios: updated.map(u => ({
+                        Usuario: u.SENHA_USUARIO
+                     }))
+                  }));
+
+                  return updated;
+               });
+            };
+
+            const removerUsuario = (usuario: IModelUsuario) => {
+               setUsuariosSelecionados(prev => {
+                  const updated = prev.filter(u => u.SENHA_USUARIO !== usuario.SENHA_USUARIO);
+
+                  params.dataModel.setData((prev: ModelRecados) => ({
+                     ...prev,
+                     Destinatarios: updated.map(u => ({
+                        Usuario: u.SENHA_USUARIO
+                     }))
+                  }));
+
+                  return updated;
+               });
+            };
+
+            return (
+               <Fragment>
+                  <div className='row' style={{ height: `${tipo ? 'auto' : 'calc(100vh - 22rem )'}`, overflowY: 'scroll' }}>
+                     <div className={`col-12 col-md-6 order-2 order-lg-1 ${isModal ? 'col-lg-3' : 'col-lg-2'} `} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                        <div className='row mb-3'>
+                           <div className='col-12'>
+                              {loading ? (<div className='d-flex justify-content-center iq-card' style={{ height: 190 }}><Spinners loading={loading} size={40} /></div>
+                              ) : (
+                                 <DataTable
+                                    title='Perfis'
+                                    useRowId
+                                    columns={columnsPerfis}
+                                    data={perfisComTodos}
+                                    options={{
+                                       height: '100%',
+                                       minHeight: '10rem',
+                                       pagination: false,
+                                       layout: 'fitColumns',
+                                       selectable: 1,
+                                       rowFormatter: (row: any) => {
+                                          const selecionado = row.getData().PER_CODIGO === perfilSelecionadoCodigo;
+                                          row.getElement().style.backgroundColor = selecionado ? '#0d6efd' : '';
+                                          row.getElement().style.color = selecionado ? 'white' : '';
+                                       }
+                                    }}
+                                    onRowClick={selecionarPerfil}
+                                 />
+                              )}
+                           </div>
+                        </div>
+
+                        <div className='row' style={{ flex: 1 }} >
+                           <div className='col-12 d-flex flex-column'>
+                              <div className='mt-2 mb-2'>
+                                 <Input
+                                    prefixId={prefixId}
+                                    placeholder='Buscar usuário...'
+                                    value={buscaUsuario}
+                                    classNameGroup='input-group'
+                                    onChange={(e) => setBuscaUsuario(e.target.value)}
+                                 >
+                                    <div className='input-group-append'>
+                                       {buscaUsuario && (
+                                          <Button
+                                             classIcon='mdi mdi-close m-1'
+                                             className='btn btn-primary'
+                                             style={{ borderTopRightRadius: '0.25rem', borderBottomRightRadius: '0.25rem' }}
+                                             title='Limpar'
+                                             overlayProps={{ placement: 'top' }}
+                                             onClick={() => setBuscaUsuario('')}
+                                          />
+                                       )}
+                                    </div>
+                                 </Input>
+
+                              </div>
+                              <div style={{ ...(erroDestinatarios ? { border: '1px solid red', borderRadius: 4 } : {}), }}>
+                                 {loading ? (<div className='d-flex justify-content-center iq-card' style={{ height: 410 }}><Spinners loading={loading} size={40} /></div>
+                                 ) : (
+                                    <DataTable
+                                       title='Destinatários'
+                                       useRowId
+                                       columns={columnsUsuarios}
+                                       data={usuariosDisponiveis}
+                                       options={{ height: '100%', minHeight: `${isModal ? '16rem' : '18rem'}`, pagination: false, layout: 'fitColumns', selectable: 1 }}
+                                       onRowClick={selecionarUsuario}
+                                    />
+                                 )}
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div className={`col-12 col-md-6 order-3 order-lg-2 ${isModal ? 'col-lg-3' : 'col-lg-2'} `} style={{ height: '100%', display: 'flex', flexDirection: 'column' }} >
+                        {loading ? (<div className='d-flex justify-content-center iq-card' style={{ height: 710 }}><Spinners loading={loading} size={40} /></div>
+                        ) : (
+                           <DataTable
+                              title='Seleção Destinatários'
+                              useRowId
+                              columns={columnsUsuarios}
+                              data={usuariosSelecionados}
+                              options={{ height: '100%', minHeight: `${isModal ? '37rem' : '39rem'}`, pagination: false, layout: 'fitColumns', selectable: 1 }}
+                              onRowClick={removerUsuario}
+                           />
+                        )}
+                     </div>
+
+                     <div className={`col-12 order-1 order-lg-3 ${isModal ? 'col-lg-6' : 'col-lg-8'} `} style={{ height: '100%', display: 'flex', flexDirection: 'column' }} >
+                        <div className='row'>
+                           <div className='col-12 col-md-6 mb-2 pt-3 '>
+                              <InputCheckbox
+                                 prefixId={prefixId}
+                                 classNameGroup='custom-control custom-checkbox d-inline-block mt-4'
+                                 className='custom-control-input'
+                                 classNameLabel='custom-control-label'
+                                 label='Necessita Confirmação Leitura'
+                                 id='ConfirmacaoLeitura'
+                                 name='ConfirmacaoLeitura'
+                                 checked={data?.ConfirmacaoLeitura === EnumSimNao.SIM}
+                                 onChange={(e) =>
+                                    params.dataModel.setData((prev: ModelRecados) => ({ ...prev, ConfirmacaoLeitura: e.target.checked ? EnumSimNao.SIM : EnumSimNao.NAO }))
+                                 }
+                              />
+                           </div>
+                           <div className='col-12 col-md-6 mb-2'>
+                              <InputSelect
+                                 prefixId={prefixId}
+                                 label='Prioridade'
+                                 placeholder='Selecione a Prioridade'
+                                 options={prioridadeOptions}
+                                 value={data?.Prioridade}
+                                 onChange={(e) =>
+                                    params.dataModel.setData((prev: ModelRecados) => ({
+                                       ...prev,
+                                       Prioridade: e.value
+                                    }))
+                                 }
+                              />
+                           </div>
+                        </div>
+
+                        <div className='row'>
+                           <div className='col-12 mb-3'>
+                              <Input prefixId={prefixId} label='Emitente' value={user?.SENHA_USUARIO} id='Emitente' disabled />
+                           </div>
+                        </div>
+
+                        <div className='row'>
+                           <div className='col-4'>
+                              <Input
+                                 prefixId={prefixId}
+                                 label='ID Pessoa'
+                                 value={data?.Pessoa || pessoaCod}
+                                 readOnly
+                              />
+                           </div>
+
+                           <div className='col-8'>
+                              <label className='medium-labelName'>
+                                 Pessoa <i className='mdi mdi-account' style={{ fontSize: 14 }} />
+                              </label>
+                              <Input
+                                 prefixId={prefixId}
+                                 id='Pessoa'
+                                 classNameGroup='input-group'
+                                 value={data?.PessoaNome || pessoaNome}
+                                 readOnly
+                              >
+                                 <div className='input-group-append'>
+                                    {!data?.Pessoa && (
+                                       <Button
+                                          classIcon='mdi mdi-account-search m-1'
+                                          className='btn btn-primary'
+                                          style={{ borderTopRightRadius: '0.25rem', borderBottomRightRadius: '0.25rem' }}
+                                          title='Consultar pessoa'
+                                          overlayProps={{ placement: 'top' }}
+                                          onClick={() => viewCadastrosEvent.current?.open()}
+                                       />
+                                    )}
+                                    {data?.Pessoa && (
+                                       <Button
+                                          classIcon='mdi mdi-close m-1'
+                                          className='btn btn-primary'
+                                          style={{ borderTopRightRadius: '0.25rem', borderBottomRightRadius: '0.25rem' }}
+                                          title='Limpar'
+                                          overlayProps={{ placement: 'top' }}
+                                          onClick={() => {
+                                             params.dataModel.setData((prev: ModelRecados) => ({
+                                                ...prev,
+                                                Pessoa: '',
+                                                PessoaNome: ''
+                                             }))
+                                          }}
+                                       />
+                                    )}
+                                 </div>
+                              </Input>
+                           </div>
+                        </div>
+
+                        {isModal &&
+                           <div className='row mb-2'>
+                              <div className='col-3 mt-4 p-0 d-flex'>
+                                 <label
+                                    className='align-self-center mt-3 pl-3'
+                                 >
+                                    {getLabelDocOrigem(docTpOrigem)}
+                                 </label>
+                              </div>
+                              <div className='col-3 mt-4'>
+                                 <Input
+                                    prefixId={prefixId}
+                                    value={codOrigem}
+                                 >
+                                 </Input>
+                              </div>
+                              <div className='col-6 mt-4 d-flex'>
+                                 <label
+                                    className='align-self-center mt-3'
+                                    id='descricao'
+                                 >
+                                    {descricao}
+                                 </label>
+                              </div>
+                           </div>
+                        }
+
+                        <div className='row'>
+                           <div className='col-12 mb-3'>
+                              <Input
+                                 prefixId={prefixId}
+                                 id='Assunto'
+                                 label='Assunto'
+                                 type='string'
+                                 value={data?.Assunto || ''}
+                                 onChange={(e) =>
+                                    params.dataModel.setData((prev: ModelRecados) => ({
+                                       ...prev,
+                                       Assunto: e.target.value
+                                    }))
+                                 }
+                                 validator={params.validateFields}
+                                 validations={{ required: true }}
+                              />
+                           </div>
+                        </div>
+
+                        <div className='row'  >
+                           <div className='col-12'>
+                              <RecadosDetalhes
+                                 isManutencao={true}
+                                 lines={isModal ? 6 : 10}
+                                 hasError={erroMensagem}
+                                 mensagem={data?.Mensagem || ''}
+                                 onMensagemChange={(valor) => {
+                                    setErroMensagem(false);
+                                    params.dataModel.setData((prev: ModelRecados) => ({ ...prev, Mensagem: valor }))
+                                 }}
+                              />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <RecadosPesquisaPessoaProspectModal
+                     viewCadastrosEvent={viewCadastrosEvent}
+                     onBtnSelecionar={(pessoa) => {
+                        params.dataModel.setData((prev: ModelRecados) => ({
+                           ...prev,
+                           Pessoa: pessoa.PES_CODIGO,
+                           PessoaNome: pessoa.PES_RAZAO_SOCIAL.trim()
+                        }));
+                        viewCadastrosEvent.current?.close();
+                     }}
+                  />
+               </Fragment >
+            );
+         }
+         }
+      />
+   );
+};
+
+export default RecadosManutencao;

@@ -1,0 +1,19 @@
+export interface IModelMOB040 {
+   PEM_ID_PESSOA: number,
+   PEM_PESSOA: string,
+   PEM_EMPRESA: number,
+   PEM_EMPRESA_PADRAO?: string,
+   PEM_DATA_ULT_COMPRA?: number,
+   PEM_CURVA_FREQ_COMPRA: string,
+   PEM_CURVA_FAT: string,
+   PEM_CURVA_FAT_ANT: string,
+   PEM_CURVA_FREQ_COMPRA_ANT: string,
+   PEM_TICKET_MEDIO_MENSAL: number,
+   PEM_QTD_MEDIA_COMPRAS_MES: number,
+   PEM_DT_ULT_REL_COMERCIAL?: number,
+   PEM_INTERVALO_COMPRAS_DIAS: number,
+   PEM_ID_ULT_COMPRA?: number,
+   PEM_DH_ALTERACAO?: number,
+   PEM_ID: number,
+
+}

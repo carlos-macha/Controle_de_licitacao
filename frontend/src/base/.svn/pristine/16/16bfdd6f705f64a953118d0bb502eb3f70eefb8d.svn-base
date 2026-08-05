@@ -1,0 +1,31 @@
+export enum EnumTipoDevolucao {
+   emDev_Tipo_EntradaNotaTereceiro = 'DEVENT_NFTER',
+   emDev_Tipo_EntradaNotaInterna = 'DEVENT_NFEMP',
+   emDev_Tipo_SaidaNotaInterna = 'DEVSAI_NFEMP'
+}
+
+export enum EnumStatusDevolucao {
+   emDev_Status_Aberto = 'ABERTO',
+   emDev_Status_Solicitacao = 'SOLICITACAO',
+   emDev_Status_Autorizado = 'AUTORIZADO',
+   emDev_Status_Confirmado = 'CONFIRMADO',
+   emDev_Status_Rejeitado = 'REJEITADO',
+   emDev_Status_Cancelado = 'CANCELADO'
+}
+
+export enum EnumOrigemDevolucao {
+   emDev_Origem_Interno = 'INT',
+   emDev_Origem_Web = 'WEB'
+}
+
+export enum EnumTpFreteDevolucao {
+   emDev_TipoFrete_Emitente = 'E',
+   emDev_TipoFrete_Destinatario = 'D',
+   emDev_TipoFrete_SemFrete = 'S'
+}
+
+export enum EnumTipoOperacaoDevolucao {
+   emDev_TipoOperacao_Normal = 'NORMAL',
+   emDev_TipoOperacao_Consignacao = 'CONSIGNACAO',
+   emDev_TipoOperacao_Industrializacao = 'INDUSTRIALIZACAO'
+}

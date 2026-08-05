@@ -1,0 +1,49 @@
+
+import { EnumCharcasetypes } from "../components/form/form";
+import { OptionInputSelect } from "../components/inputselectasync/inputselectasync";
+import DAO from "./dao";
+import { EnumContatoCargo_StatusAtivo } from "../enums/enumcontatos";
+import { IModelAux016 } from "../models/modelAUX016";
+import { IModelAux099 } from "../models/modelAUX099";
+
+export default class DAOContatos extends DAO {
+
+  Contato = async (pessoa: number, seq: number, where: string, first: string, skip: number): Promise<IModelAux016[]> => {
+    try {
+      const data = await this.Get<IModelAux016[]>(`pessoa/contatos/${pessoa}/${seq}/${where}/${first}/${skip}`);
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  ChamaContatos = async (inputValue: string, pessoa: string): Promise<OptionInputSelect[]> => {
+    try {
+      const where = `CNT_PESSOA;=;${pessoa}|CNT_NOME;LIKE;%${inputValue}%`;
+      const wherebase64 = btoa(where.toUpperCase());
+      const data = await this.Contato(0, 0, wherebase64, "50", 0);
+      return data.map(d => ({
+        label: d.CNT_NOME,
+        value: String(d.CNT_ID),
+      }));
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+
+  ChamaCargos = async (
+    id: number = -1, where: string = 'CCP_ATIVO;=;A', first: number = 0, skip: number = 0): Promise<IModelAux099[]> => {
+    try {
+      const whereEncoded = btoa(where);
+      const data = await this.Get<IModelAux099[]>(
+        `pessoa/cargocontato/${id}/${whereEncoded}/${first}/${skip}`
+      );
+      return data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+}

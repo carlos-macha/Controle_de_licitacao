@@ -1,0 +1,14 @@
+export enum EnumAcaoComercial_TipoFrete {
+   emAC_TipoFrete_Emitente = 'E',
+   emAC_TipoFrete_Destinatario = 'D',
+   emAC_TipoFrete_SemFrete = 'S',
+   emAC_TipoFrete_Terceiro = 'T',
+   emAC_TipoFrete_Prop_Emitente = 'P',
+   emAC_TipoFrete_Prop_Destinatario = 'X'
+}
+
+export enum EnumAcaoComercial_Faturado {
+   emAC_Faturado_Sim = 'S',
+   emAC_Faturado_Nao = "N",
+   emAC_Faturado_Parcial = "P"
+}

@@ -1,0 +1,233 @@
+import moment from 'moment';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import { useAuthContext } from '../../../../hooks/useAuthContext';
+import Crudpesquisa, { CrudPesquisaRef, PesquisaProps } from '../../../components/crud/pesquisa/crudpesquisa';
+import Button from '../../../components/form/form';
+import SweetAlert from 'react-bootstrap-sweetalert';
+
+import ControllerRecados from '../../../controllers/controllerrecados';
+import { EnumRecadosEnviadoRecebido } from '../../../enums/enumrecados';
+import { SweetAlertMessage } from '../../../types/types';
+import { utilities } from '../../../utils/utilities';
+import RecadosDetalhes from './recadosdetalhes';
+import { momentUtils } from '../../../utils/momentutils';
+import { DataSearchValue } from '../../../components/datasearch/datasearch';
+import { IModelAux131 } from '../../../models/modelAUX131';
+import { EnumSimNao } from '../../../enums/enums';
+import { useCrudContext } from '../../../components/crud/hook/useCrudContext';
+
+interface RecadosPesquisaProps extends PesquisaProps {
+   heightGrid?: string | number
+}
+
+const RecadosPesquisa: React.FC<RecadosPesquisaProps> = (props) => {
+   const { crudState } = useCrudContext();
+   const { events, onDataChange, heightGrid, } = props;
+   const [sweetAlert, setSweetAlert] = useState<SweetAlertMessage | undefined>();
+
+   const { authState } = useAuthContext();
+   const [recadoSelecionado, setRecadoSelecionado] = useState<IModelAux131 | null>(null);
+   const pesquisaRef = useRef<CrudPesquisaRef>(null);
+   const user: any = authState.user
+   const controller = new ControllerRecados()
+
+   const containerBottom = (recado: IModelAux131): JSX.Element => {
+      if (!recado)
+         return <Fragment />;
+
+      return (
+         <Fragment>
+            <RecadosDetalhes
+               recado={recado}
+            />
+         </Fragment>
+      )
+   }
+
+   useEffect(() => {
+      if (crudState.type === 'actInsert' || crudState.type === 'actEdit') {
+         pesquisaRef.current?.refresh();
+      }
+   }, [crudState])
+
+   return (
+      <Fragment>
+         <Crudpesquisa
+            showNewButton
+            heightGrid={heightGrid ? heightGrid : window.innerHeight <= 1080 ? 'calc(100vh - 35rem)' : 'calc(100vh - 32rem)'}
+            containerButtons={
+               <>
+                  <Button
+                     disabled={!recadoSelecionado || recadoSelecionado?.RDE_MENSAGEMLIDA === EnumSimNao.SIM}
+                     onClick={() => {
+                        if (!recadoSelecionado?.RDE_CODIGO) return
+                        controller.DAO.marcarComoLido(recadoSelecionado.RDE_CODIGO)
+                           .then(() => {
+                              setSweetAlert({
+                                 type: 'success',
+                                 title: 'Sucesso',
+                                 msg: 'O Recado foi marcado como lido!',
+                                 onConfirm: () => {
+                                    setSweetAlert(undefined)
+                                 }
+                              })
+                              pesquisaRef.current?.refresh()
+                           })
+                           .catch(console.error)
+                     }}
+                  >
+                     Marcar como lido
+                  </Button>
+
+                  <Button
+                     disabled={!recadoSelecionado}
+                     onClick={() => {
+                        const dadosIniciais = {
+                           Pessoa: recadoSelecionado?.REC_PESSOA,
+                           PessoaNome: recadoSelecionado?.PES_RAZAO,
+                           Assunto: `RE: ${recadoSelecionado?.REC_ASSUNTO ?? ''}`,
+                           Destinatarios: recadoSelecionado?.REC_USUARIOREGISTRO
+                              ? [{ Usuario: recadoSelecionado.REC_USUARIOREGISTRO }]
+                              : [],
+                        }
+                        events?.onNewButton(dadosIniciais)
+                     }}
+                  >
+                     Responder
+                  </Button>
+
+                  <Button
+                     disabled={!recadoSelecionado}
+                     onClick={() => {
+                        const dataFormatada = momentUtils.formatOADate(Number(recadoSelecionado?.RDE_DATA), 'date')
+                        const horaFormatada = momentUtils.formatOADate(Number(recadoSelecionado?.RDE_HORA), 'time')
+                        const destinatarios = recadoSelecionado?.RDE_USUARIODESTINO ?? ''
+
+                        const mensagem = `DE ....: ${recadoSelecionado?.REC_USUARIOREGISTRO ?? ''}
+PARA ..: ${destinatarios}
+DATA ..: ${dataFormatada}  ÀS  ${horaFormatada}
+ASSUNTO: ${recadoSelecionado?.REC_ASSUNTO ?? ''}
+---------------------------------------------------------------
+${utilities.base64Decode(recadoSelecionado?.REC_MENSAGEM) ?? ''}
+`
+                        events?.onNewButton({
+                           Pessoa: recadoSelecionado?.REC_PESSOA,
+                           PessoaNome: recadoSelecionado?.PES_RAZAO,
+                           Assunto: `ENC: ${recadoSelecionado?.REC_ASSUNTO ?? ''}`,
+                           Mensagem: mensagem,
+                           Destinatarios: [],
+                        })
+                     }}
+                  >
+                     Encaminhar
+                  </Button>
+
+               </>
+            }
+            ref={pesquisaRef}
+            autoLoad
+            urlGetMount={(url: string, id: string | number, where: string, page: number, limit: number, offset: number, data?: any): string => {
+               id = user.SENHA_USUARIO;
+               let envOuRec: EnumRecadosEnviadoRecebido = EnumRecadosEnviadoRecebido.EnumRecadosEnviadoRecebido_Recebido
+               let dataInicial: number = 0;
+               let dataFinal: number = 0;
+               let localWhere: string = '';
+
+               if (data) {
+                  if (!dataInicial || !dataFinal) {
+                     const hoje = moment().endOf('day');
+                     const seteDiasAtras = moment().subtract(7, 'days').startOf('day');
+
+                     const dIniOA = momentUtils.toOADate(seteDiasAtras);
+                     const dFimOA = momentUtils.toOADate(hoje);
+
+                     dataInicial = (momentUtils.formatOADate(dIniOA, 'date'));
+                     dataFinal = (momentUtils.formatOADate(dFimOA, 'date'));
+                  }
+
+                  if (DataSearchValue(data, 'ENVIADO_RECEBIDO')) {
+                     envOuRec = DataSearchValue(data, 'ENVIADO_RECEBIDO')
+                  }
+
+                  if (DataSearchValue(data, 'RDE_DATA_GE')) {
+
+                     dataInicial = DataSearchValue(data, 'RDE_DATA_GE');
+                  }
+
+                  if (DataSearchValue(data, 'RDE_DATA_LE')) {
+                     dataFinal = DataSearchValue(data, 'RDE_DATA_LE');
+                  }
+
+                  if (DataSearchValue(data, 'REC_TP_DOC_ORIGEM')) {
+                     localWhere = localWhere + (localWhere === '' ? '' : '|') + `REC_TP_DOC_ORIGEM;=;${DataSearchValue(data, 'REC_TP_DOC_ORIGEM')}`;
+                  }
+
+                  if (DataSearchValue(data, 'DESTINATARIOS_EMITENTES')) {
+                     if (envOuRec === 'R') {
+                        localWhere = localWhere + (localWhere === '' ? '' : '|') + `REC_USUARIODESTINO;=;${DataSearchValue(data, 'DESTINATARIOS_EMITENTES')}`;
+                     } else {
+                        localWhere = localWhere + (localWhere === '' ? '' : '|') + `REC_USUARIOREGISTRO;=;${DataSearchValue(data, 'DESTINATARIOS_EMITENTES')}`;
+                     }
+                  }
+
+                  if (DataSearchValue(data, 'REC_USUARIODESTINO')) {
+                     localWhere = localWhere + (localWhere === '' ? '' : '|') + `REC_USUARIODESTINO;=;${DataSearchValue(data, 'REC_USUARIODESTINO')}`;
+                  }
+
+                  if (DataSearchValue(data, 'REC_USUARIOREGISTRO')) {
+                     localWhere = localWhere + (localWhere === '' ? '' : '|') + `REC_USUARIOREGISTRO;=;${DataSearchValue(data, 'REC_USUARIOREGISTRO')}`;
+                  }
+
+                  if (DataSearchValue(data, 'REC_CONFIRMACAO_LEITURA')) {
+                     localWhere = localWhere + (localWhere === '' ? '' : '|') + `REC_CONFIRMACAO_LEITURA;=;${DataSearchValue(data, 'REC_CONFIRMACAO_LEITURA')}`;
+                  }
+
+                  if (DataSearchValue(data, 'REC_RECADO_MANUAL')) {
+                     localWhere = localWhere + (localWhere === '' ? '' : '|') + `REC_RECADO_MANUAL;=;${DataSearchValue(data, 'REC_RECADO_MANUAL')}`;
+                  }
+
+                  if (DataSearchValue(data, 'REC_TP_PRIORIDADE')) {
+                     localWhere = localWhere + (localWhere === '' ? '' : '|') + `REC_TP_PRIORIDADE;=;${DataSearchValue(data, 'REC_TP_PRIORIDADE')}`;
+                  }
+
+                  if (DataSearchValue(data, 'RDE_MENSAGEMLIDA')) {
+                     localWhere = localWhere + (localWhere === '' ? '' : '|') + `RDE_MENSAGEMLIDA;=;${DataSearchValue(data, 'RDE_MENSAGEMLIDA')}`;
+                  }
+
+                  if (DataSearchValue(data, 'RDE_CODIGO')) {
+                     localWhere = localWhere + (localWhere === '' ? '' : '|') + `RDE_CODIGO;=;${DataSearchValue(data, 'RDE_CODIGO')}`;
+                  }
+
+                  if (localWhere.trim().length > 0) {
+                     localWhere = utilities.base64(localWhere);
+                  }
+               }
+
+               let endPoint = `${url}/${id}/${dataInicial}/${dataFinal}/${envOuRec}/${localWhere}/${limit}/${offset}`;
+               return endPoint
+            }}
+            events={events}
+            containerBottom={containerBottom}
+            onDataChange={(recado: IModelAux131) => {
+               setRecadoSelecionado(recado)
+               if (onDataChange)
+                  onDataChange(recado);
+            }}
+         />
+         {sweetAlert &&
+            <SweetAlert
+               type={sweetAlert.type}
+               title={sweetAlert.title}
+               onConfirm={() => {
+                  if (sweetAlert.onConfirm)
+                     sweetAlert.onConfirm();
+               }}
+               show={Boolean(sweetAlert.msg)}>
+               {sweetAlert.msg}
+            </SweetAlert>
+         }
+      </Fragment>
+   );
+}
+
+export default RecadosPesquisa;

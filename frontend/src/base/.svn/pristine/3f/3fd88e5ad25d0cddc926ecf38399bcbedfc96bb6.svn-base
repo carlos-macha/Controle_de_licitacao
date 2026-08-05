@@ -1,0 +1,23 @@
+import { EnumPublicoPrivado } from "../enums/enumscontroldoc"
+
+export interface IModelQtdDocs {
+   CADASTRADOS: number,
+   CONTRATADOS: number
+}
+
+export interface IModelQtdPubPriv {
+   TIPO: EnumPublicoPrivado,
+   QTD: number
+}
+
+export interface IModelQtdTpDoc {
+   DOC_TIPODOCUMENTO: number,
+   TPD_DESCRICAO: string,
+   QTD: number
+}
+
+export interface IModelQtdGrupo {
+   DOC_GRUPO: number,
+   GRU_DESCRICAO: string,
+   QTD: number
+}

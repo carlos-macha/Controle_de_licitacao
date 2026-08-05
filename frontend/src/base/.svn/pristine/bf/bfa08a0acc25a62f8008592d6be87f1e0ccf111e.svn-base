@@ -1,0 +1,15 @@
+import { IModelEST009 } from "../models/modelEST009";
+import DAO from "./dao";
+
+export default class DAOMovEstoque extends DAO {
+
+   MovimentacaoEstoqueVincNF = (idNotaFiscal: number) => new Promise<IModelEST009>((resolve, reject) => {
+
+      this.Get<IModelEST009>(`/movimentoestoque/movimentacaoestoquevincnf/${idNotaFiscal}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.response.data);
+      });
+
+   });
+}

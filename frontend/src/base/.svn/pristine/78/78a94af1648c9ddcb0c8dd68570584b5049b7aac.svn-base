@@ -1,0 +1,28 @@
+import { EnumRecadosPrioridade, EnumRecadosTpDocOrigem } from "../enums/enumrecados";
+import { EnumSimNao } from "../enums/enums";
+import { IModelAux027 } from "./modelAUX027";
+
+export interface IModelAux131 {
+  REC_CODIGO?: number | null,
+  RDE_CODIGO?: number,
+  REC_DATA?: number,
+  REC_HORA?: number,
+  RDE_DATA?: number,
+  RDE_HORA?: number,
+  REC_MENSAGEM: string,
+  REC_MENSAGEMLIDA?: string,
+  RDE_MENSAGEMLIDA?: string,
+  REC_SISTEMA_ORIGEM_RECADO?: string,
+  REC_USUARIOREGISTRO?: string,
+  RDE_USUARIODESTINO?: string,
+  REC_PESSOA?: string | null,
+  REC_ID_CONTATOPESSOA?: number | null,
+  REC_ASSUNTO?: string,
+  REC_CONFIRMACAO_LEITURA?: string,
+  REC_TP_PRIORIDADE?: EnumRecadosPrioridade,
+  REC_RECADO_MANUAL?: EnumSimNao,
+  PES_RAZAO?: string
+  REC_TP_DOC_ORIGEM?: EnumRecadosTpDocOrigem,
+  REC_ID_DOC_ORIGEM?: number | null,
+  DESTINATARIOS?: Array<IModelAux027>
+}

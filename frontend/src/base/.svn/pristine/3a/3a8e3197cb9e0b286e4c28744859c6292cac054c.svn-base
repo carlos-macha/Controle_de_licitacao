@@ -1,0 +1,147 @@
+
+import PessoaPesquisa from './pessoapesquisa';
+import PessoaManutencao from './pessoamanutencao';
+import { CrudContainer } from '../../../components/crud/container/crudcontainer';
+import { CrudUrl, CrudPesquisaEvents, CrudManutencaoEvents } from '../../../components/crud/types';
+import { OperatorSearchTypes } from '../../../components/datasearch/datasearch';
+import { DataTableColumns } from '../../../components/datatable/datatable';
+import { EnumCharcasetypes } from '../../../components/form/form';
+import { EnumPessoa_TipoPessoa } from '../../../enums/enumspessoa';
+import { EnumOperacaoPermissao } from '../../../enums/enums';
+
+export interface PessoaContainerParams {
+   tipoPessoa?: EnumPessoa_TipoPessoa,
+   codigoVendedor?: string,
+   permission?: any,
+   viewProspect?: boolean,
+   checkPermission?: (permission?: any, operacao?: EnumOperacaoPermissao | undefined, observacao?: string | undefined) => Promise<boolean>,
+   heightGrid?: string | number
+}
+
+class PessoaContainer extends CrudContainer {
+
+   crudUrl = (): CrudUrl | undefined => {
+      const { params } = this.props;
+      const viewProspect = (params as PessoaContainerParams)?.viewProspect;
+
+      return {
+         GET: `/mobile/${viewProspect ? 'prospect' : 'pessoas'}`,
+         PUT: `/mobile/${viewProspect ? 'prospect' : 'pessoa'}`,
+         POST: `/mobile/${viewProspect ? 'prospect' : 'pessoa'}`
+      }
+   }
+
+   columns = (): DataTableColumns | undefined => {
+      const { params } = this.props;
+      const tpPessoa: EnumPessoa_TipoPessoa | undefined = (params as PessoaContainerParams)?.tipoPessoa;
+      const isProspect: boolean | undefined = (params as PessoaContainerParams)?.viewProspect;
+
+
+      const columns: DataTableColumns = [
+         { title: "ID", field: "PES_LEGADO_ID", width: 70, isKey: true, type: 'integer', visible: false },
+         {
+            title: "Código", field: "PES_CODIGO", width: 100, type: 'string',
+            search: {
+               type: 'DEFAULT',
+               operator: OperatorSearchTypes.EQUAL,
+               width: 100,
+               charCase: EnumCharcasetypes.UPPERCASE
+            }
+         },
+         {
+            title: "Razão Social", field: "PES_RAZAO_SOCIAL", width: 250, type: 'string',
+            search: {
+               type: 'DEFAULT',
+               operator: OperatorSearchTypes.LIKE,
+               width: 200,
+               charCase: EnumCharcasetypes.UPPERCASE
+            }
+         },
+         {
+            title: "Nome Fantasia", field: "PES_FANTASIA", width: 200, type: 'string', visible: !isProspect,
+            search: isProspect ? undefined : {
+               type: 'DEFAULT',
+               operator: OperatorSearchTypes.LIKE,
+               width: 200,
+               charCase: EnumCharcasetypes.UPPERCASE,
+            }
+         },
+         {
+            title: "CPF/CNPJ", field: "PES_CPFCGC", width: 130, type: 'string', visible: tpPessoa !== EnumPessoa_TipoPessoa.emPessoa_TpPessoa_Transportadoras && !isProspect,
+            search: isProspect ? undefined : {
+               type: 'DEFAULT',
+               operator: OperatorSearchTypes.EQUAL,
+               width: 200,
+               charCase: EnumCharcasetypes.UPPERCASE
+            }
+         },
+         {
+            title: "Telefone", field: "PES_FONE", width: 120, type: 'string', visible: tpPessoa !== EnumPessoa_TipoPessoa.emPessoa_TpPessoa_Transportadoras
+         },
+         {
+            title: "UF", field: "PES_ESTADO_RES", width: 60, type: 'string', visible: tpPessoa !== EnumPessoa_TipoPessoa.emPessoa_TpPessoa_Transportadoras
+         },
+         {
+            title: "Cidade", field: "PES_CIDADE_RES", width: 150, type: 'string', visible: tpPessoa !== EnumPessoa_TipoPessoa.emPessoa_TpPessoa_Transportadoras
+         },
+         {
+            title: "Tipo de Pessoa", field: "TIPO_PESSOA.TPP_DESCRICAO", width: 150, type: 'string', visible: tpPessoa !== EnumPessoa_TipoPessoa.emPessoa_TpPessoa_Transportadoras && !isProspect
+         },
+         {
+            title: "Ativo/Inativo", field: "PES_ATIVOINATIVO", width: 150, hozAlign: "left", type: 'string',
+            formatter: (cell, formatterParams, onRendered) => {
+               let strValue = cell.getValue();
+               return strValue === 'A' ? 'ATIVO' : 'INATIVO';
+            },
+            search: {
+               operator: OperatorSearchTypes.EQUAL,
+               type: 'COMBOBOX',
+               defaultValue: 'A',
+               width: 170,
+               options: [
+                  {
+                     value: 'A',
+                     label: 'Ativo'
+                  },
+                  {
+                     value: 'I',
+                     label: 'Inativo'
+                  }
+               ]
+            }
+         }
+      ]
+
+      return columns;
+   }
+
+   pesquisa = (events: CrudPesquisaEvents): JSX.Element => {
+      const { onDataChange, searchOnly, params } = this.props;
+      return (
+         <PessoaPesquisa
+            events={events}
+            onDataChange={onDataChange}
+            searchOnly={searchOnly}
+            tipoPessoa={(params as PessoaContainerParams)?.tipoPessoa}
+            checkPermission={(params as PessoaContainerParams)?.checkPermission}
+            codigoVendedor={(params as PessoaContainerParams)?.codigoVendedor}
+            permission={(params as PessoaContainerParams)?.permission}
+            viewProspect={(params as PessoaContainerParams)?.viewProspect}
+            heightGrid={(params as PessoaContainerParams)?.heightGrid}
+         />
+      )
+   }
+
+   manutencao = (events: CrudManutencaoEvents): JSX.Element => {
+      const { params } = this.props;
+      return (
+         <PessoaManutencao
+            events={events}
+            codigoVendedor={(params as PessoaContainerParams)?.codigoVendedor}
+            viewProspect={(params as PessoaContainerParams)?.viewProspect}
+         />
+      )
+   }
+}
+
+export default PessoaContainer;

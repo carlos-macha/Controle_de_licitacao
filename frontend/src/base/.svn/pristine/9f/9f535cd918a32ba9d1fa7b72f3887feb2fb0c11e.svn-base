@@ -1,0 +1,51 @@
+export enum EnumCRM_StatusSAC_AbertoFechado {
+   emCRM_StatusSAC_Aberto = 'S',
+   emCRM_StatusSAC_Fechado = 'F'
+}
+
+export enum EnumCRM_TpDocOrigemAgenda {
+   emCRM_TpDocOrigemAg_Manual = 'MN',
+   emCRM_TpDocOrigemAg_Acao = 'AC',
+   emCRM_TpDocOrigemAg_IntCompra = 'IC',
+   emCRM_TpDocOrigemAg_PedCompra = 'PC',
+   emCRM_TpDocOrigemAg_Titulo = 'TI',
+   emCRM_TpDocOrigemAg_AntFinanceira = 'AF',
+   emCRM_TpDocOrigemAg_Contrato = 'CT'
+}
+
+export enum EnumCRM_TpAgendamento {
+   emCRM_TpAgendamento_Comercial = 'COMERCIAL',
+   emCRM_TpAgendamento_Financeiro = 'FINANCEIRO',
+   emCRM_TpAgendamento_Compras = 'COMPRAS',
+   emCRM_TpAgendamento_Outro = 'OUTRO',
+   emCRM_TpAgendamento_Assistencia = 'ASSISTENCIA'
+}
+
+export enum EnumCRM_Consulta {
+   emCRM_Consulta_Realizado = 'PROSPECT',
+   emCRM_Consulta_Reagendado = 'PESSOA',
+   emCRM_Consulta_Aberto = 'SEQ_RELACIONADAS'
+}
+
+export enum EnumCRM_Situacao {
+   emCRM_Situacao_Realizado = 'S',
+   emCRM_Situacao_Reagendado = 'R',
+   emCRM_Situacao_Aberto = 'N'
+}
+
+export enum EnumCRM_TpPerguntaPesquisa {
+   emCRM_TpPerguntaPesquisa_Simples = 'S',
+   emCRM_TpPerguntaPesquisa_MultiplaEscolha = 'M',
+   emCRM_TpPerguntaPesquisa_NivelSatisfacao = 'N',
+   emCRM_TpPerguntaPesquisa_Texto = 'T'
+}
+
+export enum EnumCRM_TpPesquisa {
+   emCRM_TpPesquisa_PesquisaCRM = 'PESQ_CRM',
+   emCRM_TpPesquisa_AgendaCompromisso = 'AGEND_COMP'
+}
+
+export enum EnumCRM_LiberarRestringir {
+   emCRM_LiberarRestringir_Liberar = 'L',
+   emCRM_LiberarRestringir_Restringir = 'R'
+}

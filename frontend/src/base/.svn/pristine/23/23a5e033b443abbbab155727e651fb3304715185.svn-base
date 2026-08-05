@@ -1,0 +1,23 @@
+import { IModelPortalEst233 } from "./modelPortalEST233";
+
+export interface IModelPortalEst081 {
+   IDE_EMPRESA: number,
+   IDE_SEQDEVOLUCAO?: number,
+   IDE_PRODUTO: string,
+   IDE_DEVTPDEVOLUCAO: number,
+   IDE_UNIDADEDEVOLUCAO: string,
+   IDE_OBS?: string,
+   IDE_CODIGO?: number,
+   IDE_QTDE_UNIDADEDEVOLUCAO: number,
+   IDE_VALORBRUTO: number,
+   IDE_VALORACRESCIMO: number,
+   IDE_VALORDESCONTO: number,
+   IDE_VALORLIQUIDO: number,
+   IDE_VALORINDENIZACAO: number,
+   IDE_CUSTOPRODUTO: number,
+   IDE_IDMOVEST?: number,
+   TMD_DESCRICAO: string,
+   PRO_DESCRICAO: string,
+   INF_ID: number | null,
+   IMPOSTOS?: IModelPortalEst233
+}

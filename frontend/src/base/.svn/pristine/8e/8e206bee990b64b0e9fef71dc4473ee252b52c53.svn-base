@@ -1,0 +1,9 @@
+import { IModelCallcenterSITE020 } from "./modelCallcenterSITE020";
+
+export interface IModelCallcenterSITE019 {
+    CCS_CODIGO: number | null,
+    CCS_CHAMADOSITE: number,
+    CCS_QUEMINICIOU: string,
+    CCS_SITUACAO: string,
+    ITENS_CONVERSACAO: IModelCallcenterSITE020[]
+}

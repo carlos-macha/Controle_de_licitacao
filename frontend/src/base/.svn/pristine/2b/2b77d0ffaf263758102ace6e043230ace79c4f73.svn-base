@@ -1,0 +1,24 @@
+import { rejects } from "assert";
+import { IModelERPSIS007 } from "../models/modelERPsis007";
+import { ChatConversation } from "../types/types";
+import DAO from "./dao";
+
+export default class DAORecados extends DAO {
+
+  marcarComoLido = (rdecodigo: number) => new Promise<void>((resolve, reject) => {
+    this.Post(`recados/marcarcomolido/${rdecodigo}`, {}).then(() => {
+      resolve();
+    }).catch(error => {
+      reject(error.data);
+    });
+  });
+
+  chamaPerfis = (id: number = 0, where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelERPSIS007>>((resolve, reject) => {
+    this.Get<Array<IModelERPSIS007>>(`/usuario/perfis/${id}/${where}/${first}/${skip}`).then(async data => {
+       resolve(data);
+    }).catch(error => {
+       reject(error);
+    });
+
+ });
+}

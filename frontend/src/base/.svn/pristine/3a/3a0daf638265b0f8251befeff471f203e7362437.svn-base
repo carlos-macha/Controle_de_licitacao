@@ -1,0 +1,9 @@
+import { EnumSimNao } from "../enums/enums"
+import { EnumPessoa_ObservacoesAlerta } from "../enums/enumspessoa"
+
+export interface IModelMOB043 {
+   OPE_PESSOA: string,
+   OPE_TIPO: EnumPessoa_ObservacoesAlerta,
+   OPE_OBSERVACAO?: string,
+   OPE_ALERTAR: EnumSimNao,
+}

@@ -1,0 +1,16 @@
+export interface IModelDadosMaquina {
+   EDC_NOMEDAMAQUINA: string,
+   EDC_IPDAMAQUINA: string
+}
+
+export interface IModelDoc008 extends IModelDadosMaquina {
+   EDC_CODIGO: number,
+   EDC_USUARIO: string,
+   EDC_DOCUMENTO: number,
+   EDC_DATAINIEDICAO: number,
+   EDC_HORAINIEDICAO: number,
+   EDC_DATAFINEDICAO?: number,
+   EDC_HORAFINEDICAO?: number,
+   DOC_NOMEDOCUMENTO: string
+}
+

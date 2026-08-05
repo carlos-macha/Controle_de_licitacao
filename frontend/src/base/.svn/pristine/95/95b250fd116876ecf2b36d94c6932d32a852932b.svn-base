@@ -1,0 +1,10 @@
+export interface IModelAnexosBinario {
+   BIN_ARQUIVOBINARIO: string
+}
+
+export interface IModelAnexos {
+   DOC_CODIGO: number,
+   DOC_NOMEDOCUMENTO: string,
+   DOC_DTCRIACAO: number,
+   BINARIO: IModelAnexosBinario
+}

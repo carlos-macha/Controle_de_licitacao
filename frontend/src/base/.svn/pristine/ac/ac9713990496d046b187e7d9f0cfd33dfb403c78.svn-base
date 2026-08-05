@@ -1,0 +1,33 @@
+import { EnumAtivoInativo, EnumSimNao } from "../enums/enums"
+import { EnumDocTipoLegado, EnumPublicoPrivado, EnumStatusDocumento } from "../enums/enumscontroldoc"
+import { IModelDoc007 } from "./modeldoc007"
+
+export interface IModelDoc005 {
+   DOC_CODIGO: number,
+   DOC_NOMEDOCUMENTO: string,
+   DOC_GRUPO: number,
+   DOC_TIPODOCUMENTO: number,
+   DOC_RESUMODOARQUIVO?: string,
+   DOC_NOMEORIGINALARQUIVO: string,
+   DOC_VERSAO: number,
+   DOC_DTCRIACAO: number,
+   DOC_DTALTERACAO: number,
+   DOC_USUARIOCRIACAO: string,
+   DOC_USUARIOALTERACAO: string,
+   DOC_USUARIODONO: string,
+   DOC_STATUSATUAL: EnumStatusDocumento,
+   DOC_ATIVOINATIVO: EnumAtivoInativo,
+   DOC_CHAVELEGADO?: string,
+   DOC_CHAVESECUNDLEGADO?: string,
+   DOC_DTREVISAO?: number,
+   DOC_USA_CAMINHO_RELATIVO: EnumSimNao,
+   DOC_CAMINHO_RELATIVO?: string,
+   DOC_ANEXO_EMAIL_AUTOMATICO: EnumSimNao,
+   DOC_TIPO_LEGADO: EnumDocTipoLegado,
+   DOC_BO_TAMANHO_ILIMITADO: EnumSimNao,
+   GRU_DESCRICAO: string,
+   GRU_USUARIOMASTER: string,
+   TPD_DESCRICAO: string,
+   TPD_PUBLICO: EnumPublicoPrivado,
+   BINARIO?: Array<IModelDoc007>
+}

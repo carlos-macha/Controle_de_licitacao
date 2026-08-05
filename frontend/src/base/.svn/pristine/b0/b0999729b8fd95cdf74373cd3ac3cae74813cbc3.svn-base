@@ -1,0 +1,163 @@
+import { EmptyCallback } from 'tabulator-tables';
+import { Tabulator } from 'react-tabulator/lib/types/TabulatorTypes';
+import LinksdePesquisaPesquisa from './linksdepesquisaPesquisa';
+import { CrudContainer } from '../../../components/crud/container/crudcontainer';
+import { CrudUrl, CrudPesquisaEvents } from '../../../components/crud/types';
+import { OperatorSearchTypes } from '../../../components/datasearch/datasearch';
+import { Formatters, DataTableColumns } from '../../../components/datatable/datatable';
+import { EnumCharcasetypes } from '../../../components/form/form';
+import { EnumAtivoInativo, EnumSimNao } from '../../../enums/enums';
+import { IModelCrm009 } from '../../../models/modelCRM009';
+import { IModelCrm052 } from '../../../models/modelCRM052';
+import ControllerCRM from '../../../controllers/controllercrm';
+import { Fragment } from 'react';
+import { IModelRelatorioPDF } from '../../../models/modelRelatorioPDF';
+
+class LinksdePesquisaContainer extends CrudContainer {
+
+   printIconDownload = (cell: any, formatterParams: {}, onRendered: EmptyCallback) => {
+      const data = cell.getData() as IModelCrm052;
+
+      return `<div>${data.LPC_PESQUISA_NR_FICHA ?
+            `
+              <div id="SPINNER_LPC_${data.LPC_CODIGO}" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                 <span class="d-none">Loading...</span>
+              </div>
+              <a class="link-primary" id="LINK_LPC_${data.LPC_CODIGO}" title="Download"><i class='mdi mdi-file-download-outline'></i></a>
+            `
+         : ''}<div>`;
+   }
+
+
+   crudUrl = (): CrudUrl | undefined => {
+      return {
+         GET: '/crm/linkspesquisacrm'
+      }
+   }
+
+   columns = (): DataTableColumns | undefined => [
+      {
+         title: '',
+         frozen: true,
+         hozAlign: 'center',
+         headerSort: false,
+         width: 40,
+         formatter: this.printIconDownload,
+         cellClick: (e, cell) => {
+            const data = cell.getData() as IModelCrm052;
+
+            if (data.LPC_PESQUISA_NR_FICHA) {
+               const controllerCRM = new ControllerCRM();
+
+               controllerCRM.relatorioFichaPesquisa(data.LPC_PESQUISA_ID, data.LPC_PESQUISA_NR_FICHA, data.LPC_CODIGO, 'pesq-lpc-download', `LINK_PESQUISA_${data.LPC_TOKEN}_${data.PESQUISA.PSQ_DESCRICAO}`);
+            }
+         }
+      },
+      {
+         title: 'Token',
+         type: 'string',
+         field: 'LPC_TOKEN',
+         width: 320,
+         search: {
+            operator: OperatorSearchTypes.LIKE,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Nr. Ficha',
+         field: 'LPC_PESQUISA_NR_FICHA',
+         type: 'string',
+         width: 100,
+         search: {
+            operator: OperatorSearchTypes.LIKE,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Cód. Pesquisa',
+         type: 'integer',
+         field: 'LPC_PESQUISA_ID',
+         width: 100,
+      },
+      {
+         title: 'Descrição da Pesquisa',
+         type: 'string',
+         field: 'PESQUISA.PSQ_DESCRICAO',
+         width: 200,
+      },
+      {
+         title: 'Nome da Pessoa',
+         field: 'LPC_CONTATO_PESQUISA_NOME_PES',
+         type: 'string',
+         width: 200,
+         search: {
+            operator: OperatorSearchTypes.LIKE,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Nome do Contato',
+         field: 'LPC_CONTATO_PESQUISA_NOME_CNT',
+         type: 'string',
+         width: 240,
+         search: {
+            operator: OperatorSearchTypes.LIKE,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Código da Pesquisa',
+         field: 'LPC_CODIGO',
+         type: 'integer',
+         width: 100,
+         search: {
+            width: 100,
+            operator: OperatorSearchTypes.EQUAL,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Ativo/Inativo',
+         field: 'LPC_BO_ATIVO',
+         type: 'string',
+         width: 130,
+         formatter: (cell) => {
+            const ativoInativo = (cell.getValue() === EnumSimNao.SIM) ? 'Ativo' : 'Inativo';
+
+            return `<span title="${ativoInativo}">${ativoInativo}</span>`;
+         },
+         search: {
+            width: 150,
+            operator: OperatorSearchTypes.EQUAL,
+            defaultValue: EnumSimNao.SIM,
+            type: 'COMBOBOX',
+            options: [{
+               label: 'Ativo',
+               value: EnumSimNao.SIM
+            }, {
+               label: 'Inativo',
+               value: EnumSimNao.NAO
+            }],
+         }
+      }
+   ];
+
+   pesquisa = (events: CrudPesquisaEvents): JSX.Element => {
+      const { onDataChange, params } = this.props;
+
+      return (
+         <Fragment>
+            <LinksdePesquisaPesquisa
+               crudContainer={this}
+               events={events}
+               onDataChange={onDataChange}
+               heightGrid={params?.heightGrid}
+            />
+            <a id="pesq-lpc-download" className="d-none" />
+         </Fragment>
+      )
+   }
+
+}
+
+export default LinksdePesquisaContainer;

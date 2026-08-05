@@ -1,0 +1,12 @@
+import { EnumAtivoInativo, EnumSimNao } from "../enums/enums";
+
+export interface IModelCrm009 {
+   STV_CODIGO: number,
+   STV_DESCRICAO: string,
+   STV_ATIVO: EnumAtivoInativo,
+   STV_DISPONIVEL_PDA: string,
+   STV_ALTERACAO_DATA: number,
+   STV_ALTERACAO_HORA: number,
+   STV_PESQUISA?: number,
+   STV_OBRIGA_PESQUISA: EnumSimNao
+}

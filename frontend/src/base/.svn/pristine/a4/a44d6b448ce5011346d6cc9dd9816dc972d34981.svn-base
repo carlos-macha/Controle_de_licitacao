@@ -1,0 +1,11 @@
+export interface IModelAux027 {
+  RDE_CODIGO: number,
+  RDE_CODIGORECADO: number,
+  RDE_USUARIODESTINO: string,
+  RDE_MENSAGEMLIDA: string,
+  RDE_CIENTE: string,
+  RDE_CIENTE_DATA?: number | null,
+  RDE_CIENTE_HORA?: number | null,
+  RDE_DATA: number,
+  RDE_HORA: number,
+}

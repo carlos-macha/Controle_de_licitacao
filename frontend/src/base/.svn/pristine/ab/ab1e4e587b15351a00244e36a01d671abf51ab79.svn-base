@@ -1,0 +1,8 @@
+export interface IModelERPSIS009 {
+  PUS_USUARIO: string,
+  PUS_PERFIL: string,
+  PUS_DATA: number,
+  PUS_HORA: number,
+  PUS_USUARIADDPERFIL: string,
+  SENHA_NOME: string
+}

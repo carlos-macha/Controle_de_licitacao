@@ -1,0 +1,21 @@
+export interface IModelEST233 {
+  CVI_CODIGO: number;
+  CVI_ITEM: number;
+  CVI_VALOR: number;
+  CVI_ALIQUOTA: number;
+  CVI_BASE_CALCULO: number;
+  CVI_IMPOSTO: string;
+  CVI_TIPO: string;
+  CVI_ORIGEM: string;
+  CVI_CST: string;
+  CVI_CFOP: string;
+  CVI_MODALIDADE: string;
+  CVI_REDUCAO_BASE: number;
+  CVI_VALOR_ISENTO: number;
+  CVI_VALOR_OUTROS: number;
+  CVI_VALOR_RETIDO: number;
+  CVI_USUARIO_INCLUSAO: string;
+  CVI_DATA_INCLUSAO: string;
+  CVI_USUARIO_ALTERACAO: string;
+  CVI_DATA_ALTERACAO: string;
+}

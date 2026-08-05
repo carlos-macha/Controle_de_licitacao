@@ -1,0 +1,21 @@
+import { IModelCALL022 } from "./modelCALL022"
+
+export interface IModelCALL007 {
+PRG_ID: number,
+PRG_PROJETO: number,
+PRG_SISTEMA: number,
+PRG_PROGRAMA: string,
+PRG_DTINICIAL: number,
+PRG_DTFINAL: null,
+PRG_OBJETIVO: string,
+PRG_DESCRICAOINTERNET: string,
+PRG_HELPONLINE: string,
+PRG_FUNCIONARIOCRIACAO: string,
+PRG_LINGUAGEM: 1,
+PRG_VERSAO: string
+PRG_ATIVOINATIVO: string,
+PRG_DESCRICAO: string,
+PRG_SUBSISTEMA: number,
+PRG_INTERVALO_EXECUCAO: null,
+SUBSISTEMA: IModelCALL022
+}

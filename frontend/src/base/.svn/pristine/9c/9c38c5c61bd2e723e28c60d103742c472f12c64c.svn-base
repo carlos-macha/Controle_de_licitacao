@@ -1,0 +1,13 @@
+import { IModelCallcenterCALL034 } from "./modelCallcenterCALL034";
+
+export interface IModelCallcenterCALL033 {
+   VID_CODIGO: number,
+   VID_PROJETO?: number,
+   VID_PROGRAMA?: string,
+   VID_DESCRICAO: string,
+   VID_NOMEVIDEO: string,
+   VID_HISTORICO: string,
+   VID_ALTURA: number,
+   VID_LARGURA: number,
+   VISUALIZACOES: Array<IModelCallcenterCALL034>
+}

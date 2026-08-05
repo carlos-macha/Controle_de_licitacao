@@ -1,0 +1,29 @@
+import React, { Fragment, useRef } from 'react';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { PageBase, PageBaseProps } from '../../../template/pagebase/pagebase';
+import CondicionaisContainer, { CondicionaisContainerParams } from './condicionaisContainer';
+import { IModelEST016 } from '../../../models/modelEST016';
+
+export interface CondicionaisProps extends PageBaseProps {
+   nrOrdem?: number,
+   onDataChange?: ((data: IModelEST016) => void) | undefined,
+   heightGrid?: string | number
+}
+
+const Condicionais: React.FC<CondicionaisProps> = (props) => {
+   const { checkPermission, permission, onDataChange, heightGrid, nrOrdem } = props;
+
+   return (
+      <PageBase >
+         <CrudProvider>
+            <CondicionaisContainer
+               typeRender='search'
+               params={{ nrOrdem, checkPermission, permission, heightGrid } as CondicionaisContainerParams}
+               onDataChange={onDataChange}
+            />
+         </CrudProvider>
+      </PageBase>
+   );
+}
+
+export default Condicionais;

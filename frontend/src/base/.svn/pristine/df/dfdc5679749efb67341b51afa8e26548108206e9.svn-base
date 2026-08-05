@@ -1,0 +1,16 @@
+import { EnumBlobVincTpDocOrigem } from "../enums/enums";
+import { IModelAux174 } from "../models/modelAUX174";
+import DAO from "./dao";
+
+export default class DAOTabelasGerais extends DAO {
+
+   blobgenerico = (idDocOrigem: number, vincTipoDocOrigem: EnumBlobVincTpDocOrigem) => new Promise<Array<IModelAux174>>((resolve, reject) => {
+
+      this.Get<Array<IModelAux174>>(`/tabelasgerais/blobgenerico/${idDocOrigem}/${vincTipoDocOrigem}`).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+
+   });
+}

@@ -1,0 +1,11 @@
+import { EnumAtivoInativo, EnumSimNao } from "../enums/enums"
+
+export interface IModelCrm045 {
+   VID_CODIGO: number,
+   VID_DESCRICAO: string,
+   VID_SINOPSE: string,
+   VID_LINK: string,
+   VID_DATA_CADASTRO: number,
+   VID_ATIVO: EnumAtivoInativo,
+   VID_ENVIA_FTP: EnumSimNao
+}

@@ -1,0 +1,9 @@
+export interface IModelCallcenterSITE020 {
+    ICS_CODIGO?: number,
+    ICS_DATA: number,
+    ICS_HORA: number,
+    ICS_USUARIOINTERNO: null,
+    ICS_PESSOA: string,
+    ICS_USUARIOCLIENTE: string | null | undefined,
+    ICS_HISTORICO: string
+}

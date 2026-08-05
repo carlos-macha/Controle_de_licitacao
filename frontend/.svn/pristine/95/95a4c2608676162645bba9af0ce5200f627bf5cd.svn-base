@@ -1,0 +1,33 @@
+import md5 from "md5";
+import DAOUsuario from "../daos/daousuario";
+import { IModelLogin } from "../base/models/modeldoc001";
+import { storageSetUser, storageSetWSToken } from "../utils/storage";
+import Controller from "../base/controllers/controller";
+import Api from "../base/services/api";
+
+export default class ControllerUsuario extends Controller<DAOUsuario>  {
+
+   constructor() {
+      super(DAOUsuario);
+   }
+
+   Login = (usuario: string, senha: string) => new Promise<IModelLogin>((resolve, reject) => {
+      let json: IModelLogin = {
+         USU_USUARIO: usuario,
+         USU_SENHA: md5(senha)
+      }
+      console.log(md5(senha), senha)
+
+      this.DAO.Login(json).then(data => {
+         storageSetUser(data);
+         storageSetWSToken(data.TOKEN!);
+
+         Api.getInstance().token(data.TOKEN!);
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+}

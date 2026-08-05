@@ -1,0 +1,7 @@
+.card-header {
+   background-color: #fff;
+}
+
+.dark .card-header {
+   background-color: #2d325a;
+}

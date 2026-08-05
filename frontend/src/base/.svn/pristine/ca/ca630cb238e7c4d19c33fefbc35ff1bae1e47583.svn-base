@@ -1,0 +1,24 @@
+import React from 'react';
+import ResultadosdoRelatorioContainer from './resultadosdorelatorioContainer';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { PageBase } from '../../../template/pagebase/pagebase';
+
+interface ResultadosdoRelatorioProps {
+   heightGrid?: string | number
+}
+
+const ResultadosdoRelatorio: React.FC<ResultadosdoRelatorioProps> = (props) => {
+   const { heightGrid } = props;
+   return (
+      <PageBase>
+         <CrudProvider>
+            <ResultadosdoRelatorioContainer
+               typeRender='search'
+               params={heightGrid}
+            />
+         </CrudProvider>
+      </PageBase>
+   );
+}
+
+export default ResultadosdoRelatorio;

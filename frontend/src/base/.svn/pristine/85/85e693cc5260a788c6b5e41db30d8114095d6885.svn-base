@@ -1,0 +1,76 @@
+import { useState } from "react";
+import Card, { CardBody, CardFooter, CardHeader } from "../../../components/card/card";
+import Button from "../../../components/form/form";
+import Custommodal, { CustomModalRef } from "../../../components/modal/custommodal";
+import { useSweetAlertContext } from "../../../hooks/useSweetAlertContext";
+import { IModelMOB001 } from "../../../models/modelMOB001";
+import Pessoa from "../../portal/pessoa/pessoa";
+
+
+interface AgendaCadastrosModalProps {
+  viewCadastrosEvent: React.RefObject<CustomModalRef>,
+  onBtnSelecionar?: (cadastro: IModelMOB001) => void
+  mostraContatos?: boolean
+}
+
+const RecadosPesquisaPessoaProspectModal: React.FC<AgendaCadastrosModalProps> = (props) => {
+  const { viewCadastrosEvent, onBtnSelecionar } = props;
+  const [pessoaSelecionada, setPessoaSelecionada] = useState<IModelMOB001 | null>(null);
+  const { sweetAlertdispatch } = useSweetAlertContext();
+  const [mostraContatos, setMostraContatos] = useState<boolean>(true);
+
+
+  return (
+    <Custommodal
+      ref={viewCadastrosEvent}
+      largeType='extra-large'
+      showOverlay={true}
+      className="custom-agenda-recados-modal"
+    >
+      <Card className='iq-card mb-0'>
+        <CardHeader className='d-flex' title={'Pessoa'} />
+        <CardBody className='inForm p-0'>
+          <Pessoa
+            searchOnly={true}
+            typeRender='search'
+            onDataChange={(pessoa: IModelMOB001) => {
+              if (!pessoa) return;
+              setPessoaSelecionada(pessoa);
+              console.log(pessoa.PES_CODIGO, pessoa.PES_RAZAO_SOCIAL)
+            }}
+            heightGrid={'calc(100vh - 23rem)'}
+          />
+        </CardBody>
+        <CardFooter>
+          <Button caption='Fechar' classIcon='mdi mdi-close' className='btn btn-primary'
+            onClick={() => {
+              viewCadastrosEvent.current?.close();
+            }}
+          />
+          <Button caption='Selecionar' classIcon='mdi mdi-arrow-down-left-bold' className='btn btn-primary float-right'
+            onClick={() => {
+              if (!pessoaSelecionada) {
+                sweetAlertdispatch({
+                  type: 'show',
+                  msg: 'Selecione um registro!',
+                  props: {
+                    type: 'error',
+                    title: 'Selecionar evento',
+                    showConfirm: true,
+                    confirmBtnText: 'OK',
+                    onConfirm() { sweetAlertdispatch({ type: 'close' }); }
+                  }
+                });
+                return;
+              }
+
+              onBtnSelecionar?.(pessoaSelecionada);
+            }}
+          />
+        </CardFooter>
+      </Card>
+    </Custommodal>
+  )
+}
+
+export default RecadosPesquisaPessoaProspectModal;

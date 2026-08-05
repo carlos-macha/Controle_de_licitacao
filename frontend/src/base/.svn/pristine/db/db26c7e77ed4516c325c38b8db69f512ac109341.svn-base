@@ -1,0 +1,35 @@
+import { IModelEST233 } from "./modelEST233";
+
+export interface IModelEST021 {
+  IPC_SEQ: string,
+  IPC_CODIGO: number;
+  IPC_PEDIDO: number;
+  IPC_PRODUTO: string;
+  IPC_DESCRICAO: string;
+  IPC_UNIDADE: string;
+  IPC_QUANTIDADE: number;
+  IPC_QTDE_RECEBIDA: number;
+  IPC_QTDE_CANCELADA: number;
+  IPC_PRECO_UNITARIO: number;
+  IPC_VALOR_TOTAL: number;
+  IPC_VALOR_DESCONTO: number;
+  IPC_VALOR_ACRESCIMO: number;
+  IPC_DATA_ENTREGA: string;
+  IPC_DATA_RECEBIMENTO: string;
+  IPC_STATUS: string;
+  IPC_SITUACAO: string;
+  IPC_ALIQUOTA_ICMS: number;
+  IPC_BASE_ICMS: number;
+  IPC_VALOR_ICMS: number;
+  IPC_ALIQUOTA_IPI: number;
+  IPC_VALOR_IPI: number;
+  IPC_ALIQUOTA_PIS: number;
+  IPC_VALOR_PIS: number;
+  IPC_ALIQUOTA_COFINS: number;
+  IPC_VALOR_COFINS: number;
+  IPC_OBSERVACAO: string;
+  IPC_USUARIO_INCLUSAO: string;
+  IPC_DATA_INCLUSAO: string;
+  IPC_USUARIO_ALTERACAO: string;
+  CALCULO_NOTA: IModelEST233[]
+}

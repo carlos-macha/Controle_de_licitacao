@@ -1,0 +1,14 @@
+import { EnumAtivoInativo } from "../enums/enums";
+import { EnumCRM_TpPesquisa } from "../enums/enumscrm";
+import { IModelCrm020 } from "./modelCRM020";
+
+export interface IModelCrm019 {
+   PSQ_CODIGO: number,
+   PSQ_DESCRICAO: string,
+   PSQ_AREA: number,
+   PSQ_ATIVO: EnumAtivoInativo,
+   PSQ_OBS?: string,
+   PSQ_TIPO: EnumCRM_TpPesquisa,
+   APQ_DESCRICAO: string,
+   PERGUNTAS: Array<IModelCrm020>
+}

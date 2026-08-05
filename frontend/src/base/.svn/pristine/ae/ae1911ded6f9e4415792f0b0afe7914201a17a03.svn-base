@@ -1,0 +1,196 @@
+import { EmptyCallback } from 'tabulator-tables';
+import { Tabulator } from 'react-tabulator/lib/types/TabulatorTypes';
+import CondicionaisPesquisa from './condicionaisPesquisa';
+import { CrudContainer } from '../../../components/crud/container/crudcontainer';
+import { CrudUrl, CrudPesquisaEvents } from '../../../components/crud/types';
+import { OperatorSearchTypes } from '../../../components/datasearch/datasearch';
+import { Formatters, DataTableColumns } from '../../../components/datatable/datatable';
+import { EnumCharcasetypes } from '../../../components/form/form';
+import { EnumOperacaoPermissao } from '../../../enums/enums';
+
+export interface CondicionaisContainerParams {
+   nrOrdem?: number,
+   permission?: any,
+   checkPermission?: (permission?: any, operacao?: EnumOperacaoPermissao | undefined, observacao?: string | undefined) => Promise<boolean>,
+   heightGrid?: string | number
+}
+
+class CondicionaisContainer extends CrudContainer {
+
+   crudUrl = (): CrudUrl | undefined => {
+      return {
+         GET: '/acaocomercial/condicionais'
+      }
+   }
+
+   columns = (): DataTableColumns | undefined => [
+      {
+         title: (this.props.params as CondicionaisContainerParams).nrOrdem ? 'Número' : 'Nrº do Condicional',
+         type: 'string',
+         field: 'CND_SEQ',
+         width: 150,
+         titleFormatter: (cell) => {
+            return `<span title="${(this.props.params as CondicionaisContainerParams).nrOrdem ? 'Número' : 'Nrº do Condicional'}" >${(this.props.params as CondicionaisContainerParams).nrOrdem ? 'Número' : 'Nrº do Condicional'}</span>`
+         },
+         search: {
+            operator: OperatorSearchTypes.EQUAL,
+            charCase: EnumCharcasetypes.UPPERCASE,
+            width: 200
+         }
+      },
+      {
+         title: 'Razão Pessoa',
+         type: 'string',
+         field: 'PES_RAZAO',
+         width: 100,
+      },
+      {
+         title: 'Nome Vendedor',
+         type: 'string',
+         field: 'VEN_NOME',
+         width: 100,
+      },
+      {
+         title: 'Qtd. Total',
+         type: 'integer',
+         field: 'CND_QTDTOTAL',
+         width: 100,
+      },
+      {
+         title: 'Qtd. Vendida/Pendente',
+         type: 'integer',
+         field: 'CND_QTDVENDIDA',
+         width: 100,
+      },
+      {
+         title: 'Total',
+         type: 'integer',
+         field: 'CND_TOTAL',
+         width: 100,
+      },
+      {
+         title: 'Contato',
+         type: 'string',
+         field: 'CND_CONTATO',
+         width: 100,
+      },
+      {
+         title: 'Data Emissão',
+         type: 'date',
+         field: 'CND_DATAEMISSAO',
+         width: 100,
+         headerSort: true,
+         headerSortStartingDir: "desc",
+         sorter: function (a: any, b: any, aRow: Tabulator.RowComponent, bRow: Tabulator.RowComponent, column: Tabulator.ColumnComponent, dir: Tabulator.SortDirection, sorterParams: {}) {
+            if (String(a) === '0') {
+               return dir === 'asc' ? 1 : -1; // Para '0', retorna 1 se for ascendente, -1 se for descendente
+            }
+            if (String(b) === '0') {
+               return dir === 'asc' ? -1 : 1; // Para '0', retorna -1 se for ascendente, 1 se for descendente
+            }
+            return String(a).localeCompare(String(b));
+         }
+      },
+      {
+         title: 'Data Alteração',
+         type: 'date',
+         field: 'CND_DTALTERACAO',
+         width: 100,
+         headerSort: true,
+         headerSortStartingDir: "desc",
+         sorter: function (a: any, b: any, aRow: Tabulator.RowComponent, bRow: Tabulator.RowComponent, column: Tabulator.ColumnComponent, dir: Tabulator.SortDirection, sorterParams: {}) {
+            if (String(a) === '0') {
+               return dir === 'asc' ? 1 : -1; // Para '0', retorna 1 se for ascendente, -1 se for descendente
+            }
+            if (String(b) === '0') {
+               return dir === 'asc' ? -1 : 1; // Para '0', retorna -1 se for ascendente, 1 se for descendente
+            }
+            return String(a).localeCompare(String(b));
+         }
+      },
+      {
+         title: 'Data Retorno',
+         type: 'date',
+         field: 'CND_DTRETORNO',
+         width: 100,
+         headerSort: true,
+         headerSortStartingDir: "desc",
+         sorter: function (a: any, b: any, aRow: Tabulator.RowComponent, bRow: Tabulator.RowComponent, column: Tabulator.ColumnComponent, dir: Tabulator.SortDirection, sorterParams: {}) {
+            if (String(a) === '0') {
+               return dir === 'asc' ? 1 : -1; // Para '0', retorna 1 se for ascendente, -1 se for descendente
+            }
+            if (String(b) === '0') {
+               return dir === 'asc' ? -1 : 1; // Para '0', retorna -1 se for ascendente, 1 se for descendente
+            }
+            return String(a).localeCompare(String(b));
+         }
+      },
+      {
+         title: 'Previsão p/ Devolução',
+         type: 'date',
+         field: 'CND_DTPREVDEVOLUCAO',
+         width: 100,
+         headerSort: true,
+         headerSortStartingDir: "desc",
+         sorter: function (a: any, b: any, aRow: Tabulator.RowComponent, bRow: Tabulator.RowComponent, column: Tabulator.ColumnComponent, dir: Tabulator.SortDirection, sorterParams: {}) {
+            if (String(a) === '0') {
+               return dir === 'asc' ? 1 : -1; // Para '0', retorna 1 se for ascendente, -1 se for descendente
+            }
+            if (String(b) === '0') {
+               return dir === 'asc' ? -1 : 1; // Para '0', retorna -1 se for ascendente, 1 se for descendente
+            }
+            return String(a).localeCompare(String(b));
+         }
+      },
+      {
+         title: 'Usuário',
+         type: 'string',
+         field: 'CND_USUARIO',
+         width: 100,
+      },
+      {
+         title: 'Nrº Ação Comercial',
+         type: 'string',
+         field: 'CND_NRORCAMENTO',
+         width: 100,
+      },
+      {
+         title: 'Status',
+         type: 'string',
+         field: 'CND_STATUS',
+         width: 100,
+      },
+      {
+         title: 'Qtd. Devolvida',
+         type: 'integer',
+         field: 'CND_QTDDEVOLVIDA',
+         width: 100,
+      },
+      /*{
+         title: 'Ord. Produção',
+         type: 'integer',
+         field: 'CND_ORDEM_PRODUCAO',
+         width: 100,
+         visible: false,
+         search: {
+            operator: OperatorSearchTypes.EQUAL
+         }
+      }*/
+
+   ];
+
+   pesquisa = (events: CrudPesquisaEvents): JSX.Element => {
+      const { params, onDataChange } = this.props;
+
+      return <CondicionaisPesquisa
+         nrOrdem={(params as CondicionaisContainerParams).nrOrdem}
+         crudContainer={this}
+         events={events}
+         onDataChange={onDataChange}
+         heightGrid={(params as CondicionaisContainerParams).heightGrid}
+      />;
+   }
+
+}
+
+export default CondicionaisContainer;

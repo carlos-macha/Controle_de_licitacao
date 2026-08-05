@@ -1,0 +1,7 @@
+export interface IModelPOR001 {
+   PER_ID: number,
+   PER_DESCRICAO: string,
+   PER_DATA_CRIACAO: number | null,
+   PER_VERSAO: string,
+   PER_DESCRICAO_DETALHADA: string
+}

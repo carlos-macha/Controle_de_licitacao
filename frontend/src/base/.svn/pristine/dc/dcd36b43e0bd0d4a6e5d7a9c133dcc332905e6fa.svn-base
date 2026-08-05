@@ -1,0 +1,70 @@
+import { EnumSimNao } from "../enums/enums";
+import { EnumOrigemDevolucao, EnumStatusDevolucao, EnumTipoDevolucao, EnumTipoOperacaoDevolucao, EnumTpFreteDevolucao } from "../enums/enumsdevolucao";
+import { IModelPortalEst018 } from "./modelPortalEST018";
+import { IModelPortalEst081 } from "./modelPortalEST081";
+import { IModelPortalEst232 } from "./modelPortalEST232";
+
+export interface IModelPortalEst080_NFOrigem {
+   ID_NOTA: number,
+   DATA: number,
+   SERIE: string,
+   NUMERO: number,
+   CHAVE_ACESSO: string
+}
+
+export interface IModelPortalEst080 {
+   DVE_CODIGO: number,
+   DVE_EMPRESA: number,
+   DVE_OBSERVACAO?: string,
+   DVE_ORIGEM: EnumOrigemDevolucao,
+   DVE_INCLUSAO_DATAHORA: number,
+   DVE_SOLICITACAO_DATAHORA?: number,
+   DVE_AUTORIZADO_DATAHORA?: number,
+   DVE_CONFIRMADO_DATAHORA?: number,
+   DVE_CANC_REJ_DATAHORA?: number,
+   DVE_CANC_REJ_TIPOINDEFERIDO?: number,
+   DVE_CANC_REJ_OBSERVACAO?: string,
+   DVE_PESSOA: string,
+   DVE_PESSOA_SEQCONTATO?: number,
+   DVE_TP_STATUS: EnumStatusDevolucao,
+   DVE_TP_DEVOLUCAO: EnumTipoDevolucao,
+   DVE_NOTATERCEIRO?: number,
+   DVE_DATAEMISSAO: number,
+   DVE_TP_OPERACAO: EnumTipoOperacaoDevolucao,
+   DVE_NFSERIE?: string,
+   DVE_NFMODELO?: string,
+   DVE_NFSUBSERIE?: string,
+   DVE_NFE_CHAVE_ACESSO?: string,
+   DVE_BOCONSISTENTE: EnumSimNao,
+   DVE_ID_TRANSPORTADOR?: number,
+   DVE_ID_TRANSP_REDESPACHO?: number,
+   DVE_VL_FRETE: number,
+   DVE_VL_FRETE_REDESPACHO: number,
+   DVE_TP_FRETE: EnumTpFreteDevolucao,
+   DVE_TP_FRETE_REDESPACHO: EnumTpFreteDevolucao,
+   DVE_DT_MOVIMENTO: number,
+   DVE_VALORFRETE_SEM_DEST: number,
+   DVE_VALORBRUTO: number,
+   DVE_VALORACRESCIMO: number,
+   DVE_VALORDESCONTO: number,
+   DVE_VALORLIQUIDO: number,
+   DVE_VALORINDENIZACAO: number,
+   DVE_XML_DEV_WEB: string | null,
+   DVE_CAT_DEV_WEB: string | null,
+   ITENS: Array<IModelPortalEst081>,
+   IMPOSTOS?: IModelPortalEst232,
+   NOTA_FISCAL_ORIGEM?: IModelPortalEst018
+}
+
+export interface IModelPortalEst080_DadosXML {
+   DVE_NOTATERCEIRO: number,
+   DVE_DATAEMISSAO: number,
+   DVE_XML_DEV_WEB: string,
+   DVE_NFSERIE: string,
+   DVE_NFMODELO: string,
+   DVE_NFE_CHAVE_ACESSO: string
+}
+
+export interface IModelPortalEst080_MotivoCancelamento {
+   DVE_CANC_REJ_OBSERVACAO: string
+}

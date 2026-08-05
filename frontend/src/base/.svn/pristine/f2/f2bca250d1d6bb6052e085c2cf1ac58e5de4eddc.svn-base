@@ -1,0 +1,62 @@
+export enum EnumCallcenterOrigemTipoAcesso {
+   emTpAcessoCliente = 'CLIENTE',
+   emTpAcessoCommand = 'COMMAND'
+}
+
+export enum EnumCallcenterTpDepartamentoFuncionario {
+   emDepFuncAdministrativo = 'A',
+   emDepFuncDelphi = 'D',
+   emDepFuncIndefinido = 'I',
+   emDepFuncJava = 'J',
+   emDepFuncProjeto = 'P',
+   emDepFuncQualidade = 'Q',
+   emDepFuncSuporte = 'S'
+}
+
+export enum EnumPrioridadesSuporte {
+   emPriorCha_Asterisco = '*',
+   emPriorCha_0 = '0',
+   emPriorCha_1 = '1',
+   emPriorCha_2 = '2',
+   emPriorCha_3 = '3',
+   emPriorCha_4 = '4',
+   emPriorCha_5 = '5'
+};
+
+export enum EnumCallcenterChatStatus {
+   ABERTO = 'A',
+   FECHADO = 'F'
+}
+
+export enum EnumCallcenterChatOrigemConversa {
+   CLIENTE = 'C',
+   SUPORTE = 'S'
+}
+
+export enum EnumCallcenterChatTpDocOrigem {
+   CHAMADO_SUPORTE = 'CHA'
+}
+
+export enum EnumVisibilidadeTreinamento {
+   emVisibilidadeTreinamento_Publico = 'U',
+   emVisibilidadeTreinamento_Privado = 'P'
+}
+
+export enum EnumCallcenterCustomizacaoDeferido {
+   emAguardandoAnalise = 'A',
+   emRecursoJaExistente = 'E',
+   emAceitoParaImplementacao = 'I',
+   emFechadoEDisponivel = 'F',
+   emRecusado = 'R',
+   emSolicitacaoDeClienteEmImplantacao = 'S',
+   emSolicitacaoEnviadaAoDepartamentoComercial = 'C',
+   emAguardandoLiberacaoDoClienteParaExecucao = 'G',
+   emLiberadoPeloClienteParaExecucao = 'L',
+   emNaoAprovadoPeloCliente = 'N',
+   emManterComoSugestaoParaCommand = 'M',
+}
+
+export enum EnumCallcenterConversacao {
+   emInternoCommand = 'I',
+   emExternoCliente = 'C'
+}

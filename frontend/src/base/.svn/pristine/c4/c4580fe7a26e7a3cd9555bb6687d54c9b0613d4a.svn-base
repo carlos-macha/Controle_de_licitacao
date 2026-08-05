@@ -1,0 +1,105 @@
+import { EmptyCallback } from 'tabulator-tables';
+import { CrudContainer } from '../../components/crud/container/crudcontainer';
+import { CrudPesquisaEvents, CrudUrl } from '../../components/crud/types';
+import { DataTableColumns } from '../../components/datatable/datatable';
+import VendedoresPesquisa from './vendedoresPesquisa';
+import { OperatorSearchTypes } from '../../components/datasearch/datasearch';
+import { EnumCharcasetypes } from '../../components/form/form';
+import { EnumAtivoInativo } from '../../enums/enums';
+import { EnumFaturamento_Tipo_Vendedor, EnumFaturamento_TpVendedor } from '../../enums/enumsfaturamento';
+
+class VendedoresContainer extends CrudContainer {
+
+   crudUrl = (): CrudUrl | undefined => {
+      return {
+         GET: '/faturamento/Vendedores'
+      }
+   }
+
+   columns = (): DataTableColumns | undefined => [
+      {
+         title: 'Código',
+         type: 'string',
+         field: 'VEN_CODIGO',
+         width: 120,
+         search: {
+            operator: OperatorSearchTypes.EQUAL,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Nome',
+         field: 'VEN_NOME',
+         type: 'string',
+         width: 360,
+         search: {
+            operator: OperatorSearchTypes.LIKE,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Ativo/Inativo',
+         field: 'VEN_ATIVOINATIVO',
+         type: 'string',
+         width: 130,
+         formatter: (cell) => {
+            const ativoInativo = (cell.getValue() === EnumAtivoInativo.ATIVO) ? 'Ativo' : 'Inativo';
+
+            return `<span title="${ativoInativo}">${ativoInativo}</span>`;
+         },
+         search: {
+            width: 150,
+            operator: OperatorSearchTypes.EQUAL,
+            type: 'COMBOBOX',
+            defaultValue: EnumAtivoInativo.ATIVO,
+            options: [{
+               label: 'Ativo',
+               value: EnumAtivoInativo.ATIVO
+            }, {
+               label: 'Inativo',
+               value: EnumAtivoInativo.INATIVO
+            }],
+         }
+      },
+      {
+         title: 'Tipo de Vendedor',
+         field: 'VEN_TIPO_VENDEDOR',
+         type: 'string',
+         width: 160,
+         formatter: (cell) => {
+            const tipoVendedor = (cell.getValue() === EnumFaturamento_Tipo_Vendedor.emCRM_Tipo_Vendedor_Interno) ? 'Interno' :
+               ((cell.getValue() === EnumFaturamento_Tipo_Vendedor.emCRM_Tipo_Vendedor_Externo) ? 'Externo' : 'Técnico/Mecânico');
+
+            return `<span title="${tipoVendedor}">${tipoVendedor}</span>`;
+         },
+      },
+      {
+         title: 'Tipo',
+         field: 'VEN_TPVENDEDOR',
+         type: 'string',
+         width: 160,
+         formatter: (cell) => {
+            const tpVendedor = (cell.getValue() === EnumFaturamento_TpVendedor.emCRM_TpVendedor_Vendedor) ? 'Vendedor' :
+               ((cell.getValue() === EnumFaturamento_TpVendedor.emCRM_TpVendedor_Supervisor) ? 'Supervisor' :
+                  ((cell.getValue() === EnumFaturamento_TpVendedor.emCRM_TpVendedor_Representante) ? 'Representante' : 'Indicador de Negócio'));
+
+            return `<span title="${tpVendedor}">${tpVendedor}</span>`;
+         },
+      }
+   ];
+
+   pesquisa = (events: CrudPesquisaEvents): JSX.Element => {
+      const { onDataChange, params } = this.props;
+
+      return <VendedoresPesquisa
+
+         crudContainer={this}
+         events={events}
+         onDataChange={onDataChange}
+         heightGrid={params?.heightGrid}
+      />;
+   }
+
+}
+
+export default VendedoresContainer;

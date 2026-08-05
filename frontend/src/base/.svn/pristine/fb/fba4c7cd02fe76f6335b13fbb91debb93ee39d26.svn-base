@@ -1,0 +1,4 @@
+export enum EnumNotaFiscal_TpCalcDifal {
+   emNF_TpCalcDifalST_Dentro = 'D',
+   emNF_TpCalcDifalST_Fora = 'F'
+};

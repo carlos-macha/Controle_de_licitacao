@@ -1,0 +1,30 @@
+import md5 from "md5";
+import DAOUsuario from "../daos/daousuario";
+import { storageSetUser, storageSetWSPass, storageSetWSUser } from "../../utils/storage";
+import Controller from "./controller";
+import Api from "../services/api";
+import { IModelUsuario } from "../models/modelUsuario";
+
+export default class ControllerUsuario extends Controller<DAOUsuario>  {
+
+   constructor() {
+      super(DAOUsuario);
+   }
+
+   Login = (usuario: string, senha: string) => new Promise<IModelUsuario>((resolve, reject) => {
+      let passMd5 = md5(senha);
+      Api.getInstance().auth(usuario, passMd5);
+
+      this.DAO.Usuario(usuario).then(data => {
+         storageSetUser(data);
+         storageSetWSUser(usuario);
+         storageSetWSPass(passMd5);
+         resolve(data);
+      }).catch(error => {
+         Api.getInstance().auth('', '');
+         reject(error.data);
+      });
+
+   });
+
+}

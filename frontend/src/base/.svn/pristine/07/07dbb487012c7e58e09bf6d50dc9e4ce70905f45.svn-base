@@ -1,0 +1,119 @@
+import { create } from 'zustand';
+
+export interface IEventoAgendaStore {
+  id: string;
+  funcionario: string;
+  titulo: string;
+  horario: string;
+  obs: string;
+  realizado: boolean;
+  inicio: string;
+}
+
+export interface INotificacaoStore {
+  id: string;
+  funcionario: string;
+  modulo: 'agenda'
+  titulo: string;
+  corpo: string;
+  criadaEm: string;
+  lida: boolean;
+  tipo?: 'before' | 'after' | 'carga' | 'created';
+}
+
+interface NotificacaoState {
+  eventosPorFuncionario: Record<string, IEventoAgendaStore[]>;
+  notificacoes: INotificacaoStore[];
+  chavesDisparadas: Record<string, string[]>;
+  sincronizarEventosDoDia: (funcionario: string, idsAtuais: string[], eventos: IEventoAgendaStore[]) => void;
+  adicionarOuAtualizarNotificacao: (n: Omit<INotificacaoStore, 'lida'>) => void;
+  marcarComoLida: (id: string) => void;
+  marcarTodasComoLidas: () => void;
+  adicionarChaveDisparada: (funcionario: string, chave: string) => void;
+}
+
+export const useNotificacaoStore = create<NotificacaoState>()(
+  (set, get) => ({
+    eventosPorFuncionario: {},
+    notificacoes: [],
+    chavesDisparadas: {},
+    adicionarChaveDisparada: (funcionario: string, chave: string) => {
+      set(state => ({
+        chavesDisparadas: {
+          ...state.chavesDisparadas,
+          [funcionario]: [...(state.chavesDisparadas[funcionario] ?? []), chave],
+        }
+      }));
+    },
+    sincronizarEventosDoDia: (funcionario, idsAtuais, eventos) => {
+      console.log('idsAtuais', idsAtuais);
+
+      console.table(
+        get().notificacoes.map(n => ({
+          id: n.id,
+          manteve: idsAtuais.some(id => n.id.startsWith(id))
+        }))
+      );
+
+      set(state => {
+        const notificacoesLimpas = state.notificacoes.filter(n =>
+          n.funcionario !== funcionario || idsAtuais.includes(n.id)
+        );
+
+        return {
+          eventosPorFuncionario: {
+            ...state.eventosPorFuncionario,
+            [funcionario]: eventos,
+          },
+          notificacoes: notificacoesLimpas,
+        };
+      });
+    },
+
+    adicionarOuAtualizarNotificacao: (nova) => {
+      set(state => {
+        const notificacoes = [...state.notificacoes];
+
+        const index = notificacoes.findIndex(
+          n => n.id === nova.id
+        );
+
+        if (index >= 0) {
+          const antiga = notificacoes[index];
+
+          notificacoes.splice(index, 1);
+
+          notificacoes.unshift({
+            ...antiga,
+            ...nova,
+            criadaEm: new Date().toISOString(),
+            lida: antiga.corpo === nova.corpo ? antiga.lida : false,
+          });
+
+          return { notificacoes };
+        }
+
+        return {
+          notificacoes: [
+            { ...nova, lida: false },
+            ...notificacoes,
+          ].slice(0, 200)
+        };
+      });
+    },
+
+    marcarComoLida: (id) => {
+      set(state => ({
+        notificacoes: state.notificacoes.map(n =>
+          n.id === id ? { ...n, lida: true } : n
+        )
+      }));
+    },
+
+    marcarTodasComoLidas: () => {
+      set(state => ({
+        notificacoes: state.notificacoes.map(n => ({ ...n, lida: true }))
+      }));
+    },
+  }),
+);

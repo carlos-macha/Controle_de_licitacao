@@ -1,0 +1,16 @@
+import { IModelPpd003 } from "../models/modelPPD003";
+import DAO from "./dao";
+
+export default class DAOPropriedade extends DAO {
+
+   Propriedade = (propriedade: string, empresa: number = 0, usuario: string = '') => new Promise<IModelPpd003>((resolve, reject) => {
+
+      this.Get<IModelPpd003>(`propriedade/propriedade/${propriedade}/${empresa}/${usuario}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+
+   });
+
+}

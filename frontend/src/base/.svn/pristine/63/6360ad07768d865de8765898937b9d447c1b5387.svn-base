@@ -1,0 +1,452 @@
+import { CustomEventHTMLInputElement, EnumCharcasetypes, OptionInputSelect } from "../components/form/form";
+import { Buffer } from 'buffer';
+import { NumberFormatValues, SourceInfo } from "react-number-format";
+import { CustomJsonFile, InputDataValue } from "../types/types";
+
+class Utilities {
+   formatValue(value: number, decimais: number): string {
+      if (!value)
+         return (0).toLocaleString('pt-BR', {
+            minimumFractionDigits: decimais,
+            maximumFractionDigits: decimais
+         });
+
+      return value.toLocaleString('pt-BR', {
+         minimumFractionDigits: decimais,
+         maximumFractionDigits: decimais
+      });
+   }
+
+   round(value: number, decimais: number): number {
+      let valueRound = 10;
+
+      switch (Number(decimais)) {
+         case 1:
+            valueRound = 10;
+            break;
+
+         case 2:
+            valueRound = 100;
+            break;
+
+         case 3:
+            valueRound = 1000;
+            break;
+
+         case 4:
+            valueRound = 10000;
+            break;
+
+         case 5:
+            valueRound = 100000;
+            break;
+
+         case 6:
+            valueRound = 1000000;
+            break;
+
+         case 7:
+            valueRound = 10000000;
+            break;
+
+         case 8:
+            valueRound = 100000000;
+            break;
+
+         case 9:
+            valueRound = 1000000000;
+            break;
+
+         case 10:
+            valueRound = 10000000000;
+            break;
+
+         default:
+            valueRound = 100000000000;
+            break;
+      }
+
+      return Math.round(Number(value) * valueRound) / valueRound;
+   }
+
+   handleInputChange = (e: CustomEventHTMLInputElement, data: any, setData: (data: any) => void) => {
+
+      let value = null;
+
+      switch (e.target.type) {
+         case 'checkbox':
+            // if (Object.getPrototypeOf(e) === React.ChangeEvent<HTMLInputElement>)
+
+
+            value = (e as React.ChangeEvent<HTMLInputElement>).target.checked;
+            break;
+
+         default: value = e.target.value;
+         // if (e.charcase)
+         //    value = this.charCase(value, e.charcase)
+      }
+
+      let name: string = e.target.name;
+      if (name.trim().length === 0)
+         name = e.target.id;
+
+      let _data = { ...data, [name]: value }
+
+      setData(_data);
+
+   }
+
+   handleNumberChange = (values: NumberFormatValues, sourceInfo: SourceInfo, data: any, setData: (data: any) => void) => {
+
+      if (!sourceInfo || sourceInfo.event === null)
+         return;
+
+      let name: string | undefined = sourceInfo.event?.currentTarget.name;
+      if (name?.trim().length === 0)
+         name = sourceInfo.event?.currentTarget.id;
+
+      let _data = { ...data, [name!]: values.value }
+
+      setData(_data);
+
+   }
+
+   handleSelectChange = (e: OptionInputSelect, data: any, setData: (data: any) => void) => {
+
+      let value: string = e.value;
+
+      let name: string = '';
+      if (e.name && e.name.trim().length)
+         name = e.name
+      else if (e.id && e.id.trim().length)
+         name = e.id;
+
+      let _data = { ...data, [name]: value }
+
+      setData(_data);
+   }
+
+   handleAnyChange = (value: any, name: string, data: any, setData: (data: any) => void) => {
+
+      let _data = { ...data, [name]: value }
+
+      setData(_data);
+   }
+
+   handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | any, inputChange: InputDataValue<any>): void => {
+      inputChange.setData(e.target.value);
+   }
+
+   fileToBase64 = (file: File) => new Promise<CustomJsonFile>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => {
+         reader.abort();
+         reject(new Error("Error parsing file"));
+      }
+      reader.onload = () => {
+         let bytes = Array.from(new Uint8Array((reader.result as ArrayBuffer)));
+         let base64StringFile = Buffer.from(bytes).toString('base64');
+
+         resolve({
+            bytes: bytes,
+            base64StringFile: base64StringFile,
+            fileName: file.name,
+            fileType: file.type,
+            fileSize: file.size
+         });
+      }
+      reader.readAsArrayBuffer(file);
+   });
+
+   charCase = (value: string, charCaseType?: EnumCharcasetypes): string => {
+      let _value = value;
+
+      switch (charCaseType) {
+         case EnumCharcasetypes.UPPERCASE:
+            _value = String(value).toUpperCase();
+            break;
+         case EnumCharcasetypes.LOWERCASE:
+            _value = String(value).toLowerCase();
+            break;
+         default:
+            break;
+      }
+
+      return _value;
+   }
+
+   base64 = (text = ''): string => {
+      // if (text !== '') {
+      //    return Buffer.from(text).toString('base64');
+      // }
+
+      return btoa( text );
+   }
+
+   base64Decode = (base64Text = ''): string => {      
+      return atob(base64Text);
+
+      // if (base64Text !== '' && base64Text !== null && base64Text !== undefined) {
+      //    return Buffer.from(base64Text, 'base64').toString();
+      // }
+
+      // return '';
+   }
+
+   formatFloatJson = (valueData: string = ''): string => {
+      if (!valueData || valueData === null) {
+         return '';
+      }
+
+      return valueData.toString().replace(/[.]/g, ",");
+   }
+
+   formarErrorListMessage = (errorList: string | any = ''): string => {
+      if (errorList === '') {
+         return errorList;
+      }
+      let message = '';
+      errorList.map((error: any) => {
+         message = `${message}\n${error.Message}`;
+
+         return error;
+      });
+
+      return message;
+   }
+
+   calcSize = (bytes: number): string => {
+      const _1_KB: number = 1024;
+      const _1_MB: number = (1024 * 1024);
+      const _1_GB: number = (1024 * 1024 * 1024);
+      const _1_TB: number = (1024 * 1024 * 1024 * 1024);
+
+      let size: string = '';
+      if (bytes >= 0 && bytes < _1_KB) {
+         size = bytes.toFixed(2) + ' B';
+      } else if (bytes >= _1_KB && bytes < _1_MB) {
+         size = (bytes / _1_KB).toFixed(2) + ' KB';
+      } else if (bytes >= _1_MB && bytes < _1_GB) {
+         size = (bytes / _1_MB).toFixed(2) + ' MB';
+      } else if (bytes >= _1_GB && bytes < _1_TB) {
+         size = (bytes / _1_GB).toFixed(2) + ' GB';
+      }
+
+      return size;
+   }
+
+   extractExtensionFileName = (fileName: string): string => {
+      let dadosNomeArquivo = fileName.split('.');
+      let extensao: string = '';
+
+      if (dadosNomeArquivo)
+         extensao = dadosNomeArquivo[dadosNomeArquivo.length - 1].toUpperCase();
+
+      return extensao;
+   }
+
+   extractFileName = (fileName: string): string => {
+      let extensao = this.extractExtensionFileName(fileName);
+      return fileName.toUpperCase().replace(`.${extensao.toUpperCase()}`, '');
+   }
+
+   baseURL = (): string => {
+      let url = '/';
+      if (import.meta.env.PROD) {
+         const protocol = window.location.protocol;
+         const host = window.location.host;
+         const path = window.location.pathname;
+         const appName = path.split('/').filter(Boolean)[0] || '';
+
+         if (appName !== 'logout' && appName !== 'login' && appName !== 'lock') {
+            url = `${protocol}//${host}/${appName}/`;
+         } else {
+            url = `${protocol}//${host}/`;
+         }
+
+      }
+
+      return url;
+   }
+
+   fetchSystemInfo = async () => {
+      const extractIpAddress = (sdp: any) => {
+         const match = sdp.sdp.match(/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/);
+         return match ? match[0] : '';
+      };
+
+      return new Promise<{ ipAddress: string, hostname: string }>((resolve, reject) => {
+         const rtcPeerConnection = window.RTCPeerConnection;
+         if (!rtcPeerConnection) {
+            reject(new Error('WebRTC não é suportado neste navegador.'));
+         }
+
+         const pc = new rtcPeerConnection({ iceServers: [] });
+         const noop = () => { };
+
+         pc.createDataChannel('');
+         pc.createOffer()
+            .then(offer => pc.setLocalDescription(offer))
+            .catch(error => reject(error));
+
+         pc.onicecandidate = ice => {
+            if (!ice || !ice.candidate || !ice.candidate.candidate) {
+               pc.onicecandidate = noop;
+               const ipAddress = extractIpAddress(pc.localDescription);
+               const { hostname } = window.location;
+               resolve({ ipAddress, hostname });
+            }
+         };
+      });
+   };
+
+   gerarCodigoAutorizacao = (): string => {
+      // Cria um fator para a geração do código
+      let dataAtual = new Date();
+      let ano = dataAtual.getFullYear();
+      let dia = dataAtual.getDate();
+      let min = dataAtual.getMinutes();
+      let hora = dataAtual.getHours();
+      let seg = dataAtual.getSeconds();
+
+      let f_fator = (ano + dia) * (dia + min) * (hora + seg);
+
+      const minNum = 100000000; // O menor número com 9 dígitos
+      const maxNum = 999999999; // O maior número com 9 dígitos
+      const numeroAleatorio = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+
+      let codigo = numeroAleatorio.toString()
+
+      // Utiliza somente os nove primeiros dígitos
+      codigo = codigo.substring(0, 9);
+
+      // Gera um novo código
+      codigo = (Math.trunc(f_fator / 1000) * parseFloat(codigo)).toString();
+      codigo = codigo.substring(0, 9);
+      console.log(codigo)
+
+      return codigo; //.replace(/(\d{3})(\d{3})(\d{3})/, '$1.$2.$3');
+   }
+
+   gerarSenhaAutorizacao = (codigo: string): string => {
+      let iSenha = 1;
+
+      for (let x = 0; x < codigo.length; x++) {
+         let valor = parseInt(codigo.charAt(x));
+
+         if (valor === 0) {
+            valor = 2;
+         }
+
+         if (valor % 2 === 1) {
+            valor += 3;
+         }
+
+         iSenha *= valor;
+      }
+
+      return iSenha.toString();
+   }
+
+   stuff = (value: string): string => {
+      return String(value).replace(/\D/gim, '');
+   }
+
+   tColorToRGB(tColor: number): string {
+      const red: number = tColor & 0xFF;
+      const green: number = (tColor >> 8) & 0xFF;
+      const blue: number = (tColor >> 16) & 0xFF;
+      return `rgb(${red}, ${green}, ${blue})`;
+   }
+
+   isDarkColor(color: string) {
+      // Remove o '#' se estiver presente
+      color = color.replace(/^#/, '');
+
+      let r, g, b;
+
+      if (color.length === 3) {
+         // Cor no formato hexadecimal de 3 dígitos (ex: #ABC)
+         r = parseInt(color[0], 16);
+         g = parseInt(color[1], 16);
+         b = parseInt(color[2], 16);
+      } else if (color.length === 6) {
+         // Cor no formato hexadecimal de 6 dígitos (ex: #AABBCC)
+         r = parseInt(color.substr(0, 2), 16);
+         g = parseInt(color.substr(2, 2), 16);
+         b = parseInt(color.substr(4, 2), 16);
+      } else if (color.startsWith('rgb(')) {
+         // Cor no formato RGB (ex: rgb(51, 102, 153))
+         const rgbValues = color.match(/\d+/g)!.map(val => parseInt(val));
+         [r, g, b] = rgbValues;
+      } else {
+         // Formato de cor inválido
+         console.error('Formato de cor inválido:', color);
+         return false;
+      }
+
+      // Converte a cor para HSL
+      const max = Math.max(r, g, b);
+      const min = Math.min(r, g, b);
+      const luminosity = (max + min) / 2;
+
+      // Defina um limite para determinar se a cor é escura ou clara
+      const threshold = 128;
+
+      return luminosity <= threshold;
+   }
+   
+   converteSegundos(totalSegundos : number, inicio : string = 'Y') {
+      const diasPorMes = ((((365 * 3) + 366) / 4) / 12);
+  
+      let comecou = false;
+      const resultado : any = {};
+  
+      if (inicio === 'Y') {
+          resultado.anos = Math.floor(totalSegundos / (60 * 60 * 24 * diasPorMes * 12));
+          totalSegundos = totalSegundos % (60 * 60 * 24 * diasPorMes * 12);
+          comecou = true;
+      }
+  
+      if (inicio === 'm' || comecou) {
+          resultado.meses = Math.floor(totalSegundos / (60 * 60 * 24 * diasPorMes));
+          totalSegundos = totalSegundos % (60 * 60 * 24 * diasPorMes);
+          comecou = true;
+      }
+  
+      if (inicio === 'd' || comecou) {
+          resultado.dias = Math.floor(totalSegundos / (60 * 60 * 24));
+          totalSegundos = totalSegundos % (60 * 60 * 24);
+          comecou = true;
+      }
+  
+      if (inicio === 'H' || comecou) {
+          resultado.horas = Math.floor(totalSegundos / (60 * 60));
+          totalSegundos = totalSegundos % (60 * 60);
+          comecou = true;
+      }
+  
+      if (inicio === 'i' || comecou) {
+          resultado.minutos = Math.floor(totalSegundos / 60);
+          totalSegundos = totalSegundos % 60;
+          comecou = true;
+      }
+  
+      resultado.segundos = totalSegundos;
+  
+      return resultado;
+   }
+
+   generateGUID = () => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+         const r = Math.random() * 16 | 0;
+         const v = c === 'x' ? r : (r & 0x3 | 0x8);
+         return v.toString(16);
+      });
+   }
+
+}
+
+var utilities = new Utilities();
+
+export { utilities };

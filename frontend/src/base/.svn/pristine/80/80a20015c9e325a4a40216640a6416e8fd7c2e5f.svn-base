@@ -1,0 +1,6 @@
+export interface IModelCrm038 {
+   RAA_CODIGO: number,
+   RAA_ID_ASSUNTO: number,
+   RAA_ID_AGENDA: string,
+   AAR_DESCRICAO?: string
+}

@@ -1,0 +1,34 @@
+import { EnumFaturamento_TpVendedor } from "../enums/enumsfaturamento"
+import { IModelAux045 } from "./modelAUX045"
+
+export interface IModelUsuario {
+   SENHA_USUARIO: string,
+   SENHA_NOME: string,
+   SENHA_DTCADASTRO: string,
+   SENHA_DTALTERACAO: string,
+   SENHA_CRIACAO: string,
+   SENHA_CODVEND?: string,
+   SENHA_ATIVOINATIVO: string,
+   SENHA_EMAIL_HOST: string,
+   SENHA_EMAIL_USUARIO: string,
+   SENHA_EMAIL_SENHA: string,
+   SENHA_EMAIL_ENDENVIOEXPORTACAO: string,
+   SENHA_EMAIL_MEU_EMAIL: string,
+   SENHA_EMAIL_AUTENTICA: string,
+   SENHA_TEMPOAGENTECRM: string,
+   SENHA_EMAIL_CONEXAOSEGURA: string,
+   SENHA_EMAIL_PORTA: string,
+   SENHA_DATA_HORA_VERIF_ATIVIDADE: string,
+   SENHA_QTD_MODULOS_LOGADO: string,
+   SENHA_SENHA: string,
+   SENHA_DATA_ALT_SENHA: string,
+   SENHA_DATA_PROX_EXPIRACAO: string,
+   SENHA_CONECTA_DESTE_IP: string,
+   SENHA_TELEFONE: string,
+   SENHA_CELULAR: string,
+   SENHA_MODULO_AGENTE_CRM_ATIVA: string,
+   FUNCIONARIO: IModelAux045,
+   VEN_TPVENDEDOR?: EnumFaturamento_TpVendedor,
+   VEN_NOME?: string
+}
+

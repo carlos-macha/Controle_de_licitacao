@@ -1,0 +1,23 @@
+import DAOFaturamento from "../daos/daofaturamento";
+import { IModelAux012 } from "../models/modelAUX012";
+import { utilities } from "../utils/utilities";
+import Controller from "./controller";
+
+export default class ControllerFaturamento extends Controller<DAOFaturamento>  {
+
+   constructor() {
+      super(DAOFaturamento);
+   }
+
+   Vendedores = (where: string = '', first: number = 0, skip: number = 0) => new Promise<Array<IModelAux012>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.Vendedores(where, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+
+   });
+
+}

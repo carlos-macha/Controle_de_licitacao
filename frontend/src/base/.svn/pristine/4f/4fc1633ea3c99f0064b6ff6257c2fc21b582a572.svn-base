@@ -1,0 +1,15 @@
+import { EnumAtivoInativo, EnumEntradaSaida } from "../enums/enums";
+
+export interface IModelEST155 {
+   TMV_CODIGO: number,
+   TMV_DESCRICAO: string,
+   TMV_ATIVO: EnumAtivoInativo,
+   TMV_CADASTRO_DATA: number,
+   TMV_CADASTRO_USUARIO: string,
+   TMV_ALTERACAO_DATA: number,
+   TMV_ALTERACAO_USUARIO: string,
+   TMV_TIPO: string,
+   TMV_ENTRADA_SAIDA: EnumEntradaSaida,
+   TMV_TP_OPERACAO: string,
+   TMV_FINALIDADE_COMPRA?: number,
+}

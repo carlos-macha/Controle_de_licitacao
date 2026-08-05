@@ -1,0 +1,10 @@
+export interface IModelCALL005 {
+PRO_CODIGO: number,
+PRO_DESCRICAO: string,
+PRO_DTINICIO: number,
+PRO_DTFINAL: null,
+PRO_HISTORICOINTERNET: null,
+PRO_ATIVO: string,
+PRO_PROJETO_PAI: number,
+PRO_OBRIGA_VERSAO_BUILD_FECHA: string
+}

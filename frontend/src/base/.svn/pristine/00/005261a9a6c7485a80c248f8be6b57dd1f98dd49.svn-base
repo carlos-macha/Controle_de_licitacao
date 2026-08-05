@@ -1,0 +1,72 @@
+import React, { Fragment, useState } from 'react';
+import { Modal, ModalBody, ModalFooter, ModalHeader, ModalLargeType } from '../../components/modal/modal';
+import Button from '../../components/form/form';
+import Vendedores from '../../views/vendedores/vendedores';
+import { IModelAux012 } from '../../models/modelAUX012';
+import { useModalContext } from '../../hooks/useModalContext';
+import { useSweetAlertContext } from '../../hooks/useSweetAlertContext';
+
+interface VendedoresModalProps {
+   id?: string,
+   largeType?: ModalLargeType,
+   // onSelect?: (vendedor?: IModelAux012) => void
+}
+
+const VendedoresModal: React.FC<VendedoresModalProps> = (props) => {
+   const { largeType, id } = props;
+
+   const { modalState } = useModalContext();
+   const { sweetAlertdispatch } = useSweetAlertContext();
+
+   const [data, setData] = useState<IModelAux012>();
+
+   return (
+      <Fragment>
+         <Modal id={id} largeType={largeType}>
+            <ModalHeader
+               showCloseTools={true}
+               title='Vendedores'
+            />
+            <ModalBody className="p-0">
+               {modalState.type === 'vendedores' &&
+                  <Vendedores
+                     onDataChange={vendedor => {
+                        setData(vendedor);
+                     }}
+                  />
+               }
+            </ModalBody>
+            <ModalFooter showCloseBtn={true}>
+               <Button caption='Selecionar' classIcon='mdi mdi-arrow-down-left-bold' className='btn btn-primary float-right'
+                  onClick={() => {
+                     if (modalState.onBtnSelecionar)
+                        modalState.onBtnSelecionar(data).then(() => {
+                           $(`#vendedores-cps .close`).click();
+                        }).catch(() => {
+                           sweetAlertdispatch({
+                              type: 'show',
+                              msg: 'Selecione um registro!',
+                              props: {
+                                 type: 'error',
+                                 title: 'Selecionar vendedor',
+                                 showConfirm: true,
+                                 confirmBtnText: 'OK',
+                                 onConfirm(response) {
+                                    sweetAlertdispatch({ type: 'close' });
+                                 }
+                              }
+                           });
+                        });
+                  }}
+               />
+            </ModalFooter>
+         </Modal>
+      </Fragment>
+   );
+}
+
+VendedoresModal.defaultProps = {
+   largeType: 'large'
+}
+
+export default VendedoresModal;

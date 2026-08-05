@@ -1,0 +1,13 @@
+import { EnumPessoa_ContatoTipoAcessoPortal } from "../enums/enumspessoa";
+
+export interface IModelPortalContato {
+   PESSOA: string,
+   ID: number,
+   SEQ: number,
+   NOME: string,
+   USUARIO_LOGIN: string,
+   SENHA_LOGIN: string,
+   TIPO_ACESSO: EnumPessoa_ContatoTipoAcessoPortal,
+   FOTO_PERFIL?: string,
+   EMAIL?: string
+}

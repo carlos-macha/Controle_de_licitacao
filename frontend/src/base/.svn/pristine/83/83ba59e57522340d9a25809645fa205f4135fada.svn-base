@@ -1,0 +1,8 @@
+import DAOPortal from "../daos/daoportal";
+import Controller from "./controller";
+
+export default class ControllerPortal extends Controller<DAOPortal>  {
+   constructor() {
+      super(DAOPortal);
+   }
+}

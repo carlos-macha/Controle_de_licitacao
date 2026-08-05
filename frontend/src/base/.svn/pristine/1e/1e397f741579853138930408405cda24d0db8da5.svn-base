@@ -1,0 +1,5 @@
+export interface IModelSis006 {
+   IMG_CODIGO: number,
+   IMG_NOME: string,
+   IMG_IMAGEN: string
+}

@@ -1,0 +1,98 @@
+import { IModelLogin } from "../base/models/modeldoc001";
+import { Storage } from "../base/services/storage";
+
+export const STORAGE_NAME_CPMODELO_LOGGED: string = 'cpmodelo-logged';
+export const STORAGE_NAME_CPMODELO_LOCK: string = 'cpmodelo-lock';
+export const STORAGE_NAME_CPMODELO_REMINDME: string = 'cpmodelo-remindMe';
+export const STORAGE_NAME_CPMODELO_WSHOST: string = 'cpmodelo-wshost';
+export const STORAGE_NAME_CPMODELO_WSTOKEN: string = 'cpmodelo-wstoken';
+export const STORAGE_NAME_CPMODELO_WSTIMEOUT: string = 'cpmodelo-wstimeout';
+export const STORAGE_NAME_CPMODELO_USER_DATA: string = 'cpmodelo-user-data';
+export const STORAGE_NAME_CPMODELO_DARK: string = 'cpmodelo-dark';
+
+export const storageSetLogged = (logged: boolean): void => {
+   localStorage.setItem(STORAGE_NAME_CPMODELO_LOGGED, logged ? 'S' : 'N')
+}
+
+export const storageGetLogged = (): boolean => {
+   if (localStorage.getItem(STORAGE_NAME_CPMODELO_LOGGED) !== null)
+      return localStorage.getItem(STORAGE_NAME_CPMODELO_LOGGED) === 'S';
+
+   return false;
+}
+
+export const storageSetLock = (logged: boolean): void => {
+   localStorage.setItem(STORAGE_NAME_CPMODELO_LOCK, logged ? 'S' : 'N')
+}
+
+export const storageGetLock = (): boolean => {
+   if (localStorage.getItem(STORAGE_NAME_CPMODELO_LOCK) !== null)
+      return localStorage.getItem(STORAGE_NAME_CPMODELO_LOCK) === 'S';
+   return false;
+}
+
+export const storageSetRemindMe = (remindMe: boolean): void => {
+   localStorage.setItem(STORAGE_NAME_CPMODELO_REMINDME, remindMe ? 'S' : 'N')
+}
+
+export const storageGetRemindMe = (): boolean => {
+   if (localStorage.getItem(STORAGE_NAME_CPMODELO_REMINDME) !== null)
+      return localStorage.getItem(STORAGE_NAME_CPMODELO_REMINDME) === 'S'
+
+   return false;
+}
+
+export const storageSetWSHost = (host: string): void => {
+   localStorage.setItem(STORAGE_NAME_CPMODELO_WSHOST, host);
+}
+
+export const storageGetWSHost = (): string => {
+   if (localStorage.getItem(STORAGE_NAME_CPMODELO_WSHOST) !== null)
+      return String(localStorage.getItem(STORAGE_NAME_CPMODELO_WSHOST));
+
+   return '';
+}
+
+export const storageSetWSToken = (token: string): void => {
+   localStorage.setItem(STORAGE_NAME_CPMODELO_WSTOKEN, token);
+}
+
+export const storageGetWSToken = (): string => {
+   if (localStorage.getItem(STORAGE_NAME_CPMODELO_WSTOKEN) !== null)
+      return String(localStorage.getItem(STORAGE_NAME_CPMODELO_WSTOKEN));
+
+   return '';
+}
+
+export const storageSetWSTimeout = (timeout: number): void => {
+   localStorage.setItem(STORAGE_NAME_CPMODELO_WSTIMEOUT, String(timeout));
+}
+
+export const storageGetWSTimeout = (): number => {
+   if (localStorage.getItem(STORAGE_NAME_CPMODELO_WSTIMEOUT) !== null)
+      return Number(localStorage.getItem(STORAGE_NAME_CPMODELO_WSTIMEOUT));
+
+   return 60000;
+}
+
+export const storageSetUser = (user: IModelLogin): void => {
+   Storage.setObject(STORAGE_NAME_CPMODELO_USER_DATA, user);
+}
+
+export const storageGetUser = (): IModelLogin | undefined => {
+   if (localStorage.getItem(STORAGE_NAME_CPMODELO_USER_DATA) !== null)
+      return Storage.getObject(STORAGE_NAME_CPMODELO_USER_DATA) as IModelLogin;
+
+   return undefined;
+}
+
+export const storageSetDark = (dark: boolean): void => {
+   localStorage.setItem(STORAGE_NAME_CPMODELO_DARK, dark ? 'S' : 'N');
+}
+
+export const storageGetDark = (): boolean => {
+   if (localStorage.getItem(STORAGE_NAME_CPMODELO_DARK) !== null)
+      return localStorage.getItem(STORAGE_NAME_CPMODELO_DARK) === 'S';
+
+   return false;
+}

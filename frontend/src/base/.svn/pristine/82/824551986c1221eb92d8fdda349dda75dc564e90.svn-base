@@ -1,0 +1,11 @@
+import { EnumSimNao } from "../enums/enums";
+
+export interface IModelSis007 {
+   PAR_CODIGO: number
+   PAR_QTDARQUIVOS: string,
+   PAR_LISTAR_ARQUIVOS_LEGADOS: EnumSimNao,
+   PAR_TP_EXT_ARQUIVOS_PERMITIDOS: string,
+   PAR_TAM_PERMITIDO_EXT_ARQUIVO: string,
+   PAR_HOST_SERVIDOR_CPERFECT: string,
+   PAR_HOST_SERVIDOR_CALLCENTER: string
+}

@@ -1,0 +1,26 @@
+import { Menu } from "../../../base/menu/menu";
+import { MenuGroup, MenuItem, MenuType } from "../../../base/menu/types";
+
+export type MenuName = MenuType<"meucadastro" | "exemplo">;
+
+const MenuGroupCadastros: MenuGroup = { name: "Cadastros" }
+
+//itens de menu do menu cadastras
+
+export const MenuItemExemplo: MenuItem<MenuName> = {
+   name: "exemplo",
+   label: "Exemplo",
+   group: MenuGroupCadastros,
+   classIcon: "mdi mdi-account-group nav-icon",
+   permission: 1
+}
+
+
+export const menu = new Menu<MenuName>({
+   addGroups(groups) {
+      groups.push(MenuGroupCadastros);
+   },
+   addItens(itens) {
+      itens.push(MenuItemExemplo);
+   },
+});

@@ -1,0 +1,10 @@
+import DAOPropriedade from "../daos/daopropriedades";
+import Controller from "./controller";
+
+export default class ControllerPropriedades extends Controller<DAOPropriedade>  {
+
+   constructor() {
+      super(DAOPropriedade);
+   }
+
+}

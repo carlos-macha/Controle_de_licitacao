@@ -1,0 +1,181 @@
+import './pesquisa.css';
+
+import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { PageBase } from '../../../template/pagebase/pagebase';
+import PesquisaCRM, { PesquisaCRMRef } from './components/pesquisaCRM';
+import { useParams } from 'react-router-dom';
+import Button from '../../../components/form/form';
+import { IModelCrm019 } from '../../../models/modelCRM019';
+import ControllerCRM from '../../../controllers/controllercrm';
+import Spinner from 'react-bootstrap/esm/Spinner';
+import ConfigIni, { IConfigIniPropsWithAuth } from '../../../services/configini';
+import { storageGetDark, storageSetDark, storageSetWSHost, storageSetWSTimeout } from '../../../../utils/storage';
+import md5 from 'md5';
+import Api from '../../../services/api';
+import ContainerPageAuth from '../../../../view/components/containerpageauth/containerpageauth';
+import { useAuthContext } from '../../../../hooks/useAuthContext';
+import Footer from '../../../../view/components/footer/footer';
+import { utilities } from '../../../utils/utilities';
+import { IModelCrm052 } from '../../../models/modelCRM052';
+import { useSweetAlertContext } from '../../../hooks/useSweetAlertContext';
+import TemplateFooter from '../../../template/footer/footer';
+import CopyRightFooter from '../../../../view/components/copyrightfooter/copyrightfooter';
+import TemplateContainerPageAuth from '../../../template/containerpageauth/containerpageauth';
+
+interface PesquisaProps {
+   // codigo: number
+}
+
+const Pesquisa: React.FC<PesquisaProps> = (props) => {
+   const { token } = useParams();
+   const { authState, authDispatch } = useAuthContext();
+
+   const { sweetAlertdispatch } = useSweetAlertContext();
+
+   const pesquisaCRM = useRef<PesquisaCRMRef>({});
+
+   const [startSearch, setStartSearch] = useState<boolean>(false);
+   const [data, setData] = useState<IModelCrm052>();
+   const [loading, setLoading] = useState<boolean>(false);
+
+   const [respondida, setRespondida] = useState<IModelCrm052>();
+
+   let iconLigth: string = 'ri-sun-line';
+   let iconDark: string = 'ri-moon-fill';
+
+   useEffect(() => {
+      if (!authState.isDark) {
+         $("#iconDarkLigth").removeClass(iconLigth).addClass(iconDark);
+         $("#page-tipography").attr('href', `${utilities.baseURL()}css/typography.css`);
+         $("#page-style").attr('href', `${utilities.baseURL()}css/style.css`);
+         $('body').removeClass('dark');
+      } else {
+         $("#iconDarkLigth").removeClass(iconDark).addClass(iconLigth);
+         $("#page-tipography").attr('href', `${utilities.baseURL()}css/typography-dark.css`);
+         $("#page-style").attr('href', `${utilities.baseURL()}css/style-dark.css`);
+         $('body').addClass('dark');
+      }
+   }, [authState.isDark]);
+
+   useEffect(() => {
+      if (token && !startSearch) {
+         setLoading(true);
+         setStartSearch(true);
+
+         ConfigIni.getInstance().iniFactory<IConfigIniPropsWithAuth>('ERP_WITH_AUTH').then(cfg => {
+            if (!Api.getInstance().conn()) {
+               Api.getInstance().create(
+                  cfg.WSCommandBaseUrl,
+                  cfg.WSCommandTimeOut
+               );
+            }
+
+            Api.getInstance().authp(cfg.WSCommandAUTH_USER, cfg.WSCommandAUTH_PASS).finally(() => {
+               const controllerCRM = new ControllerCRM();
+
+               controllerCRM.DAO.tokenLinkPesquisaCRM(token).then((tokenPesquisa) => {
+                  setData(tokenPesquisa);
+               }).catch(error => {
+                  console.log(error);
+               }).finally(() => {
+                  setLoading(false);
+               })
+            })
+         }).catch(error => {
+            setLoading(false);
+         })
+      }
+   }, [])
+
+   return (
+      <PageBase>
+         {loading ?
+            <div className='status-loader d-flex align-items-center justify-content-center'>
+               <Spinner className='text-primary' style={{ width: 150, height: 150, fontSize: 40 }} />
+            </div>
+            :
+            ((data && !data.LPC_PESQUISA_NR_FICHA && !respondida) ?
+               <div className='pesquisa-page'>
+                  <div className='iq-top-navbar' style={{ position: 'relative', height: 75 }}>
+                     <div className='iq-navbar-custom'>
+                        <nav className="navbar navbar-expand-lg navbar-light p-0">
+                           <div className='pesquisa-page-imgs' style={{ paddingLeft: 20 }}>
+                              <img src={`${utilities.baseURL()}images/${!authState.isDark ? 'Logo-Cliente.png' : 'Logo-Cliente-dark.png'}`} alt={`Logo Cliente`} className="img-fluid" style={{ maxHeight: 45, maxWidth: 150 }} />
+                           </div>
+                           <div className='pesquisa-page-buttons'>
+                              <ul className="navbar-nav ml-auto navbar-list" style={{ top: 0 }}>
+                                 {/* {optionsNavbar} */}
+
+                                 <li>
+                                    <a
+                                       href="#"
+                                       className="search-toggle iq-waves-effect"
+                                       onClick={() => {
+                                          let isDark: boolean = storageGetDark();
+
+                                          authDispatch({
+                                             type: 'tema',
+                                             isDark: !isDark
+                                          });
+
+                                          if (isDark) {
+                                             storageSetDark(false);
+                                          } else {
+                                             storageSetDark(true);
+                                          }
+                                       }}
+                                    >
+                                       <i id="iconDarkLigth" className="ri-moon-fill"></i>
+                                    </a>
+                                 </li>
+                                 <li className="nav-item iq-full-screen">
+                                    <a href="#"
+                                       className="search-toggle iq-waves-effect"
+                                       id="btnFullscreen">
+                                       <i className="ri-fullscreen-line"></i>
+                                    </a>
+                                 </li>
+                              </ul>
+                           </div>
+                        </nav>
+                     </div>
+                  </div>
+                  <div className="p-0 pl-3 pr-3" style={{ overflow: 'auto', height: 'calc(100vh - 8rem)' }}>
+                     <PesquisaCRM
+                        ref={pesquisaCRM}
+                        defaultPesquisa={data.PESQUISA}
+                        token={data.LPC_TOKEN}
+                        onSave={(repostaLink) => {
+                           setRespondida(repostaLink);
+                        }}
+                     />
+                  </div>
+                  <TemplateFooter>
+                     <div className='d-flex justify-content-between'>
+                        <img src={`${utilities.baseURL()}images/${!authState.isDark ? 'Logo-Pesquisa-CRM.webp' : 'Logo-Pesquisa-CRM-dark.webp'}`} alt={`Logo cpCRM`} className="img-fluid" style={{ maxHeight: 25 }} />
+                        <CopyRightFooter className='text-muted' />
+                     </div>
+                  </TemplateFooter>
+               </div>
+               :
+               <TemplateContainerPageAuth
+                  imgBanner='/Banner-Cliente.webp'
+               >
+                  <Fragment>
+                     <div className="sign-in-from">
+                        {respondida && <img src={`${utilities.baseURL()}images/login/mail.png`} alt={`Logo cpCRM`} className="img-fluid" style={{ height: 80 }} />}
+
+                        <h1 className="mt-3 mb-0">{((data && data.LPC_PESQUISA_NR_FICHA) || respondida) ? 'Pesquisa respondida' : 'Token inválido'} </h1>
+                        <p><i className={`mdi mdi-${respondida ? 'check-circle-outline' : 'alert-outline'} pr-1`} />{respondida ? `${respondida.LPC_CONTATO_PESQUISA_NOME_CNT} sua pesquisa foi enviada, obrigado!` : ((data && data.LPC_PESQUISA_NR_FICHA) ? 'Essa pesquisa já foi respondida.' : token)}</p>
+                     </div>
+                     <CopyRightFooter />
+                  </Fragment>
+               </TemplateContainerPageAuth>
+            )
+         }
+      </PageBase>
+   );
+}
+
+export default Pesquisa;

@@ -1,0 +1,10 @@
+import DAOTabelasGerais from "../daos/daotabelasgerais";
+import Controller from "./controller";
+
+export default class ControllerTabelasGerais extends Controller<DAOTabelasGerais>  {
+
+   constructor() {
+      super(DAOTabelasGerais);
+   }
+
+}

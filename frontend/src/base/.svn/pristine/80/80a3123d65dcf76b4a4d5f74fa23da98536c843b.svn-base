@@ -1,0 +1,7 @@
+import { EnumContatoCargo_Descricao, EnumContatoCargo_StatusAtivo } from "../enums/enumcontatos";
+
+export interface IModelAux099 {
+  CCP_CODIGO: number,
+  CCP_DESCRICAO: EnumContatoCargo_Descricao,
+  CCP_ATIVO: EnumContatoCargo_StatusAtivo
+}

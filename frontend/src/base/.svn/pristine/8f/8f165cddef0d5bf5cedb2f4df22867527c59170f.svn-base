@@ -1,0 +1,15 @@
+import { EnumSimNao } from "../../base/enums/enums"
+
+export interface MaquinasOrdensRodando {
+   POP_ORDEM: number,
+   POP_EMPRESA: number,
+   POP_OPERACAO: number,
+   POP_TEMPO_LIMITE_TROCA_PECA?: number,
+   ODP_PRODUTO: string,
+   TPO_DATAINICIO: number,
+   TPO_HORAINICIO: number,
+   TPO_FUNCIONARIO: string,
+   TPO_SETUP: EnumSimNao,
+   PES_CODIGO_OPERADOR?: string,
+   PES_RAZAO?: string
+}

@@ -1,0 +1,19 @@
+export interface IModelPortalEst232 {
+   CVC_CODIGO: number,
+   CVC_TOT_IPI_BC: number,
+   CVC_TOT_IPI_VLR: number,
+   CVC_TOT_ICMS_BC: number,
+   CVC_TOT_ICMS_VLR: number,
+   CVC_TOT_ICMS_ST_BC: number,
+   CVC_TOT_ICMS_ST_VLR: number,
+   CVC_TOT_PIS_BC: number,
+   CVC_TOT_PIS_VLR: number,
+   CVC_TOT_COFINS_BC: number,
+   CVC_TOT_COFINS_VLR: number,
+   CVC_TOT_PRODUTOS: number,
+   CVC_TOT_FRETE: number,
+   CVC_TOT_SEGURO: number,
+   CVC_TOT_DESCONTO: number,
+   CVC_TOT_DESPACESSORIAS: number,
+   CVC_TOT_VALOR_NF: number
+}

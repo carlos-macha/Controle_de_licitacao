@@ -1,0 +1,331 @@
+import { nanoid } from 'nanoid';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
+import $ from 'jquery';
+import Card, { CardBody, CardHeader } from '../../../components/card/card';
+import { EnumCrudStateRecordType } from '../../../components/crud/enums';
+import DataTable, { DataTableColumns, Formatters } from '../../../components/datatable/datatable';
+import Tabs, { TabContent, TabItem, TabPanel } from '../../../components/tab/tab';
+import { useSweetAlertContext } from '../../../hooks/useSweetAlertContext';
+import { IModelMOB001 } from '../../../models/modelMOB001';
+import { IModelMOB002 } from '../../../models/modelMOB002';
+import { IModelMOB015 } from '../../../models/modelMOB015';
+import Button from '../../../components/form/form';
+import { useModalContext } from '../../../hooks/useModalContext';
+
+interface PessoaDetalheProps {
+   data: IModelMOB001,
+   isManuntencao?: boolean,
+   viewProspect?: boolean
+}
+
+const PessoaDetalhe: React.FC<PessoaDetalheProps> = (props) => {
+   const { data, isManuntencao, viewProspect } = props;
+
+   const [contatos, setContatos] = useState<Array<IModelMOB002> | undefined>(data?.LISTA_CONTATOS);
+   const [enderecos, setEnderecos] = useState<Array<IModelMOB015> | undefined>(data?.LISTA_ENDERECOS);
+
+   const [enderecoSelecionado, setEnderecoSelecionado] = useState<IModelMOB015 | undefined>();
+   const [enderecoNovo, setEnderecoNovo] = useState<IModelMOB015 | undefined>();
+   const [enderecoAlterado, setEnderecoAlterado] = useState<IModelMOB015 | undefined>();
+
+   const [contatoSelecionado, setContatoSelecionado] = useState<IModelMOB002 | undefined>();
+   const [contatoNovo, setContatoNovo] = useState<IModelMOB002 | undefined>();
+   const [contatoAlterado, setContatoAlterado] = useState<IModelMOB002 | undefined>();
+
+   const { sweetAlertdispatch } = useSweetAlertContext();
+   const { modalDispash } = useModalContext();
+
+   const id = useRef(nanoid());
+
+   let columnsContatos: DataTableColumns = [
+      { title: "ID", field: "rowId", width: 120, type: 'integer', isKey: true, visible: false },
+      { title: "Nome", field: "CNT_NOME", width: 300, hozAlign: "left", type: 'string' },
+      { title: "Cargo", field: "CNT_CARGO", width: 200, hozAlign: "left", type: 'string' },
+      { title: "Fone", field: "CNT_FONE", width: 150, hozAlign: "left", type: 'string' },
+      { title: "Celular", field: "CNT_CELULAR", width: 150, hozAlign: "left", type: 'string' },
+      { title: "E-Mail", field: "CNT_EMAIL", width: 200, hozAlign: "left", type: 'string' },
+      { title: "Nascimento", field: "CNT_NASCIMENTO", width: 200, hozAlign: "left", type: 'date', formatter: Formatters.date, visible: !viewProspect }
+   ];
+
+   let columnsEnderecos: DataTableColumns = [
+      { title: "ID", field: "rowId", width: 120, type: 'integer', isKey: true, visible: false },
+      {
+         title: "Tipo", field: "END_TIPO", width: 100, hozAlign: "left", type: 'string',
+         formatter: (cell: any) => {
+            let strValue = cell.getValue();
+
+            switch (strValue) {
+               case 'RES': strValue = 'COMERCIAL';
+                  break;
+
+               case 'ENT': strValue = 'ENTREGA';
+                  break;
+
+               case 'TRA': strValue = 'FATURAMENTO';
+                  break;
+
+               case 'OUT': strValue = 'COBRANÇA';
+                  break;
+            }
+
+            return strValue;
+         },
+      },
+      { title: "Endereço", field: "END_ENDERECO", width: 200, hozAlign: "left", type: 'string' },
+      { title: "Número", field: "END_NUMERO", width: 90, hozAlign: "left", type: 'string' },
+      { title: "Cidade", field: "END_CIDADE", width: 150, hozAlign: "left", type: 'string' },
+      { title: "Estado", field: "END_ESTADO", width: 90, hozAlign: "left", type: 'string' },
+      { title: "Bairro", field: "END_BAIRRO", width: 150, hozAlign: "left", type: 'string' },
+      { title: "CEP", field: "END_CEP", width: 100, hozAlign: "left", type: 'string' },
+      {
+         title: "Ativo", field: "END_ATIVO", width: 150, hozAlign: "left", type: 'string',
+         formatter: (cell: any) => {
+            let strValue = cell.getValue();
+            return strValue === 'A' ? 'ATIVO' : 'INATIVO';
+         },
+      },
+   ];
+
+   useEffect(() => {
+      setContatos(data?.LISTA_CONTATOS);
+      setEnderecos(data?.LISTA_ENDERECOS);
+   }, [data]);
+
+   const onSaveEndereco = (endereco: IModelMOB015, state?: EnumCrudStateRecordType) => new Promise<void>((resolve, reject) => {
+      try {
+
+         let hasTipoEndereco: boolean = false;
+         data?.LISTA_ENDERECOS.forEach(endereco_ => {
+            if (endereco.END_TIPO === endereco_.END_TIPO &&
+               endereco.END_LEGADO_CODIGO !== endereco_.END_LEGADO_CODIGO) {
+               hasTipoEndereco = true;
+            }
+         });
+
+         if (hasTipoEndereco) {
+            sweetAlertdispatch({
+               type: 'show',
+               props: {
+                  type: 'error',
+                  title: 'Atenção!',
+                  onConfirm(response) {
+                     sweetAlertdispatch({ type: 'close' });
+                  },
+               },
+               msg: 'Já existe um endereço cadastrado para o tipo selecioando. Selecione outro tipo de endereço!'
+            });
+            reject();
+            return;
+         }
+
+         if (state === EnumCrudStateRecordType.INCLUIR) {
+            setEnderecoNovo(endereco);
+         } else {
+            setEnderecoAlterado(endereco);
+         }
+         $(`#pessoa-endereco-manutencao-modal .close`).click();
+         resolve();
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+   const onSaveContato = (contato: IModelMOB002, state?: EnumCrudStateRecordType) => new Promise<void>((resolve, reject) => {
+
+      try {
+         if (state === EnumCrudStateRecordType.INCLUIR) {
+            setContatoNovo(contato);
+         } else {
+            setContatoAlterado(contato);
+         }
+         $(`#pessoa-contato-manutencao-modal .close`).click();
+         resolve();
+      } catch (error) {
+         reject(error);
+      }
+   });
+
+   return (
+      <Fragment>
+         <Card className='iq-card'>
+            <CardHeader className="iq-card-header p-2 border" >
+               <Tabs className="nav nav-pills">
+                  <TabItem className='nav-item' classNameLink='nav-link' tabPanelRef={`dadosContatos-${id.current}`} selected={true}> Contatos </TabItem>
+                  <TabItem className='nav-item' classNameLink='nav-link' tabPanelRef={`dadosEnderecos-${id.current}`}> Endereços </TabItem>
+               </Tabs>
+            </CardHeader>
+            <CardBody className='border iq-card-body'>
+               <TabContent className="tab-content">
+                  <TabPanel className='tab-pane fade' show={true} id={`dadosContatos-${id.current}`}>
+                     {(!isManuntencao || contatos) &&
+                        <DataTable
+                           title='Contatos'
+                           useRowId
+                           columns={columnsContatos}
+                           options={{
+                              height: 200,
+                              pagination: false,
+                              layout: 'fitDataFill',
+                              selectable: 1
+
+                           }}
+                           data={contatos}
+                           addData={contatoNovo}
+                           uptData={contatoAlterado}
+                           onRowClick={(contato: IModelMOB002) => {
+                              setContatoSelecionado(contato);
+                           }}
+                           onUpdateDataTable={(contatos: Array<IModelMOB002>) => {
+                              data.LISTA_CONTATOS = contatos;
+                           }}
+                        >
+                           {isManuntencao &&
+                              <Fragment>
+                                 <div className='btn-group'>
+                                    <Button
+                                       className="btn btn-outline-primary btn-sm "
+                                       classIcon="mdi mdi-plus-circle"
+                                       caption="Incluir"
+                                       data-toggle="modal"
+                                       data-target="#pessoa-contato-manutencao-modal"
+                                       onClick={() => {
+                                          modalDispash({
+                                             type: 'pessoaContatoManutencaoModal',
+                                             contato: undefined,
+                                             pessoaId: data?.PES_LEGADO_ID ? data?.PES_LEGADO_ID : 0,
+                                             onSave: onSaveContato,
+                                             isProspect: viewProspect,
+                                             state: EnumCrudStateRecordType.INCLUIR
+                                          });
+                                       }}
+                                    />
+                                    <Button
+                                       className="btn btn-outline-primary btn-sm "
+                                       classIcon="mdi mdi-pencil-circle"
+                                       caption="Alterar"
+                                       data-toggle="modal"
+                                       data-target={contatoSelecionado ? '#pessoa-contato-manutencao-modal' : ''}
+                                       onClick={() => {
+                                          if (!contatoSelecionado) {
+
+                                             sweetAlertdispatch({
+                                                type: 'show',
+                                                props: {
+                                                   type: 'error',
+                                                   title: 'Atenção!',
+                                                   onConfirm(response) {
+                                                      sweetAlertdispatch({ type: 'close' });
+                                                   },
+                                                },
+                                                msg: 'Selecione um Contato para edição!'
+                                             });
+
+                                             return;
+                                          }
+                                          modalDispash({
+                                             type: 'pessoaContatoManutencaoModal',
+                                             contato: contatoSelecionado,
+                                             pessoaId: data?.PES_LEGADO_ID ? data?.PES_LEGADO_ID : 0,
+                                             onSave: onSaveContato,
+                                             isProspect: viewProspect,
+                                             state: EnumCrudStateRecordType.ALTERAR
+                                          });
+                                       }}
+                                    />
+                                 </div>
+                              </Fragment>
+                           }
+                        </DataTable>
+                     }
+                  </TabPanel>
+                  <TabPanel className='tab-pane fade' id={`dadosEnderecos-${id.current}`}>
+                     {(!isManuntencao || enderecos) &&
+                        <DataTable
+                           title='Endereços'
+                           options={{
+                              height: 200,
+                              pagination: false,
+                              layout: 'fitDataFill',
+                              selectable: 1
+                           }}
+                           useRowId
+                           columns={columnsEnderecos}
+                           data={enderecos}
+                           addData={enderecoNovo}
+                           uptData={enderecoAlterado}
+                           onRowClick={(endereco: IModelMOB015) => {
+                              setEnderecoSelecionado(endereco);
+                           }}
+                           onUpdateDataTable={(enderecos: Array<IModelMOB015>) => {
+                              data.LISTA_ENDERECOS = enderecos;
+                           }}
+                        >
+                           {isManuntencao &&
+                              <Fragment>
+                                 <div className='btn-group'>
+                                    {(!viewProspect || viewProspect && data?.LISTA_ENDERECOS.length === 0) &&
+                                       <Button
+                                          className="btn btn-outline-primary btn-sm"
+                                          classIcon="mdi mdi-plus-circle"
+                                          caption="Incluir"
+                                          data-toggle="modal"
+                                          data-target="#pessoa-endereco-manutencao-modal"
+                                          onClick={() => {
+                                             modalDispash({
+                                                type: 'pessoaEnderecoManutencaoModal',
+                                                endereco: undefined,
+                                                pessoaId: data?.PES_LEGADO_ID ? data?.PES_LEGADO_ID : 0,
+                                                onSave: onSaveEndereco,
+                                                isProspect: viewProspect,
+                                                state: EnumCrudStateRecordType.INCLUIR
+                                             });
+                                          }}
+                                       />
+                                    }
+                                    <Button
+                                       className="btn btn-outline-primary btn-sm"
+                                       classIcon="mdi mdi-pencil-circle"
+                                       caption="Alterar"
+                                       data-toggle="modal"
+                                       data-target={enderecoSelecionado ? '#pessoa-endereco-manutencao-modal' : ''}
+                                       onClick={() => {
+                                          if (!enderecoSelecionado) {
+
+                                             sweetAlertdispatch({
+                                                type: 'show',
+                                                props: {
+                                                   type: 'error',
+                                                   title: 'Atenção!',
+                                                   onConfirm(response) {
+                                                      sweetAlertdispatch({ type: 'close' });
+                                                   },
+                                                },
+                                                msg: 'Selecione um Endereço para edição!'
+                                             });
+
+                                             return;
+                                          }
+                                          modalDispash({
+                                             type: 'pessoaEnderecoManutencaoModal',
+                                             endereco: enderecoSelecionado,
+                                             pessoaId: data?.PES_LEGADO_ID ? data?.PES_LEGADO_ID : 0,
+                                             onSave: onSaveEndereco,
+                                             isProspect: viewProspect,
+                                             state: EnumCrudStateRecordType.ALTERAR
+                                          });
+                                       }}
+                                    />
+                                 </div>
+                              </Fragment>
+                           }
+                        </DataTable>
+                     }
+                  </TabPanel>
+               </TabContent>
+            </CardBody>
+         </Card>
+      </Fragment>
+   );
+}
+
+export default PessoaDetalhe;

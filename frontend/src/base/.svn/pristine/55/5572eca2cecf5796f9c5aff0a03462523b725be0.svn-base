@@ -1,0 +1,3 @@
+.btn-tab-close {
+   z-index: 1000;
+}

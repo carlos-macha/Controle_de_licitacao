@@ -1,0 +1,195 @@
+import React, { useEffect, useState } from 'react';
+import Button, { ValidateFields, EnumCharcasetypes, InputDateTime, InputNumber, Input } from '../../../components/form/form';
+import { EnumAtivoInativo } from '../../../enums/enums';
+import { IModelMOB002 } from '../../../models/modelMOB002';
+import { InputDataValue } from '../../../types/types';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../../components/modal/modal';
+import { useModalContext } from '../../../hooks/useModalContext';
+import { EnumCrudStateRecordType } from '../../../components/crud/enums';
+
+interface PessoaContatoManutencaoModalProps { }
+
+const PessoaContatoManutencaoModal: React.FC<PessoaContatoManutencaoModalProps> = (props) => {
+
+   const novoContato = (idPessoa?: number): IModelMOB002 => {
+      return {
+         CNT_ID: 0,
+         CNT_ID_PESSOA: idPessoa ? idPessoa : modalState.pessoaId,
+         CNT_LEGADO_ID: 0,
+         CNT_NOME: "",
+         CNT_CARGO: "",
+         CNT_NASCIMENTO: 0,
+         CNT_FONE: "",
+         CNT_RAMAL: "",
+         CNT_CELULAR: "",
+         CNT_EMAIL: "",
+         CNT_FONE2: "",
+         CNT_CELULAR2: "",
+         CNT_EMAIL2: "",
+         CNT_RAMALFONE2: "",
+         CNT_ATIVO: EnumAtivoInativo.ATIVO,
+         CNT_ALTERACAO_DATA: 0
+      }
+   }
+
+   const { modalState } = useModalContext();
+   const [data, setData] = useState<IModelMOB002>(novoContato(0));
+   const dataModel: InputDataValue<IModelMOB002> = { data, setData }
+   const [validateFields] = useState<ValidateFields>(new ValidateFields());
+
+   useEffect(() => {
+      if (modalState.type === 'pessoaContatoManutencaoModal') {
+
+         if (modalState.state === EnumCrudStateRecordType.INCLUIR)
+            dataModel.setData(novoContato());
+
+         if (modalState.state === EnumCrudStateRecordType.ALTERAR && modalState.contato)
+            dataModel.setData(modalState.contato);
+      }
+
+   }, [modalState.contato, modalState.state])
+
+   return (
+      <Modal id="pessoa-contato-manutencao-modal" className="fade" largeType={'large'}>
+         <ModalHeader
+            showCloseTools={true}
+            title="Contato"
+         />
+         <ModalBody>
+            <div className='row'>
+               <div className={`col-12 ${modalState.isProspect ? 'col-lg-8' : 'col-lg-6'}  mb-3`}>
+                  <Input
+                     label="Nome"
+                     charCase={EnumCharcasetypes.UPPERCASE}
+                     dataModel={dataModel}
+                     id="CNT_NOME"
+                     validator={validateFields}
+                     validations={{
+                        required: true
+                     }}
+                     maxLength={40}
+                  />
+               </div>
+               <div className={`col-8 ${modalState.isProspect ? 'col-lg-4' : 'col-lg-6'} mb-3`}>
+                  <Input
+                     label="Cargo"
+                     charCase={EnumCharcasetypes.UPPERCASE}
+                     dataModel={dataModel}
+                     id="CNT_CARGO"
+                     maxLength={40}
+                  />
+               </div>
+               {!modalState.isProspect &&
+                  <div className='col-4 col-lg-3 mb-3'>
+                     <InputDateTime
+                        type='date'
+                        label="Dt. Nascimento"
+                        dataModel={dataModel}
+                        id="CNT_NASCIMENTO"
+                     />
+                  </div>
+               }
+            </div>
+            <div className='row'>
+               <div className='col-5 col-md-4 col-lg-3 mb-3'>
+                  <Input
+                     type='tel'
+                     label="Fone Fixo"
+                     dataModel={dataModel}
+                     id="CNT_FONE"
+                     mask="(99) 9999-9999"
+                  />
+               </div>
+               {!modalState.isProspect &&
+                  <div className='col-2 col-md-4 col-lg-1 mb-3'>
+                     <InputNumber
+                        label="Ramal"
+                        dataModel={dataModel}
+                        id="CNT_RAMAL"
+                     />
+                  </div>
+               }
+               <div className='col-5 col-md-4 col-lg-3 mb-3'>
+                  <Input
+                     type='tel'
+                     label="Celular"
+                     dataModel={dataModel}
+                     id="CNT_CELULAR"
+                     mask="(99) 99999-9999"
+                  />
+               </div>
+               <div className={`col-12 ${modalState.isProspect ? 'col-lg-6' : 'col-lg-5'} mb-3`}>
+                  <Input
+                     label="Email"
+                     dataModel={dataModel}
+                     id="CNT_EMAIL"
+                     maxLength={40}
+                  />
+               </div>
+            </div>
+            {!modalState.isProspect &&
+               <div className='row'>
+                  <div className='col-5 col-md-4 col-lg-3 mb-3'>
+                     <Input
+                        type='tel'
+                        label="Fone Fixo 2"
+                        dataModel={dataModel}
+                        id="CNT_FONE2"
+                        mask="(99) 9999-9999"
+                     />
+                  </div>
+                  <div className='col-2 col-md-4 col-lg-1 mb-3'>
+                     <InputNumber
+                        label="Ramal"
+                        dataModel={dataModel}
+                        id="CNT_RAMALFONE2"
+                     />
+                  </div>
+                  <div className='col-5 col-md-4 col-lg-3 mb-3'>
+                     <Input
+                        type='tel'
+                        label="Celular 2"
+                        dataModel={dataModel}
+                        id="CNT_CELULAR2"
+                        mask="(99) 99999-9999"
+                     />
+                  </div>
+                  <div className='col-12 col-lg-5 mb-3'>
+                     <Input
+                        charCase={EnumCharcasetypes.LOWERCASE}
+                        type='email'
+                        label="Email 2"
+                        dataModel={dataModel}
+                        id="CNT_EMAIL2"
+                        maxLength={60}
+                     />
+                  </div>
+               </div>
+            }
+         </ModalBody>
+         <ModalFooter
+            showCloseBtn={true}
+         >
+            <Button
+               onClick={() => {
+                  if (modalState.onSave) {
+                     if (!validateFields.validateAll())
+                        return;
+
+                     modalState.onSave(data, modalState.state).then(() => {
+                        if (modalState.state === EnumCrudStateRecordType.INCLUIR)
+                           dataModel.setData(novoContato(0));
+                        // dataModel.setData(novoContato(0))
+                     });
+                  }
+               }}
+               className="btn btn-primary"
+               classIcon="mdi mdi-check"
+               caption="Salvar"
+            />
+         </ModalFooter>
+      </Modal>
+   );
+}
+
+export default PessoaContatoManutencaoModal;

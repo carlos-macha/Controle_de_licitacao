@@ -1,0 +1,39 @@
+import { EnumSimNao } from "../enums/enums";
+import { EnumCAT_Situacao } from "../enums/enumsassistenciatecnica";
+import { IModelAnexos } from "./modelAnexos";
+import { IModelPortalMultiplosEquipamento } from "./modelPortalEquipamento";
+
+export interface IModelPortalAssitenciaTecnica {
+   CAT_ID: number,
+   CAT_EMPRESA: number,
+   CAT_PESSOA: string,
+   CAT_SEQ: string,
+   CAT_CONTATO?: string | null,
+   CAT_PESSOA_CONTATO?: number | null,
+   CAT_DATA: number,
+   CAT_SITUACAO: EnumCAT_Situacao,
+   CAT_STATUS: number,
+   STT_DESCRICAO: string,
+   CAT_TECNICO?: string,
+   VEN_NOME?: string,
+   CAT_VL_TOTALBRUTO: number,
+   CAT_VL_TOTALDESCONTO: number,
+   CAT_VL_TOTALLIQUIDO: number,
+   CAT_VL_DESLOCAMENTO: number,
+   CAT_VL_INTERVENCOES: number,
+   CAT_VL_OUTROSCUSTOS: number,
+   CAT_VL_DESP_ACESSORIAS: number,
+   CAT_VL_TOTALASSISTENCIA: number,
+   CAT_VALORTOTAL: number,
+   CAT_SOLIC_GARAN_PROD_TOT_SOL: number,
+   CAT_SOLIC_GARAN_PROD_TOT_APROV: number,
+   CAT_KILOMETRAGEM?: number,
+   CAT_KILOMETRAGEM_INSTALADO?: number,
+   CAT_KILOMETRAGEM_RETIRADO?: number,
+   CAT_APLICACAO?: string,
+   MULTIPLOS_EQUIPAMENTOS: Array<IModelPortalMultiplosEquipamento>
+   TEM_GARANTIA: EnumSimNao,
+   ANEXOS: Array<IModelAnexos>,
+   NOME_PESSOA: string | null,
+   NOME_CONTATO: string | null,
+}

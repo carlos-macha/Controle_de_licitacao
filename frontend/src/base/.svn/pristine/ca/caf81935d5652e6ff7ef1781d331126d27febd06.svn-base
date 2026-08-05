@@ -1,0 +1,14 @@
+import { EnumAtivoInativo } from "../enums/enums";
+import { EnumCRM_TpPerguntaPesquisa } from "../enums/enumscrm";
+import { IModelCrm021 } from "./modelCRM021";
+
+export interface IModelCrm020 {
+   PGT_PESQUISA: number,
+   PGT_CODPERGUNTA: number,
+   PGT_PERGUNTA: string,
+   PGT_TIPO: EnumCRM_TpPerguntaPesquisa,
+   PGT_OBJETIVO?: string,
+   PGT_ORDEM_APRESENTACAO?: number,
+   PGT_ATIVO: EnumAtivoInativo,
+   RESPOSTAS: Array<IModelCrm021>
+}

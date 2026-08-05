@@ -1,0 +1,10 @@
+import { EnumAtivoInativo } from "../enums/enums"
+
+export interface IModelEst079 {
+   TMD_CODIGO: number,
+   TMD_DESCRICAO: string,
+   TMD_ATIVO: EnumAtivoInativo,
+   TMD_USUARIO: string,
+   TMD_PERCINDENIZACAO: number,
+   TMD_CFG_INTEGRACAO: string
+}

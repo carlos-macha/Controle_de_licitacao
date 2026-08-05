@@ -1,0 +1,10 @@
+import { IModelCallcenterCALL033 } from "./modelCallcenterCALL033";
+import { IModelCallcenterCALL035 } from "./modelCallcenterCALL035";
+
+export interface IModelCallcenterCALL036 {
+   VTR_TREINAMENTO: number,
+   VTR_VIDEO: number,
+   VTR_ORDEMAPRESENTACAO: number,
+   VIDEO: IModelCallcenterCALL033,
+   TREINAMENTO: IModelCallcenterCALL035
+}

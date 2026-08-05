@@ -1,0 +1,35 @@
+import { useEffect, useState } from "react";
+import { IModelCrm021 } from "../../../../models/modelCRM021";
+import { InputCheckbox, TextArea } from "../../../../components/form/form";
+import { IModelCrm020 } from "../../../../models/modelCRM020";
+import { nanoid } from "nanoid";
+
+interface PesquisaRespostaTextoProps {
+  resposta: IModelCrm021,
+  onChange?: (text: number) => void
+}
+
+const PesquisaRespostaTexto: React.FC<PesquisaRespostaTextoProps> = (props) => {
+  const { resposta, onChange } = props;
+  const [checked, setChecked] = useState<boolean>(true);
+
+  useEffect(() => {
+    onChange?.(resposta.RPT_CODRESPOSTA);
+  }, [resposta, onChange]);
+
+  return (
+    <div key={nanoid()} style={{ display: 'none' }}>
+        <InputCheckbox
+          className='custom-control-input'
+          classNameGroup='custom-control custom-checkbox d-inline-block'
+          classNameLabel='custom-control-label mr-4'
+          checked={checked}
+          label={resposta.RPT_RESPOSTA}
+          name={'CHECKBOX_' + resposta.RPT_PESQUISA + '_' + resposta.RPT_PERGUNTA + '_' + resposta.RPT_CODRESPOSTA}
+          // id={'CHECKBOX_' + resposta.RPT_PESQUISA + '_' + resposta.RPT_PERGUNTA + '_' + resposta.RPT_CODRESPOSTA}
+          id={nanoid()}
+        />
+    </div>
+  )
+}
+export default PesquisaRespostaTexto;

@@ -1,0 +1,11 @@
+export interface ImodelRegraConversao {
+   EMPRESA: number,
+   PRODUTO: string,
+   UNIDADE_ORIGEM: string,
+   UNIDADE_DESTINO: string,
+   VALOR_CONVERSAO: number,
+   REGRA_CONVERSAO?: string,
+   ARREDONDAMENTO?: number,
+   VALIDA_TOLERANCIA?: boolean,
+   VALOR_CONVERTIDO?: number
+}

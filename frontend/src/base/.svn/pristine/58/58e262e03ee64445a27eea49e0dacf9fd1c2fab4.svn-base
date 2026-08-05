@@ -1,0 +1,6 @@
+export interface IModelSis001 {
+   DIR_CODIGO: number,
+   DIR_DIREITO: string,
+   DIR_ENDERECO: string,
+   DIR_PROPAGANDA: string
+}

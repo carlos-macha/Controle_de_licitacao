@@ -1,0 +1,12 @@
+export enum EnumFaturamento_TpVendedor {
+   emCRM_TpVendedor_Vendedor = 'V',
+   emCRM_TpVendedor_Supervisor = 'S',
+   emCRM_TpVendedor_Representante = 'R',
+   emCRM_TpVendedor_Indic_Negocio = 'I'
+}
+
+export enum EnumFaturamento_Tipo_Vendedor {
+   emCRM_Tipo_Vendedor_Interno = 'I',
+   emCRM_Tipo_Vendedor_Externo = 'E',
+   emCRM_Tipo_Vendedor_Tecnico_Mecanico = 'T'
+}

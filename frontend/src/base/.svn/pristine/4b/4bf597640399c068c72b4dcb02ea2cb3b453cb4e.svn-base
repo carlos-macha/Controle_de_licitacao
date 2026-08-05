@@ -1,0 +1,31 @@
+.wrapper-html-editor {
+   height: calc(100vh - 25rem);
+   margin-bottom: 45px;
+}
+
+.wrapper-html-editor {
+   height: calc(100vh - 25rem);
+   margin-bottom: 45px;
+
+   display: flex;
+   flex-direction: column;
+}
+
+.wrapper-html-editor .ql-container {
+   flex: 1;
+   overflow-y: auto;
+}
+
+.wrapper-html-editor .ql-editor {
+   overflow-y: auto;
+   max-height: 100%;
+   word-break: break-word;
+}
+
+.ql-toolbar.ql-snow {
+   border: 0px;
+}
+
+.ql-toolbar.ql-snow+.ql-container.ql-snow {
+   border: 0px;
+}

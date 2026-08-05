@@ -1,0 +1,86 @@
+import { SweetAlertProps, SweetAlertType } from "react-bootstrap-sweetalert/dist/types";
+import { EnumPortalTpConversacaoChat } from "../enums/enumsportal";
+
+export type SweetAlertMessage = {
+   type?: SweetAlertType,
+   title?: string,
+   msg?: string | JSX.Element,
+   onConfirm?: () => void
+}
+
+export interface CustomSweetAlertProps {
+   props: SweetAlertProps,
+   msg?: string | JSX.Element
+}
+
+export type InputDataValue<T> = {
+   data: T,
+   setData(data: T): void
+}
+
+export type CustomJsonFile = {
+   bytes?: Array<number>,
+   base64StringFile?: string,
+   fileName?: string,
+   fileType?: string,
+   fileSize?: number
+}
+
+export type RecordIdType = number | string;
+
+export interface Tab {
+   id?: string,
+   idx: number,
+   title: string,
+   selected: boolean,
+   content: JSX.Element,
+   recordId: RecordIdType,
+   showClose: boolean,
+   origem?: string,
+   fixed?: boolean,
+   classNameContent?: string
+}
+
+export type ContentTabs = Array<Tab>;
+
+export type DataRoutesTypes = {
+   path: string,
+   name: string,
+   classIcon?: string
+}
+
+export interface IComponentBaseProps {
+   prefixId?: string
+}
+
+export interface ChatMessage {
+   idDocOrigem: number,
+   tipoDocOrigem: EnumPortalTpConversacaoChat,
+   codigoMovimento: string | number,
+   mensagem: string,
+   idRecado: number
+}
+
+export interface ChatChannels {
+   id: string,
+   active: boolean,
+   lastMessage?: ChatMessage,
+   dateTimeLastMessage?: number,
+   qtdNewMessages?: number,
+   conversations: Array<ChatConversation>
+}
+
+export interface ChatConversation {
+   REC_CODIGO?: number | null,
+   REC_DATA?: number
+   REC_HORA?: number
+   REC_MENSAGEM: string
+   REC_MENSAGEMLIDA?: string
+   REC_SISTEMA_ORIGEM_RECADO: string
+   REC_USUARIOREGISTRO?: string,
+   REC_PESSOA: string,
+   REC_ID_CONTATOPESSOA?: number,
+   REC_ASSUNTO: string,
+   REC_TP_DOC_ORIGEM: EnumPortalTpConversacaoChat,
+   REC_ID_DOC_ORIGEM: number
+}

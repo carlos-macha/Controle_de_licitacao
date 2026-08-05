@@ -1,0 +1,6 @@
+export interface IModelMOB102 {
+   TPP_CODIGO: number,
+   TPP_DESCRICAO: string,
+   TPP_TIPO: string
+
+}

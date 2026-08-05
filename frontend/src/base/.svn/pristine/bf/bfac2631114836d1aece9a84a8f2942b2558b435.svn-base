@@ -1,0 +1,5 @@
+export enum EnumCondicional_Status {
+   emCondicional_Status_Aberto = 'A',
+	emCondicional_Status_AguardandoFechamento = 'G',
+	emCondicional_Status_Fechado = 'F'
+}

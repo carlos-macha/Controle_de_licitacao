@@ -20,9 +20,10 @@ export class BaseService<T> {
                 data as Record<string, unknown>
             );
 
-        return {
-            ID: id
-        };
+        const item =
+            await this.dao.findById(id);
+
+        return item;
 
     }
 
@@ -71,10 +72,12 @@ export class BaseService<T> {
 
         await this.findById(id);
 
-        return this.dao.update(
+        await this.dao.update(
             id,
             data as Partial<T>
         );
+
+        return this.dao.findById(id);
 
     }
 

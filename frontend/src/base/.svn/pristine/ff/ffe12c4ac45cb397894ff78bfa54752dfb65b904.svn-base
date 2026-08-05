@@ -1,0 +1,35 @@
+export enum EnumTpDespesa {
+   emTpDespesa_Manual = 'MN',
+   emTpDespesa_Quantidade = 'QT',
+   emTpDespesa_Fixo = 'FX',
+   emTpDespesa_Percentual = 'PC'
+}
+
+export enum EnumTpLancamentoDespesa {
+   emTpLancamentoDespesa_Manual = 'MN',
+   emTpLancamentoDespesa_InclusaoProjeto = 'IP',
+   emTpLancamentoDespesa_EncerramentoProjeto = 'EE'
+}
+
+export enum EnumTpDocOrigemEtapa {
+   emTpDocOrigemEtapa_AcaoComercial = 'AC',
+   emTpDocOrigemEtapa_ItemAcaoComercial = 'IA'
+}
+
+export enum EnumTpStatusEtapa {
+   emTpStatusEtapa_Pendente = 'PENDENTE',
+   emTpStatusEtapa_Andamento = 'ANDAMENTO',
+   emTpStatusEtapa_Concluido = 'CONCLUIDO'
+}
+
+export enum EnumTpEtapa {
+   emTpEtapa_Manual = 'MANUAL',
+   emTpEtapa_Automatica = 'AUTOMATICA'
+}
+
+export enum EnumTpNotificacao {
+   emTpNotif_Nao = 'NAO',
+   emTpNotif_Inicio = 'INICIO',
+   emTpNotif_Final = 'FINAL',
+   emTpNotif_Ambos = 'AMBOS'
+}

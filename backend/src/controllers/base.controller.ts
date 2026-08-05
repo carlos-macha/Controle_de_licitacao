@@ -47,11 +47,26 @@ export class BaseController<
 
 
             const whereObject = Object.fromEntries(
-                Object.entries(where).filter(
-                    ([, value]) =>
-                        typeof value === "string" ||
-                        typeof value === "number"
-                )
+
+                Object.entries(where)
+                    .filter(
+                        ([, value]) =>
+                            typeof value === "string" ||
+                            typeof value === "number"
+                    )
+                    .map(([key, value]) => {
+
+                        if (key.startsWith("SEARCH_")) {
+                            return [
+                                key.replace("SEARCH_", ""),
+                                value
+                            ];
+                        }
+
+                        return [key, value];
+
+                    })
+
             );
 
 
@@ -80,7 +95,7 @@ export class BaseController<
                 });
 
 
-            return res.json(result);
+            return res.json(result.data);
 
 
         } catch (error) {

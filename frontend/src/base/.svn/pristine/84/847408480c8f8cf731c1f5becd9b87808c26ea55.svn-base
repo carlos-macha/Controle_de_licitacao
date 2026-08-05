@@ -1,0 +1,8 @@
+import { EnumAtivoInativo, EnumSimNao } from "../enums/enums"
+
+export interface IModelCrm037 {
+   AAR_CODIGO: number,
+   AAR_DESCRICAO: string,
+   AAR_VIGENTE: EnumSimNao,
+   AAR_ATIVO: EnumAtivoInativo
+}

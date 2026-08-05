@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<!-- saved from url=(0034)http://127.0.0.1:5173/cpcontroldoc -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="module">
+import RefreshRuntime from "/@react-refresh"
+RefreshRuntime.injectIntoGlobalHook(window)
+window.$RefreshReg$ = () => {}
+window.$RefreshSig$ = () => (type) => type
+window.__vite_plugin_react_preamble_installed__ = true
+</script>
+
+  <script type="module" src="./cpControldoc - Command Perfect_files/client"></script>
+
+   
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>cpControldoc - Command Perfect</title>
+   <!-- Favicon -->
+   <link rel="shortcut icon" href="http://127.0.0.1:5173/images/favicon.ico">
+   <!-- Material Design Icons -->
+   <link href="./cpControldoc - Command Perfect_files/materialdesignicons.min.css" rel="stylesheet" type="text/css">
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="./cpControldoc - Command Perfect_files/bootstrap.min.css">
+   <!-- Typography CSS -->
+   <link id="page-tipography" rel="stylesheet" href="./cpControldoc - Command Perfect_files/typography.css">
+   <!-- Style CSS -->
+   <link id="page-style" rel="stylesheet" href="./cpControldoc - Command Perfect_files/style.css">
+   <!-- Responsive CSS -->
+   <link rel="stylesheet" href="./cpControldoc - Command Perfect_files/responsive.css">
+
+<style type="text/css">.login-banner {
+   object-fit: cover;
+   object-position: center;
+}
+
+.auth-pass-inputgroup input[type=text]+.btn .ri-eye-fill:before {
+   content: "\ec80"
+}
+
+.iq-error {
+   height: auto !important;
+}
+
+
+/* 
+   INFO BOX
+   ==========================================================
+ */
+
+.info-box {
+   box-shadow: 0 0 1px rgba(0, 0, 0, .125), 0 1px 3px rgba(0, 0, 0, .2);
+   border-radius: .25rem;
+   background-color: #fff;
+   display: -webkit-flex;
+   display: -ms-flexbox;
+   display: flex;
+   margin-bottom: 1rem;
+   min-height: 80px;
+   padding: .5rem;
+   position: relative;
+   width: 100%;
+}
+
+.info-box .info-box-icon {
+   border-radius: .25rem;
+   -webkit-align-items: center;
+   -ms-flex-align: center;
+   align-items: center;
+   display: -webkit-flex;
+   display: -ms-flexbox;
+   display: flex;
+   font-size: 1.875rem;
+   -webkit-justify-content: center;
+   -ms-flex-pack: center;
+   justify-content: center;
+   text-align: center;
+   width: 70px;
+}
+
+.info-box .info-box-content {
+   display: -webkit-flex;
+   display: -ms-flexbox;
+   display: flex;
+   -webkit-flex-direction: column;
+   -ms-flex-direction: column;
+   flex-direction: column;
+   -webkit-justify-content: center;
+   -ms-flex-pack: center;
+   justify-content: center;
+   line-height: 1.8;
+   -webkit-flex: 1;
+   -ms-flex: 1;
+   flex: 1;
+   padding: 0 10px;
+}
+
+.info-box .info-box-text, .info-box .progress-description {
+   display: block;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.info-box .info-box-number {
+   display: block;
+   margin-top: .25rem;
+   font-weight: 700;
+}
+
+/*
+   TABS
+*/
+
+.dark .nav-tabs .nav-item.show .nav-link,
+.dark .nav-tabs .nav-link.active {
+   border: none !important;
+}
+
+.dark .nav-tabs .nav-item.show .nav-link,
+.dark .nav-tabs .nav-link.active {
+   border-bottom: 2px solid #0084ff !important;
+   color: #0084ff !important;
+}
+
+.dark .nav-tabs .nav-item.show .nav-link,
+.dark .nav-tabs .nav-link.active {
+   background: #2d325a !important;
+}
+
+.dark .nav-tabs a:hover {
+   border: 1px solid #2d325a !important;
+}
+
+@media (max-width: 991px) {
+   .dark .navbar-collapse {
+      background-color: #25294a !important;
+      border-top: 1px solid #2d325a;
+      border-bottom: 1px solid #2d325a;
+      /* #2d325a !important; */
+   }
+}</style><style type="text/css">.component-input-uppercase {
+   text-transform: uppercase !important;
+}
+
+.component-input-uppercase::placeholder {
+   text-transform: none !important;
+}
+
+.component-input-lowercase {
+   text-transform: lowercase !important;
+}
+
+.component-input-lowercase:placeholder {
+   text-transform: none !important;
+}
+
+/* 
+   SELECT
+   ==========================================================
+ */
+
+/* .is-invalid .select__control {
+   border: 1px solid #dc3545 !important;
+} */
+
+.dark .is-invalid .select__control {
+   border: unset !important;
+}
+
+.select__control {
+   background: #e9edf4 !important;
+   border: 0px solid #d7dbda !important;
+   font-size: 14px;
+   color: #8c91b6 !important;
+   border-radius: .25rem !important;
+   padding: 0px 2px;
+   line-height: 33px;
+}
+
+
+.dark .select__control {
+   background: #25294a !important;
+   border: unset !important;
+   color: #8c91b6 !important;
+   border: 1px solid #333 !important;
+}
+
+.select__control--is-disabled {
+   background-color: #e9ecef !important;
+   opacity: 1 !important;
+}
+
+.dark .select__control--is-disabled {
+   background-color: #e9ecef !important;
+   border-color: #262626 !important;
+   color: #8c91b6 !important;
+}
+
+.select__control--is-focused {
+   box-shadow: 0 0 0 0px #0084ff !important;
+}
+
+.select__single-value--is-disabled {
+   color: #495057 !important;
+}
+
+
+.dark .select__single-value--is-disabled {
+   color: #8f9198 !important;
+}
+
+.dark .select__single-value,
+.dark .select__placeholder {
+   color: #8c91b6 !important;
+}
+
+.select__control--menu-is-open {
+   box-shadow: 0 0 0 0px #0084ff !important;
+}
+
+.select__option:hover {
+   background: #0084ff !important;
+   color: #fff !important;
+}
+
+.select__option--is-selected {
+   /* background: var(--bs-secondary) !important; */
+   background: #0084ff !important;
+   opacity: .8;
+}
+
+.select__option--is-selected:hover {
+   /* background: var(--bs-secondary) !important; */
+   background: #0084ff !important;
+   opacity: .8;
+}
+
+
+.select__option--is-focused {
+   background: #0084ff !important;
+   color: #fff !important;
+}
+
+
+body[data-layout-mode=dark] .select__indicator-separator {
+   color: #8f9198 !important;
+}
+
+.dark .select__menu {
+   background: #25294a !important;
+}</style><style type="text/css"></style><style type="text/css">.custom-footer {
+   bottom: 0;
+   left: 0;
+   position: fixed;
+   right: 0;
+   z-index: -1;
+}</style><style type="text/css">.content-tabpage {
+   padding: 0px 0px 0;
+   margin-top: 75px;
+   min-height: auto;
+   height: calc(100vh - 9rem);
+}
+
+.content-tabpage-tab {
+   width: 100% !important;
+}
+
+.content-tabpage-btn-scrollright {
+   border: none !important;
+}
+
+.dark .content-tabpage-btn-scrollright {
+   background-color: #202442 !important;
+   color: #FFF !important;
+}
+
+.content-tabpage-navbar {
+   border-radius: 0;
+   margin-bottom: 0;
+   padding: 0;
+   width: 100%;
+   z-index: 1;
+   background: #ffffff;
+   -webkit-box-shadow: 0px 0px 25px 0px rgba(45, 69, 95, 0.1);
+   -moz-box-shadow: 0px 0px 25px 0px rgba(45, 69, 95, 0.1);
+   box-shadow: 0px 0px 25px 0px rgba(45, 69, 95, 0.1);
+}
+
+.dark .content-tabpage-navbar {
+   background: #202442 !important;
+   border-top-color: #2d325a !important
+}
+
+.dark .content-tabpage-iframe-fullscreen {
+   background-color: #202442 !important;
+   color: #FFF !important;
+}
+
+.dark .content-tabpage-btn-fechar {
+   background-color: #2d325a !important
+}
+
+.dark .content-tabpage-btn-fechar .btn-primary:not(:disabled):not(.disabled).active:focus, .btn-primary:not(:disabled):not(.disabled):active:focus, .show>.btn-primary.dropdown-toggle:focus {
+   box-shadow: 0 0 0 0.2rem #202442 !important;
+}
+
+body.iframe-mode-fullscreen .iq-sidebar {
+   display: none;
+}
+
+body.iframe-mode-fullscreen .content-tabpage {
+   margin-left: 0 !important;
+   margin-top: 0 !important;
+   padding-bottom: 0 !important;
+}
+
+body.iframe-mode-fullscreen .iq-top-navbar,
+body.iframe-mode-fullscreen .iq-footer {
+   display: none;
+}
+
+/* body.iframe-mode-fullscreen {
+   overflow: hidden;
+} */
+
+@media (hover: none) and (pointer: coarse) {
+   .content-tabpage.iframe-mode .btn-iframe-close {
+      visibility: visible;
+   }
+}
+
+.content-tabpage.iframe-mode .navbar-nav {
+   overflow-y: auto;
+   width: 100%;
+}
+
+.content-tabpage.iframe-mode .navbar-nav .nav-link {
+   white-space: nowrap;
+}
+
+.content-wrapper.iframe-mode .navbar-nav .nav-item {
+   position: relative;
+}
+
+.content-wrapper.iframe-mode .navbar-nav .nav-item:hover .btn-iframe-close, .content-wrapper.iframe-mode .navbar-nav .nav-item:focus .btn-iframe-close {
+   -webkit-animation-name: fadeIn;
+   animation-name: fadeIn;
+   -webkit-animation-duration: 0.3s;
+   animation-duration: 0.3s;
+   -webkit-animation-fill-mode: both;
+   animation-fill-mode: both;
+   visibility: visible;
+}
+
+@media (max-width: 1299px) {
+   .content-page, body.sidebar-main .content-page {
+      margin-left: 0;
+      padding: 0;
+   }
+}
+
+body.iframe-mode-fullscreen .content-tabpage.iframe-mode {
+   height: calc(100vh - 1rem);
+}
+
+body.iframe-mode-fullscreen .content-tabpage.iframe-mode .frame-content-page {
+   height: calc(100vh);
+}
+
+body.iframe-mode-fullscreen .content-tabpage.iframe-mode .chat-content {
+   height: calc(100vh - 14.5rem);
+}
+
+body.iframe-mode-fullscreen .content-tabpage.iframe-mode .chat-sidebar-channel {
+   height: calc(100vh - 16rem);
+}
+
+body.iframe-mode-fullscreen .content-tabpage.iframe-mode .chat-start {
+   height: calc(100vh);
+}</style><style type="text/css">.frame-content-page {
+   overflow: auto !important;
+   height: calc(100vh - 12.0rem);
+   margin-top: 15px;
+}</style><style type="text/css">.container-text-403 {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: calc(100vh - 12rem);
+   flex-direction: column;
+   text-align: center;
+}
+
+.container-img-403 {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: calc(100vh - 12rem);
+   flex-direction: column;
+}
+
+.img-403 {
+   object-fit: contain;
+   object-position: center;
+}</style><style type="text/css">.btn-tab-close {
+   z-index: 1000;
+}</style><style type="text/css">.card-header {
+   background-color: #fff;
+}
+
+.dark .card-header {
+   background-color: #2d325a;
+}</style><style type="text/css">.datasearch-containner {
+   display: -webkit-flex;
+   display: -ms-flexbox;
+   display: flex;
+   -webkit-flex-wrap: wrap;
+   -ms-flex-wrap: wrap;
+   flex-wrap: wrap;
+}
+
+.datasearch-containner>div>div>div,
+.datasearch-containner>div>button,
+.datasearch-containner>div>input {
+   margin-right: 4px !important;
+   margin-bottom: 2px !important;
+   margin-top: 2px !important;
+}</style><style type="text/css">.tabulator{position:relative;border:1px solid #999;font-size:14px;text-align:left;overflow:hidden;-webkit-transform:translateZ(0);-moz-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0)}.tabulator[tabulator-layout=fitDataFill] .tabulator-tableholder .tabulator-table{min-width:100%}.tabulator[tabulator-layout=fitDataTable]{display:inline-block}.tabulator.tabulator-block-select{user-select:none}.tabulator .tabulator-header{position:relative;box-sizing:border-box;width:100%;border-bottom:1px solid #999;background-color:#fff;color:#555;font-weight:700;white-space:nowrap;overflow:hidden;-moz-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-o-user-select:none}.tabulator .tabulator-header.tabulator-header-hidden{display:none}.tabulator .tabulator-header .tabulator-header-contents{position:relative;overflow:hidden}.tabulator .tabulator-header .tabulator-header-contents .tabulator-headers{display:inline-block}.tabulator .tabulator-header .tabulator-col{display:inline-flex;position:relative;box-sizing:border-box;flex-direction:column;justify-content:flex-start;border-right:1px solid #ddd;background:#fff;text-align:left;vertical-align:bottom;overflow:hidden}.tabulator .tabulator-header .tabulator-col.tabulator-moving{position:absolute;border:1px solid #999;background:#e6e6e6;pointer-events:none}.tabulator .tabulator-header .tabulator-col .tabulator-col-content{box-sizing:border-box;position:relative;padding:4px}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-header-popup-button{padding:0 8px}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-header-popup-button:hover{cursor:pointer;opacity:.6}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title-holder{position:relative}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title{box-sizing:border-box;width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title.tabulator-col-title-wrap{white-space:normal;text-overflow:clip}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-title-editor{box-sizing:border-box;width:100%;border:1px solid #999;padding:1px;background:#fff}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-header-popup-button+.tabulator-title-editor{width:calc(100% - 22px)}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter{display:flex;align-items:center;position:absolute;top:0;bottom:0;right:4px}.tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter .tabulator-arrow{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:6px solid #bbb}.tabulator .tabulator-header .tabulator-col.tabulator-col-group .tabulator-col-group-cols{position:relative;display:flex;border-top:1px solid #ddd;overflow:hidden;margin-right:-1px}.tabulator .tabulator-header .tabulator-col .tabulator-header-filter{position:relative;box-sizing:border-box;margin-top:2px;width:100%;text-align:center}.tabulator .tabulator-header .tabulator-col .tabulator-header-filter textarea{height:auto!important}.tabulator .tabulator-header .tabulator-col .tabulator-header-filter svg{margin-top:3px}.tabulator .tabulator-header .tabulator-col .tabulator-header-filter input::-ms-clear{width:0;height:0}.tabulator .tabulator-header .tabulator-col.tabulator-sortable .tabulator-col-title{padding-right:25px}@media (hover:hover) and (pointer:fine){.tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover{cursor:pointer;background-color:#e6e6e6}}.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=none] .tabulator-col-content .tabulator-col-sorter{color:#bbb}@media (hover:hover) and (pointer:fine){.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=none] .tabulator-col-content .tabulator-col-sorter.tabulator-col-sorter-element .tabulator-arrow:hover{cursor:pointer;border-bottom:6px solid #555}}.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=none] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow{border-top:none;border-bottom:6px solid #bbb}.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=ascending] .tabulator-col-content .tabulator-col-sorter{color:#666}@media (hover:hover) and (pointer:fine){.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=ascending] .tabulator-col-content .tabulator-col-sorter.tabulator-col-sorter-element .tabulator-arrow:hover{cursor:pointer;border-bottom:6px solid #555}}.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=ascending] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow{border-top:none;border-bottom:6px solid #666}.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=descending] .tabulator-col-content .tabulator-col-sorter{color:#666}@media (hover:hover) and (pointer:fine){.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=descending] .tabulator-col-content .tabulator-col-sorter.tabulator-col-sorter-element .tabulator-arrow:hover{cursor:pointer;border-top:6px solid #555}}.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort=descending] .tabulator-col-content .tabulator-col-sorter .tabulator-arrow{border-bottom:none;border-top:6px solid #666;color:#666}.tabulator .tabulator-header .tabulator-col.tabulator-col-vertical .tabulator-col-content .tabulator-col-title{writing-mode:vertical-rl;text-orientation:mixed;display:flex;align-items:center;justify-content:center}.tabulator .tabulator-header .tabulator-col.tabulator-col-vertical.tabulator-col-vertical-flip .tabulator-col-title{transform:rotate(180deg)}.tabulator .tabulator-header .tabulator-col.tabulator-col-vertical.tabulator-sortable .tabulator-col-title{padding-right:0;padding-top:20px}.tabulator .tabulator-header .tabulator-col.tabulator-col-vertical.tabulator-sortable.tabulator-col-vertical-flip .tabulator-col-title{padding-right:0;padding-bottom:20px}.tabulator .tabulator-header .tabulator-col.tabulator-col-vertical.tabulator-sortable .tabulator-col-sorter{justify-content:center;left:0;right:0;top:4px;bottom:auto}.tabulator .tabulator-header .tabulator-frozen{position:sticky;left:0;z-index:10}.tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left{border-right:2px solid #ddd}.tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-right{border-left:2px solid #ddd}.tabulator .tabulator-header .tabulator-calcs-holder{box-sizing:border-box;background:#fff!important;border-top:1px solid #ddd;border-bottom:1px solid #ddd}.tabulator .tabulator-header .tabulator-calcs-holder .tabulator-row{background:#fff!important}.tabulator .tabulator-header .tabulator-calcs-holder .tabulator-row .tabulator-col-resize-handle,.tabulator .tabulator-header .tabulator-frozen-rows-holder:empty{display:none}.tabulator .tabulator-tableholder{position:relative;width:100%;white-space:nowrap;overflow:auto;-webkit-overflow-scrolling:touch}.tabulator .tabulator-tableholder:focus{outline:none}.tabulator .tabulator-tableholder .tabulator-placeholder{box-sizing:border-box;display:flex;align-items:center;justify-content:center;width:100%}.tabulator .tabulator-tableholder .tabulator-placeholder[tabulator-render-mode=virtual]{min-height:100%;min-width:100%}.tabulator .tabulator-tableholder .tabulator-placeholder .tabulator-placeholder-contents{display:inline-block;text-align:center;padding:10px;color:#ccc;font-weight:700;font-size:20px;white-space:normal}.tabulator .tabulator-tableholder .tabulator-table{position:relative;display:inline-block;background-color:#fff;white-space:nowrap;overflow:visible;color:#333}.tabulator .tabulator-tableholder .tabulator-table .tabulator-row.tabulator-calcs{font-weight:700;background:#f2f2f2!important}.tabulator .tabulator-tableholder .tabulator-table .tabulator-row.tabulator-calcs.tabulator-calcs-top{border-bottom:2px solid #ddd}.tabulator .tabulator-tableholder .tabulator-table .tabulator-row.tabulator-calcs.tabulator-calcs-bottom{border-top:2px solid #ddd}.tabulator .tabulator-footer{border-top:1px solid #999;background-color:#fff;color:#555;font-weight:700;white-space:nowrap;user-select:none;-moz-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-o-user-select:none}.tabulator .tabulator-footer .tabulator-footer-contents{display:flex;flex-direction:row;align-items:center;justify-content:space-between;padding:5px 10px}.tabulator .tabulator-footer .tabulator-footer-contents:empty{display:none}.tabulator .tabulator-footer .tabulator-calcs-holder{box-sizing:border-box;width:100%;text-align:left;background:#fff!important;border-bottom:1px solid #ddd;border-top:1px solid #ddd;overflow:hidden}.tabulator .tabulator-footer .tabulator-calcs-holder .tabulator-row{display:inline-block;background:#fff!important}.tabulator .tabulator-footer .tabulator-calcs-holder .tabulator-row .tabulator-col-resize-handle{display:none}.tabulator .tabulator-footer .tabulator-calcs-holder:only-child{margin-bottom:-5px;border-bottom:none}.tabulator .tabulator-footer>*+.tabulator-page-counter{margin-left:10px}.tabulator .tabulator-footer .tabulator-page-counter{font-weight:400}.tabulator .tabulator-footer .tabulator-paginator{flex:1;text-align:right;color:#555;font-family:inherit;font-weight:inherit;font-size:inherit}.tabulator .tabulator-footer .tabulator-page-size{display:inline-block;margin:0 5px;padding:2px 5px;border:1px solid #aaa;border-radius:3px}.tabulator .tabulator-footer .tabulator-pages{margin:0 7px}.tabulator .tabulator-footer .tabulator-page{display:inline-block;margin:0 2px;padding:2px 5px;border:1px solid #aaa;border-radius:3px;background:hsla(0,0%,100%,.2)}.tabulator .tabulator-footer .tabulator-page.active{color:#d00}.tabulator .tabulator-footer .tabulator-page:disabled{opacity:.5}@media (hover:hover) and (pointer:fine){.tabulator .tabulator-footer .tabulator-page:not(.disabled):hover{cursor:pointer;background:rgba(0,0,0,.2);color:#fff}}.tabulator .tabulator-col-resize-handle{position:relative;display:inline-block;width:6px;margin-left:-3px;margin-right:-3px;z-index:10;vertical-align:middle}@media (hover:hover) and (pointer:fine){.tabulator .tabulator-col-resize-handle:hover{cursor:ew-resize}}.tabulator .tabulator-col-resize-handle:last-of-type{width:3px;margin-right:0}.tabulator .tabulator-alert{position:absolute;display:flex;align-items:center;top:0;left:0;z-index:100;height:100%;width:100%;background:rgba(0,0,0,.4);text-align:center}.tabulator .tabulator-alert .tabulator-alert-msg{display:inline-block;margin:0 auto;padding:10px 20px;border-radius:10px;background:#fff;font-weight:700;font-size:16px}.tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-msg{border:4px solid #333;color:#000}.tabulator .tabulator-alert .tabulator-alert-msg.tabulator-alert-state-error{border:4px solid #d00;color:#590000}.tabulator-row{position:relative;box-sizing:border-box;min-height:22px}.tabulator-row,.tabulator-row.tabulator-row-even{background-color:#fff}@media (hover:hover) and (pointer:fine){.tabulator-row.tabulator-selectable:hover{background-color:#bbb;cursor:pointer}}.tabulator-row.tabulator-selected{background-color:#9abcea}@media (hover:hover) and (pointer:fine){.tabulator-row.tabulator-selected:hover{background-color:#769bcc;cursor:pointer}}.tabulator-row.tabulator-row-moving{border:1px solid #000;background:#fff}.tabulator-row.tabulator-moving{position:absolute;border-top:1px solid #ddd;border-bottom:1px solid #ddd;pointer-events:none;z-index:15}.tabulator-row .tabulator-row-resize-handle{position:absolute;right:0;bottom:0;left:0;height:5px}.tabulator-row .tabulator-row-resize-handle.prev{top:0;bottom:auto}@media (hover:hover) and (pointer:fine){.tabulator-row .tabulator-row-resize-handle:hover{cursor:ns-resize}}.tabulator-row .tabulator-responsive-collapse{box-sizing:border-box;padding:5px;border-top:1px solid #ddd;border-bottom:1px solid #ddd}.tabulator-row .tabulator-responsive-collapse:empty{display:none}.tabulator-row .tabulator-responsive-collapse table{font-size:14px}.tabulator-row .tabulator-responsive-collapse table tr td{position:relative}.tabulator-row .tabulator-responsive-collapse table tr td:first-of-type{padding-right:10px}.tabulator-row .tabulator-cell{display:inline-block;position:relative;box-sizing:border-box;padding:4px;border-right:1px solid #ddd;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tabulator-row .tabulator-cell.tabulator-frozen{display:inline-block;position:sticky;left:0;background-color:inherit;z-index:10}.tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left{border-right:2px solid #ddd}.tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-right{border-left:2px solid #ddd}.tabulator-row .tabulator-cell.tabulator-editing{border:1px solid #1d68cd;outline:none;padding:0}.tabulator-row .tabulator-cell.tabulator-editing input,.tabulator-row .tabulator-cell.tabulator-editing select{border:1px;background:transparent;outline:none}.tabulator-row .tabulator-cell.tabulator-validation-fail{border:1px solid #d00}.tabulator-row .tabulator-cell.tabulator-validation-fail input,.tabulator-row .tabulator-cell.tabulator-validation-fail select{border:1px;background:transparent;color:#d00}.tabulator-row .tabulator-cell.tabulator-row-handle{display:inline-flex;align-items:center;justify-content:center;-moz-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-o-user-select:none}.tabulator-row .tabulator-cell.tabulator-row-handle .tabulator-row-handle-box{width:80%}.tabulator-row .tabulator-cell.tabulator-row-handle .tabulator-row-handle-box .tabulator-row-handle-bar{width:100%;height:3px;margin-top:2px;background:#666}.tabulator-row .tabulator-cell .tabulator-data-tree-branch{display:inline-block;vertical-align:middle;height:9px;width:7px;margin-top:-9px;margin-right:5px;border-bottom-left-radius:1px;border-left:2px solid #ddd;border-bottom:2px solid #ddd}.tabulator-row .tabulator-cell .tabulator-data-tree-control{display:inline-flex;justify-content:center;align-items:center;vertical-align:middle;height:11px;width:11px;margin-right:5px;border:1px solid #333;border-radius:2px;background:rgba(0,0,0,.1);overflow:hidden}@media (hover:hover) and (pointer:fine){.tabulator-row .tabulator-cell .tabulator-data-tree-control:hover{cursor:pointer;background:rgba(0,0,0,.2)}}.tabulator-row .tabulator-cell .tabulator-data-tree-control .tabulator-data-tree-control-collapse{display:inline-block;position:relative;height:7px;width:1px;background:transparent}.tabulator-row .tabulator-cell .tabulator-data-tree-control .tabulator-data-tree-control-collapse:after{position:absolute;content:"";left:-3px;top:3px;height:1px;width:7px;background:#333}.tabulator-row .tabulator-cell .tabulator-data-tree-control .tabulator-data-tree-control-expand{display:inline-block;position:relative;height:7px;width:1px;background:#333}.tabulator-row .tabulator-cell .tabulator-data-tree-control .tabulator-data-tree-control-expand:after{position:absolute;content:"";left:-3px;top:3px;height:1px;width:7px;background:#333}.tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle{display:inline-flex;align-items:center;justify-content:center;-moz-user-select:none;-khtml-user-select:none;-webkit-user-select:none;-o-user-select:none;height:15px;width:15px;border-radius:20px;background:#666;color:#fff;font-weight:700;font-size:1.1em}@media (hover:hover) and (pointer:fine){.tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle:hover{opacity:.7;cursor:pointer}}.tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle.open .tabulator-responsive-collapse-toggle-close{display:initial}.tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle.open .tabulator-responsive-collapse-toggle-open{display:none}.tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle svg{stroke:#fff}.tabulator-row .tabulator-cell .tabulator-responsive-collapse-toggle .tabulator-responsive-collapse-toggle-close{display:none}.tabulator-row .tabulator-cell .tabulator-traffic-light{display:inline-block;height:14px;width:14px;border-radius:14px}.tabulator-row.tabulator-group{box-sizing:border-box;border-bottom:1px solid #999;border-right:1px solid #ddd;border-top:1px solid #999;padding:5px 5px 5px 10px;background:#ccc;font-weight:700;min-width:100%}@media (hover:hover) and (pointer:fine){.tabulator-row.tabulator-group:hover{cursor:pointer;background-color:rgba(0,0,0,.1)}}.tabulator-row.tabulator-group.tabulator-group-visible .tabulator-arrow{margin-right:10px;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid #666;border-bottom:0}.tabulator-row.tabulator-group.tabulator-group-level-1{padding-left:30px}.tabulator-row.tabulator-group.tabulator-group-level-2{padding-left:50px}.tabulator-row.tabulator-group.tabulator-group-level-3{padding-left:70px}.tabulator-row.tabulator-group.tabulator-group-level-4{padding-left:90px}.tabulator-row.tabulator-group.tabulator-group-level-5{padding-left:110px}.tabulator-row.tabulator-group .tabulator-group-toggle{display:inline-block}.tabulator-row.tabulator-group .tabulator-arrow{display:inline-block;width:0;height:0;margin-right:16px;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:0;border-left:6px solid #666;vertical-align:middle}.tabulator-row.tabulator-group span{margin-left:10px;color:#d00}.tabulator-popup-container{position:absolute;display:inline-block;box-sizing:border-box;background:#fff;border:1px solid #ddd;box-shadow:0 0 5px 0 rgba(0,0,0,.2);font-size:14px;overflow-y:auto;-webkit-overflow-scrolling:touch;z-index:10000}.tabulator-popup{padding:5px;border-radius:3px}.tabulator-tooltip{max-width:Min(500px,100%);padding:3px 5px;border-radius:2px;box-shadow:none;font-size:12px;pointer-events:none}.tabulator-menu .tabulator-menu-item{position:relative;box-sizing:border-box;padding:5px 10px;user-select:none}.tabulator-menu .tabulator-menu-item.tabulator-menu-item-disabled{opacity:.5}@media (hover:hover) and (pointer:fine){.tabulator-menu .tabulator-menu-item:not(.tabulator-menu-item-disabled):hover{cursor:pointer;background:#fff}}.tabulator-menu .tabulator-menu-item.tabulator-menu-item-submenu{padding-right:25px}.tabulator-menu .tabulator-menu-item.tabulator-menu-item-submenu:after{display:inline-block;position:absolute;top:calc(5px + .4em);right:10px;height:7px;width:7px;content:"";border-color:#ddd;border-style:solid;border-width:1px 1px 0 0;vertical-align:top;transform:rotate(45deg)}.tabulator-menu .tabulator-menu-separator{border-top:1px solid #ddd}.tabulator-edit-list{max-height:200px;font-size:14px;overflow-y:auto;-webkit-overflow-scrolling:touch}.tabulator-edit-list .tabulator-edit-list-item{padding:4px;color:#333;outline:none}.tabulator-edit-list .tabulator-edit-list-item.active{color:#fff;background:#1d68cd}.tabulator-edit-list .tabulator-edit-list-item.active.focused{outline:1px solid hsla(0,0%,100%,.5)}.tabulator-edit-list .tabulator-edit-list-item.focused{outline:1px solid #1d68cd}@media (hover:hover) and (pointer:fine){.tabulator-edit-list .tabulator-edit-list-item:hover{cursor:pointer;color:#fff;background:#1d68cd}}.tabulator-edit-list .tabulator-edit-list-placeholder{padding:4px;color:#333;text-align:center}.tabulator-edit-list .tabulator-edit-list-group{border-bottom:1px solid #ddd;padding:6px 4px 4px;color:#333;font-weight:700}.tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-2,.tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-2{padding-left:12px}.tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-3,.tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-3{padding-left:20px}.tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-4,.tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-4{padding-left:28px}.tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-5,.tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-5{padding-left:36px}.tabulator.tabulator-ltr{direction:ltr}.tabulator.tabulator-rtl{text-align:initial;direction:rtl}.tabulator.tabulator-rtl .tabulator-header .tabulator-col{text-align:initial;border-left:1px solid #ddd;border-right:initial}.tabulator.tabulator-rtl .tabulator-header .tabulator-col.tabulator-col-group .tabulator-col-group-cols{margin-right:0;margin-left:-1px}.tabulator.tabulator-rtl .tabulator-header .tabulator-col.tabulator-sortable .tabulator-col-title{padding-right:0;padding-left:25px}.tabulator.tabulator-rtl .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter{left:8px;right:auto}.tabulator.tabulator-rtl .tabulator-row .tabulator-cell{border-right:initial;border-left:1px solid #ddd}.tabulator.tabulator-rtl .tabulator-row .tabulator-cell .tabulator-data-tree-branch{margin-right:0;margin-left:5px;border-bottom-left-radius:0;border-bottom-right-radius:1px;border-left:initial;border-right:2px solid #ddd}.tabulator.tabulator-rtl .tabulator-row .tabulator-cell .tabulator-data-tree-control{margin-right:0;margin-left:5px}.tabulator.tabulator-rtl .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left{border-left:2px solid #ddd}.tabulator.tabulator-rtl .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-right{border-right:2px solid #ddd}.tabulator.tabulator-rtl .tabulator-row .tabulator-col-resize-handle:last-of-type{width:3px;margin-left:0;margin-right:-3px}.tabulator.tabulator-rtl .tabulator-footer .tabulator-calcs-holder{text-align:initial}.tabulator-print-fullscreen{position:absolute;top:0;bottom:0;left:0;right:0;z-index:10000}body.tabulator-print-fullscreen-hide>:not(.tabulator-print-fullscreen){display:none!important}.tabulator-print-table{border-collapse:collapse}.tabulator-print-table .tabulator-data-tree-branch{display:inline-block;vertical-align:middle;height:9px;width:7px;margin-top:-9px;margin-right:5px;border-bottom-left-radius:1px;border-left:2px solid #ddd;border-bottom:2px solid #ddd}.tabulator-print-table .tabulator-print-table-group{box-sizing:border-box;border-bottom:1px solid #999;border-right:1px solid #ddd;border-top:1px solid #999;padding:5px 5px 5px 10px;background:#ccc;font-weight:700;min-width:100%}@media (hover:hover) and (pointer:fine){.tabulator-print-table .tabulator-print-table-group:hover{cursor:pointer;background-color:rgba(0,0,0,.1)}}.tabulator-print-table .tabulator-print-table-group.tabulator-group-visible .tabulator-arrow{margin-right:10px;border-left:6px solid transparent;border-right:6px solid transparent;border-top:6px solid #666;border-bottom:0}.tabulator-print-table .tabulator-print-table-group.tabulator-group-level-1 td{padding-left:30px!important}.tabulator-print-table .tabulator-print-table-group.tabulator-group-level-2 td{padding-left:50px!important}.tabulator-print-table .tabulator-print-table-group.tabulator-group-level-3 td{padding-left:70px!important}.tabulator-print-table .tabulator-print-table-group.tabulator-group-level-4 td{padding-left:90px!important}.tabulator-print-table .tabulator-print-table-group.tabulator-group-level-5 td{padding-left:110px!important}.tabulator-print-table .tabulator-print-table-group .tabulator-group-toggle{display:inline-block}.tabulator-print-table .tabulator-print-table-group .tabulator-arrow{display:inline-block;width:0;height:0;margin-right:16px;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:0;border-left:6px solid #666;vertical-align:middle}.tabulator-print-table .tabulator-print-table-group span{color:#d00}.tabulator-print-table .tabulator-data-tree-control{display:inline-flex;justify-content:center;align-items:center;vertical-align:middle;height:11px;width:11px;margin-right:5px;border:1px solid #333;border-radius:2px;background:rgba(0,0,0,.1);overflow:hidden}@media (hover:hover) and (pointer:fine){.tabulator-print-table .tabulator-data-tree-control:hover{cursor:pointer;background:rgba(0,0,0,.2)}}.tabulator-print-table .tabulator-data-tree-control .tabulator-data-tree-control-collapse{display:inline-block;position:relative;height:7px;width:1px;background:transparent}.tabulator-print-table .tabulator-data-tree-control .tabulator-data-tree-control-collapse:after{position:absolute;content:"";left:-3px;top:3px;height:1px;width:7px;background:#333}.tabulator-print-table .tabulator-data-tree-control .tabulator-data-tree-control-expand{display:inline-block;position:relative;height:7px;width:1px;background:#333}.tabulator-print-table .tabulator-data-tree-control .tabulator-data-tree-control-expand:after{position:absolute;content:"";left:-3px;top:3px;height:1px;width:7px;background:#333}.tabulator{border:none;background-color:#fff}.tabulator .tabulator-header .tabulator-calcs-holder{background:#f2f2f2!important;border-bottom:1px solid #999}.tabulator .tabulator-header .tabulator-calcs-holder .tabulator-row{background:#f2f2f2!important}.tabulator .tabulator-tableholder .tabulator-placeholder span{color:#000}.tabulator .tabulator-footer .tabulator-calcs-holder{background:#f2f2f2!important;border-bottom:1px solid #fff}.tabulator .tabulator-footer .tabulator-calcs-holder .tabulator-row{background:#f2f2f2!important}.tabulator-row{border-bottom:1px solid #ddd}.tabulator-row .tabulator-cell:last-of-type{border-right:none}.tabulator-row.tabulator-group span{color:#666}.tabulator-print-table .tabulator-print-table-group span{margin-left:10px;color:#666}
+/*# sourceMappingURL=tabulator_simple.min.css.map */</style><style type="text/css">.tabulator-row.tabulator-selected,
+.tabulator-row.tabulator-selected i,
+.tabulator-row.tabulator-selected:hover {
+   background-color: #0084ff !important;
+   color: #fff;
+}
+
+.dark .tabulator-row.tabulator-selected i {
+   background-color: #25294a !important;
+}
+
+.tabulator-row:hover {
+   background-color: #e5f2ff !important;
+}
+
+.tabulator .tabulator-footer {
+   background-color: transparent !important;
+}
+
+.tabulator .tabulator-header {
+   background-color: var(--iq-light-border) !important;
+}
+
+
+/* .tabulator .tabulator-header .tabulator-col {
+   background-color: var(--iq-light-border) !important;
+} */
+
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+   cursor: pointer;
+   background-color: #e6e6e6 !important;
+}
+
+.dark .tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+   cursor: pointer;
+   background-color: #25294a !important;
+}
+
+/*
+  dark
+*/
+
+.dark .tabulator-row.tabulator-selected,
+.dark .tabulator-row.tabulator-selectable:hover {
+   background-color: #25294a !important;
+}
+
+/* 
+.dark .tabulator-row.tabulator-selectable:hover {
+   background-color: #343a40 !important;
+} */
+
+.dark .tabulator {
+   background-color: var(--iq-dark-body-bg) !important;
+
+   /* background-color: #25294a !important; */
+}
+
+.dark .tabulator .tabulator-footer {
+   background-color: var(--iq-dark-body-bg) !important;
+}
+
+.dark .tabulator .tabulator-header {
+   background-color: var(--iq-dark-hover-bg) !important;
+   border-bottom: 2px solid #25294a;
+}
+
+.dark .tabulator .tabulator-frozen-rows-holder {
+   background-color: var(--iq-dark-hover-bg) !important;
+}
+
+.dark .tabulator .tabulator-tableholder .tabulator-table {
+   background-color: var(--iq-dark-body-bg) !important;
+}
+
+.dark .tabulator-row {
+   background-color: var(--iq-dark-body-bg) !important;
+   color: #FFF !important;
+   border-bottom: 1px solid #25294a !important;
+}
+
+.dark .tabulator-row:hover {
+   background-color: #25294a !important;
+}
+
+.dark .tabulator .tabulator-header {
+   color: #fff !important;
+}
+
+.dark .tabulator-frozen {
+   background-color: #2d325a !important;
+}
+
+.dark .tabulator .tabulator-header .tabulator-col {
+   background-color: #2d325a !important;
+}
+
+.dark .tabulator .tabulator-header .tabulator-col .tabulator-header-filter input:focus {
+   background-color: #2d325a !important;
+}
+
+.dark .tabulator-row.tabulator-row-even {
+   /* background-color: #222033 !important; */
+   /* background-color: rgb(63, 52, 78) !important; */
+}
+
+
+.dark .tabulator .tabulator-header .tabulator-col.tabulator-sortable.tabulator-col-sorter-element:hover {
+   cursor: pointer;
+   /* background-color: #343a40 !important; */
+   color: #FFF;
+}
+
+.dark .tabulator .tabulator-header .tabulator-col,
+.dark .tabulator-row .tabulator-cell,
+.dark .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left,
+.dark .tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-right,
+.dark .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-right,
+.dark .tabulator .tabulator-header .tabulator-frozen.tabulator-frozen-left,
+.dark .tabulator-row .tabulator-cell.tabulator-frozen.tabulator-frozen-left {
+   border-right: 2px solid #25294a !important;
+}
+
+.dark .tabulator-row .tabulator-cell {
+   border-bottom: 1px solid #25294a !important;
+}
+
+/*#343a40*/</style><style type="text/css">.btn-options-dropdown,
+.btn-options-dropdown>button {
+   font-size: x-large;
+   padding-top: 2px;
+   padding-left: 0;
+   padding-right: 0;
+   padding-bottom: 0;
+}
+
+.dark .btn-options-dropdown>button {
+   color: #fff;
+}
+
+.btn-options-dropdown>button::after {
+   display: none;
+}</style><style type="text/css">/* .view-crud-pesquisa-visibilidade .card-body {
+   padding-top: 0 !important;
+}
+
+.view-crud-pesquisa-visibilidade .card-body>div {
+   margin-bottom: 6px !important;
+} */</style><style type="text/css"></style><style id="smooth-scrollbar-style">
+[data-scrollbar] {
+  display: block;
+  position: relative;
+}
+
+.scroll-content {
+  display: flow-root;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+}
+
+.scrollbar-track {
+  position: absolute;
+  opacity: 0;
+  z-index: 1;
+  background: rgba(222, 222, 222, .75);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-transition: opacity 0.5s 0.5s ease-out;
+          transition: opacity 0.5s 0.5s ease-out;
+}
+.scrollbar-track.show,
+.scrollbar-track:hover {
+  opacity: 1;
+  -webkit-transition-delay: 0s;
+          transition-delay: 0s;
+}
+
+.scrollbar-track-x {
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+}
+.scrollbar-track-y {
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 100%;
+}
+.scrollbar-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: rgba(0, 0, 0, .5);
+  border-radius: 4px;
+}
+</style><style>tcxspan{text-decoration: underline;cursor: pointer;}</style><style>tcxspan{text-decoration: underline;cursor: pointer;}</style><style data-emotion="css" data-s="">.css-b62m3t-container{position:relative;box-sizing:border-box;}</style><style data-emotion="css" data-s="">.css-1f43avz-a11yText-A11yText{z-index:9999;border:0;clip:rect(1px, 1px, 1px, 1px);height:1px;width:1px;position:absolute;overflow:hidden;padding:0;white-space:nowrap;}/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIkExMXlUZXh0LnRzeCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFNSSIsImZpbGUiOiJBMTF5VGV4dC50c3giLCJzb3VyY2VzQ29udGVudCI6WyIvKiogQGpzeCBqc3ggKi9cbmltcG9ydCB7IGpzeCB9IGZyb20gJ0BlbW90aW9uL3JlYWN0JztcblxuLy8gQXNzaXN0aXZlIHRleHQgdG8gZGVzY3JpYmUgdmlzdWFsIGVsZW1lbnRzLiBIaWRkZW4gZm9yIHNpZ2h0ZWQgdXNlcnMuXG5jb25zdCBBMTF5VGV4dCA9IChwcm9wczogSlNYLkludHJpbnNpY0VsZW1lbnRzWydzcGFuJ10pID0+IChcbiAgPHNwYW5cbiAgICBjc3M9e3tcbiAgICAgIGxhYmVsOiAnYTExeVRleHQnLFxuICAgICAgekluZGV4OiA5OTk5LFxuICAgICAgYm9yZGVyOiAwLFxuICAgICAgY2xpcDogJ3JlY3QoMXB4LCAxcHgsIDFweCwgMXB4KScsXG4gICAgICBoZWlnaHQ6IDEsXG4gICAgICB3aWR0aDogMSxcbiAgICAgIHBvc2l0aW9uOiAnYWJzb2x1dGUnLFxuICAgICAgb3ZlcmZsb3c6ICdoaWRkZW4nLFxuICAgICAgcGFkZGluZzogMCxcbiAgICAgIHdoaXRlU3BhY2U6ICdub3dyYXAnLFxuICAgIH19XG4gICAgey4uLnByb3BzfVxuICAvPlxuKTtcblxuZXhwb3J0IGRlZmF1bHQgQTExeVRleHQ7XG4iXX0= */</style><style data-emotion="css" data-s="">.css-13cymwt-control{-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;cursor:default;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-flex-wrap:wrap;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;-webkit-box-pack:justify;-webkit-justify-content:space-between;justify-content:space-between;min-height:38px;outline:0!important;position:relative;-webkit-transition:all 100ms;transition:all 100ms;background-color:hsl(0, 0%, 100%);border-color:hsl(0, 0%, 80%);border-radius:4px;border-style:solid;border-width:1px;box-sizing:border-box;}</style><style data-emotion="css" data-s="">.css-13cymwt-control:hover{border-color:hsl(0, 0%, 70%);}</style><style data-emotion="css" data-s="">.css-art2ul-ValueContainer2{-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;display:grid;-webkit-flex:1;-ms-flex:1;flex:1;-webkit-box-flex-wrap:wrap;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;-webkit-overflow-scrolling:touch;position:relative;overflow:hidden;padding:2px 8px;box-sizing:border-box;}</style><style data-emotion="css" data-s="">.css-1dimb5e-singleValue{grid-area:1/1/2/3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:hsl(0, 0%, 20%);margin-left:2px;margin-right:2px;box-sizing:border-box;}</style><style data-emotion="css" data-s="">.css-w9q2zk-Input2{visibility:visible;-webkit-flex:1 1 auto;-ms-flex:1 1 auto;flex:1 1 auto;display:inline-grid;grid-area:1/1/2/3;grid-template-columns:0 min-content;margin:2px;padding-bottom:2px;padding-top:2px;color:hsl(0, 0%, 20%);box-sizing:border-box;}</style><style data-emotion="css" data-s="">.css-w9q2zk-Input2:after{content:attr(data-value) " ";visibility:hidden;white-space:pre;grid-area:1/2;font:inherit;min-width:2px;border:0;margin:0;outline:0;padding:0;}</style><style data-emotion="css" data-s="">.css-4xgw5l-IndicatorsContainer2{-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-align-self:stretch;-ms-flex-item-align:stretch;align-self:stretch;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-shrink:0;-ms-flex-negative:0;flex-shrink:0;box-sizing:border-box;}</style><style data-emotion="css" data-s="">.css-1xc3v61-indicatorContainer{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-transition:color 150ms;transition:color 150ms;color:hsl(0, 0%, 80%);padding:8px;box-sizing:border-box;}</style><style data-emotion="css" data-s="">.css-1xc3v61-indicatorContainer:hover{color:hsl(0, 0%, 60%);}</style><style data-emotion="css" data-s="">.css-tj5bde-Svg{display:inline-block;fill:currentColor;line-height:1;stroke:currentColor;stroke-width:0;}/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGljYXRvcnMudHN4Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQXlCSSIsImZpbGUiOiJpbmRpY2F0b3JzLnRzeCIsInNvdXJjZXNDb250ZW50IjpbIi8qKiBAanN4IGpzeCAqL1xuaW1wb3J0IHsgUmVhY3ROb2RlIH0gZnJvbSAncmVhY3QnO1xuaW1wb3J0IHsganN4LCBrZXlmcmFtZXMgfSBmcm9tICdAZW1vdGlvbi9yZWFjdCc7XG5cbmltcG9ydCB7XG4gIENvbW1vblByb3BzQW5kQ2xhc3NOYW1lLFxuICBDU1NPYmplY3RXaXRoTGFiZWwsXG4gIEdyb3VwQmFzZSxcbn0gZnJvbSAnLi4vdHlwZXMnO1xuaW1wb3J0IHsgZ2V0U3R5bGVQcm9wcyB9IGZyb20gJy4uL3V0aWxzJztcblxuLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG4vLyBEcm9wZG93biAmIENsZWFyIEljb25zXG4vLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT1cblxuY29uc3QgU3ZnID0gKHtcbiAgc2l6ZSxcbiAgLi4ucHJvcHNcbn06IEpTWC5JbnRyaW5zaWNFbGVtZW50c1snc3ZnJ10gJiB7IHNpemU6IG51bWJlciB9KSA9PiAoXG4gIDxzdmdcbiAgICBoZWlnaHQ9e3NpemV9XG4gICAgd2lkdGg9e3NpemV9XG4gICAgdmlld0JveD1cIjAgMCAyMCAyMFwiXG4gICAgYXJpYS1oaWRkZW49XCJ0cnVlXCJcbiAgICBmb2N1c2FibGU9XCJmYWxzZVwiXG4gICAgY3NzPXt7XG4gICAgICBkaXNwbGF5OiAnaW5saW5lLWJsb2NrJyxcbiAgICAgIGZpbGw6ICdjdXJyZW50Q29sb3InLFxuICAgICAgbGluZUhlaWdodDogMSxcbiAgICAgIHN0cm9rZTogJ2N1cnJlbnRDb2xvcicsXG4gICAgICBzdHJva2VXaWR0aDogMCxcbiAgICB9fVxuICAgIHsuLi5wcm9wc31cbiAgLz5cbik7XG5cbmV4cG9ydCB0eXBlIENyb3NzSWNvblByb3BzID0gSlNYLkludHJpbnNpY0VsZW1lbnRzWydzdmcnXSAmIHsgc2l6ZT86IG51bWJlciB9O1xuZXhwb3J0IGNvbnN0IENyb3NzSWNvbiA9IChwcm9wczogQ3Jvc3NJY29uUHJvcHMpID0+IChcbiAgPFN2ZyBzaXplPXsyMH0gey4uLnByb3BzfT5cbiAgICA8cGF0aCBkPVwiTTE0LjM0OCAxNC44NDljLTAuNDY5IDAuNDY5LTEuMjI5IDAuNDY5LTEuNjk3IDBsLTIuNjUxLTMuMDMwLTIuNjUxIDMuMDI5Yy0wLjQ2OSAwLjQ2OS0xLjIyOSAwLjQ2OS0xLjY5NyAwLTAuNDY5LTAuNDY5LTAuNDY5LTEuMjI5IDAtMS42OTdsMi43NTgtMy4xNS0yLjc1OS0zLjE1MmMtMC40NjktMC40NjktMC40NjktMS4yMjggMC0xLjY5N3MxLjIyOC0wLjQ2OSAxLjY5NyAwbDIuNjUyIDMuMDMxIDIuNjUxLTMuMDMxYzAuNDY5LTAuNDY5IDEuMjI4LTAuNDY5IDEuNjk3IDBzMC40NjkgMS4yMjkgMCAxLjY5N2wtMi43NTggMy4xNTIgMi43NTggMy4xNWMwLjQ2OSAwLjQ2OSAwLjQ2OSAxLjIyOSAwIDEuNjk4elwiIC8+XG4gIDwvU3ZnPlxuKTtcbmV4cG9ydCB0eXBlIERvd25DaGV2cm9uUHJvcHMgPSBKU1guSW50cmluc2ljRWxlbWVudHNbJ3N2ZyddICYgeyBzaXplPzogbnVtYmVyIH07XG5leHBvcnQgY29uc3QgRG93bkNoZXZyb24gPSAocHJvcHM6IERvd25DaGV2cm9uUHJvcHMpID0+IChcbiAgPFN2ZyBzaXplPXsyMH0gey4uLnByb3BzfT5cbiAgICA8cGF0aCBkPVwiTTQuNTE2IDcuNTQ4YzAuNDM2LTAuNDQ2IDEuMDQzLTAuNDgxIDEuNTc2IDBsMy45MDggMy43NDcgMy45MDgtMy43NDdjMC41MzMtMC40ODEgMS4xNDEtMC40NDYgMS41NzQgMCAwLjQzNiAwLjQ0NSAwLjQwOCAxLjE5NyAwIDEuNjE1LTAuNDA2IDAuNDE4LTQuNjk1IDQuNTAyLTQuNjk1IDQuNTAyLTAuMjE3IDAuMjIzLTAuNTAyIDAuMzM1LTAuNzg3IDAuMzM1cy0wLjU3LTAuMTEyLTAuNzg5LTAuMzM1YzAgMC00LjI4Ny00LjA4NC00LjY5NS00LjUwMnMtMC40MzYtMS4xNyAwLTEuNjE1elwiIC8+XG4gIDwvU3ZnPlxuKTtcblxuLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG4vLyBEcm9wZG93biAmIENsZWFyIEJ1dHRvbnNcbi8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuXG5leHBvcnQgaW50ZXJmYWNlIERyb3Bkb3duSW5kaWNhdG9yUHJvcHM8XG4gIE9wdGlvbiA9IHVua25vd24sXG4gIElzTXVsdGkgZXh0ZW5kcyBib29sZWFuID0gYm9vbGVhbixcbiAgR3JvdXAgZXh0ZW5kcyBHcm91cEJhc2U8T3B0aW9uPiA9IEdyb3VwQmFzZTxPcHRpb24+XG4+IGV4dGVuZHMgQ29tbW9uUHJvcHNBbmRDbGFzc05hbWU8T3B0aW9uLCBJc011bHRpLCBHcm91cD4ge1xuICAvKiogVGhlIGNoaWxkcmVuIHRvIGJlIHJlbmRlcmVkIGluc2lkZSB0aGUgaW5kaWNhdG9yLiAqL1xuICBjaGlsZHJlbj86IFJlYWN0Tm9kZTtcbiAgLyoqIFByb3BzIHRoYXQgd2lsbCBiZSBwYXNzZWQgb24gdG8gdGhlIGNoaWxkcmVuLiAqL1xuICBpbm5lclByb3BzOiBKU1guSW50cmluc2ljRWxlbWVudHNbJ2RpdiddO1xuICAvKiogVGhlIGZvY3VzZWQgc3RhdGUgb2YgdGhlIHNlbGVjdC4gKi9cbiAgaXNGb2N1c2VkOiBib29sZWFuO1xuICBpc0Rpc2FibGVkOiBib29sZWFuO1xufVxuXG5jb25zdCBiYXNlQ1NTID0gPFxuICBPcHRpb24sXG4gIElzTXVsdGkgZXh0ZW5kcyBib29sZWFuLFxuICBHcm91cCBleHRlbmRzIEdyb3VwQmFzZTxPcHRpb24+XG4+KFxuICB7XG4gICAgaXNGb2N1c2VkLFxuICAgIHRoZW1lOiB7XG4gICAgICBzcGFjaW5nOiB7IGJhc2VVbml0IH0sXG4gICAgICBjb2xvcnMsXG4gICAgfSxcbiAgfTpcbiAgICB8IERyb3Bkb3duSW5kaWNhdG9yUHJvcHM8T3B0aW9uLCBJc011bHRpLCBHcm91cD5cbiAgICB8IENsZWFySW5kaWNhdG9yUHJvcHM8T3B0aW9uLCBJc011bHRpLCBHcm91cD4sXG4gIHVuc3R5bGVkOiBib29sZWFuXG4pOiBDU1NPYmplY3RXaXRoTGFiZWwgPT4gKHtcbiAgbGFiZWw6ICdpbmRpY2F0b3JDb250YWluZXInLFxuICBkaXNwbGF5OiAnZmxleCcsXG4gIHRyYW5zaXRpb246ICdjb2xvciAxNTBtcycsXG4gIC4uLih1bnN0eWxlZFxuICAgID8ge31cbiAgICA6IHtcbiAgICAgICAgY29sb3I6IGlzRm9jdXNlZCA/IGNvbG9ycy5uZXV0cmFsNjAgOiBjb2xvcnMubmV1dHJhbDIwLFxuICAgICAgICBwYWRkaW5nOiBiYXNlVW5pdCAqIDIsXG4gICAgICAgICc6aG92ZXInOiB7XG4gICAgICAgICAgY29sb3I6IGlzRm9jdXNlZCA/IGNvbG9ycy5uZXV0cmFsODAgOiBjb2xvcnMubmV1dHJhbDQwLFxuICAgICAgICB9LFxuICAgICAgfSksXG59KTtcblxuZXhwb3J0IGNvbnN0IGRyb3Bkb3duSW5kaWNhdG9yQ1NTID0gYmFzZUNTUztcbmV4cG9ydCBjb25zdCBEcm9wZG93bkluZGljYXRvciA9IDxcbiAgT3B0aW9uLFxuICBJc011bHRpIGV4dGVuZHMgYm9vbGVhbixcbiAgR3JvdXAgZXh0ZW5kcyBHcm91cEJhc2U8T3B0aW9uPlxuPihcbiAgcHJvcHM6IERyb3Bkb3duSW5kaWNhdG9yUHJvcHM8T3B0aW9uLCBJc011bHRpLCBHcm91cD5cbikgPT4ge1xuICBjb25zdCB7IGNoaWxkcmVuLCBpbm5lclByb3BzIH0gPSBwcm9wcztcbiAgcmV0dXJuIChcbiAgICA8ZGl2XG4gICAgICB7Li4uZ2V0U3R5bGVQcm9wcyhwcm9wcywgJ2Ryb3Bkb3duSW5kaWNhdG9yJywge1xuICAgICAgICBpbmRpY2F0b3I6IHRydWUsXG4gICAgICAgICdkcm9wZG93bi1pbmRpY2F0b3InOiB0cnVlLFxuICAgICAgfSl9XG4gICAgICB7Li4uaW5uZXJQcm9wc31cbiAgICA+XG4gICAgICB7Y2hpbGRyZW4gfHwgPERvd25DaGV2cm9uIC8+fVxuICAgIDwvZGl2PlxuICApO1xufTtcblxuZXhwb3J0IGludGVyZmFjZSBDbGVhckluZGljYXRvclByb3BzPFxuICBPcHRpb24gPSB1bmtub3duLFxuICBJc011bHRpIGV4dGVuZHMgYm9vbGVhbiA9IGJvb2xlYW4sXG4gIEdyb3VwIGV4dGVuZHMgR3JvdXBCYXNlPE9wdGlvbj4gPSBHcm91cEJhc2U8T3B0aW9uPlxuPiBleHRlbmRzIENvbW1vblByb3BzQW5kQ2xhc3NOYW1lPE9wdGlvbiwgSXNNdWx0aSwgR3JvdXA+IHtcbiAgLyoqIFRoZSBjaGlsZHJlbiB0byBiZSByZW5kZXJlZCBpbnNpZGUgdGhlIGluZGljYXRvci4gKi9cbiAgY2hpbGRyZW4/OiBSZWFjdE5vZGU7XG4gIC8qKiBQcm9wcyB0aGF0IHdpbGwgYmUgcGFzc2VkIG9uIHRvIHRoZSBjaGlsZHJlbi4gKi9cbiAgaW5uZXJQcm9wczogSlNYLkludHJpbnNpY0VsZW1lbnRzWydkaXYnXTtcbiAgLyoqIFRoZSBmb2N1c2VkIHN0YXRlIG9mIHRoZSBzZWxlY3QuICovXG4gIGlzRm9jdXNlZDogYm9vbGVhbjtcbn1cblxuZXhwb3J0IGNvbnN0IGNsZWFySW5kaWNhdG9yQ1NTID0gYmFzZUNTUztcbmV4cG9ydCBjb25zdCBDbGVhckluZGljYXRvciA9IDxcbiAgT3B0aW9uLFxuICBJc011bHRpIGV4dGVuZHMgYm9vbGVhbixcbiAgR3JvdXAgZXh0ZW5kcyBHcm91cEJhc2U8T3B0aW9uPlxuPihcbiAgcHJvcHM6IENsZWFySW5kaWNhdG9yUHJvcHM8T3B0aW9uLCBJc011bHRpLCBHcm91cD5cbikgPT4ge1xuICBjb25zdCB7IGNoaWxkcmVuLCBpbm5lclByb3BzIH0gPSBwcm9wcztcbiAgcmV0dXJuIChcbiAgICA8ZGl2XG4gICAgICB7Li4uZ2V0U3R5bGVQcm9wcyhwcm9wcywgJ2NsZWFySW5kaWNhdG9yJywge1xuICAgICAgICBpbmRpY2F0b3I6IHRydWUsXG4gICAgICAgICdjbGVhci1pbmRpY2F0b3InOiB0cnVlLFxuICAgICAgfSl9XG4gICAgICB7Li4uaW5uZXJQcm9wc31cbiAgICA+XG4gICAgICB7Y2hpbGRyZW4gfHwgPENyb3NzSWNvbiAvPn1cbiAgICA8L2Rpdj5cbiAgKTtcbn07XG5cbi8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PVxuLy8gU2VwYXJhdG9yXG4vLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT1cblxuZXhwb3J0IGludGVyZmFjZSBJbmRpY2F0b3JTZXBhcmF0b3JQcm9wczxcbiAgT3B0aW9uID0gdW5rbm93bixcbiAgSXNNdWx0aSBleHRlbmRzIGJvb2xlYW4gPSBib29sZWFuLFxuICBHcm91cCBleHRlbmRzIEdyb3VwQmFzZTxPcHRpb24+ID0gR3JvdXBCYXNlPE9wdGlvbj5cbj4gZXh0ZW5kcyBDb21tb25Qcm9wc0FuZENsYXNzTmFtZTxPcHRpb24sIElzTXVsdGksIEdyb3VwPiB7XG4gIGlzRGlzYWJsZWQ6IGJvb2xlYW47XG4gIGlzRm9jdXNlZDogYm9vbGVhbjtcbiAgaW5uZXJQcm9wcz86IEpTWC5JbnRyaW5zaWNFbGVtZW50c1snc3BhbiddO1xufVxuXG5leHBvcnQgY29uc3QgaW5kaWNhdG9yU2VwYXJhdG9yQ1NTID0gPFxuICBPcHRpb24sXG4gIElzTXVsdGkgZXh0ZW5kcyBib29sZWFuLFxuICBHcm91cCBleHRlbmRzIEdyb3VwQmFzZTxPcHRpb24+XG4+KFxuICB7XG4gICAgaXNEaXNhYmxlZCxcbiAgICB0aGVtZToge1xuICAgICAgc3BhY2luZzogeyBiYXNlVW5pdCB9LFxuICAgICAgY29sb3JzLFxuICAgIH0sXG4gIH06IEluZGljYXRvclNlcGFyYXRvclByb3BzPE9wdGlvbiwgSXNNdWx0aSwgR3JvdXA+LFxuICB1bnN0eWxlZDogYm9vbGVhblxuKTogQ1NTT2JqZWN0V2l0aExhYmVsID0+ICh7XG4gIGxhYmVsOiAnaW5kaWNhdG9yU2VwYXJhdG9yJyxcbiAgYWxpZ25TZWxmOiAnc3RyZXRjaCcsXG4gIHdpZHRoOiAxLFxuICAuLi4odW5zdHlsZWRcbiAgICA/IHt9XG4gICAgOiB7XG4gICAgICAgIGJhY2tncm91bmRDb2xvcjogaXNEaXNhYmxlZCA/IGNvbG9ycy5uZXV0cmFsMTAgOiBjb2xvcnMubmV1dHJhbDIwLFxuICAgICAgICBtYXJnaW5Cb3R0b206IGJhc2VVbml0ICogMixcbiAgICAgICAgbWFyZ2luVG9wOiBiYXNlVW5pdCAqIDIsXG4gICAgICB9KSxcbn0pO1xuXG5leHBvcnQgY29uc3QgSW5kaWNhdG9yU2VwYXJhdG9yID0gPFxuICBPcHRpb24sXG4gIElzTXVsdGkgZXh0ZW5kcyBib29sZWFuLFxuICBHcm91cCBleHRlbmRzIEdyb3VwQmFzZTxPcHRpb24+XG4+KFxuICBwcm9wczogSW5kaWNhdG9yU2VwYXJhdG9yUHJvcHM8T3B0aW9uLCBJc011bHRpLCBHcm91cD5cbikgPT4ge1xuICBjb25zdCB7IGlubmVyUHJvcHMgfSA9IHByb3BzO1xuICByZXR1cm4gKFxuICAgIDxzcGFuXG4gICAgICB7Li4uaW5uZXJQcm9wc31cbiAgICAgIHsuLi5nZXRTdHlsZVByb3BzKHByb3BzLCAnaW5kaWNhdG9yU2VwYXJhdG9yJywge1xuICAgICAgICAnaW5kaWNhdG9yLXNlcGFyYXRvcic6IHRydWUsXG4gICAgICB9KX1cbiAgICAvPlxuICApO1xufTtcblxuLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09XG4vLyBMb2FkaW5nXG4vLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT1cblxuY29uc3QgbG9hZGluZ0RvdEFuaW1hdGlvbnMgPSBrZXlmcmFtZXNgXG4gIDAlLCA4MCUsIDEwMCUgeyBvcGFjaXR5OiAwOyB9XG4gIDQwJSB7IG9wYWNpdHk6IDE7IH1cbmA7XG5cbmV4cG9ydCBjb25zdCBsb2FkaW5nSW5kaWNhdG9yQ1NTID0gPFxuICBPcHRpb24sXG4gIElzTXVsdGkgZXh0ZW5kcyBib29sZWFuLFxuICBHcm91cCBleHRlbmRzIEdyb3VwQmFzZTxPcHRpb24+XG4+KFxuICB7XG4gICAgaXNGb2N1c2VkLFxuICAgIHNpemUsXG4gICAgdGhlbWU6IHtcbiAgICAgIGNvbG9ycyxcbiAgICAgIHNwYWNpbmc6IHsgYmFzZVVuaXQgfSxcbiAgICB9LFxuICB9OiBMb2FkaW5nSW5kaWNhdG9yUHJvcHM8T3B0aW9uLCBJc011bHRpLCBHcm91cD4sXG4gIHVuc3R5bGVkOiBib29sZWFuXG4pOiBDU1NPYmplY3RXaXRoTGFiZWwgPT4gKHtcbiAgbGFiZWw6ICdsb2FkaW5nSW5kaWNhdG9yJyxcbiAgZGlzcGxheTogJ2ZsZXgnLFxuICB0cmFuc2l0aW9uOiAnY29sb3IgMTUwbXMnLFxuICBhbGlnblNlbGY6ICdjZW50ZXInLFxuICBmb250U2l6ZTogc2l6ZSxcbiAgbGluZUhlaWdodDogMSxcbiAgbWFyZ2luUmlnaHQ6IHNpemUsXG4gIHRleHRBbGlnbjogJ2NlbnRlcicsXG4gIHZlcnRpY2FsQWxpZ246ICdtaWRkbGUnLFxuICAuLi4odW5zdHlsZWRcbiAgICA/IHt9XG4gICAgOiB7XG4gICAgICAgIGNvbG9yOiBpc0ZvY3VzZWQgPyBjb2xvcnMubmV1dHJhbDYwIDogY29sb3JzLm5ldXRyYWwyMCxcbiAgICAgICAgcGFkZGluZzogYmFzZVVuaXQgKiAyLFxuICAgICAgfSksXG59KTtcblxuaW50ZXJmYWNlIExvYWRpbmdEb3RQcm9wcyB7XG4gIGRlbGF5OiBudW1iZXI7XG4gIG9mZnNldDogYm9vbGVhbjtcbn1cbmNvbnN0IExvYWRpbmdEb3QgPSAoeyBkZWxheSwgb2Zmc2V0IH06IExvYWRpbmdEb3RQcm9wcykgPT4gKFxuICA8c3BhblxuICAgIGNzcz17e1xuICAgICAgYW5pbWF0aW9uOiBgJHtsb2FkaW5nRG90QW5pbWF0aW9uc30gMXMgZWFzZS1pbi1vdXQgJHtkZWxheX1tcyBpbmZpbml0ZTtgLFxuICAgICAgYmFja2dyb3VuZENvbG9yOiAnY3VycmVudENvbG9yJyxcbiAgICAgIGJvcmRlclJhZGl1czogJzFlbScsXG4gICAgICBkaXNwbGF5OiAnaW5saW5lLWJsb2NrJyxcbiAgICAgIG1hcmdpbkxlZnQ6IG9mZnNldCA/ICcxZW0nIDogdW5kZWZpbmVkLFxuICAgICAgaGVpZ2h0OiAnMWVtJyxcbiAgICAgIHZlcnRpY2FsQWxpZ246ICd0b3AnLFxuICAgICAgd2lkdGg6ICcxZW0nLFxuICAgIH19XG4gIC8+XG4pO1xuXG5leHBvcnQgaW50ZXJmYWNlIExvYWRpbmdJbmRpY2F0b3JQcm9wczxcbiAgT3B0aW9uID0gdW5rbm93bixcbiAgSXNNdWx0aSBleHRlbmRzIGJvb2xlYW4gPSBib29sZWFuLFxuICBHcm91cCBleHRlbmRzIEdyb3VwQmFzZTxPcHRpb24+ID0gR3JvdXBCYXNlPE9wdGlvbj5cbj4gZXh0ZW5kcyBDb21tb25Qcm9wc0FuZENsYXNzTmFtZTxPcHRpb24sIElzTXVsdGksIEdyb3VwPiB7XG4gIC8qKiBQcm9wcyB0aGF0IHdpbGwgYmUgcGFzc2VkIG9uIHRvIHRoZSBjaGlsZHJlbi4gKi9cbiAgaW5uZXJQcm9wczogSlNYLkludHJpbnNpY0VsZW1lbnRzWydkaXYnXTtcbiAgLyoqIFRoZSBmb2N1c2VkIHN0YXRlIG9mIHRoZSBzZWxlY3QuICovXG4gIGlzRm9jdXNlZDogYm9vbGVhbjtcbiAgaXNEaXNhYmxlZDogYm9vbGVhbjtcbiAgLyoqIFNldCBzaXplIG9mIHRoZSBjb250YWluZXIuICovXG4gIHNpemU6IG51bWJlcjtcbn1cbmV4cG9ydCBjb25zdCBMb2FkaW5nSW5kaWNhdG9yID0gPFxuICBPcHRpb24sXG4gIElzTXVsdGkgZXh0ZW5kcyBib29sZWFuLFxuICBHcm91cCBleHRlbmRzIEdyb3VwQmFzZTxPcHRpb24+XG4+KFxuICBwcm9wczogTG9hZGluZ0luZGljYXRvclByb3BzPE9wdGlvbiwgSXNNdWx0aSwgR3JvdXA+XG4pID0+IHtcbiAgY29uc3QgeyBpbm5lclByb3BzLCBpc1J0bCB9ID0gcHJvcHM7XG5cbiAgcmV0dXJuIChcbiAgICA8ZGl2XG4gICAgICB7Li4uZ2V0U3R5bGVQcm9wcyhwcm9wcywgJ2xvYWRpbmdJbmRpY2F0b3InLCB7XG4gICAgICAgIGluZGljYXRvcjogdHJ1ZSxcbiAgICAgICAgJ2xvYWRpbmctaW5kaWNhdG9yJzogdHJ1ZSxcbiAgICAgIH0pfVxuICAgICAgey4uLmlubmVyUHJvcHN9XG4gICAgPlxuICAgICAgPExvYWRpbmdEb3QgZGVsYXk9ezB9IG9mZnNldD17aXNSdGx9IC8+XG4gICAgICA8TG9hZGluZ0RvdCBkZWxheT17MTYwfSBvZmZzZXQgLz5cbiAgICAgIDxMb2FkaW5nRG90IGRlbGF5PXszMjB9IG9mZnNldD17IWlzUnRsfSAvPlxuICAgIDwvZGl2PlxuICApO1xufTtcbkxvYWRpbmdJbmRpY2F0b3IuZGVmYXVsdFByb3BzID0geyBzaXplOiA0IH07XG4iXX0= */</style><style data-emotion="css" data-s="">.css-1u9des2-indicatorSeparator{-webkit-align-self:stretch;-ms-flex-item-align:stretch;align-self:stretch;width:1px;background-color:hsl(0, 0%, 80%);margin-bottom:8px;margin-top:8px;box-sizing:border-box;}</style><style data-emotion="css" data-s="">.css-1jqq78o-placeholder{grid-area:1/1/2/3;color:hsl(0, 0%, 50%);margin-left:2px;margin-right:2px;box-sizing:border-box;}</style></head>
+
+<body style="" class="">
+   <div id="root"><div class="wrapper"><div class="iq-sidebar"><div class="iq-sidebar-logo d-flex justify-content-between"><a href="javascript:void();"><img src="./cpControldoc - Command Perfect_files/Icone-Logo-ControlDoc.webp" alt="Logo cpControlDoc" class="img-fluid"><img src="./cpControldoc - Command Perfect_files/Letras-Logo-para-Fundo-Branco-ControlDoc.webp" alt="Logo cpControlDoc" class="img-fluid ml-4"></a><div class="iq-menu-bt align-self-center"><div class="wrapper-menu"><div class="line-menu half start"></div><div class="line-menu"></div><div class="line-menu half end"></div></div></div></div><div id="sidebar-scrollbar" data-scrollbar="true" tabindex="-1" style="overflow: hidden; outline: none;"><div class="scroll-content"><nav class="iq-sidebar-menu"><ul id="iq-sidebar-toggle" class="iq-menu"><li class="iq-menu-title"><i class="ri-separator"></i><span>Cadastros</span></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-account-group nav-icon"></i><span>Grupos</span></a></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-file-document-multiple-outline nav-icon"></i><span>Tipos de Documentos</span></a></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-file-document-outline nav-icon"></i><span>Documentos</span></a></li><li class="iq-menu-title"><i class="ri-separator"></i><span>Pesquisas</span></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-file-document-edit-outline nav-icon"></i><span>Arquivos em Edição</span></a></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-file-document-alert-outline nav-icon"></i><span>Avisos de Arquivos Editados</span></a></li><li class="iq-menu-title"><i class="ri-separator"></i><span>Configurações</span></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-account-outline nav-icon"></i><span>Usuários</span></a></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-cog-outline nav-icon"></i><span>Parâmetros do Sistema</span></a></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-copyright nav-icon"></i><span>Direitos de Uso</span></a></li><li class=""><a href="javascript:void();" class="iq-waves-effect"><i class="mdi mdi-math-log nav-icon"></i><span>Logs do Sistema</span></a></li></ul></nav><div class="p-3"></div></div><div class="scrollbar-track scrollbar-track-x" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-x" style="width: 260px; transform: translate3d(0px, 0px, 0px);"></div></div><div class="scrollbar-track scrollbar-track-y" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-y" style="height: 700px; transform: translate3d(0px, 0px, 0px);"></div></div></div></div><div class="iq-top-navbar"><div class="iq-navbar-custom"><div class="iq-sidebar-logo"><div class="top-logo"><a href="javascript:void();" class="logo"><img src="./cpControldoc - Command Perfect_files/Icone-Logo-ControlDoc.webp" alt="Logo cpControlDoc" class="img-fluid"><img src="./cpControldoc - Command Perfect_files/Letras-Logo-para-Fundo-Branco-ControlDoc.webp" alt="Logo cpControlDoc" class="img-fluid ml-2"></a></div></div><div class="navbar-breadcrumb"><h5 class="mb-0">Meu Perfil</h5><nav aria-label="breadcrumb"><ul class="breadcrumb"><li class="breadcrumb-item"><a href="http://127.0.0.1:5173/cpcontroldoc">Home</a></li><li class="breadcrumb-item active" aria-current="page">Meu Perfil</li></ul></nav></div><nav class="navbar navbar-expand-lg navbar-light p-0"><button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="ri-menu-3-line"></i></button><div class="iq-menu-bt align-self-center"><div class="wrapper-menu"><div class="line-menu half start"></div><div class="line-menu"></div><div class="line-menu half end"></div></div></div><div class="collapse navbar-collapse" id="navbarSupportedContent"><ul class="navbar-nav ml-auto navbar-list"><li class="nav-item"><a href="http://127.0.0.1:5173/cpcontroldoc#" class="search-toggle iq-waves-effect"><i class="ri-notification-2-line"></i><span class="bg-danger dots"></span></a><div class="iq-sub-dropdown"><div class="iq-card iq-card-block iq-card-stretch iq-card-height shadow-none m-0"><div class="iq-card-body p-0 "><div class="bg-danger p-3"><h5 class="mb-0 text-white">All Notifications<small class="badge  badge-light float-right pt-1">4</small></h5></div><a href="http://127.0.0.1:5173/cpcontroldoc#" class="iq-sub-card"><div class="media align-items-center"><div class="media-body ml-3"><h6 class="mb-0 ">New Order Recieved</h6><small class="float-right font-size-12">23 hrs ago</small><p class="mb-0">Lorem is simply</p></div></div></a><a href="http://127.0.0.1:5173/cpcontroldoc#" class="iq-sub-card"><div class="media align-items-center"><div class=""><img class="avatar-40 rounded" src="./cpControldoc - Command Perfect_files/01.jpg" alt=""></div><div class="media-body ml-3"><h6 class="mb-0 ">Emma Watson Nik</h6><small class="float-right font-size-12">Just Now</small><p class="mb-0">95 MB</p></div></div></a><a href="http://127.0.0.1:5173/cpcontroldoc#" class="iq-sub-card"><div class="media align-items-center"><div class=""><img class="avatar-40 rounded" src="./cpControldoc - Command Perfect_files/02.jpg" alt=""></div><div class="media-body ml-3"><h6 class="mb-0 ">New customer is join</h6><small class="float-right font-size-12">5 days ago</small><p class="mb-0">Jond Nik</p></div></div></a><a href="http://127.0.0.1:5173/cpcontroldoc#" class="iq-sub-card"><div class="media align-items-center"><div class=""><img class="avatar-40" src="./cpControldoc - Command Perfect_files/jpg.svg" alt=""></div><div class="media-body ml-3"><h6 class="mb-0 ">Updates Available</h6><small class="float-right font-size-12">Just Now</small><p class="mb-0">120 MB</p></div></div></a></div></div></div></li><li class=""><a href="http://127.0.0.1:5173/cpcontroldoc#" class="search-toggle iq-waves-effect"><span class="ripple rippleEffect" style="width: 75px; height: 75px; top: -3.5px; left: -16.3px;"></span><i id="iconDarkLigth" class="ri-moon-fill"></i></a></li><li class="nav-item iq-full-screen"><a href="http://127.0.0.1:5173/cpcontroldoc#" class="iq-waves-effect" id="btnFullscreen"><i class="ri-fullscreen-line"></i></a></li></ul></div><ul class="navbar-list"><li class=""><a href="http://127.0.0.1:5173/cpcontroldoc#" class="search-toggle iq-waves-effect bg-primary text-white"><i class="mdi mdi-account-circle m-0 p-0" style="font-size: 240%; line-height: 1; position: relative; top: 10px;"></i></a><div class="iq-sub-dropdown iq-user-dropdown"><div class="iq-card iq-card-block iq-card-stretch iq-card-height shadow-none m-0"><div class="iq-card-body p-0 "><div class="bg-primary p-3"><h5 class="mb-0 text-white line-height">Olá JR</h5><span class="text-white font-size-12">JUNIOR TESTE</span><br></div><a href="javascript:void();" class="iq-sub-card iq-bg-primary-hover"><div class="media align-items-center"><div class="rounded iq-card-icon iq-bg-primary"><i class="mdi mdi-card-account-details-outline"></i></div><div class="media-body ml-3"><h6 class="mb-0 ">Meu Perfil</h6><p class="mb-0 font-size-12">Visualizar detalhes do meu perfil</p></div></div></a><div class="d-inline-block w-100 text-center p-3"><a class="iq-bg-danger iq-sign-btn mr-1" href="javascript:void();" role="button">Bloquear<i class="mdi mdi-exit-run ml-2"></i></a><a class="iq-bg-danger iq-sign-btn ml-1" href="javascript:void();" role="button">Sair<i class="mdi mdi-exit-to-app ml-2"></i></a></div></div></div></div></li></ul></nav></div></div><div class="content-page content-tabpage iframe-mode" data-widget="tabpage"><div class="nav navbar navbar-expand border-top content-tabpage-navbar"><div class="nav-item dropdown"><button class="nav-link btn-primary dropdown-toggle content-tabpage-btn-fechar" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border: 0px;">Fechar</button><div class="dropdown-menu mt-0"><button class="dropdown-item">Fechar Todas</button><button class="dropdown-item">Fechar Todas as Outras</button></div></div><button class="nav-link bg-white content-tabpage-btn-scrollright" data-widget="tabpage-scrollleft"><i class="fa fa-angle-double-left"></i></button><ul class="navbar-nav overflow-hidden content-tabpage-tab nav-pills" id="custom-tabs-four-tab" role="tablist"><li class="nav-item"><a class="nav-link " id="tab-54uH1PtKWDACVU-1V5vTo-tab" data-toggle="pill" href="http://127.0.0.1:5173/cpcontroldoc#tab-54uH1PtKWDACVU-1V5vTo" role="tab" aria-controls="tab-54uH1PtKWDACVU-1V5vTo" aria-selected="false"><span style="padding-top: 15px; padding-bottom: 15px;">Avisos de Arquivos Editados</span><i class="ml-1 ri-close-line btn-tab-close" style="color: rgb(220, 53, 69);"></i></a></li><li class="nav-item"><a class="nav-link active" id="tab-_bAbMG_2JR1SNtbDjPKCx-tab" data-toggle="pill" href="http://127.0.0.1:5173/cpcontroldoc#tab-_bAbMG_2JR1SNtbDjPKCx" role="tab" aria-controls="tab-_bAbMG_2JR1SNtbDjPKCx" aria-selected="true"><span style="padding-top: 15px; padding-bottom: 15px;">Meu Perfil</span><i class="ml-1 ri-close-line btn-tab-close" style="color: rgb(220, 53, 69);"></i></a></li></ul><button class="nav-link bg-white content-tabpage-btn-scrollright" data-widget="tabpage-scrollright"><i class="fa fa-angle-double-right"></i></button><button class="nav-link bg-white content-tabpage-iframe-fullscreen" data-widget="iframe-fullscreen" style="border: 0px;"><i class="fa fa-expand"></i></button></div><div class="tab-content"><div id="tab-54uH1PtKWDACVU-1V5vTo" class="tab-pane fade " role="tabpanel" aria-labelledby="tab-54uH1PtKWDACVU-1V5vTo-tab"><div id="content-page" class="frame-content-page container-fluid"><div class="undefined view-crud-pesquisa"><div class="card card-default portal-crud-card"><div class="card-header p-0 border-bottom-0"></div><div class="card-body undefined"><div class="row mb-3"><div class="col-12"><div class="float-left"><div class="row"><div class="col-12"><div class="datasearch-containner"><div><input class="form-control  " id="SEARCH_AVD_USUARIO" name="SEARCH_AVD_USUARIO" type="hidden" value="JR"><span id="SEARCH_AVD_USUARIO-error" class="invalid-feedback"></span></div><div><input class="form-control  " id="SEARCH_AVD_DATA_GE" name="SEARCH_AVD_DATA_GE" type="text" placeholder="Data Inicial" value="" inputmode="text" style="width: 120px;"><span id="SEARCH_AVD_DATA_GE-error" class="invalid-feedback"></span></div><div><input class="form-control  " id="SEARCH_AVD_DATA_LE" name="SEARCH_AVD_DATA_LE" type="text" placeholder="Data Final" value="" inputmode="text" style="width: 120px;"><span id="SEARCH_AVD_DATA_LE-error" class="invalid-feedback"></span></div><div style="width: 130px;"><div class=" css-b62m3t-container"><span id="react-select-3-live-region" class="css-1f43avz-a11yText-A11yText"></span><span aria-live="polite" aria-atomic="false" aria-relevant="additions text" class="css-1f43avz-a11yText-A11yText"></span><div class="select__control css-13cymwt-control"><div class="select__value-container select__value-container--has-value css-art2ul-ValueContainer2"><div class="select__single-value css-1dimb5e-singleValue">Não</div><div class="select__input-container css-w9q2zk-Input2" data-value=""><input class="select__input" autocapitalize="none" autocomplete="off" autocorrect="off" id="SEARCH_AVD_LIDO" spellcheck="false" tabindex="0" type="text" aria-autocomplete="list" aria-expanded="false" aria-haspopup="true" role="combobox" value="" style="color: inherit; background: 0px center; opacity: 1; width: 100%; grid-area: 1 / 2 / auto / auto; font: inherit; min-width: 2px; border: 0px; margin: 0px; outline: 0px; padding: 0px;"></div></div><div class="select__indicators css-4xgw5l-IndicatorsContainer2"><div class="select__indicator select__clear-indicator css-1xc3v61-indicatorContainer" aria-hidden="true"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-tj5bde-Svg"><path d="M14.348 14.849c-0.469 0.469-1.229 0.469-1.697 0l-2.651-3.030-2.651 3.029c-0.469 0.469-1.229 0.469-1.697 0-0.469-0.469-0.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-0.469-0.469-0.469-1.228 0-1.697s1.228-0.469 1.697 0l2.652 3.031 2.651-3.031c0.469-0.469 1.228-0.469 1.697 0s0.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c0.469 0.469 0.469 1.229 0 1.698z"></path></svg></div><span class="select__indicator-separator css-1u9des2-indicatorSeparator"></span><div class="select__indicator select__dropdown-indicator css-1xc3v61-indicatorContainer" aria-hidden="true"><svg height="20" width="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" class="css-tj5bde-Svg"><path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path></svg></div></div></div><input name="SEARCH_AVD_LIDO" type="hidden" value="N"></div><span id="SEARCH_AVD_LIDO-error" class="invalid-feedback"></span></div><div><button class="btn btn-outline-primary btn-lg" type="button" style="height: 45px;"><i class="mdi mdi-magnify btn-icon"></i> </button></div></div></div></div></div></div></div><div class="row"><div class="col-12"><div class="card "><div class="card-body p-0 border"><div id="HglleDjsVCEFygAukF6HR" class="tabulator" role="grid" tabulator-layout="fitDataFill" style="height: 300px;"><div class="tabulator-header" role="rowgroup"><div class="tabulator-header-contents" role="rowgroup"><div class="tabulator-headers" role="row" style="margin-right: 0px; height: 34px;"><div class="tabulator-col tabulator-sortable tabulator-col-sorter-element tabulator-frozen tabulator-frozen-left" role="columnheader" aria-sort="none" style="min-width: 40px; width: 40px; position: sticky; left: 0px; height: 34px;"><div class="tabulator-col-content"><div class="tabulator-col-title-holder"><div class="tabulator-col-title">&nbsp;</div><div class="tabulator-col-sorter"><div class="tabulator-arrow"></div></div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-col tabulator-sortable tabulator-col-sorter-element" role="columnheader" aria-sort="none" tabulator-field="AVD_ID" style="display: none; min-width: 40px; width: 90px; height: 34px;"><div class="tabulator-col-content"><div class="tabulator-col-title-holder"><div class="tabulator-col-title">ID</div><div class="tabulator-col-sorter"><div class="tabulator-arrow"></div></div></div></div></div><div class="tabulator-col tabulator-sortable tabulator-col-sorter-element" role="columnheader" aria-sort="none" tabulator-field="AVD_USUARIO" style="display: none; min-width: 40px; width: 120px; height: 34px;"><div class="tabulator-col-content"><div class="tabulator-col-title-holder"><div class="tabulator-col-title">Usuário</div><div class="tabulator-col-sorter"><div class="tabulator-arrow"></div></div></div></div></div><div class="tabulator-col tabulator-sortable tabulator-col-sorter-element" role="columnheader" aria-sort="none" tabulator-field="AVD_DOCUMENTO" style="min-width: 40px; width: 120px; height: 34px;"><div class="tabulator-col-content"><div class="tabulator-col-title-holder"><div class="tabulator-col-title">Documento</div><div class="tabulator-col-sorter"><div class="tabulator-arrow"></div></div></div></div></div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-col tabulator-sortable tabulator-col-sorter-element" role="columnheader" aria-sort="none" tabulator-field="DOC_NOMEDOCUMENTO" style="min-width: 40px; width: 400px; height: 34px;"><div class="tabulator-col-content"><div class="tabulator-col-title-holder"><div class="tabulator-col-title">Nome do Documento</div><div class="tabulator-col-sorter"><div class="tabulator-arrow"></div></div></div></div></div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-col tabulator-sortable tabulator-col-sorter-element" role="columnheader" aria-sort="none" tabulator-field="AVD_DATA" style="min-width: 40px; width: 120px; height: 34px;"><div class="tabulator-col-content"><div class="tabulator-col-title-holder"><div class="tabulator-col-title">Data</div><div class="tabulator-col-sorter"><div class="tabulator-arrow"></div></div></div></div></div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-col tabulator-sortable tabulator-col-sorter-element" role="columnheader" aria-sort="none" tabulator-field="AVD_HORA" style="min-width: 40px; width: 90px; height: 34px;"><div class="tabulator-col-content"><div class="tabulator-col-title-holder"><div class="tabulator-col-title">Hora</div><div class="tabulator-col-sorter"><div class="tabulator-arrow"></div></div></div></div></div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-col tabulator-sortable tabulator-col-sorter-element" role="columnheader" aria-sort="none" tabulator-field="AVD_LIDO" style="min-width: 40px; width: 130px; height: 34px;"><div class="tabulator-col-content"><div class="tabulator-col-title-holder"><div class="tabulator-col-title">Lido</div><div class="tabulator-col-sorter"><div class="tabulator-arrow"></div></div></div></div></div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-frozen-rows-holder" style="min-width: 0px;"></div></div></div><div class="tabulator-tableholder" tabindex="0" style="height: calc(100% - 0px); max-height: calc(100% - 0px);"><div class="tabulator-table" role="rowgroup" style="padding-top: 0px; padding-bottom: 0px;"><div class="tabulator-row tabulator-selectable tabulator-row-odd" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_3767" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_3767" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_3767" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15788</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">3767</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">ALTERAR O TIPO DE OPERACAO DA AC</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">02/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">23:29:34</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-even" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_1200" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_1200" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_1200" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15810</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">1200</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">AGENTE DE ALERTA DAS ORDENS EM ATRASO DA INCOPOSTES</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">02/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">23:33:24</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-odd" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_1045" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_1045" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_1045" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15829</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">1045</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">CONSULTA TITULOS POR CODIGO DA OBRA, DATA DE EMISSAO INICIAL E FINAL</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">03/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:19:51</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-even" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_1045" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_1045" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_1045" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15831</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">1045</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">CONSULTA TITULOS POR CODIGO DA OBRA, DATA DE EMISSAO INICIAL E FINAL</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">03/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:19:52</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-odd" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_2276" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_2276" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_2276" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15833</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">2276</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">BUSCA NOTAS FISCAIS COM NAT GERA FINANCEIRO E NAO GEROU FINANCEIRO</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">03/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:20:23</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-even" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_2276" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_2276" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_2276" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15846</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">2276</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">BUSCA NOTAS FISCAIS COM NAT GERA FINANCEIRO E NAO GEROU FINANCEIRO</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">03/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:20:42</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-odd" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_2276" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_2276" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_2276" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15859</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">2276</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">BUSCA NOTAS FISCAIS COM NAT GERA FINANCEIRO E NAO GEROU FINANCEIRO</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">03/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:21:47</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-even" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_2276" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_2276" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_2276" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15872</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">2276</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">BUSCA NOTAS FISCAIS COM NAT GERA FINANCEIRO E NAO GEROU FINANCEIRO</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">03/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:22:17</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-odd" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_2276" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_2276" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_2276" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15885</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">2276</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">BUSCA NOTAS FISCAIS COM NAT GERA FINANCEIRO E NAO GEROU FINANCEIRO</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">03/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:22:27</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-even" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_2276" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_2276" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_2276" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15898</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">2276</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">BUSCA NOTAS FISCAIS COM NAT GERA FINANCEIRO E NAO GEROU FINANCEIRO</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">03/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:22:31</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-odd" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_28756" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_28756" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_28756" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15912</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">28756</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">1.4.2.1. - Ordem de ServiÃ§o Externo.xls</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">06/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:44:00</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-even" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_1200" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_1200" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_1200" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15920</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">1200</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">AGENTE DE ALERTA DAS ORDENS EM ATRASO DA INCOPOSTES</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">06/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:50:11</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-odd" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_3767" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_3767" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_3767" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15928</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">3767</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">ALTERAR O TIPO DE OPERACAO DA AC</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">06/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:50:33</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-even" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_1112" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_1112" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_1112" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15947</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">1112</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">CONSULTA TITULOS  POR DATA DE VENCIMENTO INICIAL E FINAL E POR FAIXA DE VALOR</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">06/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">23:30:41</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div><div class="tabulator-row tabulator-selectable tabulator-row-odd" role="row"><div class="tabulator-cell tabulator-frozen tabulator-frozen-left" role="gridcell" style="width: 40px; text-align: center; position: sticky; left: 0px; height: 34px;"><div>
+                 <div id="SPINNER_DOC_1045" class="spinner-border spinner-border-sm text-secondary d-none" role="status">
+                    <span class="d-none">Loading...</span>
+                 </div>
+                 <a class="link-primary" id="LINK_DOC_1045" title="Download"><i class="mdi mdi-file-download-outline"></i></a>
+                 <a id="DOC_1045" class="d-none"></a>
+              <div></div></div></div><span class="tabulator-col-resize-handle" style="position: sticky; left: 37px; height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_ID" style="width: 90px; display: none; height: 34px;">15964</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_USUARIO" style="width: 120px; display: none; height: 34px;">JR</div><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DOCUMENTO" style="width: 120px; height: 34px;">1045</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="DOC_NOMEDOCUMENTO" style="width: 400px; height: 34px;">CONSULTA TITULOS POR CODIGO DA OBRA, DATA DE EMISSAO INICIAL E FINAL</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_DATA" style="width: 120px; height: 34px;">10/08/2023</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_HORA" style="width: 90px; height: 34px;">22:22:45</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span><div class="tabulator-cell" role="gridcell" tabulator-field="AVD_LIDO" style="width: 130px; height: 34px;">Não</div><span class="tabulator-col-resize-handle" style="height: 34px;"></span></div></div></div></div></div><div class="card-footer border mb-3"><div class="mt-1 float-left">Listando 15 registros.&nbsp;</div><div class="float-right"><button class="btn btn-outline-primary btn-lg" type="button"><i class="mdi mdi-text-box-plus-outline mt-1 mr-0"></i> + 15</button></div></div></div></div></div><div class="row"><div class="col-12"></div></div><div class="row"><div class="col-12"></div></div></div><div class="card-footer px-3 pt-3 pb-4"><div class="row"><div class="col-12 buttons-scrollbar" data-scrollbar="true" tabindex="-1" style="overflow: hidden; outline: none;"><div class="scroll-content"><div class="btn-group"><button class="btn btn-outline-primary btn-lg" disabled="" type="button"><i class="mdi mdi-file-edit-outline"></i> Marcar como lido</button></div></div><div class="scrollbar-track scrollbar-track-x" style="display: block;"><div class="scrollbar-thumb scrollbar-thumb-x" style="width: 20px; transform: translate3d(0px, 0px, 0px);"></div></div><div class="scrollbar-track scrollbar-track-y" style="display: none;"><div class="scrollbar-thumb scrollbar-thumb-y" style="height: 39px; transform: translate3d(0px, 0px, 0px);"></div></div></div></div></div></div></div></div></div><div id="tab-_bAbMG_2JR1SNtbDjPKCx" class="tab-pane fade active show" role="tabpanel" aria-labelledby="tab-_bAbMG_2JR1SNtbDjPKCx-tab"><div id="content-page" class="frame-content-page container-fluid"><div><div class="row"><div class="col-lg-12"><div class="card iq-card"><div class="card-body iq-card-body p-0"><div class="iq-edit-list"><ul class="iq-edit-profile d-flex nav nav-pills"><li class="col-md-6 p-0"><a class="nav-link active" id="personal-information-tab" data-toggle="pill" href="http://127.0.0.1:5173/cpcontroldoc#personal-information" role="tab" aria-controls="personal-information" aria-selected="true"><span style="padding-top: 15px; padding-bottom: 15px;">Informações Pessoais</span></a></li><li class="col-md-6 p-0"><a class="nav-link " id="chang-pwd-tab" data-toggle="pill" href="http://127.0.0.1:5173/cpcontroldoc#chang-pwd" role="tab" aria-controls="chang-pwd" aria-selected="false"><span style="padding-top: 15px; padding-bottom: 15px;">Alterar Senha</span></a></li></ul></div></div></div></div><div class="col-lg-12"><div class="iq-edit-list-data"><div class="tab-content"><div id="personal-information" class="tab-pane fade active show" role="tabpanel" aria-labelledby="personal-information-tab"><div class="card iq-card"><div class="card-header iq-card-header d-flex justify-content-between"><div class="iq-header-title"><h4 class="card-title">Informações Pessoais</h4></div></div><div class="card-body iq-card-body"><div class="form-group row align-items-center"><div class="col-md-12"><div class="profile-img-edit"><img class="profile-pic" src="./cpControldoc - Command Perfect_files/10.jpg" alt="profile-pic"><i class="mdi mdi-account-circle m-0 p-0" style="font-size: 1175%;line-height: 1;position: relative;padding: 0;"></i><div class="p-image"><i class="ri-pencil-line upload-button"></i><div role="presentation"><input type="file" tabindex="-1" class="d-none" style="display: none;"></div></div></div></div></div><div class="row align-items-center mb-3"><div class="col-12 col-md-3 col-lg-2"><div><label class="" for="USU_USUARIO"> Usuário</label><input class="form-control  component-input-uppercase" id="USU_USUARIO" readonly="" value="JR"><span id="USU_USUARIO-error" class="invalid-feedback"></span></div></div><div class="col-12 col-md-3 col-lg-2"><div><label class="" for="USU_DTCADASTRO"> Data de Cadastro</label><input class="form-control  " id="USU_DTCADASTRO" name="USU_DTCADASTRO" type="text" readonly="" value="29/12/2005" inputmode="text"><span id="USU_DTCADASTRO-error" class="invalid-feedback"></span></div></div><div class="col-12 col-md-3 col-lg-2"><div><label class="" for="USU_DTALTERACAO"> Data de Alteração</label><input class="form-control  " id="USU_DTALTERACAO" name="USU_DTALTERACAO" type="text" readonly="" value="20/08/2023" inputmode="text"><span id="USU_DTALTERACAO-error" class="invalid-feedback"></span></div></div></div><div class="row mb-3"><div class="col-12 col-md-9 col-lg-6"><div><label class="" for="USU_NOME"> Nome</label><input class="form-control  component-input-uppercase" id="USU_NOME" value="JUNIOR MENEGUETE TESTE"><span id="USU_NOME-error" class="invalid-feedback"></span></div></div></div><button class="btn btn-outline-primary btn-lg" type="button"><i class="mdi mdi-check-bold"></i> Salvar</button></div></div></div><div id="chang-pwd" class="tab-pane fade " role="tabpanel" aria-labelledby="chang-pwd-tab"><div class="card iq-card"><div class="card-header iq-card-header d-flex justify-content-between"><div class="iq-header-title"><h4 class="card-title">Alterar Senha</h4></div></div></div></div></div></div></div></div></div></div></div></div></div></div><footer class="bg-white iq-footer custom-footer"><div class="container-fluid"><div class="row"><div class="col-lg-6"><ul class="list-inline mb-0"><li class="list-inline-item"><a href="http://127.0.0.1:5173/privacy-policy.html">Política de Privacidade</a></li><li class="list-inline-item"><a href="http://127.0.0.1:5173/terms-of-service.html">Termos de Uso</a></li></ul></div><div class="col-lg-6 text-right"><div class="text-muted"><p class="mb-0">© 2023 cpControlDoc. Criado com <i class="mdi mdi-heart text-danger"></i> pela <a target="_blank" href="http://www.commandperfect.com.br/">Command Perfect</a> </p></div></div></div></div></footer><div class="modal fade " id="modal-usuarios" data-backdrop="static" data-keyboard="false" tabindex="-1"><div class="modal-dialog modal-dialog-centered  modal-lg"><div class="modal-content"><div class="modal-header "><h4 class="modal-title">Copiar Permissões</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle=""><span aria-hidden="true">×</span></button></div><div class="modal-body p-0"></div><div class="modal-footer justify-content-between "><button type="button" class="btn btn-primary" data-dismiss="modal" data-target="" data-toggle="modal"><i class="mdi mdi-window-close"></i>Fechar</button><button class="btn btn-primary" type="button" data-toggle="modal"><i class="mdi mdi-arrow-down-left-bold"></i> Selecionar Usuário</button></div></div></div></div><div class="modal fade " id="modal-usuarios-do-grupo" data-backdrop="static" data-keyboard="false" tabindex="-1"><div class="modal-dialog modal-dialog-centered  modal-lg"><div class="modal-content"><div class="modal-header "><h4 class="modal-title">Usuários do Grupo</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle=""><span aria-hidden="true">×</span></button></div><div class="modal-body p-0"></div><div class="modal-footer justify-content-between "><button type="button" class="btn btn-primary" data-dismiss="modal" data-target="" data-toggle="modal"><i class="mdi mdi-window-close"></i>Fechar</button></div></div></div></div><div class="modal fade " id="modal-tipos-documento" data-backdrop="static" data-keyboard="false" tabindex="-1"><div class="modal-dialog modal-dialog-centered  modal-xl"><div class="modal-content"><div class="modal-header "><h4 class="modal-title">Tipos de Documento</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle=""><span aria-hidden="true">×</span></button></div><div class="modal-body p-0"></div><div class="modal-footer justify-content-between "><button type="button" class="btn btn-primary" data-dismiss="modal" data-target="" data-toggle="modal"><i class="mdi mdi-window-close"></i>Fechar</button><button class="btn btn-primary" type="button" data-toggle="modal"><i class="mdi mdi-arrow-down-left-bold"></i> Selecionar Tipo de Documento</button></div></div></div></div><div class="modal fade " id="modal-grupos-usuario" data-backdrop="static" data-keyboard="false" tabindex="-1"><div class="modal-dialog modal-dialog-centered  modal-xl"><div class="modal-content"><div class="modal-header "><h4 class="modal-title">Grupos de Usuário</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle=""><span aria-hidden="true">×</span></button></div><div class="modal-body p-0"></div><div class="modal-footer justify-content-between "><button type="button" class="btn btn-primary" data-dismiss="modal" data-target="" data-toggle="modal" id="btn-close-modal-grupos-usuario"><i class="mdi mdi-window-close"></i>Fechar</button><button class="btn btn-primary" type="button" data-toggle="modal"><i class="mdi mdi-arrow-down-left-bold"></i> Selecionar Grupo de Usuário</button></div></div></div></div><div class="modal fade " id="modal-versoes-documento" data-backdrop="static" data-keyboard="false" tabindex="-1"><div class="modal-dialog modal-dialog-centered  modal-lg"><div class="modal-content"><div class="modal-header "><h4 class="modal-title">Versões do Documento</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle=""><span aria-hidden="true">×</span></button></div><div class="modal-body p-0"></div><div class="modal-footer justify-content-between "><button type="button" class="btn btn-primary" data-dismiss="modal" data-target="" data-toggle="modal"><i class="mdi mdi-window-close"></i>Fechar</button></div></div></div></div><div class="modal fade " id="modal-visibilidade-documento" data-backdrop="static" data-keyboard="false" tabindex="-1"><div class="modal-dialog modal-dialog-centered  modal-lg"><div class="modal-content"><div class="modal-header "><button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle=""><span aria-hidden="true">×</span></button></div><div class="modal-body p-0"><h5 class="mt-2 ml-3 mr-3 p-0"></h5></div><div class="modal-footer justify-content-between "><button type="button" class="btn btn-primary" data-dismiss="modal" data-target="" data-toggle="modal" id="btn-close-modal-visibilidade-documento"><i class="mdi mdi-window-close"></i>Fechar</button></div></div></div></div><div class="modal fade " id="modal-grupos-do-usario" data-backdrop="static" data-keyboard="false" tabindex="-1"><div class="modal-dialog modal-dialog-centered  modal-lg"><div class="modal-content"><div class="modal-header "><h4 class="modal-title">Grupos do Usuário</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle=""><span aria-hidden="true">×</span></button></div><div class="modal-body p-0"></div><div class="modal-footer justify-content-between "><button type="button" class="btn btn-primary" data-dismiss="modal" data-target="" data-toggle="modal" id="btn-close-modal-grupos-do-usuario"><i class="mdi mdi-window-close"></i>Fechar</button></div></div></div></div><div class="modal fade " id="modal-permissoes" data-backdrop="static" data-keyboard="false" tabindex="-1"><div class="modal-dialog modal-dialog-centered  modal-lg"><div class="modal-content"><div class="modal-header "><h4 class="modal-title">Permissões</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle=""><span aria-hidden="true">×</span></button></div><div class="modal-body p-0"></div><div class="modal-footer justify-content-between "><button type="button" class="btn btn-primary" data-dismiss="modal" data-target="" data-toggle="modal" id="btn-close-modal-grupos-do-usuario"><i class="mdi mdi-window-close"></i>Fechar</button><button class="btn btn-primary" type="button" data-toggle="modal"><i class="mdi mdi-arrow-down-left-bold"></i> Selecionar Permissão</button></div></div></div></div></div>
+   <script type="module" src="./cpControldoc - Command Perfect_files/main.tsx"></script>
+
+   <!-- Optional JavaScript -->
+   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   <script src="./cpControldoc - Command Perfect_files/jquery.min.js.baixados"></script>
+   <!-- <script src="/js/popper.min.js"></script> -->
+   <script src="./cpControldoc - Command Perfect_files/bootstrap.min.js.baixados"></script>
+   <!-- Appear JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/jquery.appear.js.baixados"></script>
+   <!-- Countdown JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/countdown.min.js.baixados"></script>
+   <!-- Counterup JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/waypoints.min.js.baixados"></script>
+   <script src="./cpControldoc - Command Perfect_files/jquery.counterup.min.js.baixados"></script>
+   <!-- Wow JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/wow.min.js.baixados"></script>
+   <!-- Apexcharts JavaScript -->
+   <!-- <script src="/js/apexcharts.js"></script> -->
+   <!-- Slick JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/slick.min.js.baixados"></script>
+   <!-- Select2 JavaScript -->
+   <!-- <script src="/js/select2.min.js"></script> -->
+   <!-- Owl Carousel JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/owl.carousel.min.js.baixados"></script>
+   <!-- Magnific Popup JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/jquery.magnific-popup.min.js.baixados"></script>
+   <!-- Smooth Scrollbar JavaScript -->
+   <!-- <script src="/js/smooth-scrollbar.js"></script> -->
+   <!-- lottie JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/lottie.js.baixados"></script>
+   <!-- Chart Custom JavaScript -->
+   <!-- <script src="/js/chart-custom.js"></script> -->
+   <!-- Custom JavaScript -->
+   <script src="./cpControldoc - Command Perfect_files/custom.js.baixados"></script>
+
+
+</body></html>

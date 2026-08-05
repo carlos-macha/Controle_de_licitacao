@@ -1,0 +1,8 @@
+export interface IModelCallcenterCALL034 {
+   VUS_VIDEO: number,
+   VUS_DATA: number,
+   VUS_HORA: number,
+   VUS_PESSOA?: string,
+   VUS_USUCLIENTE?: string,
+   VUS_ID: number
+}

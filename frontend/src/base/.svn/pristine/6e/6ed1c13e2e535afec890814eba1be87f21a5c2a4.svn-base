@@ -1,0 +1,27 @@
+import { EnumFormaUnidadeMedida } from "../enums/enumsproduto";
+
+export interface IModelPortalEst019 {
+   ID_ITEM_NF: number,
+   PRODUTO: string,
+   PRODUTO_DESCRICAO: string,
+   NATUREZA_OPERACAO: string,
+   UNIDADE_MEDIDA: string,
+   UNIDADE_MEDIDA_TIPO: EnumFormaUnidadeMedida,
+   QUANTIDADE: number,
+   QUANTIDADE_DEVOLVIDA: number,
+   VLR_UNITARIO: number,
+   VLR_TOTAL: number,
+   VLR_DESCONTO: number,
+   VLR_PROP_FRETE: number,
+   VLR_PROP_DESP_ACESS: number,
+   VLR_PROP_SEGURO: number,
+   IPI_VLR: number,
+   ICMS_VLR: number,
+   ICMS_ST_VLR: number,
+   PIS_VLR: number,
+   COFINS_VLR: number,
+   ISS_VLR: number,
+   II_VLR: number,
+   VLR_CONTABIL: number,
+   NR_DIAS_PRAZO_GARANTIA: number
+}

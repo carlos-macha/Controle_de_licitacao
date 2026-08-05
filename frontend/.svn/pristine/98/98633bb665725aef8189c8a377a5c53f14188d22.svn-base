@@ -1,0 +1,15 @@
+import DAO from "../base/daos/dao";
+import { IModelLogin } from "../base/models/modeldoc001";
+
+export default class DAOUsuario extends DAO {
+
+   Login = (jsonLogin: IModelLogin) => new Promise<IModelLogin>((resolve, reject) => {
+      this.Post<IModelLogin>(`/usuarios/login`, jsonLogin).then(data => {
+         resolve(data);
+      }).catch(error => {
+         console.log(error)
+         reject(error.data.error);
+      });
+   });
+
+}

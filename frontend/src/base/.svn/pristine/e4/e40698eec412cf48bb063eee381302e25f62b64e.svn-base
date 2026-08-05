@@ -1,0 +1,32 @@
+import { EnumSimNao } from "../enums/enums";
+import { EnumCallcenterTpDepartamentoFuncionario } from "../enums/enumscallcenter";
+
+export interface IModelCallcenterCall002 {
+   FUN_USUARIO: string,
+   FUN_NOME: string,
+   FUN_SENHA: string,
+   FUN_DTCADASTRO: number,
+   FUN_CIDADE?: string,
+   FUN_BAIRRO?: string,
+   FUN_ESTADO?: string,
+   FUN_ENDERECO?: string,
+   FUN_FONE?: string,
+   FUN_CELULAR?: string,
+   FUN_EMAIL?: string,
+   FUN_SALARIO?: number,
+   FUN_PROJETOPADRAO: number,
+   FUN_COLUNISTA: EnumSimNao,
+   FUN_ENDFOTO?: string,
+   FUN_MOSTRARRECADOS: EnumSimNao,
+   FUN_MOSTRARPENDENCIAS: EnumSimNao,
+   FUN_MOSTRARAGENDAVISITA: EnumSimNao,
+   FUN_AREACOLUNA?: string,
+   FUN_EXPERIENCIAPROFISSIONAL: string,
+   FUN_ULTIMOARTIGO?: number,
+   FUN_ATIVOINATIVO: string,
+   FUN_COD_CPERFEC?: number,
+   FUN_QTD_CHAMADO_ABERTO: number,
+   FUN_DEPARTAMENTO: EnumCallcenterTpDepartamentoFuncionario,
+   FUN_3CX_FILA?: string,
+   FUN_3CX_RAMAL?: string
+}

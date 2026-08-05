@@ -1,0 +1,10 @@
+export interface IModelDadosCompraOrdemProducao {
+  FINALIDADE_COMPRA_CODIGO?: number,
+  FINALIDADE_COMPRA_DESCRICAO?: string,
+  TOTAL_COTACOES?: number,
+  TOTAL_PEDIDOS_REALIZADOS?: number,
+  TOTAL_PEDIDOS_APROVADOS?: number,
+  TOTAL_PEDIDOS_AGUARD_ASSINATURA?: number,
+  TOTAL_PEDIDOS_AGUARD_PAGAMENTO?: number,
+  TOTAL_PAGO?: number
+}

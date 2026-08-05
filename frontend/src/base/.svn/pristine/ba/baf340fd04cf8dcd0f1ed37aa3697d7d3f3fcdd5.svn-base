@@ -1,0 +1,49 @@
+import DAOPedidoDeCompra from "../daos/daopedidodecompra";
+import Controller from "./controller";
+
+export default class ControllerPedidoDeCompra extends Controller<DAOPedidoDeCompra>  {
+
+   constructor() {
+      super(DAOPedidoDeCompra);
+   }
+
+   // buildWherePedidosRealizados(finalidadeCompraCodigo: number) {
+   //    return `PDC_FINALIDADE_COMPRA;=;${finalidadeCompraCodigo}`;
+   // }
+
+   // buildWherePedidosAprovados(finalidadeCompraCodigo: number) {
+   //    return `PDC_FINALIDADE_COMPRA;=;${finalidadeCompraCodigo}|PDC_SITUACAO;=;CONFIRMADO`;
+   // }
+
+   // buildWherePedidosAguardandoAssinatura(finalidadeCompraCodigo: number) {
+   //    return `PDC_FINALIDADE_COMPRA;=;${finalidadeCompraCodigo}|PDC_SITUACAO;=;AGUARDANDO ASSINATURA`;
+   // }
+
+   // buildWherePedidosAguardandoPagamento(finalidadeCompraCodigo: number) {
+   //    return `PDC_FINALIDADE_COMPRA;=;${finalidadeCompraCodigo}|PDC_STATUS;=;30`;
+   // }
+
+   // async getTotalPedidosRealizados(finalidadeCompraCodigo: number) {
+   //    const where = this.buildWherePedidosRealizados(finalidadeCompraCodigo);
+   //    console.log('Where codificado do controller Pedidos Realizados:', where)
+   //    return this.DAO.pedidoDeCompra(where, 0, 1);
+   // }
+
+   // async getTotalPedidosAprovados(finalidadeCompraCodigo: number) {
+   //    const where = this.buildWherePedidosAprovados(finalidadeCompraCodigo);
+   //    console.log('Where codificado do controller Aprovados:', where)
+   //    return this.DAO.pedidoDeCompra(where, 0, 1);
+   // }
+
+   // async getTotalPedidosAguardandoAssinatura(finalidadeCompraCodigo: number) {
+   //    const where = this.buildWherePedidosAguardandoAssinatura(finalidadeCompraCodigo);
+   //    console.log('Where codificado do controller Aguardando Assinatura:', where)
+   //    return this.DAO.pedidoDeCompra(where, 0, 1);
+   // }
+
+   // async getTotalPedidosAguardandoPagamento(finalidadeCompraCodigo: number) {
+   //    const where = this.buildWherePedidosAguardandoPagamento(finalidadeCompraCodigo);
+   //    console.log('Where codificado do controller Aguardando Pagamento:', where)
+   //    return this.DAO.pedidoDeCompra(where, 0, 1);
+   // }
+}

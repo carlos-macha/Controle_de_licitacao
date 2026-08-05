@@ -1,0 +1,11 @@
+import { EnumSimNao } from "../enums/enums";
+
+export interface IModelDoc010 {
+   AVD_USUARIO: string,
+   AVD_DOCUMENTO: number,
+   AVD_DATA: number,
+   AVD_HORA: number,
+   AVD_LIDO: EnumSimNao,
+   AVD_ID: number,
+   DOC_NOMEDOCUMENTO: string
+}

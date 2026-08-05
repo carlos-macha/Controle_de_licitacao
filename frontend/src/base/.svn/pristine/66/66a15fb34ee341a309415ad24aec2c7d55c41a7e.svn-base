@@ -1,0 +1,28 @@
+import React from 'react';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { PageBase, PageBaseProps } from '../../../template/pagebase/pagebase';
+import UsuariosContainer, { UsuarioContainerParams } from './usuariosContainer';
+import { IModelUsuario } from '../../../models/modelUsuario';
+
+export interface UsuariosProps extends PageBaseProps {
+   usuarioLogado?: string,
+   onDataChange?: ((data: IModelUsuario) => void) | undefined,
+   heightGrid?: string | number
+}
+
+const Usuarios: React.FC<UsuariosProps> = (props) => {
+   const { checkPermission, permission, usuarioLogado, onDataChange, heightGrid } = props;
+   return (
+      <PageBase>
+         <CrudProvider>
+            <UsuariosContainer
+               typeRender='search'
+               params={{ checkPermission, permission, usuarioLogado, heightGrid } as UsuarioContainerParams}
+               onDataChange={onDataChange}
+            />
+         </CrudProvider>
+      </PageBase>
+   );
+}
+
+export default Usuarios;

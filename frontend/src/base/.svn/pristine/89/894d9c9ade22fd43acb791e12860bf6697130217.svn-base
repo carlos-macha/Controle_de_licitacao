@@ -1,0 +1,5 @@
+export interface IModelAux045 {
+   UFU_USUARIO: string,
+   UFU_FUNCIONARIO: string,
+   FUN_PESSOA: string
+}

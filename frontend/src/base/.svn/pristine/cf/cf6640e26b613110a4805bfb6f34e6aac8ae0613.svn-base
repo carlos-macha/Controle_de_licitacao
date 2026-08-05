@@ -1,0 +1,27 @@
+import React from 'react';
+import { PageBase } from '../../template/pagebase/pagebase';
+import CrudProvider from '../../components/crud/context/crudcontext';
+import VendedoresContainer from './vendedoresContainer';
+import { IModelAux012 } from '../../models/modelAUX012';
+
+interface VendedoresProps {
+   onDataChange?: ((data: IModelAux012) => void) | undefined,
+   heightGrid?: string | number
+}
+
+const Vendedores: React.FC<VendedoresProps> = (props) => {
+   const { onDataChange, heightGrid } = props;
+   return (
+      <PageBase>
+         <CrudProvider>
+            <VendedoresContainer
+               typeRender='search'
+               params={heightGrid}
+               onDataChange={onDataChange}
+            />
+         </CrudProvider>
+      </PageBase>
+   );
+}
+
+export default Vendedores;

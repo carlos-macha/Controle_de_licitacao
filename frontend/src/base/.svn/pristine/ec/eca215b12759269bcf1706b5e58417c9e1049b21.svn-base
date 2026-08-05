@@ -1,0 +1,64 @@
+import ControllerPortal from "../controllers/controllerportal";
+import { IModelPAR_PORTAL_CONFIG_ACOESCOMERCIAIS, IModelPAR_PORTAL_CONFIG_ASSISTENCIA_TECNICA, IModelPAR_PORTAL_CONFIG_COMMAND, IModelPAR_PORTAL_CONFIG_DEVOLUCOES, IModelPAR_PORTAL_CONFIG_GERAIS, IModelPAR_PORTAL_CONFIG_NOTAS_FISCAIS, IModelPAR_PORTAL_CONFIG_PESSOAS, IModelPAR_PORTAL_CONFIG_TITULOS, IModelPortalConfiguracao } from "../models/modelPortalConfiguracoes";
+
+interface IPortalService {
+   configuracoes: () => Promise<IModelPortalConfiguracao | undefined>,
+   gerais: () => IModelPAR_PORTAL_CONFIG_GERAIS,
+   titulos: () => IModelPAR_PORTAL_CONFIG_TITULOS,
+   notas_fiscais: () => IModelPAR_PORTAL_CONFIG_NOTAS_FISCAIS,
+   command: () => IModelPAR_PORTAL_CONFIG_COMMAND,
+   acoes_comerciais: () => IModelPAR_PORTAL_CONFIG_ACOESCOMERCIAIS,
+   pessoas: () => IModelPAR_PORTAL_CONFIG_PESSOAS,
+   devolucoes: () => IModelPAR_PORTAL_CONFIG_DEVOLUCOES,
+   assistencia_tecnica: () => IModelPAR_PORTAL_CONFIG_ASSISTENCIA_TECNICA
+}
+
+const PortalService = (function () {
+   var instance: IPortalService;
+   var configuracoes: IModelPortalConfiguracao;
+
+   const createInstance = (): IPortalService => {
+
+      return {
+         configuracoes() {
+            return new Promise<IModelPortalConfiguracao | undefined>((resolve, reject) => {
+
+               if (configuracoes) {
+                  resolve(configuracoes);
+                  return;
+               }
+
+               const controller: ControllerPortal = new ControllerPortal();
+
+               controller.DAO.Configuracoes().then(data => {
+                  configuracoes = data;
+                  resolve(data);
+               }).catch(error => {
+                  console.log(error);
+                  resolve(undefined);
+               });
+            });
+         },
+         gerais() { return configuracoes?.PAR_PORTAL_CONFIG_GERAIS! },
+         titulos() { return configuracoes?.PAR_PORTAL_CONFIG_TITULOS! },
+         notas_fiscais() { return configuracoes?.PAR_PORTAL_CONFIG_NOTAS_FISCAIS! },
+         command() { return configuracoes?.PAR_PORTAL_CONFIG_COMMAND! },
+         acoes_comerciais() { return configuracoes?.PAR_PORTAL_CONFIG_ACOESCOMERCIAIS! },
+         pessoas() { return configuracoes?.PAR_PORTAL_CONFIG_PESSOAS! },
+         devolucoes() { return configuracoes?.PAR_PORTAL_CONFIG_DEVOLUCOES! },
+         assistencia_tecnica() { return configuracoes?.PAR_PORTAL_CONFIG_ASSISTENCIA_TECNICA! }
+      }
+   }
+
+   return {
+      getInstance: function () {
+         if (!instance) {
+            instance = createInstance();
+         }
+         return instance;
+      }
+   };
+
+})();
+
+export default PortalService;

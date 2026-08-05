@@ -1,0 +1,8 @@
+export interface IModelDoc007 {
+   BIN_DOCUMENTO: number,
+   BIN_ARQUIVOBINARIO: string
+}
+
+export interface IModelDoc007_Atualizar extends IModelDoc007 {
+   BIN_NOMEORIGINALARQUIVO: string
+}

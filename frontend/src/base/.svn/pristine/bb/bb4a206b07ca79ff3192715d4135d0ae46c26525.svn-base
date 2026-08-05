@@ -1,0 +1,9 @@
+export interface IModelSis008 {
+   LCL_ID: number,
+   LCL_CNPJ: string | null,
+   LCL_CLIENT_ID: string | null,
+   LCL_CLIENT_SECRET: string | null,
+   LCL_BLOQUEIO_DH: number | null,
+   LCL_QTD_LICENCA: number | null,
+   LCL_QTD_LICENCA_UTILIZADA: number | null
+}

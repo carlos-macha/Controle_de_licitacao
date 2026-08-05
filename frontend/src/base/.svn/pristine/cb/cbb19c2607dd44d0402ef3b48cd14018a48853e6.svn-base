@@ -1,0 +1,33 @@
+export enum EnumCAT_Situacao {
+   emCAT_Situacao_Aberto = 'A',
+   emCAT_Situacao_Fechado = 'F',
+   emCAT_Situacao_Cancelado = 'C',
+   emCAT_Situacao_Lote = 'L'
+}
+
+export enum EnumCAT_EquipSolGarantiaTpServico {
+   emCat_EquipSolGarantiaTpServico_Conserto = 'CONSERTO',
+   emCat_EquipSolGarantiaTpServico_Reembolso = 'REEMBOLSO'
+}
+
+export enum EnumCAT_EquipSolGarantiaStatus {
+   emCat_EquipSolGarantiaStatus_EmAnalise = 'EM ANALISE',
+   emCat_EquipSolGarantiaStatus_EnviarParaConserto = 'ENVIAR PARA CONSERTO',
+   emCat_EquipSolGarantiaStatus_EfetuarDevolucao = 'EFETUAR DEVOLUCAO'
+}
+
+
+export enum EnumComportTelaEquipamento {
+   emCompTelaEquip_Padrao = 'PADRAO',
+   emCompTelaEquip_NotaFiscal = 'NOTA_FISCAL'
+}
+
+export enum EnumAssisTecTpNF {
+   emAssisTecTpNF_NotaFiscal = 'NF',
+   emAssisTecTpNF_Todas = 'TODAS'
+}
+
+export enum EnumComportamentoSerie {
+   emComportSerie_Obrigatorio = 'OBRIGATORIO',
+   emComportSerie_NaoUsa = 'NAOUSA'
+}

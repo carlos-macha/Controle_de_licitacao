@@ -1,0 +1,12 @@
+export interface IModelMOB004 {
+   TRP_ID: number,
+   TRP_ID_PESSOA: number,
+   TRP_EMPRESA: number,
+   TRP_NR_DOCUMENTO: string,
+   TRP_DTEMISSAO: number,
+   TRP_VENCIMENTO: number,
+   TRP_SALDO: number,
+   TRP_VALORPRICIPAL: number,
+   TRP_SITUACAO_BAIXA: string,
+
+}

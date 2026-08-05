@@ -1,0 +1,48 @@
+import React, { Fragment } from 'react';
+import './App.css'
+import BrowserRoutes from './routes/routes'
+import { AuthProvider } from './context/authcontext';
+import ModalProvider from './context/modalcontext';
+import { useSweetAlertContext } from './base/hooks/useSweetAlertContext';
+import SweetAlert from 'react-bootstrap-sweetalert';
+import HTMLReactParser from 'html-react-parser';
+
+
+const App: React.FC = () => {
+
+   const { sweetAlertState } = useSweetAlertContext();
+
+   return (
+      <Fragment>
+         <AuthProvider>
+            <ModalProvider>
+               <BrowserRoutes />
+            </ModalProvider>
+         </AuthProvider>
+         {sweetAlertState.props &&
+            <SweetAlert
+               {...sweetAlertState.props}
+            >
+               <span>
+                  {
+                     typeof sweetAlertState.msg === 'string' ?
+                        HTMLReactParser(sweetAlertState.msg.replace(/(\r\n|\n|\r)/gm, "<br>")) :
+                        sweetAlertState.msg
+                  }
+               </span>
+            </SweetAlert>
+         }
+      </Fragment>
+   )
+}
+
+export default App;
+
+
+// function App() {
+//    return (
+//       <BrowserRoutes />
+//    )
+// }
+
+// export default App

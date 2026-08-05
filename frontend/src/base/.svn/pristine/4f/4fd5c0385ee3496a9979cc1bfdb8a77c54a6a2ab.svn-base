@@ -1,0 +1,32 @@
+import React, { Fragment } from 'react';
+import Crudpesquisa, { PesquisaProps } from '../../components/crud/pesquisa/crudpesquisa';
+import { IModelAux012 } from '../../models/modelAUX012';
+
+interface VendedoresPesquisaProps extends PesquisaProps {
+   heightGrid?: string | number
+}
+
+const VendedoresPesquisa: React.FC<VendedoresPesquisaProps> = (props) => {
+   const { events, onDataChange, heightGrid } = props;
+
+   return (
+      <Fragment>
+         <Crudpesquisa
+            autoLoad
+            heightGrid={heightGrid ? heightGrid : 'calc(100vh - 24rem)'}
+            urlGetMount={(url: string, id: string | number, where: string, page: number, limit: number, offset: number, data?: any): string => {
+               return `${url}/${where}/${limit}/${offset}`;
+            }}
+            events={events}
+            typePagination='limit-offset'
+            onDataChange={(data: IModelAux012) => {
+               if (onDataChange)
+                  onDataChange(data);
+            }}
+            prefixId='grid-vendedores-pesquisa'
+         />
+      </Fragment>
+   );
+}
+
+export default VendedoresPesquisa;

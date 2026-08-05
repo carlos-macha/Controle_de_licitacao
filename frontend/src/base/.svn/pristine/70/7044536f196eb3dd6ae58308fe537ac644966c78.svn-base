@@ -1,0 +1,18 @@
+import { EnumSimNao } from "../enums/enums";
+
+export interface IModelPortalMeusTitulos {
+   EMPRESA: number,
+   ID_TITULO: number,
+   TITULO: string,
+   SEQ: number,
+   PARCELAS: string,
+   DOCUMENTO?: string,
+   DT_EMISSAO: number,
+   DT_VENCIMENTO: number,
+   VL_PRINCIPAL: number,
+   VL_BAIXADO: number,
+   VL_SALDO: number,
+   SITUACAO_BAIXA: string,
+   TIPO: string,
+   EMITE_SEGUNDA_VIA: EnumSimNao
+}

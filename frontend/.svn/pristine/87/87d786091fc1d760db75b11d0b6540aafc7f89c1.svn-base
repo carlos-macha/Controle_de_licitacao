@@ -1,0 +1,15 @@
+{
+   "ambiente": 3,
+   "producao": {
+      "WSCommandBaseUrl": "http://192.168.0.240:8097/api/v1",
+      "WSCommandTimeOut": 60000
+   },
+   "homologacao": {
+      "WSCommandBaseUrl": "http://192.168.0.240:8087/api/v1",
+      "WSCommandTimeOut": 60000
+   },
+   "desenvolvimento": {
+      "WSCommandBaseUrl": "http://192.168.0.240:8087/api/v1",
+      "WSCommandTimeOut": 60000
+   }
+}

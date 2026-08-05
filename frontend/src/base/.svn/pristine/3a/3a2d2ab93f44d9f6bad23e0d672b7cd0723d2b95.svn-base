@@ -1,0 +1,52 @@
+import { useState } from "react";
+import { IModelCrm021 } from "../../../../models/modelCRM021";
+import Rating from "react-rating";
+
+interface PesquisaRespostaNivelSatisfacaoProps {
+  respostas: IModelCrm021[];
+  onChange?: (resposta: IModelCrm021) => void;
+}
+
+const PesquisaRespostaNivelSatisfacao: React.FC<PesquisaRespostaNivelSatisfacaoProps> = ({ respostas, onChange }) => {
+  const [nota, setNota] = useState<number | null>(null);
+
+  const getColor = (valor: number, max = 10) => {
+    const hue = Math.round((valor / max) * 120);
+    return `hsl(${hue}, 80%, 50%)`;
+  };
+
+  const squares = respostas.map((resposta: IModelCrm021) => {
+    const valor = Number(resposta.RPT_RESPOSTA)
+    const backgroundColor = getColor(valor);
+    const classes = `text-white font-weight-bold d-flex justify-content-center align-items-center ${nota === valor ? "border border-dark" : "border border-light"}`;
+    return (
+      <span
+        key={resposta.RPT_CODRESPOSTA}
+        className={classes}
+        style={{ width: 40, height: 40, margin: 1, borderRadius: 4, backgroundColor }}
+      >
+        {valor}
+      </span>
+    );
+  });
+
+  return (
+    <div className="text-start">
+      <Rating
+        stop={respostas.length}
+        initialRating={nota ?? undefined}
+        onClick={(index) => {
+          const valorReal = Number(respostas[index - 1].RPT_RESPOSTA);
+          setNota(valorReal);
+          const selected = respostas.find(r => Number(r.RPT_RESPOSTA) === valorReal);
+          if (selected) onChange?.(selected);
+        }}
+        emptySymbol={squares}
+        fullSymbol={squares}
+      />
+    </div>
+  );
+};
+
+
+export default PesquisaRespostaNivelSatisfacao;

@@ -1,0 +1,33 @@
+import DAOAcaoComercial from "../daos/daoacaocomercial";
+import { IModelEST069 } from "../models/modelEST069";
+import { utilities } from "../utils/utilities";
+import Controller from "./controller";
+
+export default class ControllerAcaoComercial extends Controller<DAOAcaoComercial>  {
+
+   constructor() {
+      super(DAOAcaoComercial);
+   }
+
+   tipoAcaoComercial = (id: number = 0) => new Promise<IModelEST069>((resolve, reject) => {
+
+      this.DAO.tiposAcaoComercial(id).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+
+   });
+
+   tiposAcaoComercial = (empresa: number = 0, where: string = '', first: number = 0, skip: number = 0) => new Promise<Array<IModelEST069>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.tiposAcaoComercial(0, empresa, where, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+
+   });
+
+}

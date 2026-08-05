@@ -1,0 +1,126 @@
+import { EmptyCallback } from 'tabulator-tables';
+import { Tabulator } from 'react-tabulator/lib/types/TabulatorTypes';
+import TiposdeCompromissoPesquisa from './tiposdecompromissoPesquisa';
+import { CrudContainer } from '../../../components/crud/container/crudcontainer';
+import { CrudUrl, CrudPesquisaEvents } from '../../../components/crud/types';
+import { OperatorSearchTypes } from '../../../components/datasearch/datasearch';
+import { Formatters, DataTableColumns } from '../../../components/datatable/datatable';
+import { EnumCharcasetypes } from '../../../components/form/form';
+import { EnumAtivoInativo, EnumSimNao } from '../../../enums/enums';
+import { IModelCrm009 } from '../../../models/modelCRM009';
+
+class TiposdeCompromissoContainer extends CrudContainer {
+
+   crudUrl = (): CrudUrl | undefined => {
+      return {
+         GET: '/crm/tiposdecompromisso'
+      }
+   }
+
+   columns = (): DataTableColumns | undefined => [
+      {
+         title: 'Código',
+         type: 'integer',
+         field: 'STV_CODIGO',
+         width: 120,
+         hozAlign: 'center',
+         search: {
+            operator: OperatorSearchTypes.EQUAL,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Descrição',
+         field: 'STV_DESCRICAO',
+         type: 'string',
+         width: 243,
+         search: {
+            operator: OperatorSearchTypes.LIKE,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Ativo/Inativo',
+         field: 'STV_ATIVO',
+         type: 'string',
+         width: 130,
+         formatter: (cell) => {
+            const ativoInativo = (cell.getValue() === EnumAtivoInativo.ATIVO) ? 'Ativo' : 'Inativo';
+
+            return `<span title="${ativoInativo}">${ativoInativo}</span>`;
+         },
+         search: {
+            width: 150,
+            operator: OperatorSearchTypes.EQUAL,
+            defaultValue: EnumAtivoInativo.ATIVO,
+            type: 'COMBOBOX',
+            options: [{
+               label: 'Ativo',
+               value: EnumAtivoInativo.ATIVO
+            }, {
+               label: 'Inativo',
+               value: EnumAtivoInativo.INATIVO
+            }],
+         }
+      },
+      {
+         title: 'Data de Alteração',
+         field: 'STV_ALTERACAO_DATA',
+         type: 'date',
+         width: 165,
+         headerSort: true,
+         headerSortStartingDir: "desc",
+         sorter: function (a: any, b: any, aRow: Tabulator.RowComponent, bRow: Tabulator.RowComponent, column: Tabulator.ColumnComponent, dir: Tabulator.SortDirection, sorterParams: {}) {
+            if (String(a) === '0') {
+               return dir === 'asc' ? 1 : -1; // Para '0', retorna 1 se for ascendente, -1 se for descendente
+            }
+            if (String(b) === '0') {
+               return dir === 'asc' ? -1 : 1; // Para '0', retorna -1 se for ascendente, 1 se for descendente
+            }
+            return String(a).localeCompare(String(b));
+         }
+      },
+      {
+         title: 'Hora de Alteração',
+         field: 'STV_ALTERACAO_HORA',
+         type: 'time',
+         width: 165,
+         headerSort: true,
+         headerSortStartingDir: "asc",
+         sorter: function (a: string, b: string, aRow: any, bRow: any, column: any, dir: any, sorterParams: any) {
+            if (String(a) === '0') {
+               return dir === 'asc' ? 1 : -1; // Para '0', retorna 1 se for ascendente, -1 se for descendente
+            }
+            if (String(b) === '0') {
+               return dir === 'asc' ? -1 : 1; // Para '0', retorna -1 se for ascendente, 1 se for descendente
+            }
+            return String(a).localeCompare(String(b));
+         }
+      },
+      {
+         title: 'Obriga Pesquisa',
+         field: 'STV_OBRIGA_PESQUISA',
+         type: 'string',
+         width: 155,
+         formatter: (cell) => {
+            const simNao = (cell.getValue() === EnumSimNao.SIM) ? 'Sim' : 'Não';
+
+            return `<span title="${simNao}">${simNao}</span>`;
+         }
+      }
+   ];
+
+   pesquisa = (events: CrudPesquisaEvents): JSX.Element => {
+      const { onDataChange, params } = this.props;
+
+      return <TiposdeCompromissoPesquisa
+         crudContainer={this}
+         events={events}
+         onDataChange={onDataChange}
+         heightGrid={params?.heightGrid}
+      />;
+   }
+
+}
+
+export default TiposdeCompromissoContainer;

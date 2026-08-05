@@ -1,0 +1,26 @@
+
+import DAO from "./dao";
+import { IModelUsuario } from "../models/modelUsuario";
+import { IModelSis004 } from "../models/modelsis004";
+
+export default class DAOUsuario extends DAO {
+
+   Usuario = (usuario: string) => new Promise<IModelUsuario>((resolve, reject) => {
+      this.Get<IModelUsuario>(`/usuario/usuario/${usuario}/false`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         console.log(error)
+         reject(error);
+      });
+   });
+
+   retornapermissao = (usuario: string, sistema: string, programa: string) => new Promise<IModelSis004>((resolve, reject) => {
+      this.Get<IModelSis004>(`/usuario/retornapermissao/${usuario}/${sistema}/${programa}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         console.log(error)
+         reject(error);
+      });
+   });
+
+}

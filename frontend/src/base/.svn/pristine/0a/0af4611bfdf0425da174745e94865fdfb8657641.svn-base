@@ -1,0 +1,10 @@
+import DAOMovEstoque from "../daos/daomvestoque";
+import Controller from "./controller";
+
+export default class ControllerMovEstoque extends Controller<DAOMovEstoque>  {
+
+   constructor() {
+      super(DAOMovEstoque);
+   }
+
+}

@@ -1,0 +1,158 @@
+import { useRef, useState } from "react";
+import Card, { CardBody, CardHeader } from "../../../../components/card/card";
+import { IModelCrm020 } from "../../../../models/modelCRM020";
+import { EnumCRM_TpPerguntaPesquisa } from "../../../../enums/enumscrm";
+import { TextArea } from "../../../../components/form/form";
+import PesquisaRespostaMultiplaEscolha from "./pesquisaCRMRespostaMultiplaEscolha";
+import PesquisaRespostasSimples from "./pesquisaCRMRespostasSimples";
+import { IModelCrm023 } from "../../../../models/modelCRM023";
+import { utilities } from "../../../../utils/utilities";
+import { nanoid } from "nanoid";
+import PesquisaRespostaTexto from "./pesquisaCRMRespostaTexto";
+import PesquisaRespostaNivelSatisfacao from "./pesquisaCRMRespostaNivelSatisfacao";
+
+interface PesquisaPerguntaProps {
+   pergunta: IModelCrm020,
+   hasSelected: boolean,
+   onChange?: (resposta: IModelCrm023, type: 'checkbox' | 'radio', checked: boolean) => void,
+   onChangeObservacao?: (observacao: string) => void,
+   respostas: React.MutableRefObject<IModelCrm023[]>;
+   selecteds: number[];
+   setSelecteds: React.Dispatch<React.SetStateAction<number[]>>;
+}
+
+const PesquisaPergunta: React.FC<PesquisaPerguntaProps> = (props) => {
+   const { pergunta, hasSelected, onChange, onChangeObservacao, respostas, selecteds, setSelecteds } = props;
+   const observacao = useRef<string>('');
+   const [hasObservacao, setHasObservacao] = useState<boolean>(false);
+
+   return (
+      <Card className="card-pesquisacrm-pergunta mb-3">
+         <CardHeader className="card-header-pesquisacrm-pergunta" title={pergunta.PGT_PERGUNTA} />
+         <CardBody className="card-body-pesquisacrm-pergunta">
+            {pergunta.PGT_TIPO === EnumCRM_TpPerguntaPesquisa.emCRM_TpPerguntaPesquisa_Simples ? (
+               <PesquisaRespostasSimples
+                  respostas={pergunta.RESPOSTAS}
+                  onChange={(resposta) => {
+                     if (onChange)
+                        onChange(
+                           {
+                              RFP_PESQUISA: resposta.RPT_PESQUISA,
+                              RFP_NRFICHA: 0,
+                              RFP_PERGUNTA: resposta.RPT_PERGUNTA,
+                              RFP_RESPOSTA: resposta.RPT_CODRESPOSTA,
+                              RFP_COMPLEMENTO: utilities.base64(observacao.current),
+                              RFP_PONTOS: resposta.RPT_PONTOS
+                           }
+                           , 'radio', true);
+                  }}
+               />
+            ) : pergunta.PGT_TIPO === EnumCRM_TpPerguntaPesquisa.emCRM_TpPerguntaPesquisa_MultiplaEscolha ? (
+               pergunta.RESPOSTAS.map((resposta) => {
+                  return (
+                     <div key={'checkbox-' + resposta.RPT_PESQUISA + '_' + resposta.RPT_PERGUNTA + '_' + resposta.RPT_CODRESPOSTA}>
+                        <PesquisaRespostaMultiplaEscolha
+                           resposta={resposta}
+                           onChange={(checked) => {
+                              if (onChange)
+                                 onChange(
+                                    {
+                                       RFP_PESQUISA: resposta.RPT_PESQUISA,
+                                       RFP_NRFICHA: 0,
+                                       RFP_PERGUNTA: resposta.RPT_PERGUNTA,
+                                       RFP_RESPOSTA: resposta.RPT_CODRESPOSTA,
+                                       RFP_COMPLEMENTO: utilities.base64(observacao.current),
+                                       RFP_PONTOS: resposta.RPT_PONTOS
+                                    }
+                                    , 'checkbox', checked)
+                           }}
+                        />
+                     </div>
+                  )
+               })
+            ) : pergunta.PGT_TIPO === EnumCRM_TpPerguntaPesquisa.emCRM_TpPerguntaPesquisa_Texto ? (
+               pergunta.RESPOSTAS.map((resposta) => {
+                  return (
+                     <PesquisaRespostaTexto
+                        key={`texto-${resposta.RPT_PESQUISA}-${resposta.RPT_PERGUNTA}-${resposta.RPT_CODRESPOSTA}`}
+                        resposta={resposta}
+                        onChange={(texto) => {
+                           if (onChange)
+                              onChange(
+                                 {
+                                    RFP_PESQUISA: resposta.RPT_PESQUISA,
+                                    RFP_NRFICHA: 0,
+                                    RFP_PERGUNTA: resposta.RPT_PERGUNTA,
+                                    RFP_RESPOSTA: texto,
+                                    RFP_COMPLEMENTO: utilities.base64(observacao.current),
+                                    RFP_PONTOS: resposta.RPT_PONTOS
+                                 }
+                                 , 'checkbox', true)
+                        }}
+                     />
+                  )
+               })
+            ) : pergunta.PGT_TIPO === EnumCRM_TpPerguntaPesquisa.emCRM_TpPerguntaPesquisa_NivelSatisfacao ? (
+               <div className="mb-3">
+                  <PesquisaRespostaNivelSatisfacao
+                     respostas={pergunta.RESPOSTAS}
+                     onChange={(respostaSelecionada) => {
+                        const novaResposta = {
+                           RFP_PESQUISA: respostaSelecionada.RPT_PESQUISA,
+                           RFP_NRFICHA: 0,
+                           RFP_PERGUNTA: respostaSelecionada.RPT_PERGUNTA,
+                           RFP_RESPOSTA: respostaSelecionada.RPT_CODRESPOSTA,
+                           RFP_COMPLEMENTO: utilities.base64(observacao.current),
+                           RFP_PONTOS: Number(respostaSelecionada.RPT_RESPOSTA)
+                        };
+
+                        const index = respostas.current.findIndex(r => r.RFP_PERGUNTA === novaResposta.RFP_PERGUNTA);
+                        if (index > -1) {
+                           respostas.current[index] = novaResposta;
+                        } else {
+                           respostas.current.push(novaResposta);
+                        }
+
+                        if (!selecteds.includes(respostaSelecionada.RPT_PERGUNTA)) {
+                           setSelecteds([...selecteds, respostaSelecionada.RPT_PERGUNTA]);
+                        }
+                     }}
+                  />
+               </div>
+            ) : (pergunta.RESPOSTAS.length > 0) ? <div style={{ paddingTop: '0.25rem' }} /> : ''}
+            {(((pergunta.PGT_TIPO === EnumCRM_TpPerguntaPesquisa.emCRM_TpPerguntaPesquisa_Simples) || hasObservacao)
+               && !hasSelected
+               && pergunta.PGT_TIPO !== EnumCRM_TpPerguntaPesquisa.emCRM_TpPerguntaPesquisa_Texto)
+               ? <div style={{ height: 'calc(20px + 0.25rem)' }}><span style={{ fontSize: '80%', color: '#dc3545' }}>{'Pelo menos 1 opção deve estar selecionada!'}</span></div>
+               : <div style={{ height: 20 }} />}
+            <TextArea
+               rows={3}
+               placeholder='Deixe um comentário'
+               onChange={(e) => {
+                  observacao.current = e.currentTarget.value;
+
+                  // if (onChangeObservacao)
+                  //    onChangeObservacao(e.currentTarget.value);
+
+                  if (observacao.current.length > 0) {
+                     if (!hasObservacao) {
+                        setHasObservacao(true);
+                     }
+                  } else {
+                     if (hasObservacao) {
+                        setHasObservacao(false);
+                     }
+                  }
+               }}
+               onBlur={() => {
+                  if (onChangeObservacao)
+                     onChangeObservacao(observacao.current);
+                     console.log(observacao.current)
+               }}
+            />
+         </CardBody>
+      </Card>
+   )
+}
+
+export default PesquisaPergunta;

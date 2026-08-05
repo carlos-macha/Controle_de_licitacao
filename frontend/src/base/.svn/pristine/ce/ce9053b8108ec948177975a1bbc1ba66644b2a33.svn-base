@@ -1,0 +1,19 @@
+import { EnumSimNao, EnumUserType } from "../enums/enums";
+import { IModelPAR_PORTAL_CONFIG_COMMAND } from "./modelPortalConfiguracoes";
+import { IModelPortalContato } from "./modelPortalContato";
+
+export interface IModelPortalUsuario {
+   ID_PESSOA: number,
+   COD_PESSOA: string,
+   NOME_PESSOA: string,
+   CPFCNPJ_PESSOA: string,
+   USUARIO: string
+   TELAS: IModelPAR_PORTAL_CONFIG_COMMAND,
+   REDEFINIR_SENHA: EnumSimNao,
+   EMPRESA_LOGIN: number,
+   COD_VENDEDOR: string | null,
+   NOME_VENDEDOR: string | null,
+   USU_VENDEDOR: string | null,
+   TIPO_USUARIO: EnumUserType,
+   CONTATO: IModelPortalContato
+}

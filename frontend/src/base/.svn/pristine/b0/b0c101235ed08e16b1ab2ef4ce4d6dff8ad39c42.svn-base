@@ -1,0 +1,251 @@
+import DAOCRM from "../daos/daocrm";
+import { IModelAux030 } from "../models/modelAUX030";
+import { IModelAux039 } from "../models/modelAUX039";
+import { IModelCrm009 } from "../models/modelCRM009";
+import { IModelCrm037 } from "../models/modelCRM037";
+import { IModelKanban } from "../models/modelKanban";
+import { IModelMOB001 } from "../models/modelMOB001";
+import { IModelMOB012 } from "../models/modelMOB012";
+import { IModelRelatorioPDF } from "../models/modelRelatorioPDF";
+import { IModelUsuario } from "../models/modelUsuario";
+import { utilities } from "../utils/utilities";
+import Controller from "./controller";
+
+type ProgressCallback = (atual: number, total: number) => void;
+
+export default class ControllerCRM extends Controller<DAOCRM>  {
+
+   constructor() {
+      super(DAOCRM);
+   }
+
+   relatorioFichaPesquisa = (codigo: number, nrFicha: string, id: number, idEl: string, name?: string) => new Promise<IModelRelatorioPDF>((resolve, reject) => {
+      // let idEl = 'pesq-doc-download';// `DOC_${codigo}`;
+      let idSpinner = `SPINNER_LPC_${id}`;
+      let idLink = `LINK_LPC_${id}`;
+
+      // let href = document.getElementById(idEl)?.getAttribute('href');
+      let spinner = document.getElementById(idSpinner);
+
+      // if (href) {
+      //    document.getElementById(idEl)?.click();
+      //    return;
+      // }
+
+      spinner?.classList.remove('d-none');
+      document.getElementById(idLink)?.classList.add('d-none');
+
+      this.DAO.relatorioFichaPesquisa(codigo, nrFicha).then(data => {
+
+         let base64: string = data.REL_PDF;
+
+         document.getElementById(idEl)?.setAttribute('href', `data:application/octet-stream;base64,${base64}`);
+         document.getElementById(idEl)?.setAttribute('download', `${name || data.REL_NAME}.pdf`);
+         document.getElementById(idEl)?.click();
+
+         resolve(data);
+      }).catch(error => {
+         console.log(error)
+         reject(error);
+      }).finally(() => {
+         spinner?.classList.add('d-none');
+         document.getElementById(idLink)?.classList.remove('d-none');
+      });
+   });
+
+   agendas = (where: string, first: number = 0, skip: number = 0, visualizarTodasAgendas: boolean = false, tipoOutrasAgendas: string = 'A') => new Promise<Array<IModelMOB012>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.agendas(where, first, skip, visualizarTodasAgendas, tipoOutrasAgendas).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+
+   });
+
+   cadastros = (viewProspect: boolean, where: string) => new Promise<Array<IModelMOB001>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.cadastros(viewProspect, where).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+
+   });
+
+   funcionarios = (where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelUsuario>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.usuarios(where, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+
+   });
+
+   tiposdeCompromisso = (id: number = 0, where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelCrm009>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.tiposdeCompromisso(id, where, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      })
+   });
+
+   assuntosCompromisso = (id: number = 0, where: string = "", first: number = 0, skip: number = 0) => new Promise<Array<IModelCrm037>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.assuntosCompromisso(id, where, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   workflowStatus = (id: number = 0, where: string = "", empresa: number = 0, categoria: number = 0, first: number = 0, skip: number = 0) => new Promise<Array<IModelAux030>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.workflowStatus(id, where, empresa, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+
+   });
+
+   workflowKanban = (empresa: number, status: number, data_inicial: number = 0, data_final: number = 0, vendedor: string = '', where: string = '', page: number = 0) => new Promise<IModelKanban>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.workflowKanban(empresa, status, data_inicial, data_final, vendedor, where, page).then(async data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+
+   });
+
+   workflowTransicoes = (id: number, where: string = '', usuario: string = '', empresa: number = 0, first: number = 0, skip: number = 0) => new Promise<Array<IModelAux039>>((resolve, reject) => {
+      where = utilities.base64(where);
+
+      this.DAO.workflowTransicoes(id, where, usuario, empresa, first, skip).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error.data);
+      });
+
+   });
+
+   removerSerieCompletaRecorrencias = (id_base: number, onProgress?: ProgressCallback) =>
+      new Promise<number>(async (resolve, reject) => {
+         try {
+            if (!id_base) return resolve(0);
+
+            const filtroFilhos = `AGE_ID_AGENDA_ORIGEM;=;${id_base}`;
+            const filhos = await this.agendas(filtroFilhos, 0, 0, true);
+
+            const idsParaDeletar = filhos.map(f => f.AGE_LEGADO_ID).filter(id => !!id) as number[];
+            if (!idsParaDeletar.includes(id_base)) {
+               idsParaDeletar.push(id_base);
+            }
+
+            const total = idsParaDeletar.length;
+            let atual = 0;
+
+            if (onProgress) {
+               onProgress(0, total);
+            }
+
+            for (const id of idsParaDeletar) {
+               await this.DAO.RemoverAgenda(id);
+               atual++;
+
+               if (onProgress) {
+                  onProgress(atual, total);
+               }
+            }
+            resolve(idsParaDeletar.length);
+         } catch (error) {
+            reject(error);
+         }
+      });
+
+   removerSerieRecorrenciasAgenda = (id_origem: number, onProgress?: (atual: number, total: number) => void, data_corte: number = 0, id_clicado?: number) =>
+      new Promise<number>(async (resolve, reject) => {
+         try {
+            if (!id_origem) return resolve(0);
+
+            let filtro = `AGE_ID_AGENDA_ORIGEM;=;${id_origem}`;
+            const todosOsFilhos = await this.agendas(filtro, 0, 0, true);
+
+            let idsParaDeletar = todosOsFilhos
+               .filter((f: any) => f.AGE_DATA >= data_corte)
+               .map((f: any) => f.AGE_LEGADO_ID)
+               .filter((id) => !!id) as number[];
+
+            if (id_clicado && !idsParaDeletar.includes(id_clicado)) {
+               idsParaDeletar.push(id_clicado);
+            }
+
+            const total = idsParaDeletar.length;
+            let atual = 0;
+
+            console.log(`Encontrados ${total} registros para excluir da série ${id_origem}`);
+
+            if (onProgress) onProgress(0, total);
+
+            for (const idParaRemover of idsParaDeletar) {
+               try {
+                  await this.DAO.RemoverAgenda(idParaRemover);
+                  atual++;
+
+                  if (onProgress) onProgress(atual, total);
+
+                  console.log(`Progresso: ${atual}/${total}`);
+               } catch (e) {
+                  console.error(`Erro no ID ${idParaRemover}`, e);
+               }
+            }
+            resolve(total);
+
+            resolve(total);
+         } catch (error) {
+            console.error("Erro crítico na exclusão da série:", error);
+            reject(error);
+         }
+      });
+
+   excluirSerieCompletaPaiParaFilhos = (idBase: number, onProgress?: (atual: number, total: number) => void) =>
+      new Promise<number>(async (resolve, reject) => {
+         try {
+            const filtro = `AGE_ID_AGENDA_ORIGEM;=;${idBase}`;
+            const registros = await this.agendas(filtro, 0, 0, true);
+
+            let filaExclusao = registros.map((r: any) => r.AGE_LEGADO_ID);
+            filaExclusao.push(idBase);
+
+            const total = filaExclusao.length;
+            let atual = 0;
+            if (onProgress) onProgress(0, total);
+
+            for (const id of filaExclusao) {
+               try {
+                  await this.DAO.RemoverAgenda(id);
+                  atual++;
+                  if (onProgress) onProgress(atual, total);
+               } catch (e) {
+                  console.error(`Falha ao remover ID ${id} na série do pai`, e);
+               }
+            }
+
+            resolve(total);
+         } catch (error) {
+            reject(error);
+         }
+      });
+
+}

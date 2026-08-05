@@ -1,0 +1,2049 @@
+import Select, { components, ContainerProps, InputProps, MultiValueGenericProps, SingleValueProps, ValueContainerProps } from 'react-select'
+import { Fragment, InputHTMLAttributes, TextareaHTMLAttributes, useEffect } from "react";
+import Inputmask from "inputmask";
+import React from 'react';
+import { useState } from 'react';
+import NumberFormat, { NumberFormatProps, NumberFormatValues, SourceInfo } from 'react-number-format';
+import { utilities } from '../../utils/utilities';
+import moment from 'moment';
+import { momentUtils } from '../../utils/momentutils';
+import './form.css';
+import { Dropdown, OverlayTriggerProps } from 'react-bootstrap';
+import { InputDataValue } from '../../types/types';
+import RetryMessage from '../retrymessage/retrymessage';
+import Tippy from '@tippyjs/react';
+
+
+export enum EnumCharcasetypes {
+  NORMAL = 'normal',
+  UPPERCASE = 'upperCase',
+  LOWERCASE = 'lowerCase'
+}
+
+export interface ErrorMessage {
+  hasError: boolean,
+  message?: string
+}
+
+export type OnValidateForms = (value: any, fn: ValidationsFunction) => boolean;
+
+export interface ValidationsFunction {
+  setError: (error: boolean, errorMessage: string) => void
+  clean: () => void
+}
+
+interface Validations {
+  required?: boolean,
+  min?: number,
+  max?: number,
+  onValidate?: OnValidateForms, // (value: any, fn: ValidationsFunction) => boolean,
+  onError?: (errorMessage: ErrorMessage) => void,
+  message?: string
+}
+
+interface RegisterType {
+  validations: Validations,
+  id?: string,
+  name?: string,
+  type?: React.HTMLInputTypeAttribute | "select" | "textarea",
+  setInvalid: (value: boolean) => void,
+  setInvalidMsg: (value: string) => void
+}
+
+export class ValidateFields {
+  private fields: Array<RegisterType>;
+
+  constructor() {
+    this.fields = [];
+  }
+
+  private field = (id: string): RegisterType | undefined => {
+    var _field: RegisterType | undefined = undefined;
+    this.fields.forEach(field => {
+      if (field.id === id) {
+        _field = field;
+      }
+    });
+    return _field;
+  }
+
+  private clean = (field: RegisterType) => {
+    field.setInvalid(false);
+    field.setInvalidMsg('');
+  }
+
+  private setError = (field: RegisterType, errorMessage: ErrorMessage): boolean => {
+    field.setInvalid(errorMessage.hasError);
+    field.setInvalidMsg(errorMessage.message!);
+
+    if (field.validations.onError)
+      field.validations.onError(errorMessage);
+
+    return !errorMessage.hasError;
+  }
+
+  register = (register: RegisterType) => {
+    var hasField = false;
+
+    this.fields.forEach(field => {
+      if (field.id === register.id) {
+        hasField = true;
+      }
+    });
+
+    if (!hasField) {
+      this.fields.push(register);
+    }
+  }
+
+  validate = (id: string, value: string | number | boolean): boolean => {
+    let field = this.field(id);
+
+    if (field) {
+      var valueIsEmpty: boolean = (String(value).trim() === "" || (field.type === 'checkbox' && value === false));
+      let validations: Validations = field.validations;
+
+      // console.log(id, value, valueIsEmpty)
+
+      if (validations.required) {
+        if (!this.setError(field, {
+          hasError: valueIsEmpty,
+          message: validations.message ? validations.message : 'Este campo é obrigatório'
+        }))
+          return false;
+        // field.setInvalid(valueIsEmpty);
+        // if (valueIsEmpty) {
+        //    field.setInvalidMsg(validations.message ? validations.message : 'Este campo é obrigatório');
+        //    return false;
+        // }
+      }
+
+      let message: string = '';
+      switch (field.type) {
+        case "number":
+          if (validations.max && Number(value) > validations.max) {
+            message = `O valor deve ser menor ou igual a ${validations.max}`;
+          }
+          if (validations.min && Number(value) < validations.min) {
+            message = `O valor deve ser maior ou igual a ${validations.min}`;
+          }
+          break;
+
+        default:
+
+          break;
+      }
+
+      if (!this.setError(field, {
+        hasError: message.length > 0,
+        message
+      }))
+        return false;
+
+      if (validations.onValidate) {
+        return validations.onValidate(value, {
+          setError: (error: boolean, errorMessage: string) => {
+            this.setError(field!, {
+              hasError: error,
+              message: errorMessage
+            });
+          },
+          clean: () => {
+            this.clean(field!);
+          }
+        });
+      }
+    }
+
+    return true;
+  }
+
+  validateAll = () => {
+    let isValid: boolean = true;
+    this.fields.forEach(field => {
+
+      let el: HTMLElement | null;
+
+      // if (field.type === "select") {
+      //    el = document.getElementsByName(field.name!).item(0);
+      // } else {
+      el = document.getElementById(field.id!);
+      // }
+
+      if (el) {
+        let value: string | number | boolean | null = '';
+
+        if (field.type === "textarea") {
+          value = (el as HTMLTextAreaElement).value;
+        } else if (field.type === "checkbox") {
+          value = (el as HTMLInputElement).checked;
+        } else {
+          value = (el as HTMLInputElement).value;
+        }
+
+        // console.log(field.name, value)
+
+        if (value === undefined || value === null) {
+          value = '';
+        }
+
+        if (!this.validate(field.id!, value)) {
+          isValid = false;
+        }
+      }
+    });
+
+    return isValid;
+  }
+
+  cleanMessage(fieldName?: string) {
+    this.fields.forEach(field => {
+      if (fieldName) {
+        if (fieldName === field.name || fieldName === field.id) {
+          this.clean(field);
+        }
+      } else {
+        this.clean(field);
+      }
+    });
+  }
+
+  setErrorMessage(fieldName: string, message: string) {
+    this.fields.forEach(field => {
+      if (fieldName === field.name || fieldName === field.id) {
+        this.setError(field, {
+          hasError: true,
+          message
+        });
+      }
+    });
+  }
+}
+
+export interface OverlayTriggerPropsCustom extends Omit<OverlayTriggerProps, 'overlay' | 'children'> { }
+
+interface InputGroupTextProps {
+  className: string
+}
+
+export const InputGroupText: React.FC<InputGroupTextProps> = (props) => {
+  return (
+    <div className="input-group-append">
+      <div className="input-group-text">
+        <span className={props.className}></span>
+      </div>
+    </div>
+  )
+}
+
+export interface CustomEventHTMLInputElement extends React.ChangeEvent<HTMLInputElement> {
+  charcase?: EnumCharcasetypes
+}
+
+interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  prefixId?: string,
+  label?: string,
+  validator?: ValidateFields,
+  validations?: Validations,
+  classNameGroup?: string,
+  classNameInputGroupText?: string,
+  classNameLabel?: string,
+  showOverlay?: boolean,
+  overlayProps?: OverlayTriggerPropsCustom,
+  onChange?: (event: CustomEventHTMLInputElement) => void
+}
+
+/**
+ * Custom for Radio Buttons
+ */
+
+interface RadioButtonsProps extends CustomInputProps { }
+
+export const RadioButtons: React.FC<RadioButtonsProps> = (props) => {
+
+  const { id, label, ...RadioButtons } = props;
+
+  return (
+    <div className="custom-control custom-radio custom-control-inline mr-1 ml-1">
+      <input id={id} type="radio" className="custom-control-input" {...RadioButtons} />
+      {label && <label className="custom-control-label" htmlFor={id}>{label}</label>}
+    </div>
+  );
+
+}
+
+/**
+ * Custom for Input
+ */
+
+interface IInputProps extends CustomInputProps {
+  mask?: string,
+  disabledLabelError?: boolean,
+  charCase?: EnumCharcasetypes,
+  dataModel?: InputDataValue<any>,
+  dataValue?: InputDataValue<any>,
+  groupPrepend?: JSX.Element,
+  groupAppend?: JSX.Element
+}
+
+export const Input: React.FC<IInputProps> = (props) => {
+
+  const { id, name, label, mask, type, validator, validations, disabledLabelError, className, classNameGroup, classNameLabel,
+    classNameInputGroupText, charCase, children, value, dataModel, dataValue, checked, overlayProps, showOverlay, title,
+    onChange, onBlur, onKeyDown, groupPrepend, groupAppend, prefixId, ...Input } = props;
+  const [invalid, setInvalid] = useState<boolean>(false);
+  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [internalValue, setInternalValue] = useState<string | number | readonly string[] | undefined>();
+  const [internalChecked, setInternalChecked] = useState<boolean | undefined>();
+
+  let internalID = id || name;
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  const onSetData = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | React.FocusEvent<HTMLInputElement, Element>): void => {
+
+    let _value = null;
+
+    switch (type) {
+      case 'checkbox':
+        _value = (e as React.ChangeEvent<HTMLInputElement>).target.checked;
+        break;
+
+      default: _value = e.target.value;
+    }
+
+    if (dataModel) {
+      let name: string = e.target.name;
+      if (name.trim().length === 0)
+        name = e.target.id;
+
+      let _data = { ...dataModel.data, [name]: _value }
+
+      dataModel.setData(_data);
+    }
+
+    if (dataValue) {
+      dataValue.setData(_value);
+    }
+  }
+
+  const getClassNameCharCase = (): string => {
+    switch (charCase) {
+      case EnumCharcasetypes.UPPERCASE: return 'component-input-uppercase';
+      case EnumCharcasetypes.LOWERCASE: return 'component-input-lowercase';
+      default: return '';
+    }
+  }
+
+  const getValue = (): string | number | readonly string[] | undefined => {
+
+    if (value)
+      return value;
+
+    if (dataModel) {
+      let _name: string = '';
+
+      if (name && name.trim().length > 0)
+        _name = name
+      else if (internalID && internalID.trim().length > 0)
+        _name = internalID;
+
+      return dataModel.data[_name];
+    }
+
+    if (dataValue) {
+      return dataValue.data;
+    }
+
+    return '';
+
+  }
+
+  const getChecked = (): boolean | undefined => {
+    if (type !== 'checkbox')
+      return undefined
+
+    if (checked)
+      return checked;
+
+    if (dataModel) {
+      let _name: string = '';
+
+      if (name && name.trim().length > 0)
+        _name = name
+      else if (internalID && internalID.trim().length > 0)
+        _name = internalID;
+
+      return dataModel.data[_name];
+    }
+
+    if (dataValue) {
+      return dataValue.data;
+    }
+
+  }
+
+  useEffect(() => {
+    let _mask: string | undefined = undefined;
+    let options: Inputmask.Options | undefined = undefined;
+
+    switch (type) {
+      case 'email':
+        _mask = "*{1,20}[.*{1,20}][.*{1,20}][.*{1,20}]@*{1,20}[.*{2,6}][.*{1,2}]";
+        options = {
+          definitions: {
+            '*': {
+              validator: "[0-9A-Za-z!#$%&'*+/=?^_`{|}~\\-]",
+              casing: "lower"
+            }
+          },
+          greedy: false,
+          onBeforePaste: function (pastedValue: string, opts: Inputmask.Options) {
+            pastedValue = pastedValue.toLowerCase();
+            return pastedValue.replace("mailto:", "");
+          },
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    if (mask) {
+      _mask = mask;
+    }
+
+    if (internalID && _mask) {
+      let selector = document.getElementById(internalID);
+      if (selector) {
+        var im = new Inputmask(_mask, options);
+        im.mask(selector);
+      }
+    }
+
+    if (validations && validator) {
+      validator.register({
+        validations,
+        id: internalID,
+        name,
+        type,
+        setInvalid,
+        setInvalidMsg
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setInternalValue(getValue());
+    setInternalChecked(getChecked());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, dataModel, dataValue, checked])
+
+  let elLabel: JSX.Element = <label className={classNameLabel} htmlFor={internalID}>{invalid && <i className="mdi mdi-close-circle"></i>} {label}</label>;
+  let elLabelCheckbox: JSX.Element = <Fragment />;
+  let elChildren: JSX.Element = <Fragment />;
+
+  if (type === 'checkbox') {
+    elLabelCheckbox = elLabel;
+
+    if (children)
+      elLabelCheckbox = <label className={classNameLabel} htmlFor={internalID}>{invalid && <i className="mdi mdi-close-circle"></i>} {children}</label>;
+
+    elLabel = <Fragment />
+  } else {
+    elChildren = <Fragment>{children}</Fragment>
+  }
+
+  return (
+    <Tippy
+      content={title}
+      allowHTML={true}
+      arrow={true}
+      placement={overlayProps?.placement}
+      animation='shift-away-subtle'
+      delay={!overlayProps?.delay ? ((typeof overlayProps?.delay === 'object') ? [overlayProps?.delay.show, overlayProps?.delay.hide] : overlayProps?.delay) : [250, 250]}
+      touch={false}
+      disabled={!overlayProps ? true : false}
+      visible={overlayProps?.show && (overlayProps?.show ? true : false)}
+    >
+      <div className={classNameGroup}>
+        {label && elLabel}
+        {groupPrepend}
+        <input
+          value={internalValue}
+          checked={internalChecked}
+          className={`${className} ${invalid ? 'is-invalid' : ''} ${getClassNameCharCase()}`}
+          id={internalID}
+          name={name}
+          type={type}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+
+            if (onKeyDown) {
+              onKeyDown(e)
+            }
+          }}
+          onChange={e => {
+            // console.log(e)
+            let event: CustomEventHTMLInputElement = e;
+            event.charcase = charCase;
+            if (onChange) {
+              onChange(event);
+            }
+            onSetData(e);
+
+            if (type === 'checkbox') {
+              setInternalChecked(e.target.checked);
+              validator?.validate(internalID!, e.target.checked);
+            } else {
+              setInternalValue(e.target.value);
+            }
+            // else
+            //    validator?.validate(id!, e.target.value);
+          }}
+          onBlur={e => {
+            e.target.value = utilities.charCase(e.target.value, charCase);
+            onSetData(e);
+            // console.log(validator)
+            if (type === 'checkbox')
+              validator?.validate(internalID!, e.target.checked);
+            else
+              validator?.validate(internalID!, e.target.value);
+            if (onBlur) {
+              onBlur(e);
+            }
+          }}
+          {...Input}
+        />
+        {groupAppend}
+        {elChildren}
+        {(label || children) && elLabelCheckbox}
+        {classNameInputGroupText &&
+          <InputGroupText className={classNameInputGroupText} />
+        }
+        {!disabledLabelError &&
+          <span id={`${internalID}-error`} className="invalid-feedback">{invalidMsg}</span>
+        }
+      </div>
+    </Tippy>
+  );
+}
+
+Input.defaultProps = {
+  className: 'form-control',
+  classNameLabel: ''
+}
+
+export const InputCheckbox: React.FC<IInputProps> = (props) => {
+  const { classNameGroup, ...attributes } = props;
+  return (
+    <Input
+      classNameGroup={`${classNameGroup} icheck-primary`}
+      type="checkbox"
+      {...attributes}
+    />
+  );
+}
+
+interface InputPassWordProps extends IInputProps {
+  viewPass?: boolean
+}
+
+export const InputPassWord: React.FC<InputPassWordProps> = (props) => {
+  const { id, name, classNameGroup, viewPass, children, prefixId, ...attributes } = props;
+  const [iconEye, setIconEye] = useState<string>('mdi-eye');
+
+  let internalID = id || name;
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  const onViewPass = (): void => {
+    var e = document.getElementById(internalID!);
+    if (e?.getAttribute('type') === "password") {
+      e?.setAttribute('type', 'text');
+      setIconEye('mdi-eye-off');
+    } else {
+      e?.setAttribute('type', 'password');
+      setIconEye('mdi-eye');
+    }
+  }
+
+  return (
+    <Input
+      id={id}
+      name={name}
+      prefixId={prefixId}
+      classNameGroup={`${classNameGroup} ${viewPass ? 'position-relative input-group' : ''}`}
+      type="password"
+      {...attributes}
+    >
+      {viewPass &&
+        <div className="input-group-append">
+          <Button
+            style={{ marginLeft: -45, zIndex: 100 }}
+            className="btn btn-link text-decoration-none text-muted"
+            id={`${id}-btnView`}
+            classIcon={`mdi ${iconEye} align-middle`}
+            onClick={onViewPass}
+          />
+        </div>
+      }
+      {children}
+    </Input>
+  );
+}
+
+export interface DataSearchCEP {
+  cep: string,
+  logradouro: string,
+  complemento: string,
+  bairro: string,
+  localidade: string,
+  uf: string,
+  ibge: string,
+  gia: string,
+  ddd: string,
+  siafi: string
+}
+
+export interface InputCEPProps extends IInputProps {
+  onSearchCEP?: (data: DataSearchCEP) => void
+}
+
+export const InputCEP: React.FC<InputCEPProps> = (props) => {
+  const { onBlur, onSearchCEP, ...attributes } = props;
+  const [CEPAtual, setCEPAtual] = useState<string>();
+
+  const onBlurCEP = (cep: string): void => {
+    if (cep !== CEPAtual) {
+      fetch(`https://viacep.com.br/ws/${cep}/json/`).then(async response => {
+        let body = await response.json();
+
+        if (onSearchCEP && !body.erro)
+          onSearchCEP(body);
+
+        setCEPAtual(cep);
+      }).catch(error => {
+        console.log(error);
+      });
+    }
+  }
+
+  return (
+    <Input
+      type="text"
+      mask='99999-999'
+      onBlur={(e) => {
+        onBlurCEP(e.target.value);
+
+        if (onBlur)
+          onBlur(e);
+      }}
+      {...attributes}
+    />
+  );
+}
+
+/**
+ * Custom for Select
+ */
+
+export interface OptionInputSelect {
+  readonly id?: string,
+  readonly name?: string,
+  data?: any,
+  value: any,
+  label?: string
+}
+
+export type OptionsInputSelect = Array<OptionInputSelect>;
+
+export interface InputSelectProps {
+  prefixId?: string,
+  id?: string,
+  options?: OptionsInputSelect,
+  isLoading?: boolean,
+  label?: string,
+  value?: any,
+  defaultValue?: any,
+  placeholder?: string,
+  name?: string,
+  validator?: ValidateFields,
+  validations?: Validations,
+  isDisabled?: boolean,
+  isClearable?: boolean,
+  isMulti?: boolean,
+  dataModel?: InputDataValue<any>,
+  dataValue?: InputDataValue<any>,
+  showOverlay?: boolean,
+  overlayProps?: OverlayTriggerPropsCustom,
+  title?: string,
+  className?: string,
+  onChange?: (e: OptionInputSelect) => void,
+  onMultipleSelection?: (e: Array<OptionInputSelect>) => void
+}
+
+export const InputSelect: React.FC<InputSelectProps> = (props) => {
+
+  const { options, isLoading, value, placeholder, dataModel, dataValue, onChange, onMultipleSelection,
+    name, label, id, prefixId, validations, validator, isDisabled, isClearable, isMulti, overlayProps, showOverlay, title, className } = props;
+  const [invalid, setInvalid] = useState<boolean>(false);
+  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [optionValue, setOptionValue] = useState<OptionInputSelect | Array<OptionInputSelect> | undefined | null>({
+    value: '',
+    label: placeholder
+  });
+
+  let internalID = id || name || '';
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  useEffect(() => {
+    if (validations && validator) {
+      validator.register({
+        validations,
+        id: internalID,
+        name: name ? name : id,
+        type: "select",
+        setInvalid,
+        setInvalidMsg
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    let cancelado = false;
+
+    const atualizarOptions = () => {
+      if (cancelado) return;
+
+      if (options && options.length > 0) {
+        const el = document.getElementById(internalID);
+        let option: Array<OptionInputSelect> | OptionInputSelect | null = null;
+        if (isMulti) {
+          option = [];
+          options.forEach(opt => {
+            // if (opt.value === getValue()) {
+            const v = getValue();
+            if (v && (v as string).split(',').includes(opt.value)) {
+              (option as Array<OptionInputSelect>).push(opt)
+
+
+            }
+          });
+          if (el)
+            el.setAttribute('value', (option as Array<OptionInputSelect>).map(opt => opt.value).join(','))
+        } else {
+          options.forEach(opt => {
+            if (opt.value === getValue()) {
+              option = opt;
+
+              if (el)
+                el.setAttribute('value', (opt as OptionInputSelect).value)
+            }
+          });
+        }
+
+
+        setOptionValue(option)
+      } else {
+        setTimeout(atualizarOptions, 2000);
+      }
+    };
+
+    atualizarOptions();
+
+    return () => {
+      cancelado = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options, dataModel, dataValue, value]);
+
+  const getName = (): string | undefined => {
+
+    if (name && name.trim().length > 0)
+      return name;
+
+    if (internalID && internalID.trim().length > 0)
+      return internalID;
+
+    return undefined;
+
+  }
+
+  const onSetData = (e: OptionInputSelect | Array<OptionInputSelect>): void => {
+    let internalValue: string = '';
+
+    if (isMulti)
+      internalValue = (e as Array<OptionInputSelect>).map(opt => opt.value).join(',');
+    else
+      internalValue = (e as OptionInputSelect).value;
+
+    const el = document.getElementById(internalID);
+    if (el)
+      el.setAttribute('value', internalValue)
+
+    if (dataModel) {
+      let value: string = internalValue;
+
+      let _name: string | undefined = getName();
+
+      if (!_name)
+        _name = '';
+
+      let _data = { ...dataModel.data, [_name]: value }
+
+      dataModel.setData(_data);
+    }
+
+    if (dataValue) {
+      dataValue.setData(internalValue);
+    }
+  }
+
+  const getValue = (): string | number | readonly string[] | undefined => {
+
+    if (value)
+      return value;
+
+    let _name: string | undefined = getName();
+
+    if (!_name)
+      _name = '';
+
+    if (dataModel)
+      return dataModel.data[_name];
+
+    if (dataValue) {
+      return dataValue.data;
+    }
+  }
+
+  const getInputValue = (): string | undefined => {
+    if (!options)
+      return undefined
+
+    if (isMulti) {
+      options.forEach(opt => {
+        // if (opt.value === getValue()) {
+        const v = getValue();
+
+        return v && (v as string).split(',');
+      });
+    } else {
+      options.forEach(opt => {
+        if (opt.value === getValue()) {
+          return opt.value
+        }
+      });
+    }
+  }
+
+  const ValueContainer = ({
+    children,
+    ...props
+  }: ValueContainerProps<OptionInputSelect>) => {
+    // console.log(children)
+
+    let container: React.ReactNode = children
+    // if (isMulti) {
+    //    container = <Fragment>
+    //       {props.getValue().length === 0 && children}
+    //       {props.getValue().length > 0 && ` ${props.getValue().length} selecionado(s)`}
+    //    </Fragment>
+    // }
+
+
+    return (
+      <components.ValueContainer {...props}>{container}</components.ValueContainer>
+    )
+  };
+
+  const MultiValueContainer = (props: MultiValueGenericProps<OptionInputSelect>) => {
+    console.log(props)
+    return (
+
+      <components.MultiValueContainer {...props}>{props.children}</components.MultiValueContainer>
+
+    );
+  };
+
+  const Input = (props: InputProps<OptionInputSelect>) => {
+    console.log(props)
+    return (
+
+      <components.Input {...props}>{props.children}</components.Input>
+
+    );
+  };
+
+  const SelectContainer = (props: ContainerProps<OptionInputSelect>) => {
+    console.log(props)
+    return (
+
+      <components.SelectContainer className='teste' {...props}>{props.children}</components.SelectContainer>
+
+    );
+  };
+
+  return (
+    <Tippy
+      content={title}
+      allowHTML={true}
+      arrow={true}
+      placement={overlayProps?.placement}
+      animation='shift-away-subtle'
+      delay={!overlayProps?.delay ? ((typeof overlayProps?.delay === 'object') ? [overlayProps?.delay.show, overlayProps?.delay.hide] : overlayProps?.delay) : [250, 250]}
+      touch={false}
+      disabled={!overlayProps ? true : false}
+      visible={overlayProps?.show && (overlayProps?.show ? true : false)}
+      appendTo={document.body}
+      zIndex={999999}
+    >
+      <div>
+        {label && <label htmlFor={`select-${internalID}`}>{invalid && <i className="mdi mdi-close-circle"></i>} {label}</label>}
+        <Select
+          components={{ MultiValueContainer }}
+          inputId={`select-${internalID}`}
+          // name={name ? name : internalID}
+          options={options}
+          value={optionValue}
+          placeholder={placeholder}
+          className={`${invalid ? 'is-invalid' : ''} ${className}`}
+          classNamePrefix='select'
+          isLoading={isLoading}
+          isDisabled={isDisabled}
+          isClearable={isClearable}
+          // isSearchable={false}
+          isMulti={isMulti}
+          onChange={(e) => {
+            // console.log(e);
+            if (!isMulti) {
+              let optionSelected: OptionInputSelect = {
+                id: internalID,
+                name: name,
+                data: (e as OptionInputSelect)?.data,
+                value: (e as OptionInputSelect)?.value,
+                label: (e as OptionInputSelect)?.label
+              };
+
+              if (onChange !== undefined) {
+                onChange(optionSelected)
+              }
+
+              onSetData(optionSelected);
+              validator?.validate(internalID!, (e as OptionInputSelect)?.value);
+            } else {
+              let optionSelecteds: Array<OptionInputSelect> = [];
+              (e as Array<OptionInputSelect>).forEach(value => {
+                optionSelecteds.push({
+                  id: internalID,
+                  name: name,
+                  data: (value as OptionInputSelect)?.data,
+                  value: (value as OptionInputSelect)?.value,
+                  label: (value as OptionInputSelect)?.label
+                })
+              })
+
+              if (onMultipleSelection !== undefined) {
+                onMultipleSelection(optionSelecteds)
+              }
+
+              onSetData(optionSelecteds);
+              // validator?.validate(id!, (e as OptionInputSelect)?.value);
+            }
+          }}
+          onBlur={e => {
+            // validator?.validate(id!, optionValue?.value);
+          }}
+          // components={{
+          //    MenuList
+          // }}
+          menuPortalTarget={document.body}
+          menuPosition="fixed"
+          styles={{
+            menuPortal: base => ({ ...base, zIndex: 9999 })
+          }}
+        />
+        <span id={`${internalID}-error`} className="invalid-feedback">{invalidMsg}</span>
+        <input hidden id={internalID} name={name} />
+      </div>
+    </Tippy>
+  );
+}
+
+InputSelect.defaultProps = {
+  className: ''
+}
+
+/**
+ * Custom for Textarea
+ */
+
+interface CustomTextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  prefixId?: string,
+  label?: string,
+  validator?: ValidateFields,
+  validations?: Validations,
+  charCase?: EnumCharcasetypes,
+  dataModel?: InputDataValue<any>,
+  dataValue?: InputDataValue<any>,
+  classNameGroup?: string,
+  disabledLabelError?: boolean,
+  isBase64?: boolean,
+  onBase64?: (valueBase64: string) => void
+}
+
+export const TextArea: React.FC<CustomTextAreaProps> = (props) => {
+
+  const { id, name, prefixId, label, validator, validations, charCase, dataModel, dataValue, value, classNameGroup,
+    isBase64, disabledLabelError, onChange, onBlur, onBase64, className, style, ...TextArea } = props;
+  const [invalid, setInvalid] = useState<boolean>(false);
+  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [internalValue, setInternalValue] = useState<string | undefined>();
+
+  let internalID = id || name;
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  const onSetData = (value: string): void => {
+    if (isBase64) {
+      value = utilities.base64(value);
+      if (onBase64)
+        onBase64(value);
+    }
+
+    if (dataModel) {
+
+      let _name: string | undefined = getName();
+
+      if (!_name)
+        _name = '';
+
+      let _data = { ...dataModel.data, [_name]: value }
+
+      dataModel.setData(_data);
+    }
+
+    if (dataValue) {
+      dataValue.setData(value);
+    }
+  }
+
+  const getClassNameCharCase = (): string => {
+    switch (charCase) {
+      case EnumCharcasetypes.UPPERCASE: return 'component-input-uppercase';
+      case EnumCharcasetypes.LOWERCASE: return 'component-input-lowercase';
+      default: return '';
+    }
+  }
+
+  const getName = (): string | undefined => {
+
+    if (name && name.trim().length > 0)
+      return name;
+
+    if (internalID && internalID.trim().length > 0)
+      return internalID;
+
+    return undefined;
+
+  }
+
+  const getValue = (): string | undefined => {
+    let valueReturn: string | undefined = String(value);
+
+    if (!value || value === null)
+      valueReturn = '';
+
+    if (dataModel) {
+      let _name: string = getName() || '';
+
+      valueReturn = dataModel.data[_name];
+    }
+
+    if (dataValue) {
+      valueReturn = dataValue.data;
+    }
+
+    if (isBase64 && valueReturn !== '')
+      valueReturn = utilities.base64Decode(valueReturn); //atob(valueReturn!);
+
+    return valueReturn;
+  }
+
+  useEffect(() => {
+    setInternalValue(getValue());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, dataModel, dataValue])
+
+  useEffect(() => {
+    if (validations && validator) {
+      validator.register({
+        validations,
+        id: internalID,
+        name: name ? name : internalID,
+        type: 'textarea',
+        setInvalid,
+        setInvalidMsg
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className={classNameGroup}>
+      {label && <label htmlFor={internalID}>{invalid && <i className="mdi mdi-close-circle"></i>} {label}</label>}
+      <textarea
+        value={internalValue}
+        className={`form-control ${invalid ? 'is-invalid' : ''} ${getClassNameCharCase()} ${className}`}
+        id={internalID}
+        name={name ? name : internalID}
+        onChange={e => {
+          setInternalValue(e.target.value);
+
+          if (onChange) {
+            onChange(e);
+          }
+
+          if (isBase64 && onBase64) {
+            onBase64(utilities.base64(e.target.value))
+          }
+
+          validator?.validate(internalID!, e.target.value);
+        }}
+        onBlur={e => {
+          e.target.value = utilities.charCase(e.target.value, charCase);
+
+          if (onBlur) {
+            onBlur(e);
+          }
+
+          onSetData(e.target.value)
+          validator?.validate(internalID!, e.target.value);
+        }}
+        style={{ ...style, lineHeight: '200%' }}
+        {...TextArea}
+      />
+      {!disabledLabelError &&
+        <span id={`${internalID}-error`} className="invalid-feedback">{invalidMsg}</span>
+      }
+    </div>
+  );
+}
+
+
+/**
+ * Custom for InputNumber
+*/
+
+interface CustomNumberFormatProps extends NumberFormatProps {
+  prefixId?: string,
+  label?: string,
+  validator?: ValidateFields,
+  validations?: Validations,
+  classNameGroup?: string,
+  classNameInputGroupText?: string,
+  dataModel?: InputDataValue<any>,
+  dataValue?: InputDataValue<any>,
+  showOverlay?: boolean,
+  overlayProps?: OverlayTriggerPropsCustom,
+  groupAppend?: JSX.Element,
+  isText?: boolean,
+  onBlur?: (e: React.FocusEvent<HTMLInputElement, Element>, values?: NumberFormatValues) => void
+}
+
+export const InputNumber: React.FC<CustomNumberFormatProps> = (props) => {
+  const { onChange, onBlur, onValueChange, value, dataModel, dataValue, validations, validator, id, name, label, prefixId,
+    classNameGroup, classNameInputGroupText, overlayProps, showOverlay, title, groupAppend, isText, ...InputNumber } = props;
+  // const [format, setFormat] = useState<string>("##.###.###/####-##");
+
+  const [invalid, setInvalid] = useState<boolean>(false);
+  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [valuesChange, setValuesChange] = useState<NumberFormatValues | undefined>();
+  // var valuesChange: NumberFormatValues;
+
+  let internalID = id || name;
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  useEffect(() => {
+    if (validations && validator) {
+      validator.register({
+        validations,
+        id: internalID,
+        name,
+        type: 'text',
+        setInvalid,
+        setInvalidMsg
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getName = (): string | undefined => {
+
+    if (name && name.trim().length > 0)
+      return name;
+
+    if (internalID && internalID.trim().length > 0)
+      return internalID;
+
+    return undefined;
+
+  }
+
+  const onSetData = (values: NumberFormatValues, sourceInfo: SourceInfo): void => {
+    // valuesChange = values;
+    setValuesChange(values);
+
+    if (sourceInfo.event === null)
+      return;
+
+    let value: number | string | undefined = values.floatValue;
+    if (isText)
+      value = values.value;
+
+    if (dataModel) {
+
+      let _name: string | undefined = getName();
+
+      if (!_name)
+        _name = '';
+
+      let _data = { ...dataModel.data, [_name]: value }
+
+      dataModel.setData(_data);
+    }
+
+    if (dataValue) {
+      dataValue.setData(value);
+    }
+  }
+
+  const getValue = (): string | number | null | undefined => {
+
+    if (value || value === 0)
+      return value;
+
+    let _name: string | undefined = getName();
+
+    if (!_name)
+      _name = '';
+
+    if (dataModel)
+      return dataModel.data[_name];
+
+    if (dataValue) {
+      return dataValue.data;
+    }
+  }
+
+  return (
+    <Tippy
+      content={title}
+      allowHTML={true}
+      arrow={true}
+      placement={overlayProps?.placement}
+      animation='shift-away-subtle'
+      delay={!overlayProps?.delay ? ((typeof overlayProps?.delay === 'object') ? [overlayProps?.delay.show, overlayProps?.delay.hide] : overlayProps?.delay) : [250, 250]}
+      touch={false}
+      disabled={!overlayProps ? true : false}
+      visible={overlayProps?.show && (overlayProps?.show ? true : false)}
+    >
+      <div className={classNameGroup}>
+        {label && <label htmlFor={internalID}>{invalid && <i className="mdi mdi-close-circle"></i>} {label}</label>}
+        <NumberFormat
+          id={internalID}
+          name={name}
+          value={getValue()}
+          type="text"
+          className={`form-control ${invalid ? 'is-invalid' : ''}`}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            if (onChange) {
+              onChange(e);
+            }
+          }}
+          onBlur={(e: React.FocusEvent<HTMLInputElement, Element>) => {
+            if (onBlur) {
+              onBlur(e, valuesChange);
+            }
+            validator?.validate(internalID!, e.target.value);
+          }}
+          onValueChange={(values: NumberFormatValues, sourceInfo: SourceInfo) => {
+
+            if (onValueChange)
+              onValueChange(values, sourceInfo);
+
+            onSetData(values, sourceInfo);
+          }}
+          {...InputNumber}
+        />
+        {groupAppend}
+        {classNameInputGroupText &&
+          <InputGroupText className={classNameInputGroupText} />
+        }
+        <span id={`${internalID}-error`} className="invalid-feedback">{invalidMsg}</span>
+      </div>
+    </Tippy>
+  )
+}
+
+/**
+ * Custom for CNPJ / CPF
+ */
+
+export const InputCPFCNPJ: React.FC<CustomNumberFormatProps> = (props) => {
+
+  const { onValueChange, value, dataModel, dataValue, id, name, prefixId, ...InputCPFCNPJ } = props;
+
+  const [format, setFormat] = useState<string>("##.###.###/####-##");
+
+  let internalID = id || name;
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  useEffect(() => {
+    let _value = getValue();
+    if (_value && _value !== null) {
+      if (String(getValue()).length <= 11) {
+        setFormat('###.###.###-###');
+      } else {
+        setFormat('##.###.###/####-##');
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, dataModel, dataValue])
+
+  const getName = (): string | undefined => {
+
+    if (name && name.trim().length > 0)
+      return name;
+
+    if (internalID && internalID.trim().length > 0)
+      return internalID;
+
+    return undefined;
+
+  }
+
+  const getValue = (): string | number | null | undefined => {
+
+    if (value)
+      return value;
+
+    let _name: string | undefined = getName();
+
+    if (!_name)
+      _name = '';
+
+    if (dataModel)
+      return dataModel.data[_name];
+
+    if (dataValue) {
+      return dataValue.data;
+    }
+
+  }
+
+  return (
+    <InputNumber
+      isText
+      id={internalID}
+      name={name}
+      prefixId={prefixId}
+      value={value}
+      dataModel={dataModel}
+      dataValue={dataValue}
+      mask=" "
+      format={format}
+      isNumericString={false}
+      onValueChange={(values: NumberFormatValues, sourceInfo: SourceInfo) => {
+        if (String(values.value).length <= 11) {
+          setFormat('###.###.###-###');
+        } else {
+          setFormat('##.###.###/####-##');
+        }
+
+        if (onValueChange)
+          onValueChange(values, sourceInfo);
+      }}
+      {...InputCPFCNPJ}
+    />
+  );
+}
+
+/**
+ * Custom for Integer
+ */
+
+export const InputInteger: React.FC<CustomNumberFormatProps> = (props) => {
+
+  const { ...attributes } = props;
+
+  return (
+    <InputNumber
+      thousandSeparator={false}
+      isNumericString={true}
+      format="####################################"
+      {...attributes}
+    />
+  );
+}
+
+/**
+ * Custom for Float
+ */
+
+export const InputFloat: React.FC<CustomNumberFormatProps> = (props) => {
+  const { ...attributes } = props;
+
+  return (
+    <InputNumber
+      thousandSeparator="."
+      decimalSeparator=","
+      {...attributes}
+    />
+  );
+}
+
+/**
+ * Custom for DateTime
+ */
+
+export interface InputDateTimeProps extends IInputProps { }
+
+export const InputDateTime: React.FC<InputDateTimeProps> = (props) => {
+  var { onBlur, onChange, type, id, name, dataModel, dataValue, validator, validations, prefixId,
+    value, ...attributes } = props;
+  const [formatedValue, setFormatedValue] = useState<string | number | undefined>();
+
+  let internalID = id || name;
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  const toFloat = (value: string): void => {
+    let dateMoment = moment(value, getFormatMoment(), 'pt-br', true).utc(true);
+    if (dateMoment.isValid()) {
+      switch (type) {
+        case "date":
+          onSetData(momentUtils.formatOADate(momentUtils.toOADate(dateMoment), 'date'));
+
+          break;
+
+        case "time":
+          onSetData(momentUtils.formatOADate(momentUtils.toOADate(dateMoment), 'time'));
+
+          break;
+
+        default:
+          onSetData(momentUtils.formatOADate(momentUtils.toOADate(dateMoment), 'datetime'));
+          break;
+      }
+    } else {
+      onSetData(0)
+    }
+  }
+
+  const formatValue = (v: string | number | readonly string[] | undefined): void => {
+    let valueDate = undefined;
+    let dateMoment = moment(String(v), getFormatMoment(), 'pt-br', true).utc(true);
+    if (dateMoment.isValid()) {
+      switch (type) {
+        case "date":
+          valueDate = momentUtils.formatOADate(momentUtils.toOADate(dateMoment), 'date');
+
+          break;
+
+        case "time":
+          valueDate = momentUtils.formatOADate(momentUtils.toOADate(dateMoment), 'time');
+
+          break;
+
+        default:
+          valueDate = momentUtils.formatOADate(momentUtils.toOADate(dateMoment), 'datetime');
+          break;
+      }
+    }
+
+    if (!valueDate)
+      return;
+
+    if (value) {
+      value = valueDate;
+    }
+
+    let _name: string | undefined = getName();
+
+    if (!_name)
+      _name = '';
+
+    if (dataModel)
+      dataModel.data[_name] = valueDate;
+
+    if (dataValue) {
+      dataValue.data = valueDate;
+    }
+  }
+
+  const getName = (): string | undefined => {
+
+    if (name && name.trim().length > 0)
+      return name;
+
+    if (internalID && internalID.trim().length > 0)
+      return internalID;
+
+    return undefined;
+
+  }
+
+  const onSetData = (value: number | string): void => {
+    if (dataModel) {
+
+      let _name: string | undefined = getName();
+
+      if (!_name)
+        _name = '';
+
+      let _data = { ...dataModel.data, [_name]: value }
+
+      dataModel.setData(_data);
+    }
+
+    if (dataValue) {
+      dataValue.setData(value);
+    }
+  }
+
+  const getValue = (): string | number | readonly string[] | undefined => {
+
+    if (value)
+      return value;
+
+    let _name: string | undefined = getName();
+
+    if (!_name)
+      _name = '';
+
+    if (dataModel)
+      return dataModel.data[_name];
+
+    if (dataValue) {
+      return dataValue.data;
+    }
+  }
+
+  const getFormatedValue = (): string | number | undefined => {
+
+    let value: string | number | readonly string[] | undefined = getValue();
+
+    if (!value)
+      return value;
+
+    if (isNaN(Number(value)))
+      return (value as any);
+
+    switch (type) {
+      case 'datetime-local': return momentUtils.fromOADateTime(Number(value)).format(getFormatMoment());
+      case 'time': return momentUtils.fromOATime(Number(value)).format(getFormatMoment());
+      default: return momentUtils.fromOADate(Number(value)).format(getFormatMoment());
+    }
+  }
+
+  const getFormatMask = (): string => {
+    switch (type) {
+      case 'time': return '99:99:99';
+      case 'datetime-local': return '99/99/9999 99:99:99';
+      default: return '99/99/9999';
+    }
+  }
+
+  const getFormatMoment = () => {
+    switch (type) {
+      case 'time': return 'HH:mm:ss';
+      case 'datetime-local': return 'DD/MM/YYYY HH:mm:ss';
+      default: return 'DD/MM/YYYY';
+    }
+  }
+
+  useEffect(() => {
+    setFormatedValue(getFormatedValue());
+    formatValue(getValue())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataModel, dataValue, value])
+
+  return (
+    <Input
+      id={id}
+      name={getName()}
+      prefixId={prefixId}
+      type="text"
+      mask={getFormatMask()}
+      value={formatedValue}
+
+      onChange={(e) => {
+        if (onChange)
+          onChange(e);
+      }}
+
+      onBlur={(e) => {
+        toFloat(e.target.value);
+        if (onBlur)
+          onBlur(e);
+      }}
+
+      validator={validator}
+
+      validations={{
+        ...validations,
+        onValidate(value, fn) {
+          let isValid: boolean = true;
+
+          if (validations?.onValidate)
+            isValid = validations?.onValidate(value, fn);
+
+          if (isValid && String(value).trim().length > 0) {
+
+            let dateMoment = moment(value, getFormatMoment(), 'pt-br', true).utc(true);
+            if (dateMoment.isValid())
+              validator?.cleanMessage(getName()!);
+            else
+              validator?.setErrorMessage(getName()!, 'Data inválida');
+
+            isValid = dateMoment.isValid();
+
+          }
+
+          return isValid;
+        },
+      }}
+
+      {...attributes}
+    />
+  );
+}
+
+/**
+ * Custom for Button
+ */
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  loading?: boolean,
+  caption?: string,
+  captionLoading?: string,
+  showCaptionLoading?: boolean,
+  showCaptionButtonOnLoading?: boolean,
+  spinner?: 'border' | 'grow',
+  classIcon?: string,
+  showOverlay?: boolean,
+  overlayProps?: OverlayTriggerPropsCustom
+}
+
+const Button: React.FC<ButtonProps> = (props) => {
+  const { loading, captionLoading, showCaptionLoading, showCaptionButtonOnLoading, className, classIcon,
+    caption, spinner, showOverlay, title, overlayProps, children, ...Button } = props;
+
+  let iconSpinner: string = 'border';
+  if (spinner)
+    iconSpinner = spinner;
+
+  let classButton: string = "btn btn-outline-primary btn-lg";
+  if (className)
+    classButton = className;
+
+  let _classIcon = classIcon;
+  if (loading && showCaptionButtonOnLoading)
+    _classIcon = 'mr-1';
+
+  return (
+    <Tippy
+      content={title}
+      allowHTML={true}
+      arrow={true}
+      placement={overlayProps?.placement}
+      animation='shift-away-subtle'
+      delay={!overlayProps?.delay ? ((typeof overlayProps?.delay === 'object') ? [overlayProps?.delay.show, overlayProps?.delay.hide] : overlayProps?.delay) : [250, 250]}
+      touch={false}
+      disabled={!overlayProps ? true : false}
+      visible={overlayProps?.show && (overlayProps?.show ? true : false)}
+    >
+      <button
+        title={overlayProps || showOverlay ? undefined : title}
+        className={classButton}
+        disabled={loading}
+        type="button"
+        {...Button}
+      >
+        {loading &&
+          <Fragment>
+            <span className={`spinner-${iconSpinner} spinner-${iconSpinner}-sm`} role="status" aria-hidden="true"></span>
+            {showCaptionLoading &&
+              <span className='ml-1'>{captionLoading ? captionLoading : 'Aguarde'} ...</span>
+            }
+          </Fragment>
+        }
+
+        {(!loading || (loading && showCaptionButtonOnLoading)) &&
+          <Fragment>
+            {_classIcon && <i className={_classIcon}></i>} {caption ? caption : children}
+          </Fragment>
+        }
+      </button>
+    </Tippy>
+  );
+}
+
+export default Button;
+
+/**
+ * Custom for Switch
+ */
+
+interface InputSwitchProps extends CustomInputProps {
+  dataModel?: InputDataValue<any>,
+  dataValue?: InputDataValue<any>,
+  disabledLabelError?: boolean,
+  variant?: 'primary' | 'success' | 'danger' | 'waring' | 'dark' | 'info',
+  valueForTrue?: string | number | boolean,
+  valueForFalse?: string | number | boolean,
+}
+
+export const InputSwitch: React.FC<InputSwitchProps> = (props) => {
+  const { label, className, id, name, variant, title, overlayProps, showOverlay, dataModel, dataValue, checked,
+    validations, validator, type, classNameLabel, disabledLabelError, valueForTrue, valueForFalse, classNameGroup,
+    onKeyDown, onChange, onBlur, prefixId, ...InputSwitch } = props;
+
+  const [invalid, setInvalid] = useState<boolean>(false);
+  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [internalChecked, setInternalChecked] = useState<boolean | undefined>();
+
+  let internalID = id || name;
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  const onSetData = (e: React.ChangeEvent<HTMLInputElement>): void => {
+
+    let _value = valueForFalse;
+    if ((e as React.ChangeEvent<HTMLInputElement>).target.checked)
+      _value = valueForTrue;
+
+    if (dataModel) {
+      let name: string = e.target.name;
+      if (name.trim().length === 0)
+        name = e.target.id;
+
+      let _data = { ...dataModel.data, [name]: _value }
+
+      dataModel.setData(_data);
+    }
+
+    if (dataValue) {
+      dataValue.setData(_value);
+    }
+  }
+
+  const getChecked = (): boolean | undefined => {
+    if (checked)
+      return checked;
+
+    if (dataModel) {
+      let _name: string = '';
+
+
+      if (name && name.trim().length > 0)
+        _name = name
+      else if (internalID && internalID.trim().length > 0)
+        _name = internalID;
+
+      return dataModel.data[_name] === valueForTrue;
+    }
+
+    if (dataValue) {
+      return dataValue.data === valueForTrue;
+    }
+
+  }
+
+  useEffect(() => {
+    if (validations && validator) {
+      validator.register({
+        validations,
+        id: internalID,
+        name,
+        type,
+        setInvalid,
+        setInvalidMsg
+      });
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setInternalChecked(getChecked());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checked, dataModel, dataValue])
+
+  let elLabel: JSX.Element = <span className={`${classNameLabel} ml-2`}>{invalid && <i className="mdi mdi-close-circle"></i>} {label}</span>;
+  // console.log(internalChecked)
+  return (
+    <Tippy
+      content={title}
+      allowHTML={true}
+      arrow={true}
+      placement={overlayProps?.placement}
+      animation='shift-away-subtle'
+      delay={!overlayProps?.delay ? ((typeof overlayProps?.delay === 'object') ? [overlayProps?.delay.show, overlayProps?.delay.hide] : overlayProps?.delay) : [250, 250]}
+      touch={false}
+      disabled={!overlayProps ? true : false}
+      visible={overlayProps?.show && (overlayProps?.show ? true : false)}
+    >
+      <div className={`custom-control custom-switch custom-switch-icon custom-control-inline ${classNameGroup}`}>
+        <div className="custom-switch-inner">
+          <input
+            type="checkbox"
+            className={`custom-control-input bg-${variant} ${className} ${invalid ? 'is-invalid' : ''}`}
+            id={internalID}
+            checked={internalChecked}
+            name={name}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+
+              if (onKeyDown) {
+                onKeyDown(e)
+              }
+            }}
+            onChange={e => {
+              let event: CustomEventHTMLInputElement = e;
+              if (onChange) {
+                onChange(event);
+              }
+              onSetData(e);
+              setInternalChecked(e.target.checked);
+              validator?.validate(internalID!, e.target.checked);
+            }}
+            onBlur={e => {
+              if (onBlur) {
+                onBlur(e);
+              }
+              onSetData(e);
+              validator?.validate(internalID!, e.target.checked);
+
+            }}
+            {...InputSwitch}
+          />
+          <label className="custom-control-label" htmlFor={internalID}>
+            <span className="switch-icon-left"><i className="mdi mdi-check-bold"></i></span>
+            <span className="switch-icon-right"><i className="mdi mdi-close-thick"></i></span>
+          </label>
+          {elLabel}
+        </div>
+        {!disabledLabelError &&
+          <span id={`${internalID}-error`} className="invalid-feedback">{invalidMsg}</span>
+        }
+      </div>
+    </Tippy>
+  );
+}
+
+InputSwitch.defaultProps = {
+  variant: 'primary',
+  className: '',
+  classNameLabel: '',
+  valueForTrue: true,
+  valueForFalse: false
+}
+
+export interface OptionInputCheckBox {
+  value: any,
+  label?: string
+}
+
+export type OptionsInputCheckBox = Array<OptionInputCheckBox>;
+
+export interface InputMultCheckBoxProps {
+  prefixId?: string,
+  id?: string,
+  name?: string,
+  caption?: String,
+  options: OptionsInputCheckBox,
+  dataModel?: InputDataValue<any>,
+  dataValue?: InputDataValue<any>,
+  title?: string,
+  disabled?: boolean,
+  validator?: ValidateFields,
+  validations?: Validations,
+  showOverlay?: boolean,
+  overlayProps?: OverlayTriggerPropsCustom,
+  onChange?: (options: OptionsInputCheckBox, values: Array<any>) => void
+}
+
+export const InputMultCheckBox: React.FC<InputMultCheckBoxProps> = (props) => {
+  const { id, name, caption, options, dataModel, dataValue, title, prefixId,
+    validator, validations, showOverlay, overlayProps, onChange } = props;
+
+  let internalID = id || name || '';
+  if (prefixId)
+    internalID = `${prefixId}-${internalID}`;
+
+  const [optionsSelecteds, setOptionsSelecteds] = useState<OptionsInputCheckBox>([]);
+
+  const updateOptionsSelected = (checked: Boolean, option: OptionInputCheckBox) => {
+    // console.log(checked, option)      
+    const opts = optionsSelecteds.filter(o => {
+      return o.value !== option.value;
+    })
+
+    if (checked) {
+      opts.push(option);
+    }
+
+    setOptionsSelecteds(opts);
+  }
+
+  useEffect(() => {
+    const values: Array<any> = [];
+
+    optionsSelecteds.forEach(opts => {
+      values.push(opts.value)
+    });
+
+    if (onChange) {
+      onChange(optionsSelecteds, values);
+    }
+
+    onSetData(values.join(','))
+  }, [optionsSelecteds])
+
+  const onSetData = (values: string): void => {
+
+    if (dataModel) {
+      let _name: string = name || '';
+      if (_name.trim().length === 0)
+        _name = internalID || '';
+
+      let _data = { ...dataModel.data, [_name]: values }
+
+      dataModel.setData(_data);
+    }
+
+    if (dataValue) {
+      dataValue.setData(values);
+    }
+  }
+
+  const checkAll = () => {
+    options.forEach(opt => {
+      (document.getElementById('ck' + internalID + opt.value) as HTMLInputElement).checked = true
+    })
+    setOptionsSelecteds(options);
+  }
+
+  const uncheckAll = () => {
+    options.forEach(opt => {
+      (document.getElementById('ck' + internalID + opt.value) as HTMLInputElement).checked = false
+    })
+    setOptionsSelecteds([]);
+  }
+
+  const invertCheck = () => {
+    const opts: OptionsInputCheckBox = [];
+
+    options.forEach(opt => {
+      const checked = !(document.getElementById('ck' + internalID + opt.value) as HTMLInputElement).checked;
+
+      (document.getElementById('ck' + internalID + opt.value) as HTMLInputElement).checked = checked;
+
+      if (checked) {
+        opts.push(opt);
+      }
+    })
+
+    setOptionsSelecteds(opts);
+  }
+
+  return (
+    <Tippy
+      content={title}
+      allowHTML={true}
+      arrow={true}
+      placement={overlayProps?.placement}
+      animation='shift-away-subtle'
+      delay={!overlayProps?.delay ? ((typeof overlayProps?.delay === 'object') ? [overlayProps?.delay.show, overlayProps?.delay.hide] : overlayProps?.delay) : [250, 250]}
+      touch={false}
+      disabled={!overlayProps ? true : false}
+      visible={overlayProps?.show && (overlayProps?.show ? true : false)}
+    >
+      <Dropdown autoClose="outside" className='multicheckbox'>
+        <Dropdown.Toggle size='lg' style={{ height: 45 }} className='multicheckbox-toggle'>
+          {caption}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <div className='row'>
+            <div className='col-4'>
+              <Button caption='Marcar todos' className='btn btn-sm btn-link btn-block m-0 p-0' onClick={checkAll} />
+            </div>
+            <div className='col-4'>
+              <Button caption='Desmarcar todos' className='btn btn-sm btn-link btn-block  m-0 p-0' onClick={uncheckAll} />
+            </div>
+            <div className='col-4'>
+              <Button caption='Inverter seleção' className='btn btn-sm btn-link btn-block  m-0 p-0' onClick={invertCheck} />
+            </div>
+          </div>
+          <div style={{ height: 200, overflowY: 'scroll' }}>
+            {
+              options.map((opt, idx) => (
+
+                <div key={internalID + idx}>
+                  <Dropdown.Item as={'div'}>
+                    <div className='custom-control custom-checkbox d-inline-block icheck-primary'>
+                      <input
+                        type='checkbox'
+                        className='custom-control-input'
+                        // classNameGroup='custom-control custom-checkbox d-inline-block '
+                        // classNameLabel='custom-control-label'
+                        id={'ck' + internalID + opt.value}
+                        // label={opt.label}
+                        key={'ck' + internalID + idx}
+                        onChange={(e) => {
+                          updateOptionsSelected(e.target.checked, opt);
+                        }}
+                      />
+                      <label className='custom-control-label' htmlFor={'ck' + internalID + opt.value}>{opt.label}</label>
+                    </div>
+                  </Dropdown.Item>
+                </div>
+              ))
+            }
+          </div>
+        </Dropdown.Menu>
+      </Dropdown>
+    </Tippy>
+  )
+}
+
+// Input.defaultProps = {
+//    className: 'form-control',
+//    classNameLabel: ''
+// }
+
+// export const InputCheckbox: React.FC<InputProps> = (props) => {
+//    const { classNameGroup, ...attributes } = props;
+//    return (
+//       <Input
+//          classNameGroup={`${classNameGroup} icheck-primary`}
+//          type="checkbox"
+//          {...attributes}
+//       />
+//    );
+// }

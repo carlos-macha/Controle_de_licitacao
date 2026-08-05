@@ -1,0 +1,243 @@
+import React, { Fragment, useState } from 'react';
+import moment from 'moment';
+import PessoaDetalhe from './pessoadetalhe';
+import { useSweetAlertContext } from '../../../hooks/useSweetAlertContext';
+import { IModelMOB001 } from '../../../models/modelMOB001';
+import { EnumCrudStateRecordType } from '../../../components/crud/enums';
+import { momentUtils } from '../../../utils/momentutils';
+import { EnumAtivoInativo } from '../../../enums/enums';
+import Crudmanutencao, { ManutencaoProps } from '../../../components/crud/manutencao/crudmanutencao';
+import { ValidateFields, InputCPFCNPJ, EnumCharcasetypes, InputDateTime, InputSelect, Input } from '../../../components/form/form';
+import { EnumPessoa_FisicaJuridica } from '../../../enums/enumspessoa';
+import { CustomSweetAlertProps, InputDataValue } from '../../../types/types';
+
+interface PessoaManutencaoProps extends ManutencaoProps {
+   codigoVendedor?: string,
+   viewProspect?: boolean
+}
+
+const PessoaManutencao: React.FC<PessoaManutencaoProps> = (props) => {
+   const { events, codigoVendedor, viewProspect } = props;
+   const [showCamposCNPJ, setShowCamposCNPJ] = useState<boolean>(false);
+   const [dsLabelRG, setDsLabelRG] = useState<string>('R.G.');
+   const [dsLabelRazao, setDsLabelRazao] = useState<string>('Nome');
+   const [dsLabelNomeFantasia, setDsLabelNomeFantasia] = useState<string>('Apelido');
+   const [dsLabelDtNascimento, setDsLabelDtNascimento] = useState<string>('Dt. Nascimento');
+   const { sweetAlertdispatch } = useSweetAlertContext();
+
+   const onInit = (data: IModelMOB001, state: EnumCrudStateRecordType) => {
+
+      if (state === EnumCrudStateRecordType.INCLUIR) {
+         let dataCadastro = momentUtils.formatOADate(momentUtils.toOADate(moment()), 'date');
+         data.PES_ID = 0;
+         data.PES_LEGADO_ID = 0;
+         data.PES_ATIVOINATIVO = EnumAtivoInativo.ATIVO;
+         data.PES_LIMITE_CREDITO = 0;
+         data.PES_DTCADASTRO = dataCadastro;
+         data.PES_DTALTERACAO = dataCadastro;
+         data.PES_REGIME_TRIBUTARIO = "IND";
+         data.PES_TIPO_OPERACAO_AC = "C";
+         data.PES_VENDEDOR = codigoVendedor!;
+         data.LISTA_CONTATOS = [];
+         data.LISTA_ENDERECOS = [];
+      }
+   }
+
+   const validateOnSave = (data: IModelMOB001, state: EnumCrudStateRecordType, validateFields: ValidateFields, setSweetAlertProps: React.Dispatch<React.SetStateAction<CustomSweetAlertProps | undefined>>): boolean => {
+
+      const enderecosRES = data.LISTA_ENDERECOS.filter(endereco => {
+         return endereco.END_TIPO === 'RES';
+      });
+
+      if (enderecosRES.length === 0) {
+         sweetAlertdispatch({
+            type: 'show',
+            props: {
+               title: 'Atenção',
+               type: 'error',
+               onConfirm(response) {
+                  sweetAlertdispatch({ type: 'close' })
+               },
+            },
+            msg: 'Por favor, informe pelo menos 1 (Um) Endereço Residencial!'
+         })
+         return false;
+      }
+
+      if (data.PES_FISICAJURIDICA === EnumPessoa_FisicaJuridica.emPessoa_FisJur_Fisica && data.LISTA_CONTATOS.length === 0) {
+
+         data.LISTA_CONTATOS.push({
+            CNT_ID: 0,
+            CNT_ID_PESSOA: data.PES_LEGADO_ID,
+            CNT_LEGADO_ID: 0,
+            CNT_NOME: String(data.PES_RAZAO_SOCIAL).substring(0, 40),
+            CNT_CARGO: "",
+            CNT_NASCIMENTO: 0,
+            CNT_FONE: enderecosRES[0].END_FONE,
+            CNT_RAMAL: "",
+            CNT_CELULAR: enderecosRES[0].END_CELULAR,
+            CNT_EMAIL: enderecosRES[0].END_EMAIL?.substring(0, 60),
+            CNT_FONE2: "",
+            CNT_CELULAR2: "",
+            CNT_EMAIL2: "",
+            CNT_RAMALFONE2: "",
+            CNT_ATIVO: EnumAtivoInativo.ATIVO
+         });
+      }
+
+      // console.log(data);
+      return true;
+   }
+
+   return (
+      <Crudmanutencao
+         events={events}
+         onInit={onInit}
+         validateOnSave={validateOnSave}
+         onBody={(params) => {
+            const dataModel: InputDataValue<IModelMOB001> = params.dataModel;
+            return (
+               <Fragment>
+                  <div className="row">
+                     {!viewProspect &&
+                        <Fragment>
+                           <div className="col-6 col-md-3 col-lg-2 mb-3">
+                              <InputCPFCNPJ
+                                 label="CPF/CNPJ"
+                                 dataModel={dataModel}
+                                 id="PES_CPFCGC"
+                                 onValueChange={e => {
+                                    let isCNPJ = String(e.value).length > 11;
+
+                                    let data = { ...dataModel.data };
+                                    data.PES_FISICAJURIDICA = EnumPessoa_FisicaJuridica.emPessoa_FisJur_Fisica;
+                                    if (isCNPJ)
+                                       data.PES_FISICAJURIDICA = EnumPessoa_FisicaJuridica.emPessoa_FisJur_Juridica;
+
+                                    setShowCamposCNPJ(isCNPJ);
+                                    setDsLabelRG(isCNPJ ? "Inscrição Estadual" : "R.G.");
+                                    setDsLabelRazao(isCNPJ ? "Razão Social" : "Nome");
+                                    setDsLabelNomeFantasia(isCNPJ ? "Nome Fantasia" : "Apelido");
+                                    setDsLabelDtNascimento(isCNPJ ? "Dt. Abertura" : "Dt. Nascimento");
+                                    dataModel.setData(data);
+                                    console.log(data)
+                                 }}
+                                 validator={params.validateFields}
+                                 validations={{
+                                    required: true
+                                 }}
+                              />
+                           </div>
+                           <div className="col-6 col-md-2 col-lg-2 mb-3">
+                              <Input
+                                 charCase={EnumCharcasetypes.UPPERCASE}
+                                 label={dsLabelRG}
+                                 dataModel={dataModel}
+                                 id="PES_RGINSCR"
+                                 validator={params.validateFields}
+                                 validations={{
+                                    required: true
+                                 }}
+                              />
+                           </div>
+                        </Fragment>
+                     }
+                     <div className={`${viewProspect ? 'col-7 col-md-9 col-lg-10' : 'col-12 col-md-7 col-lg-4'} mb-3`}>
+                        <Input
+                           charCase={EnumCharcasetypes.UPPERCASE}
+                           label={dsLabelRazao}
+                           dataModel={dataModel}
+                           id="PES_RAZAO_SOCIAL"
+                           validator={params.validateFields}
+                           validations={{
+                              required: true
+                           }}
+                           maxLength={60}
+                        />
+                     </div>
+                     {!viewProspect &&
+                        <div className="col-7 col-md-10 col-lg-2 mb-3">
+                           <Input
+                              charCase={EnumCharcasetypes.UPPERCASE}
+                              label={dsLabelNomeFantasia}
+                              dataModel={dataModel}
+                              id="PES_FANTASIA"
+                              maxLength={60}
+                           />
+                        </div>
+                     }
+                     <div className={`${viewProspect ? 'col-5 col-md-3 col-lg-2' : 'col-5 col-md-2 col-lg-2'} mb-3`}>
+                        <InputDateTime
+                           type='date'
+                           label={dsLabelDtNascimento}
+                           id="PES_DTNASCIMENTO"
+                           dataModel={dataModel}
+                           validator={params.validateFields}
+                           validations={{
+                              required: !viewProspect
+                           }}
+
+                        />
+                     </div>
+                  </div>
+                  {showCamposCNPJ &&
+                     <div className="row">
+                        <div className="col-12 col-md-6 mb-3">
+                           <InputSelect
+                              id="PES_TIPO_OPERACAO_AC"
+                              label="Tipo de Operação"
+                              placeholder="Tipo de Operação"
+                              dataModel={dataModel}
+                              options={[
+                                 { value: 'R', label: 'Revenda' },
+                                 { value: 'I', label: 'Industrialização' },
+                                 { value: 'C', label: 'Consumo Final' },
+                                 { value: 'Z', label: 'Imobilizado' },
+                                 { value: 'N', label: 'Não Contribuinte' }
+                              ]}
+                              validator={params.validateFields}
+                              validations={{
+                                 required: true
+                              }}
+                           />
+                        </div>
+                        <div className="col-12 col-md-6 mb-3">
+                           <InputSelect
+                              id="PES_REGIME_TRIBUTARIO"
+                              label="Regime Tributário"
+                              placeholder="Regime Tributário"
+                              options={[
+                                 { value: 'IND', label: 'Indefinido' },
+                                 { value: 'RSN', label: 'Simples Nacional' },
+                                 { value: 'RSE', label: 'Simples Nacional - Excesso de Sublimite de Receita Bruta' },
+                                 { value: 'RNP', label: 'Lucro Presumido' },
+                                 { value: 'RNR', label: 'Lucro Real' }
+                              ]}
+                              dataModel={dataModel}
+                              validator={params.validateFields}
+                              validations={{
+                                 required: true
+                              }}
+                           >
+                           </InputSelect>
+                        </div>
+                     </div>
+                  }
+                  <div className="row">
+                     <div className="col-12">
+                        <PessoaDetalhe
+                           isManuntencao
+                           data={dataModel.data}
+                           viewProspect={viewProspect}
+                        />
+                     </div>
+                  </div>
+               </Fragment>
+            )
+         }}
+      />
+
+   );
+}
+
+export default PessoaManutencao;

@@ -1,0 +1,13 @@
+import { MaquinasOrdensRodando } from "./MaquinasOrdensRodando";
+import { MaquinasResumidoOEE } from "./MaquinasResumidoOEE";
+
+export interface MaquinasResumido {
+   MQN_CODIGO: number,
+   MQN_DESCRICAO: string,
+   MQN_SITUACAO: string,
+   EM_MANUTENCAO: string,
+   ORDENS_RODANDO_MAQUINA: Array<MaquinasOrdensRodando>,
+   LOT_FASE: number,
+   FSE_DESCRICAO: string,
+   OEE: MaquinasResumidoOEE
+}

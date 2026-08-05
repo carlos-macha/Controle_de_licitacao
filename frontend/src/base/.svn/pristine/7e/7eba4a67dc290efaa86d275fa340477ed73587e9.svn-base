@@ -1,0 +1,25 @@
+import { EnumSimNao } from "../enums/enums"
+import { EnumPessoa_TpPessoaProspect } from "../enums/enumspessoa"
+import { IModelCrm019 } from "./modelCRM019"
+
+export interface IModelCrm052 {
+   LPC_CODIGO: number,
+   LPC_PESQUISA_ID: number,
+   LPC_DATA_CADASTRO: number,
+   LPC_USUARIO_CADASTRO: string,
+   LPC_TOKEN: string
+   LPC_CONTATO_PESQUISA_TIPO: EnumPessoa_TpPessoaProspect,
+   LPC_CONTATO_PESQUISA_COD_PES: string,
+   LPC_CONTATO_PESQUISA_COD_CNT: number,
+   LPC_CONTATO_PESQUISA_NOME_PES: string,
+   LPC_CONTATO_PESQUISA_NOME_CNT: string,
+   LPC_CONTATO_PESQUISA_EMAIL_CNT?: string,
+   LPC_CONTATO_PESQUISA_FONE_CNT?: string,
+   LPC_DATA_LIMITE?: number,
+   LPC_BO_ATIVO: EnumSimNao,
+   LPC_PESQUISA_NR_FICHA?: string,
+   FIP_DATA_CADASTRO?: number,
+   FIP_HORA_CADASTRO?: number,
+   FIP_PONTUACAO_TOTAL?: number,
+   PESQUISA: IModelCrm019
+}

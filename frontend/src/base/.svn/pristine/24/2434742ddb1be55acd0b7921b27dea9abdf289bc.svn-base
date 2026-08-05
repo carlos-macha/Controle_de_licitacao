@@ -1,0 +1,28 @@
+import { EnumAtivoInativo } from "../enums/enums"
+import { IModelDoc006 } from "./modeldoc006"
+
+export interface IModelDoc001 {
+   USU_USUARIO: string,
+   USU_NOME: string,
+   USU_DTCADASTRO: number,
+   USU_DTALTERACAO: number,
+   USU_ATIVO: EnumAtivoInativo,
+   USU_SENHA: string,
+   USU_FOTO?: string,
+   VISIBILIDADE: Array<IModelDoc006>
+   USU_SENHA_2?: string,
+   USU_SENHA_ATUAL?: string
+}
+
+export interface IModelLogin {
+   USU_USUARIO: string,
+   USU_SENHA: string,
+   USU_NOME?: string,
+   USU_FOTO?: string,
+   TOKEN?: string
+}
+
+export interface IModelAlterarSenha {
+   USU_SENHA: string
+}
+

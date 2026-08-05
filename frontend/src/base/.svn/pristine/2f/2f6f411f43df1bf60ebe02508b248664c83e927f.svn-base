@@ -1,0 +1,396 @@
+import React, { useEffect } from 'react';
+import { useAuthContext } from '../../hooks/useAuthContext';
+import SocketService, { ISocket } from '../services/socket';
+import { utilities } from '../utils/utilities';
+import { ChatChannels, ChatConversation, ChatMessage } from '../components/chat/types';
+import socket from '../services/socket';
+
+export interface ICreateChannel {
+   key: string | number,
+   caption: string,
+   data: any,
+   tags?: string,
+}
+
+type ChatAction = {
+   type: 'channels',
+   channels?: Array<ChatChannels<any, any>>
+} | {
+   type: 'open',
+   idChannel: string,
+   message: ChatMessage<any>,
+   createChannel?: ICreateChannel
+} | {
+   type: 'conversation',
+   conversation: ChatConversation<any>
+} | {
+   type: 'close',
+   idChannel: string
+} | {
+   type: 'channel',
+   idChannel: string,
+   data: any
+}
+
+type ChatDispatch = (action: ChatAction) => void
+
+export type ChatState = {
+   type?: 'channels' | 'open' | 'conversation' | 'close' | 'channel',
+   idChannel?: string,
+   message?: ChatMessage<any>,
+   channels?: Array<ChatChannels<any, any>>,
+   conversation?: ChatConversation<any>,
+   createChannel?: ICreateChannel,
+   data?: any
+}
+
+export interface ChatContextProps {
+   chatState: ChatState,
+   chatDispatch: ChatDispatch,
+   open: (message: ChatMessage<any>, craeteChannel?: ICreateChannel) => void,
+   channelActive: () => ChatChannels<any, any> | undefined,
+   close: (channelId?: string) => void
+}
+
+export const ChatStateContext = React.createContext<ChatContextProps | undefined>(undefined);
+
+var ChatReducer = (chatState: ChatState, chatAction: ChatAction): ChatState => {
+   let type: string = chatAction.type;
+   let channels: Array<ChatChannels<any, any>> | undefined;// = storageGetChatChannels();
+   let message: ChatMessage<any> | undefined;
+   let idChannel: string = '';
+   let conversation: ChatConversation<any> | undefined;
+   let createChannel: ICreateChannel | undefined;
+   let data: any;
+
+   const resolveChannel = (chatMessage: ChatMessage<any>, createChannel?: ICreateChannel) => {
+
+      // let idChannel = `${(authState.user as IModelPortalUsuario).COD_PESSOA}-conversa-${chatMessage.tipoDocOrigem}-${chatMessage.idDocOrigem}`
+      var _channels = chatState.channels;
+
+      let channel = _channels?.find(ch => {
+         return chatMessage.idChannel === ch.id
+      });
+
+      let otherChannels = _channels?.filter(ch => {
+         return chatMessage.idChannel !== ch.id
+      });
+
+      if (createChannel && channel)
+         return;
+
+      if (channel) {
+         channel.lastMessage = chatMessage;
+         if (!channel.active) {
+            if (!channel.qtdNewMessages)
+               channel.qtdNewMessages = 0;
+
+            channel.qtdNewMessages = channel.qtdNewMessages! + 1;
+         }
+      } else {
+         channel = {
+            id: chatMessage.idChannel,
+            active: false,
+            lastMessage: chatMessage,
+            qtdNewMessages: 1,
+            // conversations: [],
+            caption: createChannel?.caption!,
+            data: createChannel?.data,
+            tags: createChannel?.tags,
+            key: createChannel?.key!
+         }
+      }
+
+      if (!otherChannels)
+         otherChannels = [];
+
+      otherChannels?.unshift(channel);
+
+      channels = otherChannels;
+      chatState.channels = channels;
+   }
+
+   switch (chatAction.type) {
+      case 'channels': {
+         // storageSetChatChannels(chatAction.channels);
+         channels = chatAction.channels;
+         break;
+      }
+
+      case 'channel': {
+         data = chatAction.data;
+         idChannel = chatAction.idChannel;
+
+         chatState.channels = chatState.channels?.map(ch => {
+            if (ch.id === idChannel)
+               ch.data = data;
+
+            return ch;
+         });
+         channels = chatState.channels;
+
+         break;
+      }
+
+      case 'open': {
+         idChannel = chatAction.idChannel;
+         message = chatAction.message;
+         createChannel = chatAction.createChannel;
+
+         if (!message.id && chatAction.createChannel) {
+            resolveChannel(message, chatAction.createChannel);
+         }
+
+         chatState.channels = chatState.channels?.map(ch => {
+            ch.active = ch.id === idChannel;
+            if (ch.active)
+               ch.qtdNewMessages = undefined;
+
+            return ch;
+         });
+         channels = chatState.channels;
+
+         // storageSetChatChannels(chatState.channels);
+         break;
+      }
+
+      case 'close': {
+         idChannel = chatAction.idChannel;
+
+         chatState.channels = chatState.channels?.filter(ch => {
+            return ch.id !== idChannel;
+         });
+         channels = chatState.channels;
+         // storageSetChatChannels(chatState.channels);
+         break;
+      }
+
+      case 'conversation': {
+         conversation = chatAction.conversation;
+
+         chatState.channels = chatState.channels?.map(ch => {
+            if (ch.lastMessage?.key === conversation?.key) {
+               if (ch.lastMessage) {
+                  ch.lastMessage.id = conversation?.id;
+                  ch.lastMessage.message = utilities.base64Decode(conversation?.message)
+               }
+               ch.dateTimeLastMessage = conversation?.dateTime;
+            }
+
+            return ch;
+         });
+
+         channels = chatState.channels;
+
+         break;
+      }
+
+      default: {
+         throw new Error(`Unhandled action type: ${type}`)
+      }
+   }
+
+   return {
+      type: chatAction.type,
+      idChannel,
+      message,
+      channels,
+      conversation,
+      createChannel,
+      data
+   }
+}
+
+interface ChatProviderProps {
+   children: React.ReactNode,
+   hostSocket: string,
+   idClient: string,
+   idUser: string,
+   subcriblePublic?: boolean,
+   loadChannes: () => Promise<Array<ChatChannels<any, any>>>
+}
+
+export const ChatProvider: React.FC<ChatProviderProps> = (props): JSX.Element => {
+   const { hostSocket, children, idClient, idUser, subcriblePublic, loadChannes } = props;
+
+   const channels: Array<ChatChannels<any, any>> = [];// storageGetChatChannels();
+
+   const [chatState, chatDispatch] = React.useReducer(ChatReducer, { channels });
+
+   // const { authDataUser } = useAuthContext();
+
+   const resolveNewConversation = (conversation: ChatConversation<any>) => {
+      chatDispatch({
+         type: 'conversation',
+         conversation
+      })
+   }
+
+   const channelActive = (): ChatChannels<any, any> | undefined => {
+      return chatState.channels?.find(channel => {
+         return channel.active;
+      })
+   }
+
+   const open = (message: ChatMessage<any>, createChannel?: ICreateChannel) => {
+      chatDispatch({
+         type: 'open',
+         idChannel: message.idChannel,
+         message,
+         createChannel
+      })
+   }
+
+   const close = (channelId?: string) => {
+      if (!channelId) {
+         let channel = channelActive();
+         if (channel)
+            channelId = channel.id;
+      }
+      chatDispatch({
+         type: 'close',
+         idChannel: channelId!
+      })
+   }
+
+   // const resolveChannel = (chatMessage: ChatMessage<any>, craeteChannel?: boolean) => {
+
+   //    // let idChannel = `${(authState.user as IModelPortalUsuario).COD_PESSOA}-conversa-${chatMessage.tipoDocOrigem}-${chatMessage.idDocOrigem}`
+   //    var _channels = storageGetChatChannels();
+
+   //    let channel = _channels?.find(ch => {
+   //       return chatMessage.idChannel === ch.id
+   //    });
+
+   //    let otherChannels = _channels?.filter(ch => {
+   //       return chatMessage.idChannel !== ch.id
+   //    });
+
+   //    if (craeteChannel && channel)
+   //       return;
+
+   //    if (channel) {
+   //       channel.lastMessage = chatMessage;
+   //       if (!channel.active) {
+   //          if (!channel.qtdNewMessages)
+   //             channel.qtdNewMessages = 0;
+
+   //          channel.qtdNewMessages = channel.qtdNewMessages! + 1;
+   //       }
+   //    } else {
+   //       channel = {
+   //          id: chatMessage.idChannel,
+   //          active: false,
+   //          lastMessage: chatMessage,
+   //          qtdNewMessages: 1,
+   //          conversations: []
+   //       }
+   //    }
+
+   //    if (!otherChannels)
+   //       otherChannels = [];
+
+   //    otherChannels?.unshift(channel);
+
+   //    chatDispatch({
+   //       type: 'channels',
+   //       channels: otherChannels
+   //    })
+   // }
+
+   const conectSocket = async () => {
+      if (hostSocket.trim() === '')
+         return;
+
+      // const id: string = idClient;// `${utilities.stuff(authDataUser().CNPJ)}-${authDataUser().USER}`;
+      const notifyChannel = `channel-${idClient}-notify`;
+      const conversationPrivateChannel = `channel-${idClient}-${idUser}`;
+      const conversationPublicChannel = `channel-${idClient}-all`;
+      // const channelConversation = `${id}-conversa`;
+
+      const socket: ISocket = SocketService.getInstance().create({
+         url: hostSocket,
+         id: idClient,
+         pingInSeconds: 10,
+         reconnectInSeconds: 10
+      });
+
+      socket.beforetConnect = () => {
+         // setMsgSocketReconnecting('Conectando com o servidor Socket. Por favor, aguarde!')
+      }
+
+      socket.aftertConnect = () => {
+         // setMsgSocketReconnecting('Conexão realizada com sucesso!')
+         let timer = setInterval(() => {
+            // showModalReconnectSocket(false)
+            clearInterval(timer);
+         }, 3000);
+      }
+
+      socket.onpong = (ws) => {
+         console.log('pong');
+      };
+
+      socket.onopen = (e, ws) => {
+         ws.subscribe(notifyChannel);
+         ws.subscribe(conversationPrivateChannel);
+         if (subcriblePublic)
+            ws.subscribe(conversationPublicChannel);
+      }
+
+      // socket.onchannel(notifyChannel, message => {
+      //    // if (message.message)
+      //    //    dispatchMessage(message.message);
+      //    console.log(message);
+      //    let msg: string = message.message?.replace(/(\r\n|\n|\r)/gm, "<br>")!; /*remoção de quebra de linha na mensagem*/;
+      //    let chatMessage: ChatMessage<any> = JSON.parse(msg);
+      //    console.log(chatMessage);
+      //    // resolveChannel(chatMessage);
+      //    // resolveNotification(chatMessage);
+      // });
+
+      // socket.onchannel(notifyChannel, message => {
+      //    console.log(message);
+
+      // });
+
+      socket.onchannel(notifyChannel, message => {
+         console.log(message);
+         let msg: string = message.message?.replace(/(\r\n|\n|\r)/gm, "<br>")!; /*remoção de quebra de linha na mensagem*/;
+         let conversation: ChatConversation<any> = JSON.parse(msg);
+         resolveNewConversation(conversation);
+      });
+
+      socket.onerror = () => {
+         // setMsgSocketReconnecting('Conexão com o servidor Socket foi perdida. Realizando nova tentativa!')
+         // showModalReconnectSocket(true)
+      }
+
+      socket.connect();
+   }
+
+   useEffect(() => {
+      conectSocket();
+   }, [hostSocket])
+
+   useEffect(() => {
+      if (loadChannes && chatState.channels?.length === 0) {
+         loadChannes().then(channels => {
+            chatDispatch({
+               type: 'channels',
+               channels
+            })
+         }).catch(error => {
+            console.log(error)
+         })
+      }
+   }, [loadChannes])
+
+   const value: ChatContextProps = { chatState, chatDispatch, open, close, channelActive };
+
+   return (
+      <ChatStateContext.Provider value={value}>
+         {children}
+      </ChatStateContext.Provider>
+   );
+}

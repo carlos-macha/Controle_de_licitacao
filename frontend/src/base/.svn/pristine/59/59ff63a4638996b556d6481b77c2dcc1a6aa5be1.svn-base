@@ -1,0 +1,26 @@
+import { IModelControleEtapas } from "../models/modelControleEtapas";
+import { IModelEtapaAnexos } from "../models/modelEtapaAnexos";
+import DAO from "./dao";
+
+export default class DAOControleEtapas extends DAO {
+
+   ControleEtapas = (usuario: string, where: string) => new Promise<Array<IModelControleEtapas>>((resolve, reject) => {
+      this.List<IModelControleEtapas>(`controleetapas/PedidosComEtapas/${usuario}/${where}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+   AnexosEtapa = (idEtapa: number) => new Promise<Array<IModelEtapaAnexos>>((resolve, reject) => {
+
+      this.List<IModelEtapaAnexos>(`controleetapas/AnexosEtapa/${idEtapa}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+}

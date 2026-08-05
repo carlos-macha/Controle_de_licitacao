@@ -1,0 +1,59 @@
+import { EnumSimNao } from "../enums/enums";
+import { EnumCallcenterTpDepartamentoFuncionario } from "../enums/enumscallcenter";
+import { IModelAnexosBinario } from "./modelAnexos";
+
+export interface IModelCallcenterUsuarioCommand {
+   USUARIO: string,
+   SENHA: string,
+   NOME?: string,
+   DEPARTAMENTO: EnumCallcenterTpDepartamentoFuncionario,
+   TOKEN?: string
+}
+
+export interface IModelCallcenterUsuarioCliente {
+   USUARIO: string,
+   SENHA: string,
+   CNPJ?: string,
+   VERSAO?: string,
+   PROJETO?: number,
+   TELA?: string,
+   CLIENTE_ID: number,
+   CLIENTE_CODIGO: string,
+   CLIENTE_RAZAO_SOCIAL: string
+}
+
+export interface IModelCallcenterAnexos {
+   DOC_CODIGO: number,
+   DOC_CHAVELEGADO: string,
+   DOC_NOMEDOCUMENTO: string,
+   DOC_TIPODOCUMENTO: number,
+   DOC_DTCRIACAO: number,
+   BINARIO: Array<IModelAnexosBinario>
+}
+
+export interface IModelCallcenterHelp {
+   PRO_DESCRICAO: string,
+   SIS_DESCRICAO: string,
+   SBS_DESCRICAO: string,
+   PRG_PROGRAMA: string,
+   PRG_DESCRICAO: string,
+   HVE_HELP: string
+}
+
+export interface IModelCallcenterNovidadesVersao {
+   CHA_CODIGO: number,
+   CHA_VERSAO: string,
+   BIL_NR_BUILD: number,
+   SIS_DESCRICAO: string,
+   SBS_DESCRICAO: string,
+   CHA_GERAINTERNET: EnumSimNao,
+   CHA_ATENCAO_AO_ATUALIZAR: EnumSimNao,
+   BO_MINHA_EMPRESA: EnumSimNao,
+   CHA_HISTORICOINTERNET: string,
+   CHA_PROGRAMA: string,
+   CHA_TITULO?: string
+}
+
+export interface IModelCallcenterChatAttachment {
+   file: string
+}

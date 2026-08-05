@@ -1,0 +1,5 @@
+export interface IModelSis003 {
+   PRG_SISTEMA: string,
+   PRG_PROGRAMA: string,
+   PRG_DESCRICAO: string
+}

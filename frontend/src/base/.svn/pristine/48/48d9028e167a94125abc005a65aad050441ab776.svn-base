@@ -1,0 +1,4 @@
+export interface IModelSis002 {
+   SIS_CODIGO: string,
+   SIS_DESCRICAO: string
+}

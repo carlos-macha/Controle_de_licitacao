@@ -1,0 +1,128 @@
+import { EmptyCallback } from 'tabulator-tables';
+import ResultadosdoRelatorioPesquisa from './resultadosdorelatorioPesquisa';
+import { CrudContainer } from '../../../components/crud/container/crudcontainer';
+import { CrudUrl, CrudPesquisaEvents } from '../../../components/crud/types';
+import { OperatorSearchTypes } from '../../../components/datasearch/datasearch';
+import { Formatters, DataTableColumns } from '../../../components/datatable/datatable';
+import { EnumCharcasetypes } from '../../../components/form/form';
+import { EnumAtivoInativo, EnumSimNao } from '../../../enums/enums';
+import { IModelCrm019 } from '../../../models/modelCRM019';
+
+export interface IResultadosdoRelatorioContainerEvents {
+   onClickViewRelatorioResultadosPesquisa?: (acompanhamento: IModelCrm019) => void
+}
+
+class ResultadosdoRelatorioContainer extends CrudContainer {
+
+   declare public events: IResultadosdoRelatorioContainerEvents;
+
+   crudUrl = (): CrudUrl | undefined => {
+      return {
+         GET: '/crm/pesquisascrm'
+      }
+   }
+
+   columns = (): DataTableColumns | undefined => [
+      {
+         title: '',
+         field: 'RRP_PSQ',
+         formatter: (cell) => {
+            return `<div class="isTabulatorIcon" title="Relatório" data-toggle="modal" data-target="#relatorioresultadospesquisa-cps"><i class="mdi mdi-file-document-outline"/></div>`;
+         },
+         width: 40,
+         headerSort: false,
+         hozAlign: "center",
+         frozen: true,
+         cellClick: (ev, cell) => {
+            const data = (cell.getData() as IModelCrm019);
+            // console.log(data)
+
+            if (this.events.onClickViewRelatorioResultadosPesquisa)
+               this.events.onClickViewRelatorioResultadosPesquisa(data);
+         }
+      },
+      {
+         title: 'Código',
+         type: 'integer',
+         field: 'PSQ_CODIGO',
+         width: 100,
+         search: {
+            operator: OperatorSearchTypes.EQUAL,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Descrição',
+         field: 'PSQ_DESCRICAO',
+         type: 'string',
+         width: 270,
+         search: {
+            operator: OperatorSearchTypes.LIKE,
+            charCase: EnumCharcasetypes.UPPERCASE
+         }
+      },
+      {
+         title: 'Ativo/Inativo',
+         field: 'PSQ_ATIVO',
+         type: 'string',
+         width: 130,
+         formatter: (cell) => {
+            const ativoInativo = (cell.getValue() === EnumAtivoInativo.ATIVO) ? 'Ativo' : 'Inativo';
+
+            return `<span title="${ativoInativo}">${ativoInativo}</span>`;
+         },
+         search: {
+            width: 150,
+            operator: OperatorSearchTypes.EQUAL,
+            defaultValue: EnumAtivoInativo.ATIVO,
+            type: 'COMBOBOX',
+            options: [{
+               label: 'Ativo',
+               value: EnumAtivoInativo.ATIVO
+            }, {
+               label: 'Inativo',
+               value: EnumAtivoInativo.INATIVO
+            }],
+         }
+      },
+      {
+         title: 'Tipo',
+         field: 'PSQ_TIPO',
+         type: 'string',
+         width: 270,
+         formatter: (cell) => {
+            const pesquisaAgenda = (cell.getValue() === 'PESQ_CRM') ? 'Pesquisa do CRM' : 'Agenda de Compromisso';
+
+            return `<span title="${pesquisaAgenda}">${pesquisaAgenda}</span>`;
+         },
+         search: {
+            width: 290,
+            operator: OperatorSearchTypes.EQUAL,
+            type: 'COMBOBOX',
+            options: [{
+               label: 'Pesquisa do CRM',
+               value: 'PESQ_CRM'
+            }, {
+               label: 'Agenda de Compromisso',
+               value: 'AGEND_COMP'
+            }],
+         }
+      }
+   ];
+
+   pesquisa = (events: CrudPesquisaEvents): JSX.Element => {
+      const { onDataChange, params } = this.props;
+
+      return (
+         <ResultadosdoRelatorioPesquisa
+            crudContainer={this}
+            events={events}
+            onDataChange={onDataChange}
+            heightGrid={params?.heightGrid}
+         />
+      )
+   }
+
+}
+
+export default ResultadosdoRelatorioContainer;

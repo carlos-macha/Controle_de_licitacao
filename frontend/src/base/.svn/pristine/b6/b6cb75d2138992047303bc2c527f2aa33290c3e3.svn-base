@@ -1,0 +1,10 @@
+import { EnumAtivoInativo } from "../enums/enums";
+
+export interface IModelDoc002 {
+   GRU_CODIGO: number,
+   GRU_DESCRICAO: string,
+   GRU_USUARIOMASTER: string,
+   GRU_USUARIOALTERACAO: string,
+   GRU_DTALTERACAO: number,
+   GRU_ATIVOINATIVO: EnumAtivoInativo
+}

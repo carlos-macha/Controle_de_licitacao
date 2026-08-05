@@ -1,0 +1,54 @@
+import { nanoid } from 'nanoid';
+import React, { Fragment, useRef } from 'react';
+import Card, { CardBody, CardHeader } from '../../../components/card/card';
+import Tabs, { TabContent, TabItem, TabPanel } from '../../../components/tab/tab';
+import { TextArea } from '../../../components/form/form';
+import { IModelAux131 } from '../../../models/modelAUX131';
+
+interface RecadosDetalhesProps {
+  recado?: IModelAux131
+  mensagem?: string
+  isManutencao?: boolean
+  onMensagemChange?: (valor: string) => void
+  lines?: number
+  hasError?: boolean
+}
+
+const RecadosDetalhes: React.FC<RecadosDetalhesProps> = (props) => {
+  const { recado, isManutencao, mensagem, lines, hasError, onMensagemChange } = props;
+  const id = useRef(nanoid());
+
+  return (
+    <Fragment>
+      <Card className='iq-card mb-0'>
+        <CardHeader className="iq-card-header p-2 border" >
+          <Tabs className="nav nav-pills">
+            <TabItem className='nav-item' classNameLink='nav-link' tabPanelRef={`dadosRecado-${id.current}`} selected={true}> Recado </TabItem>
+          </Tabs>
+        </CardHeader>
+        <CardBody className='border iq-card-body'>
+          <TabContent className="tab-content">
+            <TabPanel className='tab-pane fade' show={true} id={`dadosRecado-${id.current}`}>
+              <div className='row'>
+                <div className='col-12 pt-3 mb-0'>
+                  <TextArea
+                    style={{
+                      ...(hasError ? { border: '1px solid red' } : {}),
+                      height: lines ? `${lines * 24}px` : undefined
+                    }}
+                    isBase64={!isManutencao}
+                    value={recado?.REC_MENSAGEM || mensagem || ''}
+                    readOnly={!isManutencao}
+                    onChange={(e) => onMensagemChange?.(e.target.value)}
+                  />
+                </div>
+              </div>
+            </TabPanel>
+          </TabContent>
+        </CardBody>
+      </Card>
+    </Fragment>
+  );
+}
+
+export default RecadosDetalhes;

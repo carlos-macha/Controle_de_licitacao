@@ -1,0 +1,7 @@
+export interface IModelPpd003 {
+   VLP_CODIGO: number,
+   VLP_EMPRESA?: number,
+   VLP_PROPRIEDADE?: string,
+   VLP_USUARIO?: string,
+   VLP_VALOR: string
+}

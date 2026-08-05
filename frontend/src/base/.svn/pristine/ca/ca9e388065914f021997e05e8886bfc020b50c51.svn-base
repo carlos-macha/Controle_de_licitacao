@@ -1,0 +1,23 @@
+import { EnumAcaoComercial_TipoFrete } from "../enums/enumacaocoemrcial"
+
+export type IModelPortalTransportadora = {
+   PED_TRANSPORTADORA: number | null,
+   PES_CODIGO_TRANSPORTADORA: string | null,
+   PES_RAZAO_TRANSPORTADORA: string | null,
+   PED_FRETEEMITDEST: EnumAcaoComercial_TipoFrete,
+   PED_TRANSREDESPACHO: string | null,
+   PES_RAZAO_TRANSPORTADORA_REDESP: string | null,
+   PED_FRETEEMITDESTREDESP: EnumAcaoComercial_TipoFrete
+}
+
+export type IModelTabelaInscidencia = {
+   codigo: number,
+   count: number
+}
+
+export interface IModelPortalCodigoAcesso {
+   CNPJ_CPF: string,
+   USER: string,
+   EMAIL: string,
+   CODE?: string
+}

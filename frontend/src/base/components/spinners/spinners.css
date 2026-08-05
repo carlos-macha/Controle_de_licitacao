@@ -1,0 +1,12 @@
+.loader-spinners {
+   position: relative;
+   flex-flow: column wrap;
+   overflow: auto;
+   padding: 30px 20px;
+   margin: -10px;
+   display: flex;
+   -webkit-box-pack: center;
+   place-content: center;
+   place-items: center;
+   -webkit-box-align: center;
+}

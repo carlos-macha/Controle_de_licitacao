@@ -1,0 +1,16 @@
+import { EnumCallcenterChatOrigemConversa } from "../enums/enumscallcenter";
+
+
+export interface IModelCallcenterChat002 {
+   CCI_ID?: number | null,
+   CCI_CCH_ID?: number | null,
+   CCI_DH_CONVERSA?: number | null,
+   CCI_QUEM_CONVERSA: EnumCallcenterChatOrigemConversa,
+   CCI_USUARIO_CONVERSA: string,
+   CCI_USUARIO_DESTINO?: string | null,
+   CCI_CONVERSA: string,
+   CCI_ANEXO_ID?: number | null,
+   CCI_ANEXO_NOME?: string | null,
+   ANEXO?: string,
+   PREVIEW?: string
+}

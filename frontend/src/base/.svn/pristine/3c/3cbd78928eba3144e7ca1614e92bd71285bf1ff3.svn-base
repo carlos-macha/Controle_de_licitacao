@@ -1,0 +1,16 @@
+import { MaquinasResumido } from "../models/MaquinasResumido";
+import DAO from "./dao";
+
+export default class DAOPCP extends DAO {
+
+   maquinasResumido = (where: string = '', first: number = 0, skip: number = 0) => new Promise<Array<MaquinasResumido>>((resolve, reject) => {
+
+      this.Get<Array<MaquinasResumido>>(`pcp/maquinasresumido/${where}/${first}/${skip}`).then(data => {
+         resolve(data);
+      }).catch(error => {
+         reject(error);
+      });
+
+   });
+
+}

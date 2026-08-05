@@ -1,0 +1,5 @@
+export type ImodelPortalCondicoesPagamentoTabelaPreco = {
+   TCP_CD_CONDPGTO: number,
+   PAG_DESCRICAO: string,
+   PAG_FATOR_VENDA: number
+}

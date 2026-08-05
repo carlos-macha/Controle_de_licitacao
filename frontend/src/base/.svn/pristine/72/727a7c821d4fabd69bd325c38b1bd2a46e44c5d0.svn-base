@@ -1,0 +1,14 @@
+import { EnumBlobVincTpDocOrigem, EnumBlobVincEsteriotipo, EnumBlobVincTpConteudo, EnumBlobVincTpLancamento } from "../enums/enums";
+
+export interface IModelAux174 {
+   BGT_CODIGO: number,
+   BGT_TP_DOC: EnumBlobVincTpDocOrigem,
+   BGT_ID_DOC_ORIGEM: number,
+   BGT_ESTERIOTIPO: EnumBlobVincEsteriotipo,
+   BGT_CONTEUDO: string,
+   BGT_TIPO_CONTEUDO: EnumBlobVincTpConteudo,
+   BGT_TIPO_LANCAMENTO: EnumBlobVincTpLancamento,
+   BGT_EXT_ARQUIVO?: string,
+   BGT_USUARIO: string,
+   BGT_DH_CRIACAO: number
+}

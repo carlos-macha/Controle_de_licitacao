@@ -1,0 +1,38 @@
+import React from 'react';
+import PessoaContainer, { PessoaContainerParams } from './pessoacontainer';
+import { EnumPessoa_TipoPessoa } from '../../../enums/enumspessoa';
+import CrudProvider from '../../../components/crud/context/crudcontext';
+import { PageBaseProps, PageBase } from '../../../template/pagebase/pagebase';
+import { IModelMOB001 } from '../../../models/modelMOB001';
+import { typeRender } from '../../../components/crud/types';
+
+export interface PessoaProps extends PageBaseProps {
+   tipoPessoa?: EnumPessoa_TipoPessoa,
+   codigoVendedor?: string,
+   viewProspect?: boolean,
+   onDataChange?: (data: IModelMOB001) => void,
+   searchOnly?: boolean,
+   typeRender?: typeRender,
+   heightGrid?: string | number
+}
+
+const Pessoa: React.FC<PessoaProps> = (props) => {
+   const { tipoPessoa, permission, checkPermission, codigoVendedor, viewProspect, onDataChange, searchOnly, typeRender, heightGrid } = props;
+   return (
+      <PageBase
+         permission={permission}
+         checkPermission={checkPermission}
+      >
+         <CrudProvider>
+            <PessoaContainer
+               params={{ tipoPessoa, codigoVendedor, checkPermission, permission, viewProspect, heightGrid } as PessoaContainerParams}
+               onDataChange={onDataChange}
+               searchOnly={searchOnly}
+               typeRender={typeRender}
+            />
+         </CrudProvider>
+      </PageBase>
+   );
+}
+
+export default Pessoa;

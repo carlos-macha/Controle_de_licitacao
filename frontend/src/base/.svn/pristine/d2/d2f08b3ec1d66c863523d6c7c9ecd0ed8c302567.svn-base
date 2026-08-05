@@ -1,0 +1,40 @@
+import { useState } from "react";
+import { IModelCrm021 } from "../../../../models/modelCRM021";
+import { InputCheckbox } from "../../../../components/form/form";
+import { nanoid } from "nanoid";
+
+interface PesquisaRespostaMultiplaEscolhaProps {
+   resposta: IModelCrm021,
+   onChange?: (checked: boolean) => void
+}
+
+const PesquisaRespostaMultiplaEscolha: React.FC<PesquisaRespostaMultiplaEscolhaProps> = (props) => {
+   const { resposta, onChange } = props;
+
+   const [checked, setChecked] = useState<boolean>(false);
+
+   return (
+      <div key={nanoid()}>
+         <InputCheckbox
+            className='custom-control-input'
+            classNameGroup='custom-control custom-checkbox d-inline-block'
+            classNameLabel='custom-control-label mr-4'
+            checked={checked}
+            label={resposta.RPT_RESPOSTA}
+            onChange={() => {
+               setChecked((stateChecked) => {
+                  if (onChange)
+                     onChange(!stateChecked);
+
+                  return !stateChecked;
+               });
+            }}
+            name={'CHECKBOX_' + resposta.RPT_PESQUISA + '_' + resposta.RPT_PERGUNTA + '_' + resposta.RPT_CODRESPOSTA}
+            // id={'CHECKBOX_' + resposta.RPT_PESQUISA + '_' + resposta.RPT_PERGUNTA + '_' + resposta.RPT_CODRESPOSTA}
+            id={nanoid()}
+         />
+      </div>
+   )
+}
+
+export default PesquisaRespostaMultiplaEscolha;
