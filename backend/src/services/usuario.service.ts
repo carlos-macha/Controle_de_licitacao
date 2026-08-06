@@ -6,6 +6,7 @@ import { BaseService } from "./base.service";
 import { UsuarioDAO } from "../dao/usuario.dao";
 import { Usuario } from "../models/Usuario";
 import { HttpError } from "../utils/httpError";
+import { UsuarioResponse } from "../schemas/usuario.schema";
 
 
 interface UsuarioUpdate {
@@ -13,6 +14,7 @@ interface UsuarioUpdate {
     NOME?: string;
     SENHA?: string;
     ATIVO?: "S" | "N";
+    PERFIL?: "ADMIN" | "USER";
 }
 
 interface UsuarioInsert {
@@ -20,6 +22,7 @@ interface UsuarioInsert {
     NOME: string;
     SENHA?: string;
     ATIVO?: "S" | "N";
+    PERFIL?: "ADMIN" | "USER";
 }
 
 @injectable()
@@ -88,7 +91,7 @@ export class UsuarioService extends BaseService<Usuario> {
 
 
 
-    async insert(usuario: Omit<Usuario, "ID"> & UsuarioInsert) {
+    async create(usuario: Omit<Usuario, "ID"> & UsuarioInsert): Promise<UsuarioResponse | null> {
 
         const existe = await this.usuarioDAO.findByLogin(usuario.LOGIN);
 
@@ -104,15 +107,27 @@ export class UsuarioService extends BaseService<Usuario> {
             10
         );
 
-        return super.insert({
+        const usuarioCriado = await super.insert({
             LOGIN: usuario.LOGIN,
             NOME: usuario.NOME,
             SENHA_HASH: senhaHash,
-            ATIVO: "S"
+            ATIVO: "S",
+            PERFIL: usuario.PERFIL ?? "USER"
         });
+
+        if (!usuarioCriado) {
+            return null;
+        }
+
+        const {
+            SENHA_HASH,
+            ...usuarioSemSenha
+        } = usuarioCriado;
+
+        return usuarioSemSenha;
     }
 
-    async update(id: number, usuario: UsuarioUpdate) {
+    async updateSafe(id: number, usuario: UsuarioUpdate) {
 
         await this.findById(id);
 
@@ -139,6 +154,10 @@ export class UsuarioService extends BaseService<Usuario> {
             updateData.ATIVO = usuario.ATIVO;
         }
 
+        if (usuario.PERFIL !== undefined) {
+            updateData.PERFIL = usuario.PERFIL;
+        }
+
         if (usuario.SENHA !== undefined) {
             updateData.SENHA_HASH = await bcrypt.hash(
                 usuario.SENHA,
@@ -146,10 +165,21 @@ export class UsuarioService extends BaseService<Usuario> {
             );
         }
 
-        return super.update(
+        const usuarioAtualizado = await super.update(
             id,
             updateData
         );
+
+        if (!usuarioAtualizado) {
+            return null;
+        }
+
+        const {
+            SENHA_HASH,
+            ...usuarioSemSenha
+        } = usuarioAtualizado;
+
+        return usuarioSemSenha;
     }
 
 
@@ -199,7 +229,9 @@ export class UsuarioService extends BaseService<Usuario> {
 
                 {
                     id: usuario.ID,
-                    login: usuario.LOGIN
+                    login: usuario.LOGIN,
+                    nome: usuario.NOME,
+                    perfil: usuario.PERFIL
                 },
 
                 process.env.JWT_SECRET!,
@@ -260,6 +292,106 @@ export class UsuarioService extends BaseService<Usuario> {
         return {
             UNLOCKED: true
         };
+    }
+
+    async perfil(id: number) {
+        const usuario =
+            await this.usuarioDAO.findById(
+                id
+            );
+
+        if (!usuario) {
+            throw new HttpError(
+                401,
+                "Usuário inválido."
+            );
+        }
+
+        const {
+            SENHA_HASH,
+            ...rest
+        } = usuario;
+
+        return rest;
+    }
+
+    async atualizarNome(id: number, nome: string) {
+        const usuario =
+            await this.usuarioDAO.findById(
+                id
+            );
+
+        if (!usuario) {
+            throw new HttpError(
+                401,
+                "Usuário inválido."
+            );
+        }
+
+        const usuarioAtualizado = await super.update(id, {
+            NOME: nome
+        });
+
+        if (!usuarioAtualizado) {
+            return null;
+        }
+
+        const {
+            SENHA_HASH,
+            ...usuarioSemSenha
+        } = usuarioAtualizado;
+
+        return usuarioSemSenha;
+    }
+
+    async atualizarSenha(
+        id: number,
+        senhaAtual: string,
+        novaSenha: string
+    ) {
+        const usuario =
+            await this.usuarioDAO.findById(
+                id
+            );
+
+        if (!usuario) {
+            throw new HttpError(
+                401,
+                "Usuário inválido."
+            );
+        }
+
+        const senhaValida =
+            await bcrypt.compare(
+                senhaAtual,
+                usuario.SENHA_HASH
+            );
+
+
+        if (!senhaValida) {
+            throw new HttpError(
+                401,
+                "Senha inválida."
+            );
+        }
+
+        const usuarioAtualizado = await super.update(id, {
+            SENHA_HASH: await bcrypt.hash(
+                novaSenha,
+                10
+            )
+        });
+
+        if (!usuarioAtualizado) {
+            return null;
+        }
+
+        const {
+            SENHA_HASH,
+            ...usuarioSemSenha
+        } = usuarioAtualizado;
+
+        return usuarioSemSenha;
     }
 
 }

@@ -19,7 +19,10 @@ export class UsuarioDAO extends BaseDAO<Usuario> {
                 "LOGIN",
                 "NOME",
                 "SENHA_HASH",
-                "ATIVO"
+                "ATIVO",
+                "PERFIL",
+                "DATA_CADASTRO",
+                "DATA_ALTERACAO"
             ])
         );
     }

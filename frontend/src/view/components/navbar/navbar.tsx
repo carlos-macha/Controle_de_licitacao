@@ -26,13 +26,13 @@ const Navbar: React.FC<NavbarControllerProps> = () => {
       }
    }
 
-   /*const onClickPerfil = () => {
+   const onClickPerfil = () => {
       dispatch({
          type: 'open',
          name: 'meucadastro',
          title: 'Meu Cadastro'
       });
-   }*/
+   }
 
    const onClickSair = () => {
       authDispatch({
@@ -52,7 +52,7 @@ const Navbar: React.FC<NavbarControllerProps> = () => {
          menuTitle={itemMenu.title}
          name={authState.user.NOME!}
          user={authState.user.LOGIN}
-         //onClickPerfil={onClickPerfil}
+         onClickPerfil={onClickPerfil}
          onClickSair={onClickSair}
          onClickBloquear={onClickBloquear}
          // imgLogo=''

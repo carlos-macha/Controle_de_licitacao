@@ -8,7 +8,7 @@ interface CopyRightFooterProps {
 const CopyRightFooter: React.FC<CopyRightFooterProps> = (props) => {
    const { className } = props;
    return (
-      <TemplateCopyRightFooter className={className} projectName='cpModelo' />
+      <TemplateCopyRightFooter className={className} projectName='cpLicitação' />
    );
 }
 

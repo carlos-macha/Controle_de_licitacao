@@ -51,6 +51,7 @@ const ViewLogin: React.FC<ViewLoginProps> = (props) => {
                      onClick={onCloseAlert}
                      id="senha"
                      validator={validateFields}
+                     autoComplete="new-password"
                      validations={{
                         required: true,
                      }}

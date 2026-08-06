@@ -1,4 +1,4 @@
-import { EnumAtivoInativo } from "../base/enums/enums";
+import { EnumAtivoInativo, EnumPerfilUsuario } from "../base/enums/enums";
 
 export interface IModelUsuario {
     ID: number;
@@ -6,4 +6,7 @@ export interface IModelUsuario {
     NOME: string;
     SENHA_HASH: string;
     ATIVO: EnumAtivoInativo;
+    DATA_CADASTRO: Date;
+    DATA_ALTERACAO?: Date | null;
+    PERFIL: EnumPerfilUsuario;
 }

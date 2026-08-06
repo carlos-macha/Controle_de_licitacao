@@ -3,6 +3,7 @@ import { MenuName } from '../menu/menu';
 import TemplateTabPage from '../../../base/template/tabPage/tabpage';
 import MeuPerfil from '../../meuperfil/meuperfil';
 import Produtos from '../../produtos/produtos';
+import Licitacao from '../../licitacao/licitacao';
 
 interface TabPageProps { };
 
@@ -15,6 +16,10 @@ const TabPage: React.FC<TabPageProps> = (props) => {
       switch (name) {
          case "produtos":
             el = <Produtos/>
+            break;
+
+         case "licitacoes":
+            el = <Licitacao/>
             break;
             
          case "meucadastro":

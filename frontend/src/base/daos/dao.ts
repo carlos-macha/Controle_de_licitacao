@@ -41,21 +41,21 @@ export default class DAO {
       });
    });
 
-   Put = <T>(resource: string, model?: T) => new Promise<T>((resolve, reject) => {
-      this.api.put<T>(resource, model).then(async (response: { data: T | PromiseLike<T>; }) => {
+   Put = <TResponse, TRequest = TResponse>(resource: string, model?: TRequest) => new Promise<TResponse>((resolve, reject) => {
+      this.api.put<TResponse>(resource, model).then((response) => {
          resolve(response.data);
-      }).catch((error: any) => {
+      }).catch((error) => {
          reject(error);
       });
    });
 
-   Post = <T>(resource: string, model?: T) => new Promise<T>((resolve, reject) => {
+   Post = <TResponse, TRequest = TResponse>(resource: string, model?: TRequest) => new Promise<TResponse>((resolve, reject) => {
 
    console.log("POST RESOURCE:", resource);
    console.log("POST BODY:", model);
    console.log("AUTH NO POST:", this.api.defaults.headers.common['Authorization']);
 
-   this.api.post<T>(resource, model)
+   this.api.post<TResponse>(resource, model)
       .then(response => {
          resolve(response.data);
       })

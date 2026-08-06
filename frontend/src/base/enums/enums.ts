@@ -31,6 +31,11 @@ export enum EnumTipoOutrasAgendas {
    FUTURO = 'F'
 }
 
+export enum EnumPerfilUsuario {
+    ADMIN = "ADMIN",
+    USER = "USER"
+}
+
 export enum EnumBlobVincTpDocOrigem {
    emBlobVincTpDocOrigem_NotaInterna = 'EST018',
    emBlobVincTpDocOrigem_DespesasAdicionaisOrdem = 'PCP134',

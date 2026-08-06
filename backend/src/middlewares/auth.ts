@@ -7,6 +7,7 @@ export interface JwtPayload {
     id: number;
     login: string;
     nome: string;
+    perfil: "ADMIN" | "USER";
 }
 
 declare global {

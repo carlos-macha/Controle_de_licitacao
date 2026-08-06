@@ -87,7 +87,7 @@ export class UsuarioController {
         try {
 
             const result =
-                await this.usuarioService.insert(
+                await this.usuarioService.create(
                     req.body
                 );
 
@@ -116,7 +116,7 @@ export class UsuarioController {
         try {
 
             const result =
-                await this.usuarioService.update(
+                await this.usuarioService.updateSafe(
                     Number(req.params.id),
                     req.body
                 );
@@ -215,4 +215,63 @@ export class UsuarioController {
         }
     }
 
+    async perfil(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+
+            const result =
+                await this.usuarioService.perfil(
+                    req.user!.id,
+                );
+
+            return res.json(result);
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async atualizarNome(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+
+            const result =
+                await this.usuarioService.atualizarNome(
+                    req.user!.id,
+                    req.body.NOME
+                );
+
+            return res.json(result);
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async atualizarSenha(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ){
+        try {
+
+            const result =
+                await this.usuarioService.atualizarSenha(
+                    req.user!.id,
+                    req.body.SENHA_ATUAL,
+                    req.body.NOVA_SENHA
+                );
+
+            return res.json(result);
+
+        } catch (error) {
+            next(error);
+        }
+    }
 }

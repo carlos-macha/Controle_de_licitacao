@@ -5,16 +5,18 @@ import { DataTableColumns } from "../../base/components/datatable/datatable";
 
 class MeuPerfilContainer extends CrudContainer {
    crudUrl = (): CrudUrl | undefined => {
-      return {
-         POST: '/usuarios'
-      }
-   }
+        const { params } = this.props;
+
+        return {
+            PUT: '/atualizar-nome',
+        }
+    }
 
    columns = (): DataTableColumns | undefined => {
 
       const columns: DataTableColumns = [
          {
-            title: "ID", field: "USU_USUARIO", width: 90, type: "string", isKey: true, visible: false
+            title: "ID", field: "LOGIN", width: 90, type: "string", isKey: true, visible: false
          }
       ]
 

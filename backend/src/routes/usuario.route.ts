@@ -5,36 +5,68 @@ import { UsuarioController } from "../controllers/usuario.controller";
 import { validate } from "../middlewares/validade";
 
 import {
+    atualizarNomeSchema,
+    atualizarSenhaSchema,
     createUsuarioSchema,
     updateUsuarioSchema
 } from "../schemas/usuario.schema";
 
 import { loginSchema } from "../schemas/login.schema";
-import { createCrudRoutes } from "../utils/createCrudRoutes";
-import { unlockSchema } from "../schemas/unlock.schema";
+import { idParamSchema } from "../schemas/id.schema";
 import { authenticate } from "../middlewares/auth";
+import { unlockSchema } from "../schemas/unlock.schema";
+import { admin } from "../middlewares/admin";
 
 const usuarioRouter = Router();
 
-const controller =
-    container.get(UsuarioController);
+const controller = container.get(UsuarioController);
 
-createCrudRoutes(
-    usuarioRouter,
-    "usuarios",
-    controller,
-    {
-        create: createUsuarioSchema,
-        update: updateUsuarioSchema
-    }
+usuarioRouter.get(
+    "/usuarios",
+    authenticate,
+    admin,
+    controller.find.bind(controller)
+);
+
+usuarioRouter.get(
+    "/usuarios/:id",
+    authenticate,
+    admin,
+    validate({
+        params: idParamSchema
+    }),
+    controller.findById.bind(controller)
 );
 
 usuarioRouter.post(
-    "/registrar-usuario",
+    "/usuarios",
+    authenticate,
+    admin,
     validate({
         body: createUsuarioSchema
     }),
     controller.insert.bind(controller)
+);
+
+usuarioRouter.put(
+    "/usuarios/:id",
+    authenticate,
+    admin,
+    validate({
+        params: idParamSchema,
+        body: updateUsuarioSchema
+    }),
+    controller.update.bind(controller)
+);
+
+usuarioRouter.delete(
+    "/usuarios/:id",
+    authenticate,
+    admin,
+    validate({
+        params: idParamSchema
+    }),
+    controller.delete.bind(controller)
 );
 
 usuarioRouter.post(
@@ -52,6 +84,30 @@ usuarioRouter.post(
         body: unlockSchema
     }),
     controller.unlock.bind(controller)
+);
+
+usuarioRouter.get(
+    "/perfil",
+    authenticate,
+    controller.perfil.bind(controller)
+);
+
+usuarioRouter.put(
+    "/atualizar-nome",
+    authenticate,
+    validate({
+        body: atualizarNomeSchema
+    }),
+    controller.atualizarNome.bind(controller)
+);
+
+usuarioRouter.put(
+    "/atualizar-senha",
+    authenticate,
+    validate({
+        body: atualizarSenhaSchema
+    }),
+    controller.atualizarSenha.bind(controller)
 );
 
 
