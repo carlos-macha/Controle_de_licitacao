@@ -58,13 +58,13 @@ NOTE: This file contains the styling for responsive Template.
 }
 
 ::-moz-selection {
-   background: #ffffff;
+   background: #8c91b6;
    color: #fff;
    text-shadow: none;
 }
 
 ::selection {
-   background: #ffffff;
+   background: #8c91b6;
    color: #fff;
    text-shadow: none;
 }
@@ -123,6 +123,13 @@ a:hover {
 /* placeholder color */
 .form-control::placeholder {
    color: #8c91b6;
+}
+
+body.dark .form-control:disabled,
+body.dark .form-control[readonly] {
+    background-color: #25294a;
+    color: #fff;
+    opacity: 1;
 }
 
 .navbar ul.navbar-list li a.bg-primary {
@@ -4548,4 +4555,16 @@ body.two-sidebar.sidebar-main .iq-sidebar-logo {
 
 .two-sidebar.sidebar-main .wrapper-menu.open {
    transform: rotate(0deg);
+}
+
+/*---------------------------------------------------------------------
+Modal
+-----------------------------------------------------------------------*/
+
+body.dark .modal-content {
+    background-color:#2d325a;
+}
+
+body.dark .modal-content .close {
+   color: #fff;
 }
