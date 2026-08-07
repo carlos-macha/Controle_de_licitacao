@@ -5,7 +5,7 @@ import { DataRoutesAlterarSenha, DataRoutesHome, DataRoutesLock, DataRoutesLogin
 import Login from '../view/login/login';
 import Lock from '../view/lock/lock';
 import Home from '../view/home/home';
-import { storageGetWSHost, storageGetWSTimeout, storageGetWSToken } from '../utils/storage';
+import { storageGetWSHost, storageGetWSTimeout } from '../utils/storage';
 import Logout from '../view/logout/logout';
 import Api from '../base/services/api';
 
@@ -34,7 +34,6 @@ const BrowserRoutes: React.FC = () => {
             storageGetWSTimeout()
          );
       }
-      Api.getInstance().token(storageGetWSToken());
    }, []);
 
    return (

@@ -92,7 +92,6 @@ const MeuPerfilManutencao: React.FC<MeuPerfilManutencaoProps> = (props) => {
          });
 
       } catch (error: any) {
-
          sweetAlertdispatch({
             type: "show",
             props: {
@@ -102,9 +101,8 @@ const MeuPerfilManutencao: React.FC<MeuPerfilManutencaoProps> = (props) => {
                   sweetAlertdispatch({ type: "close" });
                }
             },
-            msg: error.response?.data?.error?.message ?? "Erro ao alterar o nome."
+            msg: error.response?.data?.error ?? "Erro ao alterar nome."
          });
-
       }
    };
 
@@ -156,7 +154,6 @@ const MeuPerfilManutencao: React.FC<MeuPerfilManutencaoProps> = (props) => {
          setSenhaConfirmacao('');
 
       } catch (error: any) {
-
          sweetAlertdispatch({
             type: "show",
             props: {
@@ -166,9 +163,8 @@ const MeuPerfilManutencao: React.FC<MeuPerfilManutencaoProps> = (props) => {
                   sweetAlertdispatch({ type: "close" });
                }
             },
-            msg: error.response?.data?.error?.message ?? "Erro ao alterar senha."
+            msg: error.response?.data?.error ?? "Erro ao alterar senha."
          });
-
       } finally {
 
          setLoadingAlterarSenha(false);

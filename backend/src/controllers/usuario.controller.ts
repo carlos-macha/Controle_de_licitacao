@@ -184,7 +184,16 @@ export class UsuarioController {
                 );
 
 
-            return res.json(result);
+            res.cookie("token", result.token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 7 * 24 * 60 * 60 * 1000
+            });
+
+            return res.json({
+                usuario: result.usuario
+            });
 
 
         } catch (error) {
@@ -193,6 +202,15 @@ export class UsuarioController {
 
         }
 
+    }
+
+    async logout(req: Request, res: Response, next: NextFunction) {
+        try {
+            res.clearCookie("token");
+            return res.json({ LOGGED_OUT: true });
+        } catch (error) {
+            next(error);
+        }
     }
 
     async unlock(
@@ -258,7 +276,7 @@ export class UsuarioController {
         req: Request,
         res: Response,
         next: NextFunction
-    ){
+    ) {
         try {
 
             const result =

@@ -26,9 +26,9 @@ export const resultadoLicitacaoSchema = z.object({
         .number()
         .positive("Preço ganho deve ser maior que zero."),
 
-    DATA_RESULTADO: z.coerce.date({
-        error: "Data do resultado inválida."
-    })
+    DATA_RESULTADO: z
+        .string()
+        .min(1, "Data do resultado é obrigatório."),
 });
 
 export type ResultadoLicitacao = z.infer<typeof resultadoLicitacaoSchema>;

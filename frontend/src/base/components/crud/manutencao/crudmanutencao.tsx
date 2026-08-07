@@ -159,7 +159,7 @@ const CrudManutencao: React.ForwardRefRenderFunction<CrudManuencaoRef, CrudManut
                   events.onSaveButton(responseData);
 
                crudDispash({
-                  type: 'actInsert',
+                  type: 'actEdit',
                   data: responseData
                });
 

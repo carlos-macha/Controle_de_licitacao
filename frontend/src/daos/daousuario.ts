@@ -18,6 +18,9 @@ export default class DAOUsuario extends DAO {
       });
    });
 
+   logout = (): Promise<any> => 
+      this.Post<any>('/logout');
+
    Unlock = (jsonUnlock: IModelUnlock) => new Promise<IModelUnlockResponse>((resolve, reject) => {
       this.Post<IModelUnlockResponse, IModelUnlock>(`/unlock`, jsonUnlock).then(data => {
          resolve(data);

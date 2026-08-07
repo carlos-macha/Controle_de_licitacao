@@ -10,8 +10,7 @@ interface IApi {
    // loadIni: () => void,
    // ini: () => Promise<ConfigIniProps>,
    auth: (user: string, pass: string) => void,
-   authp: (user: string, pass: string) => Promise<void>
-   token: (token: string) => void,
+   authp: (user: string, pass: string) => Promise<void>,
    noAuth: () => void
 }
 
@@ -28,6 +27,7 @@ const Api = (function () {
                api = axios.create({
                   baseURL: urlBase,
                   timeout: timeout ? timeout : 60000,
+                  withCredentials: true, // <-- essencial: manda/recebe o cookie httpOnly
                   headers: {
                      "Content-Type": "application/json"
                   }
@@ -40,7 +40,6 @@ const Api = (function () {
          noAuth() {
             if (api) {
                delete api.defaults.auth;
-               delete api.defaults.headers.common['Authorization'];
             }
          },
          auth(user, pass) {
@@ -51,7 +50,6 @@ const Api = (function () {
          },
          authp(user, pass) {
             return new Promise<void>((resolve, reject) => {
-
                try {
                   if (api)
                      api.defaults.auth = {
@@ -63,18 +61,7 @@ const Api = (function () {
                   console.log(error)
                   reject();
                }
-
             });
-
-         },
-         token(token) {
-            if (api) {
-
-               delete api.defaults.auth;
-
-               api.defaults.headers.common['Authorization'] =
-                  `Bearer ${token}`;
-            }
          }
       }
    }

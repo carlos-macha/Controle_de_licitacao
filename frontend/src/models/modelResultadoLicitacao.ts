@@ -4,5 +4,5 @@ export interface IModelResultadoLicitacao {
     CODIGO_CONCORRENTE: number;
     CODIGO_PRODUTO: number;
     PRECO_GANHO: number;
-    DATA_RESULTADO: Date;
+    DATA_RESULTADO: string;
 }

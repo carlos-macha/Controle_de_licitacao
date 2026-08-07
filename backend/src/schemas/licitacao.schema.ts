@@ -37,9 +37,9 @@ export const licitacaoSchema = z.object({
         .min(1, "Órgão competente é obrigatório.")
         .max(150, "Órgão competente deve possuir no máximo 150 caracteres."),
 
-    DATA_CERTAME: z.coerce.date({
-        error: "Data do certame inválida."
-    }),
+    DATA_CERTAME: z
+        .string()
+        .min(1, "Data do certame obrigatória."),
 
     LOGRADOURO: z
         .string()

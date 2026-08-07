@@ -78,6 +78,12 @@ usuarioRouter.post(
 );
 
 usuarioRouter.post(
+    "/logout", 
+    authenticate, 
+    controller.logout.bind(controller)
+);
+
+usuarioRouter.post(
     "/unlock",
     authenticate,
     validate({

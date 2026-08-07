@@ -24,24 +24,13 @@ export function authenticate(
     next: NextFunction
 ) {
 
-    const authHeader = req.headers.authorization;
+    const token = req.cookies?.token;
 
-    if (!authHeader) {
+    if (!token) {
         return next(
             new HttpError(
                 401,
                 "Token não informado."
-            )
-        );
-    }
-
-    const [type, token] = authHeader.split(" ");
-
-    if (type !== "Bearer" || !token) {
-        return next(
-            new HttpError(
-                401,
-                "Token inválido."
             )
         );
     }

@@ -1,0 +1,149 @@
+import { Fragment } from "react";
+import { EnumCrudStateRecordType } from "../../base/components/crud/enums";
+import Crudmanutencao, { ManutencaoProps } from "../../base/components/crud/manutencao/crudmanutencao";
+import { InputDataValue } from "../../base/types/types";
+import { IModelLicitacao } from "../../models/modellicitacao";
+import { EnumCharcasetypes, Input } from "../../base/components/form/form";
+import LicitacaoDetalhe from "./licitacaodetalhes";
+
+interface LicitacaoManutencaoProps extends ManutencaoProps { }
+
+const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
+    const { events, prefixId } = props;
+
+    const onInit = (data: IModelLicitacao, state: EnumCrudStateRecordType) => {
+        if (state === EnumCrudStateRecordType.INCLUIR) {
+            data.NUMERO_EDITAL = '';
+            data.NOME = '';
+            data.CODIGO_LICITACAO = '';
+            data.ORGAO_COMPETENTE = '';
+            data.DATA_CERTAME = undefined as any;
+        }
+
+        if (state === EnumCrudStateRecordType.ALTERAR) {
+            if (data.DATA_CERTAME) {
+                (data as any).DATA_CERTAME = String(data.DATA_CERTAME).substring(0, 10);
+            }
+        }
+
+    }
+
+    return (
+        <Crudmanutencao
+            events={events}
+            onInit={onInit}
+            urlPutMount={(url, data: IModelLicitacao) => {
+                if (!data.ID) {
+                    return url;
+                }
+
+                return `${url}/${data.ID}`;
+            }}
+            onBody={(params) => {
+
+                const dataModel: InputDataValue<IModelLicitacao> = params.dataModel;
+
+                return (
+                    <Fragment>
+
+                        <div className="row">
+
+                            <div className="col-12 col-md-4 mb-3">
+                                <Input
+                                    label="Número do Edital"
+                                    dataModel={dataModel}
+                                    id="NUMERO_EDITAL"
+                                    validator={params.validateFields}
+                                    validations={{
+                                        required: true
+                                    }}
+                                    maxLength={30}
+                                />
+                            </div>
+
+                            <div className="col-12 col-md-8 mb-3">
+                                <Input
+                                    label="Nome"
+                                    dataModel={dataModel}
+                                    id="NOME"
+                                    charCase={EnumCharcasetypes.UPPERCASE}
+                                    validator={params.validateFields}
+                                    validations={{
+                                        required: true
+                                    }}
+                                    maxLength={200}
+                                />
+                            </div>
+
+                        </div>
+
+
+                        <div className="row">
+
+                            <div className="col-12 col-md-4 mb-3">
+                                <Input
+                                    label="Código da Licitação"
+                                    dataModel={dataModel}
+                                    id="CODIGO_LICITACAO"
+                                    validator={params.validateFields}
+                                    validations={{
+                                        required: true
+                                    }}
+                                    maxLength={30}
+                                />
+                            </div>
+
+
+                            <div className="col-12 col-md-5 mb-3">
+                                <Input
+                                    label="Órgão Competente"
+                                    dataModel={dataModel}
+                                    id="ORGAO_COMPETENTE"
+                                    charCase={EnumCharcasetypes.UPPERCASE}
+                                    validator={params.validateFields}
+                                    validations={{
+                                        required: true
+                                    }}
+                                    maxLength={200}
+                                />
+                            </div>
+
+
+                            <div className="col-12 col-md-3 mb-3">
+                                <Input
+                                    label="Data do Certame"
+                                    dataModel={dataModel as any}
+                                    id="DATA_CERTAME"
+                                    type="date"
+                                    validator={params.validateFields}
+                                    validations={{
+                                        required: true
+                                    }}
+                                />
+                            </div>
+
+                        </div>
+
+
+                        <div className="row">
+                            <div className="col-12">
+
+                                <LicitacaoDetalhe
+                                    dataModel={dataModel}
+                                    data={dataModel.data}
+                                    isManutencao
+                                    state={params.state}
+                                />
+
+                            </div>
+                        </div>
+
+                    </Fragment>
+                )
+            }}
+            
+        />
+    );
+}
+
+export default LicitacaoManutencao;

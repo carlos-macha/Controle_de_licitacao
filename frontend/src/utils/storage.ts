@@ -5,7 +5,6 @@ export const STORAGE_NAME_CPLICITACAO_LOGGED = 'cplicitacao-logged';
 export const STORAGE_NAME_CPLICITACAO_LOCK = 'cplicitacao-lock';
 export const STORAGE_NAME_CPLICITACAO_REMINDME = 'cplicitacao-remindMe';
 export const STORAGE_NAME_CPLICITACAO_WSHOST: string = 'cplicitacao-wshost';
-export const STORAGE_NAME_CPLICITACAO_TOKEN = 'cplicitacao-token';
 export const STORAGE_NAME_CPLICITACAO_WSTIMEOUT: string = 'cplicitacao-wstimeout';
 export const STORAGE_NAME_CPLICITACAO_USER_DATA = 'cplicitacao-user-data';
 export const STORAGE_NAME_CPLICITACAO_DARK = 'cplicitacao-dark';
@@ -49,17 +48,6 @@ export const storageSetWSHost = (host: string): void => {
 export const storageGetWSHost = (): string => {
    if (localStorage.getItem(STORAGE_NAME_CPLICITACAO_WSHOST) !== null)
       return String(localStorage.getItem(STORAGE_NAME_CPLICITACAO_WSHOST));
-
-   return '';
-}
-
-export const storageSetWSToken = (token: string): void => {
-   localStorage.setItem(STORAGE_NAME_CPLICITACAO_TOKEN, token);
-}
-
-export const storageGetWSToken = (): string => {
-   if (localStorage.getItem(STORAGE_NAME_CPLICITACAO_TOKEN) !== null)
-      return String(localStorage.getItem(STORAGE_NAME_CPLICITACAO_TOKEN));
 
    return '';
 }

@@ -268,17 +268,17 @@ const CrudPesquisa: React.ForwardRefRenderFunction<CrudPesquisaRef, CrudPesquisa
 
    const onSearchView = (e: SearchEvent): void => {
 
-   setDataSearch({
-      id: e.id,
-      where: ' ',
-      page: 1,
-      limit: numberOfRecordsPerDemand,
-      offset: 0,
-      data: e.data,
-      isDemand:false
-   });
+      setDataSearch({
+         id: e.id,
+         where: ' ',
+         page: 1,
+         limit: numberOfRecordsPerDemand,
+         offset: 0,
+         data: e.data,
+         isDemand: false
+      });
 
-}
+   }
 
    const onDemand = () => {
       setDataSearch({
@@ -429,7 +429,7 @@ const CrudPesquisa: React.ForwardRefRenderFunction<CrudPesquisaRef, CrudPesquisa
          });
          return;
       }
-      
+
       let body = error.response.data;
       switch (error.response.status) {
          case 403:
@@ -630,18 +630,20 @@ const CrudPesquisa: React.ForwardRefRenderFunction<CrudPesquisaRef, CrudPesquisa
    useEffect(() => {
       if (crudState.data) {
          switch (crudState.type) {
-            case 'actInsert': setAddData(crudState.data)
+
+            case 'actInsert':
+               setAddData(crudState.data);
                break;
 
-            case 'actEdit': setUptData(crudState.data)
-
+            case 'actEdit':
+               setUptData(crudState.data);
+               refresh();
                break;
 
             default:
                break;
          }
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [crudState.data])
 
    useEffect(() => {

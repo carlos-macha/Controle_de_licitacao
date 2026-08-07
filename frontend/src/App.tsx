@@ -9,6 +9,7 @@ import HTMLReactParser from 'html-react-parser';
 import Api from './base/services/api';
 import { storageGetWSHost, storageGetWSTimeout } from './utils/storage';
 import TemplateLoading from './base/template/loading/loading';
+import ModalRender from './view/components/modal/modalrender';
 
 
 const App: React.FC = () => {
@@ -37,6 +38,7 @@ const App: React.FC = () => {
          <AuthProvider>
             <ModalProvider>
                <BrowserRoutes />
+               <ModalRender />
             </ModalProvider>
          </AuthProvider>
          {sweetAlertState.props &&

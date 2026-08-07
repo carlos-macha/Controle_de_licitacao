@@ -182,7 +182,6 @@ export class BaseController<
                     req.body
                 );
 
-
             return res.json(result);
 
 

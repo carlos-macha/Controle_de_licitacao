@@ -12,7 +12,6 @@ import {
    storageGetDark,
    storageGetRemindMe,
    storageSetRemindMe,
-   storageSetWSToken,
    STORAGE_NAME_CPLICITACAO_LOCK,
    STORAGE_NAME_CPLICITACAO_LOGGED
 } from '../utils/storage';
@@ -69,7 +68,6 @@ var AuthReducer = (authState: AuthState, action: AuthAction): AuthState => {
       }
 
       case 'login': {
-         storageSetWSToken(action.token);
 
          storageSetLogged(true);
          storageSetLock(false);

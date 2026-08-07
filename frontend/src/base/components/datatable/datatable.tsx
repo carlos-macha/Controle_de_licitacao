@@ -13,6 +13,7 @@ import { DataSearchType } from '../datasearch/datasearch';
 import Button from '../form/form';
 
 import './datatable.css';
+import moment from 'moment';
 
 export const rowId = 'rowId';
 
@@ -106,6 +107,15 @@ export class Formatters {
 
       if (strValue === 0)
          strValue = '';
+
+      return strValue ? `<span title="${strValue}" >${strValue}</span>` : '';
+   }
+
+   static dateISO = (cell: any, formatterParams: {}, onRendered: EmptyCallback) => {
+      let strValue = (cell as CellComponent).getValue();
+
+      if (strValue && strValue !== null)
+         strValue = moment(strValue).format('DD/MM/YYYY');
 
       return strValue ? `<span title="${strValue}" >${strValue}</span>` : '';
    }

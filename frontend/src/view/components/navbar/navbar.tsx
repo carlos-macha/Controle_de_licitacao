@@ -4,6 +4,7 @@ import { DataRoutesHome } from '../../../routes/dataroutes';
 import TemplateNavbar from '../../../base/template/navbar/navbar';
 import { useMenuContext } from '../../../base/menu/hooks/useMenuContext';
 import { storageGetDark, storageSetDark } from '../../../utils/storage';
+import ControllerUsuario from '../../../controllers/controllerusuario';
 
 interface NavbarControllerProps { }
 
@@ -35,9 +36,15 @@ const Navbar: React.FC<NavbarControllerProps> = () => {
    }
 
    const onClickSair = () => {
-      authDispatch({
-         type: 'logoff'
-      });
+      new ControllerUsuario().DAO.logout()
+         .catch(() => {
+            // mesmo se falhar a chamada ao backend, desloga localmente
+         })
+         .finally(() => {
+            authDispatch({
+               type: 'logoff'
+            });
+         });
    }
 
    const onClickBloquear = () => {

@@ -1,6 +1,6 @@
 import DAOUsuario from "../daos/daousuario";
 import { IModelLogin, IModelLoginResponse } from "../models/modelLogin";
-import { storageGetWSHost, storageGetWSTimeout, storageGetWSToken, storageSetUser, storageSetWSToken } from "../utils/storage";
+import { storageGetWSHost, storageGetWSTimeout, storageSetUser } from "../utils/storage";
 import Controller from "../base/controllers/controller";
 import Api from "../base/services/api";
 import { IModelUnlock, IModelUnlockResponse } from "../models/modelUnlock";
@@ -17,12 +17,6 @@ export default class ControllerUsuario extends Controller<DAOUsuario> {
             storageGetWSTimeout()
          );
       }
-
-      const token = storageGetWSToken();
-
-      if (token) {
-         Api.getInstance().token(token);
-      }
    }
 
    Login = (usuario: string, senha: string) => new Promise<IModelLoginResponse>((resolve, reject) => {
@@ -33,9 +27,7 @@ export default class ControllerUsuario extends Controller<DAOUsuario> {
 
       this.DAO.Login(json).then(data => {
          storageSetUser(data.usuario);
-         storageSetWSToken(data.token);
 
-         Api.getInstance().token(data.token);
          resolve(data);
       }).catch(error => {
          reject(error);
@@ -60,5 +52,6 @@ export default class ControllerUsuario extends Controller<DAOUsuario> {
             .catch(reject);
 
       });
+
 
 }

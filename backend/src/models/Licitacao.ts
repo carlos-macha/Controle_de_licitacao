@@ -5,7 +5,7 @@ export interface Licitacao {
   DESCRICAO: string;
   CODIGO_LICITACAO: string;
   ORGAO_COMPETENTE: string;
-  DATA_CERTAME: Date;
+  DATA_CERTAME: string;
   LOGRADOURO: string;
   NUMERO: string;
   BAIRRO: string;
