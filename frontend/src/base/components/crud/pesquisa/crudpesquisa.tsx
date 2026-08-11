@@ -672,7 +672,7 @@ const CrudPesquisa: React.ForwardRefRenderFunction<CrudPesquisaRef, CrudPesquisa
             typePagination={typePagination}
             autoLoad={autoLoad}
             showOnDemandButton={showOnDemandButton}
-            columns={events?.columns!}
+            columns={events?.columns ?? []}
             data={data}
             loading={loading}
             numberOfRecordsPerDemand={numberOfRecordsPerDemand}

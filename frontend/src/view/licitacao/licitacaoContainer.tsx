@@ -1,12 +1,17 @@
+import { Fragment } from "react";
 import { CrudContainer } from "../../base/components/crud/container/crudcontainer";
 import { CrudManutencaoEvents, CrudPesquisaEvents, CrudUrl } from "../../base/components/crud/types";
 import { OperatorSearchTypes } from "../../base/components/datasearch/datasearch";
 import { DataTableColumns, Formatters } from "../../base/components/datatable/datatable";
 import { EnumCharcasetypes } from "../../base/components/form/form";
-import LicitacaoManutencao from "./licitacaomanutencao";
-import LicitacaoPesquisa from "./licitacaopesquisa";
+import { IModelLicitacao } from "../../models/modellicitacao";
+import LicitacaoManutencao from "./licitacaoManutencao";
+import LicitacaoPesquisa from "./licitacaoPesquisa";
 
-export interface LicitacaoContainerParams { }
+export interface LicitacaoContainerParams {
+    isModal: boolean;
+    onSelecionar?: (produto: IModelLicitacao) => void;
+}
 
 class LicitacaoContainer extends CrudContainer {
 
@@ -95,12 +100,20 @@ class LicitacaoContainer extends CrudContainer {
         const { params } = this.props;
         return (
             <LicitacaoPesquisa
-                events={events} />
+                events={events}
+                isModal={params.isModal}
+                onBtnSelecionar={params.onSelecionar}
+            />
         )
     }
 
     manutencao = (events: CrudManutencaoEvents): JSX.Element => {
         const { params } = this.props;
+
+        if (params.isModal) {
+            return <Fragment />;
+        }
+
         return (
             <LicitacaoManutencao
                 events={events} />

@@ -1,14 +1,18 @@
 import CrudProvider from "../../base/components/crud/context/crudcontext";
 import { PageBase, PageBaseProps } from "../../base/template/pagebase/pagebase";
-import ProdutosContainer from "./produtoscontainer";
+import ProdutosContainer from "./produtosContainer";
 
-export interface ProdutosProps extends PageBaseProps {}
+export interface ProdutosProps extends PageBaseProps { }
 
 const Produtos: React.FC<ProdutosProps> = (props) => {
     return (
         <PageBase>
             <CrudProvider>
-                <ProdutosContainer />
+                <ProdutosContainer
+                    params={{
+                        isModal: false
+                    }}
+                />
             </CrudProvider>
         </PageBase>
     );

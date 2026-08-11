@@ -16,7 +16,7 @@ export const concorrenteSchema = z.object({
     CNPJ: z
         .string()
         .trim()
-        .length(14, "CNPJ deve conter 14 dígitos."),
+        .length(18, "CNPJ deve conter 18 dígitos."),
 
     EMAIL: z
         .string()

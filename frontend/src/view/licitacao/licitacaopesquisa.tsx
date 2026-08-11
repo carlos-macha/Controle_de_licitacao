@@ -1,31 +1,44 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import Crudpesquisa, { PesquisaProps } from "../../base/components/crud/pesquisa/crudpesquisa";
 import { IModelLicitacao } from "../../models/modellicitacao";
-import LicitacaoDetalhe from "./licitacaodetalhes";
+import LicitacaoDetalhe from "./licitacaoDetalhes";
 
-interface LicitacaoPesquisaProps extends PesquisaProps { }
+interface LicitacaoPesquisaProps extends PesquisaProps {
+    onBtnSelecionar?: (produto: IModelLicitacao) => void;
+    isModal?: boolean;
+}
 
 const LicitacaoPesquisa: React.FC<LicitacaoPesquisaProps> = (props) => {
     const [licitacaoSelecionada, setLicitacaoSelecionada] = useState<IModelLicitacao>();
 
     const limparSelecionada = () => {
-    setLicitacaoSelecionada(undefined);
-};
+        setLicitacaoSelecionada(undefined);
+    };
 
     return (
         <Crudpesquisa
-            showNewButton
-            showChangeButton
-            showDeleteButton
+            showNewButton={!props.isModal}
+            showChangeButton={!props.isModal}
+            showDeleteButton={!props.isModal}
             autoLoad
             onDataChange={(data) => {
                 setLicitacaoSelecionada(data);
+
+                if (data && props.onBtnSelecionar) {
+                    props.onBtnSelecionar(data);
+                }
             }}
-            containerBottom={() => (
-                <LicitacaoDetalhe
-                    data={licitacaoSelecionada}
-                />
-            )}
+            containerBottom={() => {
+                if (!licitacaoSelecionada) {
+                    return <Fragment />;
+                }
+
+                return (
+                    <LicitacaoDetalhe
+                        data={licitacaoSelecionada}
+                    />
+                );
+            }}
             urlGetMount={(
                 url: string,
                 id: string | number,

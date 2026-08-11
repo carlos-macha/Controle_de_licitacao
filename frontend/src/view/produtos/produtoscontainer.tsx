@@ -1,13 +1,16 @@
+import { Fragment } from "react";
 import { CrudContainer } from "../../base/components/crud/container/crudcontainer";
 import { CrudManutencaoEvents, CrudPesquisaEvents, CrudUrl } from "../../base/components/crud/types";
 import { OperatorSearchTypes } from "../../base/components/datasearch/datasearch";
 import { DataTableColumns } from "../../base/components/datatable/datatable";
 import { EnumCharcasetypes } from "../../base/components/form/form";
-import ProdutosManutencao from "./produtosmanutencao";
-import ProdutosPesquisa from "./produtospesquisa";
+import ProdutosManutencao from "./produtosManutencao";
+import ProdutosPesquisa from "./produtosPesquisa";
+import { IModelProduto } from "../../models/modelProduto";
 
 export interface ProdutosContainerParams {
-
+    isModal: boolean;
+    onSelecionar?: (produto: IModelProduto) => void;
 }
 
 class ProdutosContainer extends CrudContainer {
@@ -82,16 +85,25 @@ class ProdutosContainer extends CrudContainer {
         const { params } = this.props;
         return (
             <ProdutosPesquisa
-                events={events} />
+                events={events} 
+                isModal={params.isModal}
+                onBtnSelecionar={params.onSelecionar}
+            />
         )
     }
 
     manutencao = (events: CrudManutencaoEvents): JSX.Element => {
         const { params } = this.props;
+
+        if (params.isModal) {
+            return <Fragment/>;
+        }
+
         return (
             <ProdutosManutencao
-                events={events} />
-        )
+                events={events}
+            />
+        );
     }
 }
 

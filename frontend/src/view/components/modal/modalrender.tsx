@@ -1,32 +1,27 @@
 import { useModalContext } from "../../../hooks/useModalContext";
 import LicitacaoEnderecoManutencaoModal from "../../licitacao/LicitacaoEnderecoManutencaoModal";
+import ConcorrentesEnderecoManutencaoModal from "../../concorrentes/concorrentesEnderecoManutencaoModal";
+import ConcorrentesContatoManutencaoModal from "../../concorrentes/concorrentesContatoManutencaoModal";
 
+const ModalRender = () => {
 
-const ModalRender = ()=>{
+    const { modalState } = useModalContext();
 
+    switch (modalState.type) {
 
-    const {
-        modalState
-    } = useModalContext();
+        case "licitacaoEnderecoManutencaoModal":
+            return <LicitacaoEnderecoManutencaoModal />;
 
+        case "concorrentesEnderecoManutencaoModal":
+            return <ConcorrentesEnderecoManutencaoModal />;
 
+        case "concorrentesContatoManutencaoModal":
+            return <ConcorrentesContatoManutencaoModal />;
 
-    if(
-        modalState.type ===
-        "licitacaoEnderecoManutencaoModal"
-    ){
-
-        return (
-            <LicitacaoEnderecoManutencaoModal/>
-        );
-
+        case "close":
+        default:
+            return null;
     }
-
-
-    return null;
-
-}
-
-
+};
 
 export default ModalRender;

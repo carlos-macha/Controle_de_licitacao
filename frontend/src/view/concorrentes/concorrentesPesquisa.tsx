@@ -1,36 +1,33 @@
 import { Fragment, useState } from "react";
 import Crudpesquisa, { PesquisaProps } from "../../base/components/crud/pesquisa/crudpesquisa";
-import { IModelProduto } from "../../models/modelProduto";
-import ProdutoDetalhe from "./produtosDetalhes";
+import { IModelConcorrente } from "../../models/modelConcorrente";
+import ConcorrenteDetalhe from "./concorrentesDetalhes";
 
-interface ProdutosPesquisaProps extends PesquisaProps {
-    onBtnSelecionar?: (produto: IModelProduto) => void;
-    isModal?: boolean;
-}
+interface ConcorrentePesquisaProps extends PesquisaProps { }
 
-const ProdutosPesquisa: React.FC<ProdutosPesquisaProps> = (props) => {
-    const [produtoSelecionado, setProdutoSelecionado] = useState<IModelProduto>();
+const ConcorrentesPesquisa: React.FC<ConcorrentePesquisaProps> = (props) => {
+    const [concorrenteSelecionado, setConcorrenteSelecionado] = useState<IModelConcorrente>();
+
+    const limparSelecionada = () => {
+        setConcorrenteSelecionado(undefined);
+    };
 
     return (
         <Crudpesquisa
-            showNewButton={!props.isModal}
-            showChangeButton={!props.isModal}
-            showDeleteButton={!props.isModal}
+            showNewButton
+            showChangeButton
+            showDeleteButton
             autoLoad
             onDataChange={(data) => {
-                setProdutoSelecionado(data);
-
-                if (data && props.onBtnSelecionar) {
-                    props.onBtnSelecionar(data);
-                }
+                setConcorrenteSelecionado(data);
             }}
             containerBottom={() => {
-                if (!produtoSelecionado) {
+                if (!concorrenteSelecionado) {
                     return <Fragment />
                 }
 
-                return <ProdutoDetalhe
-                    data={produtoSelecionado}
+                return <ConcorrenteDetalhe
+                    data={concorrenteSelecionado}
                 />
             }}
             urlGetMount={(
@@ -66,6 +63,6 @@ const ProdutosPesquisa: React.FC<ProdutosPesquisaProps> = (props) => {
             events={props.events}
         />
     );
-};
+}
 
-export default ProdutosPesquisa;
+export default ConcorrentesPesquisa;

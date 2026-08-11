@@ -4,6 +4,8 @@ import TemplateTabPage from '../../../base/template/tabPage/tabpage';
 import MeuPerfil from '../../meuperfil/meuperfil';
 import Produtos from '../../produtos/produtos';
 import Licitacao from '../../licitacao/licitacao';
+import Concorrentes from '../../concorrentes/concorrentes';
+import LicitacaoProduto from '../../licitacaoProduto/licitacaoProduto';
 
 interface TabPageProps { };
 
@@ -20,6 +22,14 @@ const TabPage: React.FC<TabPageProps> = (props) => {
 
          case "licitacoes":
             el = <Licitacao/>
+            break;
+
+         case "concorrentes":
+            el = <Concorrentes/>
+            break;
+
+         case "produtoslicitacao":
+            el = <LicitacaoProduto/>
             break;
             
          case "meucadastro":

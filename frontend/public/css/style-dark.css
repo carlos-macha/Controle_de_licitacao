@@ -4568,3 +4568,21 @@ body.dark .modal-content {
 body.dark .modal-content .close {
    color: #fff;
 }
+
+
+/*---------------------------------------------------------------------
+sweet-alert
+-----------------------------------------------------------------------*/
+
+
+body.dark .sweet-alert {
+    background-color: #25294a !important;
+}
+
+body.dark .sweet-alert h2 {
+    color: #fff !important;
+}
+
+body.dark .sweet-alert > div:nth-of-type(2) {
+    color: #fff !important;
+}

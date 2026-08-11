@@ -28,6 +28,7 @@ export const licitacaoProdutoSchema = z.object({
     VALOR_TOTAL_REFERENCIA: z
         .number()
         .nonnegative("Valor total não pode ser negativo.")
+        .optional()
 });
 
 export type LicitacaoProduto = z.infer<typeof licitacaoProdutoSchema>;

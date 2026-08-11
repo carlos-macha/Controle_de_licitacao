@@ -9,7 +9,11 @@ const Licitacao: React.FC<LicitacaoProps> = (props) => {
     return (
         <PageBase>
             <CrudProvider>
-                <LicitacaoContainer/>
+                <LicitacaoContainer
+                    params={{
+                        isModal: false
+                    }}
+                />
             </CrudProvider>
         </PageBase>
     );

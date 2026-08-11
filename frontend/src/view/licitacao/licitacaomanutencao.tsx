@@ -4,7 +4,7 @@ import Crudmanutencao, { ManutencaoProps } from "../../base/components/crud/manu
 import { InputDataValue } from "../../base/types/types";
 import { IModelLicitacao } from "../../models/modellicitacao";
 import { EnumCharcasetypes, Input } from "../../base/components/form/form";
-import LicitacaoDetalhe from "./licitacaodetalhes";
+import LicitacaoDetalhes from "./licitacaoDetalhes";
 
 interface LicitacaoManutencaoProps extends ManutencaoProps { }
 
@@ -128,7 +128,7 @@ const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
                         <div className="row">
                             <div className="col-12">
 
-                                <LicitacaoDetalhe
+                                <LicitacaoDetalhes
                                     dataModel={dataModel}
                                     data={dataModel.data}
                                     isManutencao

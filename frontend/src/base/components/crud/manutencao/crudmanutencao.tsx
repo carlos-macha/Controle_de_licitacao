@@ -10,6 +10,7 @@ import { CustomSweetAlertProps, InputDataValue } from '../../../types/types';
 import { useCrudContext } from '../hook/useCrudContext';
 import Api from '../../../services/api';
 import Spinners from '../../spinners/spinners';
+import { Await } from 'react-router-dom';
 
 
 export interface BodyParamns {
@@ -69,10 +70,17 @@ const CrudManutencao: React.ForwardRefRenderFunction<CrudManuencaoRef, CrudManut
 
 
    useEffect(() => {
-      let data = { ...events?.data };
-      if (onInit)
-         onInit(data, events?.state!, setSweetAlertProps)
-      dataModel.setData(data);
+      const carregar = async () => {
+         let data = { ...events?.data };
+
+         if (onInit) {
+            await onInit(data, events?.state!, setSweetAlertProps);
+         }
+
+         dataModel.setData(data);
+      };
+
+      carregar();
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [events]);
 

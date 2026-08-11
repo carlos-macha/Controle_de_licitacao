@@ -4,7 +4,7 @@ import Crudmanutencao, { ManutencaoProps } from "../../base/components/crud/manu
 import { InputDataValue } from "../../base/types/types";
 import { IModelProduto } from "../../models/modelProduto";
 import { EnumCharcasetypes, Input, InputNumber } from "../../base/components/form/form";
-import ProdutoDetalhe from "./produtosdetalhes";
+import ProdutoDetalhe from "./produtosDetalhes";
 
 interface ProdutosManutencaoProps extends ManutencaoProps { }
 

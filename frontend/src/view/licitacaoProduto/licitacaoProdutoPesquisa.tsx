@@ -1,36 +1,30 @@
 import { Fragment, useState } from "react";
 import Crudpesquisa, { PesquisaProps } from "../../base/components/crud/pesquisa/crudpesquisa";
-import { IModelProduto } from "../../models/modelProduto";
-import ProdutoDetalhe from "./produtosDetalhes";
+import { IModelLicitacaoProduto } from "../../models/modelLicitacaoProduto";
+import LicitacaoProdutoDetalhes from "./licitacaoProdutoDetalhes";
+//import LicitacaoProdutoDetalhes from "./licitacaoProdutoDetalhes";
 
-interface ProdutosPesquisaProps extends PesquisaProps {
-    onBtnSelecionar?: (produto: IModelProduto) => void;
-    isModal?: boolean;
-}
+interface LicitacaoProdutosPesquisaProps extends PesquisaProps { }
 
-const ProdutosPesquisa: React.FC<ProdutosPesquisaProps> = (props) => {
-    const [produtoSelecionado, setProdutoSelecionado] = useState<IModelProduto>();
+const LicitacaoProdutosPesquisa: React.FC<LicitacaoProdutosPesquisaProps> = (props) => {
+    const [licitacaoProdutoSelecionado, setLicitacaoProdutoSelecionado] = useState<IModelLicitacaoProduto>();
 
     return (
         <Crudpesquisa
-            showNewButton={!props.isModal}
-            showChangeButton={!props.isModal}
-            showDeleteButton={!props.isModal}
+            showNewButton
+            showChangeButton
+            showDeleteButton
             autoLoad
             onDataChange={(data) => {
-                setProdutoSelecionado(data);
-
-                if (data && props.onBtnSelecionar) {
-                    props.onBtnSelecionar(data);
-                }
+                setLicitacaoProdutoSelecionado(data);
             }}
             containerBottom={() => {
-                if (!produtoSelecionado) {
+                if (!licitacaoProdutoSelecionado) {
                     return <Fragment />
                 }
 
-                return <ProdutoDetalhe
-                    data={produtoSelecionado}
+                return <LicitacaoProdutoDetalhes
+                    data={licitacaoProdutoSelecionado}
                 />
             }}
             urlGetMount={(
@@ -66,6 +60,6 @@ const ProdutosPesquisa: React.FC<ProdutosPesquisaProps> = (props) => {
             events={props.events}
         />
     );
-};
+}
 
-export default ProdutosPesquisa;
+export default LicitacaoProdutosPesquisa;

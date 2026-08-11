@@ -37,7 +37,7 @@ const BrowserRoutes: React.FC = () => {
    }, []);
 
    return (
-      <BrowserRouter basename='/cpmodelo'>
+      <BrowserRouter basename='/cplicitacao'>
          <Routes>
             <Route path={DataRoutesLogin.path} element={<Login />} />
             <Route path={DataRoutesLogout.path} element={<Logout />} />

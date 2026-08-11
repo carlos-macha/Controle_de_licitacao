@@ -1208,7 +1208,7 @@ export const InputNumber: React.FC<CustomNumberFormatProps> = (props) => {
 
     let value: number | string | undefined = values.floatValue;
     if (isText)
-      value = values.value;
+      value = values.formattedValue;
 
     if (dataModel) {
 
