@@ -94,13 +94,30 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
         dataModel: InputDataValue<IModelResultadoLicitacao>
     ): JSX.Element => {
         return (
-            <Custommodal
-                ref={viewModalLicitacaoRef}
-                largeType="extra-large"
-                showOverlay={false}
-            >
-                <Card className="iq-card mb-0">
-                    <CardHeader title="Licitações" />
+            <Custommodal ref={viewModalLicitacaoRef} largeType="extra-large">
+                <Card>
+                    <CardHeader
+                        title="Licitações"
+                        showSelectButton
+                        showCancelButton
+                        onSelectButtonClick={() => {
+                            if (!licitacaoSelecionada) {
+                                return;
+                            }
+
+                            dataModel.setData({
+                                ...dataModel.data,
+                                CODIGO_LICITACAO: licitacaoSelecionada.ID,
+                                LICITACAO: `${licitacaoSelecionada.ID} - ${licitacaoSelecionada.DESCRICAO}`
+                            });
+
+                            viewModalLicitacaoRef.current?.close();
+                        }}
+                        onCancelButtonClick={() => {
+                            viewModalLicitacaoRef.current?.close();
+                        }}
+                    />
+
                     <CardBody>
                         <LicitacaoContainer
                             params={{
@@ -110,36 +127,6 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                 }
                             }}
                         />
-
-                        <div className="d-flex justify-content-end mt-3">
-                            <Button
-                                className="btn btn-primary"
-                                onClick={() => {
-                                    if (!licitacaoSelecionada) {
-                                        return;
-                                    }
-
-                                    dataModel.setData({
-                                        ...dataModel.data,
-                                        CODIGO_LICITACAO: licitacaoSelecionada.ID,
-                                        LICITACAO: `${licitacaoSelecionada.ID} - ${licitacaoSelecionada.DESCRICAO}`
-                                    });
-
-                                    viewModalLicitacaoRef.current?.close();
-                                }}
-                            >
-                                Selecionar
-                            </Button>
-
-                            <Button
-                                className="btn btn-secondary ml-2"
-                                onClick={() => {
-                                    viewModalLicitacaoRef.current?.close();
-                                }}
-                            >
-                                Cancelar
-                            </Button>
-                        </div>
                     </CardBody>
                 </Card>
             </Custommodal>
@@ -156,7 +143,27 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                 showOverlay={false}
             >
                 <Card className="iq-card mb-0">
-                    <CardHeader title="Produtos" />
+                    <CardHeader
+                        title="Produtos"
+                        showSelectButton
+                        showCancelButton
+                        onSelectButtonClick={() => {
+                            if (!produtoSelecionado) {
+                                return;
+                            }
+
+                            dataModel.setData({
+                                ...dataModel.data,
+                                CODIGO_PRODUTO: produtoSelecionado.ID,
+                                PRODUTO: `${produtoSelecionado.ID} - ${produtoSelecionado.DESCRICAO}`
+                            });
+
+                            viewModalProdutoRef.current?.close();
+                        }}
+                        onCancelButtonClick={() => {
+                            viewModalProdutoRef.current?.close();
+                        }}
+                    />
                     <CardBody>
                         <ProdutosContainer
                             params={{
@@ -166,36 +173,6 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                 }
                             }}
                         />
-
-                        <div className="d-flex justify-content-end mt-3">
-                            <Button
-                                className="btn btn-primary"
-                                onClick={() => {
-                                    if (!produtoSelecionado) {
-                                        return;
-                                    }
-
-                                    dataModel.setData({
-                                        ...dataModel.data,
-                                        CODIGO_PRODUTO: produtoSelecionado.ID,
-                                        PRODUTO: `${produtoSelecionado.ID} - ${produtoSelecionado.DESCRICAO}`
-                                    });
-
-                                    viewModalProdutoRef.current?.close();
-                                }}
-                            >
-                                Selecionar
-                            </Button>
-
-                            <Button
-                                className="btn btn-secondary ml-2"
-                                onClick={() => {
-                                    viewModalProdutoRef.current?.close();
-                                }}
-                            >
-                                Cancelar
-                            </Button>
-                        </div>
                     </CardBody>
                 </Card>
             </Custommodal>
@@ -206,13 +183,30 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
         dataModel: InputDataValue<IModelResultadoLicitacao>
     ): JSX.Element => {
         return (
-            <Custommodal
-                ref={viewModalConcorrenteRef}
-                largeType="extra-large"
-                showOverlay={false}
-            >
-                <Card className="iq-card mb-0">
-                    <CardHeader title="Concorrentes" />
+            <Custommodal ref={viewModalConcorrenteRef} largeType="extra-large">
+                <Card>
+                    <CardHeader
+                        title="Concorrentes"
+                        showSelectButton
+                        showCancelButton
+                        onSelectButtonClick={() => {
+                            if (!concorrenteSelecionado) {
+                                return;
+                            }
+
+                            dataModel.setData({
+                                ...dataModel.data,
+                                CODIGO_CONCORRENTE: concorrenteSelecionado.ID,
+                                CONCORRENTE: `${concorrenteSelecionado.ID} - ${concorrenteSelecionado.NOME}`
+                            });
+
+                            viewModalConcorrenteRef.current?.close();
+                        }}
+                        onCancelButtonClick={() => {
+                            viewModalConcorrenteRef.current?.close();
+                        }}
+                    />
+
                     <CardBody>
                         <ConcorrentesContainer
                             params={{
@@ -222,36 +216,6 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                 }
                             }}
                         />
-
-                        <div className="d-flex justify-content-end mt-3">
-                            <Button
-                                className="btn btn-primary"
-                                onClick={() => {
-                                    if (!concorrenteSelecionado) {
-                                        return;
-                                    }
-
-                                    dataModel.setData({
-                                        ...dataModel.data,
-                                        CODIGO_CONCORRENTE: concorrenteSelecionado.ID,
-                                        CONCORRENTE: `${concorrenteSelecionado.ID} - ${concorrenteSelecionado.NOME}`
-                                    });
-
-                                    viewModalConcorrenteRef.current?.close();
-                                }}
-                            >
-                                Selecionar
-                            </Button>
-
-                            <Button
-                                className="btn btn-secondary ml-2"
-                                onClick={() => {
-                                    viewModalConcorrenteRef.current?.close();
-                                }}
-                            >
-                                Cancelar
-                            </Button>
-                        </div>
                     </CardBody>
                 </Card>
             </Custommodal>

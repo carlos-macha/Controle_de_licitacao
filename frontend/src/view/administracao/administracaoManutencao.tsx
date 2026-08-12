@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { EnumCrudStateRecordType } from "../../base/components/crud/enums";
 import Crudmanutencao, { ManutencaoProps } from "../../base/components/crud/manutencao/crudmanutencao";
 import { InputDataValue } from "../../base/types/types";
-import { EnumCharcasetypes, Input, InputCheckbox, InputSelect, InputSwitch } from "../../base/components/form/form";
+import { EnumCharcasetypes, Input, InputSelect, InputSwitch } from "../../base/components/form/form";
 
 interface AdministracaoManutencaoProps extends ManutencaoProps { }
 

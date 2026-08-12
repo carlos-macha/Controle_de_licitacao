@@ -39,7 +39,8 @@
       "react-tabulator": "^0.18.1",
       "smooth-scrollbar": "^8.8.4",
       "tabulator-tables": "^5.5.0",
-      "tippy.js": "^6.3.7"
+      "tippy.js": "^6.3.7",
+      "xlsx": "^0.18.5"
    },
    "devDependencies": {
       "@types/clone": "^2.1.1",

@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
+import * as XLSX from 'xlsx';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { DataRoutesHome } from '../../../routes/dataroutes';
 import TemplateNavbar from '../../../base/template/navbar/navbar';
@@ -70,21 +71,65 @@ const Navbar: React.FC<NavbarControllerProps> = () => {
       });
    }
 
+   const onImportarExcel = () => {
+      document.getElementById('input-importar-excel')?.click();
+   }
+
+   const onArquivoExcelSelecionado = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const arquivo = e.target.files?.[0];
+
+      if (!arquivo) {
+         return;
+      }
+
+
+      const buffer = await arquivo.arrayBuffer();
+      const workbook = XLSX.read(buffer);
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const dados = XLSX.utils.sheet_to_json(sheet);
+
+      console.log(dados);
+   }
+
    return (
-      <TemplateNavbar
-         onToggleDarkLigth={onToggleDarkLigth}
-         menuTitle={itemMenu.title}
-         name={authState.user.NOME!}
-         user={authState.user.LOGIN}
-         onClickPerfil={onClickPerfil}
-         onClickSair={onClickSair}
-         onClickBloquear={onClickBloquear}
-         // imgLogo=''
-         // imgNameApp=''
-         pathHome={DataRoutesHome.path}
-         isDark={authState.isDark}
-         optionsDropdownNavbar={optionsDropdownNavbar}
-      />
+      <Fragment>
+         <input
+            id="input-importar-excel"
+            type="file"
+            accept=".xlsx,.xls"
+            style={{ display: 'none' }}
+            onChange={onArquivoExcelSelecionado}
+         />
+
+         <TemplateNavbar
+            onToggleDarkLigth={onToggleDarkLigth}
+            menuTitle={itemMenu.title}
+            name={authState.user.NOME!}
+            user={authState.user.LOGIN}
+            onClickPerfil={onClickPerfil}
+            onClickSair={onClickSair}
+            onClickBloquear={onClickBloquear}
+            // imgLogo=''
+            // imgNameApp=''
+            pathHome={DataRoutesHome.path}
+            isDark={authState.isDark}
+            optionsDropdownNavbar={optionsDropdownNavbar}
+            optionsNavbar={[
+               <li key="importar-excel">
+                  <a
+                     href="#"
+                     className="search-toggle iq-waves-effect"
+                     onClick={(e) => {
+                        e.preventDefault();
+                        onImportarExcel();
+                     }}
+                  >
+                     <i className="mdi mdi-file-excel"></i>
+                  </a>
+               </li>
+            ]}
+         />
+      </Fragment>
    );
 }
 

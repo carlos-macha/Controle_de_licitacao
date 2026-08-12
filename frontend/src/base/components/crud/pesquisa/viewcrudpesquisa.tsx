@@ -105,6 +105,39 @@ const ViewCrudPesquisa: React.FC<ViewCrudPesquisaProps> = (props) => {
                      </div>
                   }
                </div>
+               {!consultationOnly && (showAllButtons || showNewButton || showChangeButton || showDeleteButton || showViewButton || containerButtons) &&
+                  <div className="row mb-3">
+                     <div className="col-12 buttons-scrollbar d-flex justify-content-end">
+                        <div className="btn-group">
+                           {(showNewButton || showAllButtons) &&
+                              <Button
+                                 style={{ width: 100 }}
+                                 caption="Novo"
+                                 classIcon="mdi mdi-plus"
+                                 onClick={onNewButtonClick} />}
+                           {(showChangeButton || showAllButtons) &&
+                              <Button
+                                 style={{ width: 100 }}
+                                 caption="Alterar"
+                                 classIcon="mdi mdi-file-edit-outline"
+                                 onClick={onChangeButtonClick} />}
+                           {(showDeleteButton || showAllButtons) &&
+                              <Button
+                                 style={{ width: 100 }}
+                                 caption="Excluir"
+                                 classIcon="mdi mdi-trash-can-outline"
+                                 onClick={onDeleteButtonClick} />}
+                           {(showViewButton || showAllButtons) &&
+                              <Button
+                                 style={{ width: 130 }}
+                                 caption="Visualizar"
+                                 classIcon="mdi mdi-eye-outline"
+                                 onClick={onViewButtonClick} />}
+                           {containerButtons}
+                        </div>
+                     </div>
+                  </div>
+               }
                <div className="row">
                   <div className="col-12">
                      {containerData ? containerData(data, columns) :
@@ -161,43 +194,6 @@ const ViewCrudPesquisa: React.FC<ViewCrudPesquisaProps> = (props) => {
                   </div>
                </div>
             </CardBody>
-            {!consultationOnly && (showAllButtons || showNewButton || showChangeButton || showDeleteButton || showViewButton || containerButtons) &&
-               <CardFooter className="px-3 pt-3 pb-4" >
-                  {/* row row-cols-2 row-cols-md-1 */}
-                  <div className="row">
-                     {/* col-6 col-md-6 col-lg-6-- */}
-                     <div className="col-12 buttons-scrollbar">
-                        <div className="btn-group">
-                           {(showNewButton || showAllButtons) &&
-                              <Button
-                                 style={{ width: 100 }}
-                                 caption="Novo"
-                                 classIcon="mdi mdi-plus"
-                                 onClick={onNewButtonClick} />}
-                           {(showChangeButton || showAllButtons) &&
-                              <Button
-                                 style={{ width: 100 }}
-                                 caption="Alterar"
-                                 classIcon="mdi mdi-file-edit-outline"
-                                 onClick={onChangeButtonClick} />}
-                           {(showDeleteButton || showAllButtons) &&
-                              <Button
-                                 style={{ width: 100 }}
-                                 caption="Excluir"
-                                 classIcon="mdi mdi-trash-can-outline"
-                                 onClick={onDeleteButtonClick} />}
-                           {(showViewButton || showAllButtons) &&
-                              <Button
-                                 style={{ width: 130 }}
-                                 caption="Visualizar"
-                                 classIcon="mdi mdi-eye-outline"
-                                 onClick={onViewButtonClick} />}
-                           {containerButtons}
-                        </div>
-                     </div>
-                  </div>
-               </CardFooter>
-            }
          </Card>
       </div>
    );

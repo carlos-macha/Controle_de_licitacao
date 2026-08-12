@@ -1,6 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 
 import './card.css';
+import Button from '../form/form';
 
 interface CardProps extends HTMLAttributes<HTMLElement> {
    className?: string,
@@ -31,19 +32,55 @@ interface CardHeaderProps {
    className?: string,
    classNameTitle?: string,
    children?: React.ReactNode
+   showSelectButton?: boolean,
+   showCancelButton?: boolean,
+   onSelectButtonClick?: () => void,
+   onCancelButtonClick?: () => void
 }
 
 export const CardHeader: React.FC<CardHeaderProps> = (props) => {
-   const { title, className, classNameTitle, children, ...attributes } = props;
+   const {
+      title,
+      className,
+      classNameTitle,
+      children,
+      showSelectButton,
+      showCancelButton,
+      onSelectButtonClick,
+      onCancelButtonClick,
+      ...attributes
+   } = props;
+
    return (
       <div {...attributes} className={`card-header pb-0 ${className}`}>
-         {title &&
-            <h4 className={`card-title ${classNameTitle}`}>{title}</h4>
-         }
-         {children}
+         <div className="d-flex align-items-center justify-content-between w-100">
+            {title && <h4 className={`card-title mb-0 ${classNameTitle}`}>{title}</h4>}
+
+            <div>
+               {children}
+
+               {showSelectButton && (
+                  <Button
+                     className="btn btn-primary mb-3"
+                     onClick={onSelectButtonClick}
+                  >
+                     Selecionar
+                  </Button>
+               )}
+
+               {showCancelButton && (
+                  <Button
+                     className="btn btn-secondary ml-2 mb-3"
+                     onClick={onCancelButtonClick}
+                  >
+                     Cancelar
+                  </Button>
+               )}
+            </div>
+         </div>
       </div>
    );
-}
+};
 
 CardHeader.defaultProps = {
    className: '',

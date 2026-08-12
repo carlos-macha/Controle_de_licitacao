@@ -44,7 +44,7 @@ export const SubMenuItemProdutosLicitacao: MenuItem<MenuName> = {
 export const MenuItemCadastroDeLicitacao: MenuItem<MenuName> =
 {
    name: "cadastrodelicitacao",
-   label: "Cadastro de Licitação ",
+   label: "Cadastro de Licitação",
    group: MenuGroupCadastros,
    classIcon: "mdi mdi-format-list-bulleted-square nav-icon",
    subMenu: [SubMenuItemlicitacoes, SubMenuItemProdutosLicitacao]
