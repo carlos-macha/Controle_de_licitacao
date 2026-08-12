@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-
+import { container } from "../containers";
+import { UsuarioDAO } from "../dao/usuario.dao";
 import { HttpError } from "../utils/httpError";
 
 export interface JwtPayload {
@@ -18,12 +19,11 @@ declare global {
     }
 }
 
-export function authenticate(
+export async function authenticate(
     req: Request,
     res: Response,
     next: NextFunction
 ) {
-
     const token = req.cookies?.token;
 
     if (!token) {
@@ -36,17 +36,48 @@ export function authenticate(
     }
 
     try {
-
         const payload = jwt.verify(
             token,
             process.env.JWT_SECRET!
         ) as JwtPayload;
 
+        const usuarioDAO = container.get(UsuarioDAO);
+
+        const usuario = await usuarioDAO.findById(payload.id);
+
+        if (!usuario) {
+            res.clearCookie("token");
+
+            return next(
+                new HttpError(
+                    401,
+                    "Usuário não encontrado."
+                )
+            );
+        }
+
+        if (usuario.ATIVO !== "A") {
+            res.clearCookie("token");
+
+            return next(
+                new HttpError(
+                    403,
+                    "Usuário inativo."
+                )
+            );
+        }
+
         req.user = payload;
 
         next();
 
-    } catch {
+    } catch (error) {
+
+        if (error instanceof HttpError) {
+            return next(error);
+        }
+
+        res.clearCookie("token");
 
         next(
             new HttpError(
@@ -54,7 +85,5 @@ export function authenticate(
                 "Token inválido ou expirado."
             )
         );
-
     }
-
 }

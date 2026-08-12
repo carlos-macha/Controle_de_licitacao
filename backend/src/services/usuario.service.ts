@@ -10,10 +10,9 @@ import { UsuarioResponse } from "../schemas/usuario.schema";
 
 
 interface UsuarioUpdate {
-    LOGIN?: string;
     NOME?: string;
-    SENHA?: string;
-    ATIVO?: "S" | "N";
+    REDEFINIR_SENHA?: "S" | "N";
+    ATIVO?: boolean;
     PERFIL?: "ADMIN" | "USER";
 }
 
@@ -21,7 +20,7 @@ interface UsuarioInsert {
     LOGIN: string;
     NOME: string;
     SENHA?: string;
-    ATIVO?: "S" | "N";
+    ATIVO?: "A" | "I";
     PERFIL?: "ADMIN" | "USER";
 }
 
@@ -102,16 +101,13 @@ export class UsuarioService extends BaseService<Usuario> {
             );
         }
 
-        const senhaHash = await bcrypt.hash(
-            usuario.SENHA!,
-            10
-        );
+        const senhaHash = await bcrypt.hash("123456", 10);
 
         const usuarioCriado = await super.insert({
             LOGIN: usuario.LOGIN,
             NOME: usuario.NOME,
             SENHA_HASH: senhaHash,
-            ATIVO: "S",
+            ATIVO: usuario.ATIVO,
             PERFIL: usuario.PERFIL ?? "USER"
         });
 
@@ -129,22 +125,12 @@ export class UsuarioService extends BaseService<Usuario> {
 
     async updateSafe(id: number, usuario: UsuarioUpdate) {
 
+
+
         await this.findById(id);
 
         const updateData: Record<string, unknown> = {};
 
-        if (usuario.LOGIN !== undefined) {
-            const existe = await this.usuarioDAO.findByLogin(usuario.LOGIN);
-
-            if (existe && existe.ID !== id) {
-                throw new HttpError(
-                    409,
-                    "Login já cadastrado."
-                );
-            }
-
-            updateData.LOGIN = usuario.LOGIN;
-        }
 
         if (usuario.NOME !== undefined) {
             updateData.NOME = usuario.NOME;
@@ -158,11 +144,8 @@ export class UsuarioService extends BaseService<Usuario> {
             updateData.PERFIL = usuario.PERFIL;
         }
 
-        if (usuario.SENHA !== undefined) {
-            updateData.SENHA_HASH = await bcrypt.hash(
-                usuario.SENHA,
-                10
-            );
+        if (usuario.REDEFINIR_SENHA) {
+            updateData.SENHA_HASH = await bcrypt.hash("123456", 10);
         }
 
         const usuarioAtualizado = await super.update(
@@ -195,6 +178,14 @@ export class UsuarioService extends BaseService<Usuario> {
             await this.usuarioDAO.findByLogin(
                 login
             );
+
+        if (usuario?.ATIVO !== "A") {
+
+            throw new HttpError(
+                403,
+                "Usuário inativo."
+            );
+        }
 
 
         if (!usuario) {
@@ -231,7 +222,7 @@ export class UsuarioService extends BaseService<Usuario> {
                     id: usuario.ID,
                     login: usuario.LOGIN,
                     nome: usuario.NOME,
-                    perfil: usuario.PERFIL
+                    perfil: usuario.PERFIL,
                 },
 
                 process.env.JWT_SECRET!,
@@ -253,7 +244,9 @@ export class UsuarioService extends BaseService<Usuario> {
 
                 LOGIN: usuario.LOGIN,
 
-                NOME: usuario.NOME
+                NOME: usuario.NOME,
+
+                PERFIL: usuario.PERFIL
 
             }
 

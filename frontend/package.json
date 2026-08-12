@@ -1,12 +1,12 @@
 {
-   "name": "cpmodelo",
-   "homepage": "http://localhost/cpmodelo",
+   "name": "cplicitacao",
+   "homepage": "http://localhost/cplicitacao",
    "private": true,
    "version": "1.0.0",
    "type": "module",
    "scripts": {
       "dev": "vite",
-      "build": "tsc && vite build --base=/cpmodelo",
+      "build": "tsc && vite build --base=/cplicitacao",
       "preview": "vite preview"
    },
    "dependencies": {

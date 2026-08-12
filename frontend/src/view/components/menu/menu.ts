@@ -1,7 +1,7 @@
 import { Menu } from "../../../base/menu/menu";
 import { MenuGroup, MenuItem, MenuType } from "../../../base/menu/types";
 
-export type MenuName = MenuType<"meucadastro" | "cadastrodelicitacao" | "concorrentes" | "produtos" | "licitacoes" | "produtoslicitacao" | "resultadoslicitacao">;
+export type MenuName = MenuType<"meucadastro" | "administracao" | "cadastrodelicitacao" | "concorrentes" | "produtos" | "licitacoes" | "produtoslicitacao" | "resultadoslicitacao">;
 
 export const MenuGroupCadastros: MenuGroup = { name: "Cadastros" }
 export const MenuGroupLicitação: MenuGroup = { name: "Licitação", hidden: true }

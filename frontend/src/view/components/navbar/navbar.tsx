@@ -35,6 +35,23 @@ const Navbar: React.FC<NavbarControllerProps> = () => {
       });
    }
 
+   const optionsDropdownNavbar = authState.user.PERFIL === 'ADMIN'
+      ? [
+         {
+            iconCss: 'mdi mdi-shield-account',
+            title: 'Administração',
+            description: 'Acessar área administrativa',
+            onClick: () => {
+               dispatch({
+                  type: 'open',
+                  name: 'administracao',
+                  title: 'Administração'
+               });
+            }
+         }
+      ]
+      : [];
+
    const onClickSair = () => {
       new ControllerUsuario().DAO.logout()
          .catch(() => {
@@ -66,6 +83,7 @@ const Navbar: React.FC<NavbarControllerProps> = () => {
          // imgNameApp=''
          pathHome={DataRoutesHome.path}
          isDark={authState.isDark}
+         optionsDropdownNavbar={optionsDropdownNavbar}
       />
    );
 }

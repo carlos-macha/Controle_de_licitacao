@@ -6,6 +6,7 @@ import Wrapper from '../wrapper/wrapper';
 import ContainerModals from '../containermodals/containermodals';
 import Navbar from '../navbar/navbar';
 import TabPage from '../tabPage/tabpage';
+import { MenuItemResultadosLicitacao } from '../menu/menu';
 
 interface PageProps { }
 
@@ -15,7 +16,12 @@ const Page: React.FC<PageProps> = (props) => {
 
    return (
       <Fragment>
-         <MenuProvider>
+         <MenuProvider
+         itemMenu={{
+               type: 'open',
+               name: 'resultadoslicitacao',
+               title: MenuItemResultadosLicitacao.label
+            }}>
             <Wrapper>
                <Sidebar />
                <Navbar />

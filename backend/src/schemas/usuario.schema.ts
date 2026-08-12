@@ -25,19 +25,19 @@ export const usuarioSchema = z.object({
         .max(255),
 
     ATIVO: z
-        .enum(["S", "N"])
-        .default("S"),
+        .enum(["A", "I"])
+        .default("A"),
 
     PERFIL: z
         .enum(["ADMIN", "USER"])
         .default("USER"),
 
     DATA_CADASTRO: z
-        .date()
+        .string()
         .optional(),
 
     DATA_ALTERACAO: z
-        .date()
+        .string()
         .optional()
 });
 
@@ -53,10 +53,9 @@ export const createUsuarioSchema = z.object({
         .min(3)
         .max(100),
 
-    SENHA: z
-        .string()
-        .min(6)
-        .max(100),
+    ATIVO: z
+        .enum(["A", "I"])
+        .optional(),
 
     PERFIL: z
         .enum(["ADMIN", "USER"])
@@ -65,33 +64,24 @@ export const createUsuarioSchema = z.object({
 
 
 export const updateUsuarioSchema = z.object({
-    LOGIN: z
-        .string()
-        .min(3)
-        .max(30)
-        .optional(),
-
     NOME: z
         .string()
         .min(3)
         .max(100)
         .optional(),
 
-    SENHA: z
-        .string()
-        .min(6)
-        .max(100)
-        .optional(),
-
     ATIVO: z
-        .enum(["S", "N"])
+        .enum(["A", "I"])
         .optional(),
 
     PERFIL: z
         .enum(["ADMIN", "USER"])
+        .optional(),
+
+    REDEFINIR_SENHA: z
+        .boolean()
         .optional()
 });
-
 
 export const loginSchema = z.object({
     LOGIN: z.string(),

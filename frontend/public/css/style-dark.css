@@ -136,6 +136,16 @@ body.dark .form-control[readonly] {
    background-color: #2d325a !important;
 }
 
+body.dark .form-control:-webkit-autofill,
+body.dark .form-control:-webkit-autofill:hover,
+body.dark .form-control:-webkit-autofill:focus,
+body.dark .form-control:-webkit-autofill:active {
+    -webkit-text-fill-color: #8c91b6 !important;
+    -webkit-box-shadow: 0 0 0 1000px #25294a inset !important;
+    box-shadow: 0 0 0 1000px #202442 inset !important;
+    caret-color: #8c91b6;
+}
+
 /*---------------------------------------------------------------------
                                   Badge
 -----------------------------------------------------------------------*/

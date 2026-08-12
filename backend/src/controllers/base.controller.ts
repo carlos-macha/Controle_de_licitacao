@@ -172,8 +172,6 @@ export class BaseController<
 
         try {
 
-            console.log(req.body)
-
             const id =
                 Number(req.params.id);
 

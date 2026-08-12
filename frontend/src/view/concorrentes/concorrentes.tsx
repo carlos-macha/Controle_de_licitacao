@@ -9,7 +9,11 @@ const Concorrentes: React.FC<ConcorrentesProps> = (props) => {
     return (
         <PageBase>
             <CrudProvider>
-                <ConcorrentesContainer/>
+                <ConcorrentesContainer
+                    params={{
+                        isModal: false
+                    }}
+                />
             </CrudProvider>
         </PageBase>
     );

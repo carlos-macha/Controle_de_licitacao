@@ -1,3 +1,5 @@
+import { EnumPerfilUsuario } from "../base/enums/enums";
+
 export interface IModelLogin {
 
     LOGIN: string;
@@ -14,6 +16,8 @@ export interface IUsuarioLogado {
     LOGIN: string;
 
     NOME: string;
+
+    PERFIL: EnumPerfilUsuario;
 
 }
 

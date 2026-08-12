@@ -49,7 +49,7 @@ class LicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Número do Edital", field: "NUMERO_EDITAL", width: 100, type: 'integer', visible: true,
+                title: "Número do Edital", field: "NUMERO_EDITAL", width: 100, type: 'string', visible: true,
                 search: {
                     operator: OperatorSearchTypes.EQUAL,
                     width: 300,
@@ -66,7 +66,7 @@ class LicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Código da Licitação", field: "CODIGO_LICITACAO", width: 150, type: 'integer', visible: true,
+                title: "Código da Licitação", field: "CODIGO_LICITACAO", width: 150, type: 'string', visible: true,
                 search: {
                     operator: OperatorSearchTypes.EQUAL,
                     width: 300,

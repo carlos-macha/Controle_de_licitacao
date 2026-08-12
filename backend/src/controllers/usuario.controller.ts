@@ -20,34 +20,73 @@ export class UsuarioController {
 
 
 
+
     async find(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
         try {
+            const {
+                page,
+                limit,
+                orderBy,
+                order,
+                ...where
+            } = req.query;
+
+            const pageValue = Number(page);
+            const pageNumber =
+                Number.isFinite(pageValue) && pageValue > 0
+                    ? Math.floor(pageValue)
+                    : 1;
+
+            const limitValue = Number(limit);
+
+            const whereObject = Object.fromEntries(
+                Object.entries(where)
+                    .filter(
+                        ([, value]) =>
+                            typeof value === "string" ||
+                            typeof value === "number"
+                    )
+                    .map(([key, value]) => {
+                        if (key.startsWith("SEARCH_")) {
+                            return [
+                                key.replace("SEARCH_", ""),
+                                value
+                            ];
+                        }
+
+                        return [key, value];
+                    })
+            );
 
             const result =
                 await this.usuarioService.findSafe({
-
-                    page: Number(req.query.page),
-
-                    limit: Number(req.query.limit)
-
+                    page: pageNumber,
+                    limit: limitValue,
+                    orderBy:
+                        typeof orderBy === "string"
+                            ? orderBy
+                            : undefined,
+                    order:
+                        order === "DESC"
+                            ? "DESC"
+                            : "ASC",
+                    where:
+                        Object.keys(whereObject).length
+                            ? whereObject
+                            : undefined
                 });
 
-
             return res.json(result);
-
-
         } catch (error) {
-
             next(error);
-
         }
-
     }
+
+
 
 
 
@@ -182,7 +221,6 @@ export class UsuarioController {
                     req.body.SENHA
 
                 );
-
 
             res.cookie("token", result.token, {
                 httpOnly: true,

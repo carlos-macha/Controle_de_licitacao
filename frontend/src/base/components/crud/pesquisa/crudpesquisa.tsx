@@ -407,15 +407,22 @@ const CrudPesquisa: React.ForwardRefRenderFunction<CrudPesquisaRef, CrudPesquisa
       }
    }
 
-   const resolveResponseData = (respondeData: any, isDemand: boolean) => {
-      if (!Array.isArray(respondeData)) {
-         respondeData = [respondeData];
+   const resolveResponseData = (responseData: any, isDemand: boolean) => {
+      let newData: Array<any>;
+
+      if (Array.isArray(responseData)) {
+         newData = responseData;
+      } else if (Array.isArray(responseData?.data)) {
+         newData = responseData.data;
+      } else {
+         newData = [];
       }
 
-      if (isDemand && data.length > 0)
-         respondeData = data.concat(respondeData);
+      if (isDemand && data.length > 0) {
+         newData = data.concat(newData);
+      }
 
-      setData(respondeData);
+      setData(newData);
    }
 
    const resolveResponseError = (id: string | number, error: any) => {

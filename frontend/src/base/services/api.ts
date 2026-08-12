@@ -32,6 +32,21 @@ const Api = (function () {
                      "Content-Type": "application/json"
                   }
                });
+
+               api.interceptors.response.use(
+                  response => response,
+                  error => {
+                     const status = error.response?.status;
+                     const message = error.response?.data?.error;
+                     console.log(`message:` + message)
+
+                     if (status === 403 && message === "Usuário inativo.") {
+                        window.location.href = "/cplicitacao/login";
+                     }
+
+                     return Promise.reject(error);
+                  }
+               );
             }
          },
          conn() {

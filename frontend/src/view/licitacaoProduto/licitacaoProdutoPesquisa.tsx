@@ -2,7 +2,6 @@ import { Fragment, useState } from "react";
 import Crudpesquisa, { PesquisaProps } from "../../base/components/crud/pesquisa/crudpesquisa";
 import { IModelLicitacaoProduto } from "../../models/modelLicitacaoProduto";
 import LicitacaoProdutoDetalhes from "./licitacaoProdutoDetalhes";
-//import LicitacaoProdutoDetalhes from "./licitacaoProdutoDetalhes";
 
 interface LicitacaoProdutosPesquisaProps extends PesquisaProps { }
 

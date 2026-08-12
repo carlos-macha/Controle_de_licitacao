@@ -3,7 +3,10 @@ import Crudpesquisa, { PesquisaProps } from "../../base/components/crud/pesquisa
 import { IModelConcorrente } from "../../models/modelConcorrente";
 import ConcorrenteDetalhe from "./concorrentesDetalhes";
 
-interface ConcorrentePesquisaProps extends PesquisaProps { }
+interface ConcorrentePesquisaProps extends PesquisaProps {
+    onBtnSelecionar?: (produto: IModelConcorrente) => void;
+    isModal?: boolean;
+}
 
 const ConcorrentesPesquisa: React.FC<ConcorrentePesquisaProps> = (props) => {
     const [concorrenteSelecionado, setConcorrenteSelecionado] = useState<IModelConcorrente>();
@@ -14,12 +17,16 @@ const ConcorrentesPesquisa: React.FC<ConcorrentePesquisaProps> = (props) => {
 
     return (
         <Crudpesquisa
-            showNewButton
-            showChangeButton
-            showDeleteButton
+            showNewButton={!props.isModal}
+            showChangeButton={!props.isModal}
+            showDeleteButton={!props.isModal}
             autoLoad
             onDataChange={(data) => {
                 setConcorrenteSelecionado(data);
+
+                if (data && props.onBtnSelecionar) {
+                    props.onBtnSelecionar(data);
+                }
             }}
             containerBottom={() => {
                 if (!concorrenteSelecionado) {
