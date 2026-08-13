@@ -119,6 +119,19 @@ export class Formatters {
 
       return strValue ? `<span title="${strValue}" >${strValue}</span>` : '';
    }
+
+   static cnpj = (cell: any, formatterParams: {}, onRendered: EmptyCallback) => {
+    let strValue = String(cell.getValue() ?? '').replace(/\D/g, '');
+
+    if (strValue.length === 14) {
+        strValue = strValue.replace(
+            /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+            '$1.$2.$3/$4-$5'
+        );
+    }
+
+    return strValue ? `<span title="${strValue}">${strValue}</span>` : '';
+}
 }
 
 export type DataTableColumns = Array<DataTableColumnDefinition>;

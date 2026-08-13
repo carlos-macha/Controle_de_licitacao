@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { CrudContainer } from "../../base/components/crud/container/crudcontainer";
 import { CrudManutencaoEvents, CrudPesquisaEvents, CrudUrl } from "../../base/components/crud/types";
 import { OperatorSearchTypes } from "../../base/components/datasearch/datasearch";
-import { DataTableColumns } from "../../base/components/datatable/datatable";
+import { DataTableColumns, Formatters } from "../../base/components/datatable/datatable";
 import { EnumCharcasetypes } from "../../base/components/form/form";
 import ProdutosManutencao from "./produtosManutencao";
 import ProdutosPesquisa from "./produtosPesquisa";
@@ -67,7 +67,7 @@ class ProdutosContainer extends CrudContainer {
                 }
             },
             {
-                title: "Preço base", field: "PRECO_BASE", width: 200, type: 'integer', visible: true,
+                title: "Preço base", field: "PRECO_BASE", width: 200, type: 'integer', formatter: Formatters.formatterNumber, formatterParams: Formatters.money("R$"), visible: true,
                 search: {
                     operator: OperatorSearchTypes.EQUAL,
                     width: 300,

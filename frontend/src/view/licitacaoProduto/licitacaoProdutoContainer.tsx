@@ -1,7 +1,7 @@
 import { CrudContainer } from "../../base/components/crud/container/crudcontainer";
 import { CrudManutencaoEvents, CrudPesquisaEvents, CrudUrl } from "../../base/components/crud/types";
 import { OperatorSearchTypes } from "../../base/components/datasearch/datasearch";
-import { DataTableColumns } from "../../base/components/datatable/datatable";
+import { DataTableColumns, Formatters } from "../../base/components/datatable/datatable";
 import LicitacaoProdutoManutencao from "./licitacaoProdutoManutencao";
 import LicitacaoProdutoPesquisa from "./licitacaoProdutoPesquisa";
 
@@ -77,6 +77,8 @@ class LicitacaoProdutoContainer extends CrudContainer {
                 field: "VALOR_UNITARIO_REFERENCIA",
                 width: 220,
                 type: 'integer',
+                formatter: Formatters.formatterNumber,
+                formatterParams: Formatters.money("R$"),
                 visible: true,
                 search: {
                     operator: OperatorSearchTypes.EQUAL,
@@ -89,6 +91,8 @@ class LicitacaoProdutoContainer extends CrudContainer {
                 field: "VALOR_TOTAL_REFERENCIA",
                 width: 220,
                 type: 'integer',
+                formatter: Formatters.formatterNumber,
+                formatterParams: Formatters.money("R$"),
                 visible: true,
                 search: {
                     operator: OperatorSearchTypes.EQUAL,

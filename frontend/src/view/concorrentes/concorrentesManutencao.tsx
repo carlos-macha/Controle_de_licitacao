@@ -29,6 +29,10 @@ const ConcorrenteManutencao: React.FC<ConcorrenteManutencaoProps> = (props) => {
 
                 return `${url}/${data.ID}`;
             }}
+            transformData={(data: IModelConcorrente) => ({
+                ...data,
+                CNPJ: data.CNPJ.replace(/\D/g, '')
+            })}
             onBody={(params) => {
                 const dataModel: InputDataValue<IModelConcorrente> = params.dataModel;
 
@@ -50,7 +54,7 @@ const ConcorrenteManutencao: React.FC<ConcorrenteManutencaoProps> = (props) => {
                             </div>
 
                             <div className="col-12 col-md-4 mb-3">
-                                <InputNumber
+                                <InputCPFCNPJ
                                     label="CNPJ"
                                     dataModel={dataModel}
                                     id="CNPJ"

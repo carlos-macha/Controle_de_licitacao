@@ -1,7 +1,7 @@
 import { CrudContainer } from "../../base/components/crud/container/crudcontainer";
 import { CrudManutencaoEvents, CrudPesquisaEvents, CrudUrl } from "../../base/components/crud/types";
 import { OperatorSearchTypes } from "../../base/components/datasearch/datasearch";
-import { DataTableColumns } from "../../base/components/datatable/datatable";
+import { DataTableColumns, Formatters } from "../../base/components/datatable/datatable";
 import { EnumCharcasetypes } from "../../base/components/form/form";
 import { IModelConcorrente } from "../../models/modelConcorrente";
 import ConcorrenteManutencao from "./concorrentesManutencao";
@@ -56,7 +56,8 @@ class ConcorrentesContainer extends CrudContainer {
                 title: "CNPJ",
                 field: "CNPJ",
                 width: 200,
-                type: 'string',
+                type: 'integer',
+                formatter: Formatters.cnpj,
                 visible: true,
                 search: {
                     operator: OperatorSearchTypes.EQUAL,

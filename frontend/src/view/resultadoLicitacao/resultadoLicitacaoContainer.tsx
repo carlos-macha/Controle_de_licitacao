@@ -83,6 +83,8 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 field: "PRECO_GANHO",
                 width: 200,
                 type: 'integer',
+                formatter: Formatters.formatterNumber,
+                formatterParams: Formatters.money("R$"),
                 visible: true,
                 search: {
                     operator: OperatorSearchTypes.EQUAL,
