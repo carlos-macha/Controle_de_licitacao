@@ -29,19 +29,16 @@ export class BaseService<T> {
 
 
 
-async find(options?: {
+    async find(options?: {
         page?: number;
         limit?: number;
-        where?: Record<
-            string,
-            unknown | { operator: "=" | "LIKE"; value: unknown }
-        >;
+        where?: Record<string, unknown>;
         orderBy?: string;
         order?: "ASC" | "DESC";
     }) {
- 
+
         return this.dao.find(options);
- 
+
     }
 
 
