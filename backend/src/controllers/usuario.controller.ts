@@ -7,6 +7,7 @@ import {
 import { inject, injectable } from "inversify";
 
 import { UsuarioService } from "../services/usuario.service";
+import { LoginAttemptService } from "../services/loginAttempt.service";
 
 
 @injectable()
@@ -15,7 +16,10 @@ export class UsuarioController {
 
     constructor(
         @inject(UsuarioService)
-        private usuarioService: UsuarioService
+        private usuarioService: UsuarioService,
+
+        @inject(LoginAttemptService)
+        private loginAttemptService: LoginAttemptService
     ) { }
 
 
@@ -210,36 +214,39 @@ export class UsuarioController {
         res: Response,
         next: NextFunction
     ) {
-
         try {
+            const { LOGIN, SENHA } = req.body;
 
-            const result =
-                await this.usuarioService.login(
+            this.loginAttemptService.check(LOGIN);
 
-                    req.body.LOGIN,
+            try {
+                const result =
+                    await this.usuarioService.login(
+                        LOGIN,
+                        SENHA
+                    );
 
-                    req.body.SENHA
+                this.loginAttemptService.clear(LOGIN);
 
-                );
+                res.cookie("token", result.token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: "strict",
+                    maxAge: 7 * 24 * 60 * 60 * 1000
+                });
 
-            res.cookie("token", result.token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "strict",
-                maxAge: 7 * 24 * 60 * 60 * 1000
-            });
+                return res.json({
+                    usuario: result.usuario
+                });
 
-            return res.json({
-                usuario: result.usuario
-            });
-
+            } catch (error) {
+                this.loginAttemptService.registerFailure(LOGIN);
+                throw error;
+            }
 
         } catch (error) {
-
             next(error);
-
         }
-
     }
 
     async logout(req: Request, res: Response, next: NextFunction) {
@@ -297,10 +304,12 @@ export class UsuarioController {
     ) {
         try {
 
+            const { NOME } = req.body;
+
             const result =
                 await this.usuarioService.atualizarNome(
                     req.user!.id,
-                    req.body.NOME
+                    NOME
                 );
 
             return res.json(result);
@@ -317,11 +326,13 @@ export class UsuarioController {
     ) {
         try {
 
+            const { SENHA_ATUAL, NOVA_SENHA } = req.body;
+
             const result =
                 await this.usuarioService.atualizarSenha(
                     req.user!.id,
-                    req.body.SENHA_ATUAL,
-                    req.body.NOVA_SENHA
+                    SENHA_ATUAL,
+                    NOVA_SENHA
                 );
 
             return res.json(result);

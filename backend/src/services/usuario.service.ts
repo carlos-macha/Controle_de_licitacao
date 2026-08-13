@@ -368,6 +368,13 @@ export class UsuarioService extends BaseService<Usuario> {
             );
         }
 
+        if (senhaAtual === novaSenha) {
+            throw new HttpError(
+                401,
+                "A senha nova não pode ser igual a antiga."
+            );
+        }
+
         const usuarioAtualizado = await super.update(id, {
             SENHA_HASH: await bcrypt.hash(
                 novaSenha,

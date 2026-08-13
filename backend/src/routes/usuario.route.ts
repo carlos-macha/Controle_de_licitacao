@@ -16,6 +16,7 @@ import { idParamSchema } from "../schemas/id.schema";
 import { authenticate } from "../middlewares/auth";
 import { unlockSchema } from "../schemas/unlock.schema";
 import { admin } from "../middlewares/admin";
+import { loginRateLimit } from "../middlewares/loginRateLimit";
 
 const usuarioRouter = Router();
 
@@ -71,6 +72,7 @@ usuarioRouter.delete(
 
 usuarioRouter.post(
     "/login",
+    loginRateLimit,
     validate({
         body: loginSchema
     }),
