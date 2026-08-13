@@ -43,7 +43,6 @@ class LicitacaoContainer extends CrudContainer {
             {
                 title: "Código", field: "ID", width: 100, isKey: true, type: 'integer', visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 150,
                     type: "DEFAULT",
                 }
@@ -51,7 +50,6 @@ class LicitacaoContainer extends CrudContainer {
             {
                 title: "Número do Edital", field: "NUMERO_EDITAL", width: 100, type: 'string', visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT",
                 }
@@ -59,7 +57,6 @@ class LicitacaoContainer extends CrudContainer {
             {
                 title: "Nome", field: "NOME", width: 300, type: 'string', visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT",
                     charCase: EnumCharcasetypes.UPPERCASE
@@ -68,7 +65,6 @@ class LicitacaoContainer extends CrudContainer {
             {
                 title: "Código da Licitação", field: "CODIGO_LICITACAO", width: 150, type: 'string', visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT",
                 }
@@ -76,7 +72,6 @@ class LicitacaoContainer extends CrudContainer {
             {
                 title: "Orgão Competente", field: "ORGAO_COMPETENTE", width: 300, type: 'string', visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT",
                     charCase: EnumCharcasetypes.UPPERCASE
@@ -85,7 +80,6 @@ class LicitacaoContainer extends CrudContainer {
             {
                 title: "Data do Certame", field: "DATA_CERTAME", formatter: Formatters.dateISO, width: 100, type: 'date', visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT",
                 }

@@ -37,7 +37,6 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 150,
                     type: "DEFAULT",
                 }
@@ -49,7 +48,6 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT"
                 }
@@ -61,7 +59,6 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT"
                 }
@@ -73,7 +70,6 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT"
                 }
@@ -82,12 +78,11 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 title: "Preço ganho",
                 field: "PRECO_GANHO",
                 width: 200,
-                type: 'integer',
+                type: 'float',
                 formatter: Formatters.formatterNumber,
                 formatterParams: Formatters.money("R$"),
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT"
                 }
@@ -100,7 +95,6 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 visible: true,
                 formatter: Formatters.dateISO,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT"
                 }

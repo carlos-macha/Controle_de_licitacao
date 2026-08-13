@@ -23,6 +23,10 @@ export class UsuarioDAO extends BaseDAO<Usuario> {
                 "PERFIL",
                 "DATA_CADASTRO",
                 "DATA_ALTERACAO"
+            ]),
+            new Set([
+                "LOGIN",
+                "NOME"
             ])
         );
     }

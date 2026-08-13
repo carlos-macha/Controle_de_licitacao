@@ -31,7 +31,6 @@ class LicitacaoProdutoContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 150,
                     type: "DEFAULT",
                 }
@@ -43,7 +42,6 @@ class LicitacaoProdutoContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 200,
                     type: "DEFAULT",
                 }
@@ -55,7 +53,6 @@ class LicitacaoProdutoContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 200,
                     type: "DEFAULT",
                 }
@@ -67,7 +64,6 @@ class LicitacaoProdutoContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 200,
                     type: "DEFAULT",
                 }
@@ -76,12 +72,11 @@ class LicitacaoProdutoContainer extends CrudContainer {
                 title: "Valor Unitário Referência",
                 field: "VALOR_UNITARIO_REFERENCIA",
                 width: 220,
-                type: 'integer',
+                type: 'float',
                 formatter: Formatters.formatterNumber,
                 formatterParams: Formatters.money("R$"),
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 250,
                     type: "DEFAULT",
                 }
@@ -90,12 +85,11 @@ class LicitacaoProdutoContainer extends CrudContainer {
                 title: "Valor Total Referência",
                 field: "VALOR_TOTAL_REFERENCIA",
                 width: 220,
-                type: 'integer',
+                type: 'float',
                 formatter: Formatters.formatterNumber,
                 formatterParams: Formatters.money("R$"),
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 250,
                     type: "DEFAULT",
                 }

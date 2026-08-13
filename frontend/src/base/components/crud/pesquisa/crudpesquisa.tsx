@@ -408,12 +408,14 @@ const CrudPesquisa: React.ForwardRefRenderFunction<CrudPesquisaRef, CrudPesquisa
    }
 
    const resolveResponseData = (responseData: any, isDemand: boolean) => {
-      let newData: Array<any>;
+      let newData: any[];
 
       if (Array.isArray(responseData)) {
          newData = responseData;
       } else if (Array.isArray(responseData?.data)) {
          newData = responseData.data;
+      } else if (responseData && typeof responseData === "object") {
+         newData = [responseData];
       } else {
          newData = [];
       }

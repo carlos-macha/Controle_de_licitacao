@@ -29,6 +29,10 @@ export class LicitacaoDAO extends BaseDAO<Licitacao> {
                 "ESTADO",
                 "CEP",
                 "COMPLEMENTO"
+            ]),
+            new Set([
+                "NOME",
+                "ORGAO_COMPETENTE"
             ])
         );
     }

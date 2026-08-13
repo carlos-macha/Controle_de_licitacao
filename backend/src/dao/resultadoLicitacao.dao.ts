@@ -21,7 +21,7 @@ export class ResultadoLicitacaoDAO extends BaseDAO<ResultadoLicitacao> {
                 "CODIGO_PRODUTO",
                 "PRECO_GANHO",
                 "DATA_RESULTADO"
-            ])
+            ]),
         );
     }
 

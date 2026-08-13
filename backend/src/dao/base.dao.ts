@@ -5,7 +5,8 @@ export class BaseDAO<T> {
   constructor(
     protected db: FirebirdDatabase,
     protected tableName: string,
-    protected allowedColumns: Set<string>
+    protected allowedColumns: Set<string>,
+    protected likeColumns: Set<string> = new Set()
   ) { }
 
   private validateColumns(columns: string[]) {
@@ -52,11 +53,15 @@ export class BaseDAO<T> {
       this.validateColumns(fields);
 
       const conditions = fields.map(field => {
+        const value = options.where![field];
 
-        params.push(options.where![field]);
+        if (this.likeColumns.has(field)) {
+          params.push(`%${value}%`);
+          return `${field} LIKE ?`;
+        }
 
+        params.push(value);
         return `${field} = ?`;
-
       });
 
       whereSQL = `WHERE ${conditions.join(" AND ")}`;

@@ -22,6 +22,11 @@ export class ProdutoDAO extends BaseDAO<Produto> {
                 "MODELO",
                 "PRECO_BASE",
                 "OBSERVACAO"
+            ]),
+            new Set([
+                "MARCA",
+                "DESCRICAO",
+                "MODELO"
             ])
         );
     }

@@ -34,7 +34,6 @@ class ConcorrentesContainer extends CrudContainer {
                 type: 'integer',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 150,
                     type: "DEFAULT",
                 }
@@ -46,7 +45,6 @@ class ConcorrentesContainer extends CrudContainer {
                 type: 'string',
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 300,
                     type: "DEFAULT",
                     charCase: EnumCharcasetypes.UPPERCASE
@@ -60,7 +58,6 @@ class ConcorrentesContainer extends CrudContainer {
                 formatter: Formatters.cnpj,
                 visible: true,
                 search: {
-                    operator: OperatorSearchTypes.EQUAL,
                     width: 200,
                     type: "DEFAULT",
                 }

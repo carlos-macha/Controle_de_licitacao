@@ -28,6 +28,9 @@ export class ConcorrenteDAO extends BaseDAO<Concorrente> {
                 "ESTADO",
                 "CEP",
                 "COMPLEMENTO"
+            ]),
+            new Set([
+                "NOME"
             ])
         );
     }
