@@ -11,14 +11,22 @@ export default class DAOUsuario extends DAO {
          resolve(data);
       }).catch(error => {
          console.log(error)
+         if (error.response?.status === 429) {
+            reject(
+               error.response?.data?.error ??
+               "Muitas tentativas de login. Tente novamente mais tarde."
+            );
+            return;
+         }
+
          reject(
-            error.response?.data?.message ??
+            error.response?.data?.error ??
             "Erro ao realizar login"
          );
       });
    });
 
-   logout = (): Promise<any> => 
+   logout = (): Promise<any> =>
       this.Post<any>('/logout');
 
    Unlock = (jsonUnlock: IModelUnlock) => new Promise<IModelUnlockResponse>((resolve, reject) => {
@@ -27,7 +35,7 @@ export default class DAOUsuario extends DAO {
       }).catch(error => {
          console.log(error);
          reject(
-            error.response?.data?.message ??
+            error.response?.data?.error ??
             "Senha inválida"
          );
       });

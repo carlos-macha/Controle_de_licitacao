@@ -1,4 +1,5 @@
 import { injectable } from "inversify";
+import { HttpError } from "../utils/httpError";
 
 interface LoginAttempt {
     attempts: number;
@@ -30,7 +31,14 @@ export class LoginAttemptService {
                 Math.ceil((attempt.blockedUntil - Date.now()) / 1000),
                 "segundos"
             );
-            throw new Error("Login ou senha inválidos.");
+            const segundos = Math.ceil(
+                (attempt.blockedUntil - Date.now()) / 1000
+            );
+
+            throw new HttpError(
+                429,
+                `Muitas tentativas de login. Tente novamente em ${segundos} segundos.`,
+            );
         }
     }
 
