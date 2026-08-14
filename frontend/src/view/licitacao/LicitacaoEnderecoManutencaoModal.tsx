@@ -196,6 +196,7 @@ const LicitacaoEnderecoManutencaoModal: React.FC<LicitacaoEnderecoManutencaoModa
                                     dataModel={dataModel}
                                     validator={validateFields}
                                     charCase={EnumCharcasetypes.UPPERCASE}
+                                    maxLength={100}
                                 />
 
                             </div>
@@ -209,6 +210,7 @@ const LicitacaoEnderecoManutencaoModal: React.FC<LicitacaoEnderecoManutencaoModa
                                     dataModel={dataModel}
                                     validator={validateFields}
                                     charCase={EnumCharcasetypes.UPPERCASE}
+                                    maxLength={100}
                                 />
 
                             </div>

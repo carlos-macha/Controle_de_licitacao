@@ -161,6 +161,7 @@ const ConcorrentesEnderecoManutencaoModal: React.FC<ConcorrentesEnderecoManutenc
                                     dataModel={dataModel}
                                     validator={validateFields}
                                     charCase={EnumCharcasetypes.UPPERCASE}
+                                    maxLength={100}
                                 />
                             </div>
 
@@ -171,6 +172,7 @@ const ConcorrentesEnderecoManutencaoModal: React.FC<ConcorrentesEnderecoManutenc
                                     dataModel={dataModel}
                                     validator={validateFields}
                                     charCase={EnumCharcasetypes.UPPERCASE}
+                                    maxLength={100}
                                 />
                             </div>
 

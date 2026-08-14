@@ -38,10 +38,23 @@ const Api = (function () {
                   error => {
                      const status = error.response?.status;
                      const message = error.response?.data?.error;
-                     console.log(`message:` + message)
+                     const url = error.config?.url;
+                     const currentPath = window.location.pathname;
 
-                     if (status === 403 && message === "Usuário inativo.") {
-                        window.location.href = "/cplicitacao/login";
+                     const isLoginPage = currentPath === "/cplicitacao/login";
+                     const isLoginRequest = url?.endsWith("/login");
+
+                     if (!isLoginPage && !isLoginRequest) {
+                        if (
+                           status === 403 &&
+                           message === "Usuário inativo."
+                        ) {
+                           window.location.href = "/cplicitacao/logout";
+                        }
+
+                        if (status === 401) {
+                           window.location.href = "/cplicitacao/logout";
+                        }
                      }
 
                      return Promise.reject(error);

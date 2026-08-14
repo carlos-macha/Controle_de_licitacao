@@ -86,7 +86,7 @@ const Login: React.FC = () => {
          // setData(data);
       }).catch(error => {
          setLogged(false);
-         setError(typeof error === "string" ? error : "Erro ao realizar logins.");
+         setError(typeof error === "string" ? error : "Erro ao realizar login.");
          setResetPass(false);
          // setData(undefined);
       }).finally(() => {

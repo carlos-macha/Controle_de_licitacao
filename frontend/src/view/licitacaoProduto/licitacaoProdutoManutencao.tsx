@@ -271,6 +271,7 @@ const LicitacaoProdutoManutencao: React.FC<LicitacaoProdutoManutencaoProps> = (p
                                     }}
                                     decimalScale={2}
                                     allowNegative={false}
+                                    maxLength={20}
                                     onValueChange={(values) => {
                                         const quantidade =
                                             Number(values.floatValue || 0);
@@ -305,6 +306,7 @@ const LicitacaoProdutoManutencao: React.FC<LicitacaoProdutoManutencaoProps> = (p
                                     prefix="R$ "
                                     decimalSeparator=","
                                     thousandSeparator="."
+                                    maxLength={20}
                                     onValueChange={(values) => {
                                         const valorUnitario =
                                             Number(values.floatValue || 0);

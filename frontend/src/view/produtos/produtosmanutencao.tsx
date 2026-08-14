@@ -91,6 +91,12 @@ const ProdutosManutencao: React.FC<ProdutosManutencaoProps> = (props) => {
                                     label="Preço Base"
                                     dataModel={dataModel}
                                     id="PRECO_BASE"
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    allowNegative={false}
+                                    prefix="R$ "
+                                    decimalSeparator=","
+                                    thousandSeparator="."
                                     validator={params.validateFields}
 
                                     validations={{

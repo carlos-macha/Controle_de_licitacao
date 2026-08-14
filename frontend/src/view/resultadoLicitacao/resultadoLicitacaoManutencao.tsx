@@ -361,6 +361,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     prefix="R$ "
                                     decimalSeparator=","
                                     thousandSeparator="."
+                                    maxLength={20}
                                 />
                             </div>
 
