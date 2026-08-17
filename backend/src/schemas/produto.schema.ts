@@ -1,11 +1,7 @@
 import { z } from "zod";
 
 export const produtoSchema = z.object({
-    ID: z
-        .number()
-        .int()
-        .positive()
-        .optional(),
+    ID: z.number().int().positive().optional(),
 
     CODIGO_PRODUTO: z
         .string()
@@ -31,21 +27,19 @@ export const produtoSchema = z.object({
         .min(1, "Modelo é obrigatório.")
         .max(100, "Modelo deve ter no máximo 100 caracteres."),
 
-    PRECO_BASE: z
-        .number()
-        .positive("Preço deve ser maior que zero."),
+    PRECO_BASE: z.number().positive("Preço deve ser maior que zero."),
 
     OBSERVACAO: z
         .string()
         .trim()
         .max(500, "Observação deve ter no máximo 500 caracteres.")
-        .optional()
+        .optional(),
 });
 
 export type Produto = z.infer<typeof produtoSchema>;
 
 export const createProdutoSchema = produtoSchema.omit({
-    ID: true
+    ID: true,
 });
 
 export const updateProdutoSchema = createProdutoSchema.partial();

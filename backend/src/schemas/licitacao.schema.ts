@@ -1,11 +1,7 @@
 import { z } from "zod";
 
 export const licitacaoSchema = z.object({
-    ID: z
-        .number()
-        .int()
-        .positive()
-        .optional(),
+    ID: z.number().int().positive().optional(),
 
     NUMERO_EDITAL: z
         .string()
@@ -37,9 +33,7 @@ export const licitacaoSchema = z.object({
         .min(1, "Órgão competente é obrigatório.")
         .max(150, "Órgão competente deve possuir no máximo 150 caracteres."),
 
-    DATA_CERTAME: z
-        .string()
-        .min(1, "Data do certame obrigatória."),
+    DATA_CERTAME: z.string().min(1, "Data do certame obrigatória."),
 
     LOGRADOURO: z
         .string()
@@ -70,23 +64,19 @@ export const licitacaoSchema = z.object({
         .trim()
         .length(2, "Estado deve possuir exatamente 2 caracteres."),
 
-    CEP: z
-        .string()
-        .trim()
-        .length(9, "CEP deve estar no formato 00000-000."),
+    CEP: z.string().trim().length(9, "CEP deve estar no formato 00000-000."),
 
     COMPLEMENTO: z
         .string()
         .trim()
         .max(100, "Complemento deve possuir no máximo 100 caracteres.")
-        .optional()
+        .optional(),
 });
 
 export type Licitacao = z.infer<typeof licitacaoSchema>;
 
 export const createLicitacaoSchema = licitacaoSchema.omit({
-    ID: true
+    ID: true,
 });
 
-export const updateLicitacaoSchema =
-    createLicitacaoSchema.partial();
+export const updateLicitacaoSchema = createLicitacaoSchema.partial();

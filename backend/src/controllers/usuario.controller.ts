@@ -1,43 +1,23 @@
-import {
-    Request,
-    Response,
-    NextFunction
-} from "express";
+import { Request, Response, NextFunction } from "express";
 
 import { inject, injectable } from "inversify";
 
 import { UsuarioService } from "../services/usuario.service";
 import { LoginAttemptService } from "../services/loginAttempt.service";
 
-
 @injectable()
 export class UsuarioController {
-
-
     constructor(
         @inject(UsuarioService)
         private usuarioService: UsuarioService,
 
         @inject(LoginAttemptService)
         private loginAttemptService: LoginAttemptService
-    ) { }
+    ) {}
 
-
-
-
-    async find(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    async find(req: Request, res: Response, next: NextFunction) {
         try {
-            const {
-                page,
-                limit,
-                orderBy,
-                order,
-                ...where
-            } = req.query;
+            const { page, limit, orderBy, order, ...where } = req.query;
 
             const pageValue = Number(page);
             const pageNumber =
@@ -56,175 +36,86 @@ export class UsuarioController {
                     )
                     .map(([key, value]) => {
                         if (key.startsWith("SEARCH_")) {
-                            return [
-                                key.replace("SEARCH_", ""),
-                                value
-                            ];
+                            return [key.replace("SEARCH_", ""), value];
                         }
 
                         return [key, value];
                     })
             );
 
-            const result =
-                await this.usuarioService.findSafe({
-                    page: pageNumber,
-                    limit: limitValue,
-                    orderBy:
-                        typeof orderBy === "string"
-                            ? orderBy
-                            : undefined,
-                    order:
-                        order === "DESC"
-                            ? "DESC"
-                            : "ASC",
-                    where:
-                        Object.keys(whereObject).length
-                            ? whereObject
-                            : undefined
-                });
-
-            return res.json(result);
-        } catch (error) {
-            next(error);
-        }
-    }
-
-
-
-
-
-    async findById(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-
-        try {
-
-            const result =
-                await this.usuarioService.findSafeById(
-                    Number(req.params.id)
-                );
-
-
-            return res.json(result);
-
-
-        } catch (error) {
-
-            next(error);
-
-        }
-
-    }
-
-
-
-    async insert(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-
-        try {
-
-            const result =
-                await this.usuarioService.create(
-                    req.body
-                );
-
-
-            return res
-                .status(201)
-                .json(result);
-
-
-        } catch (error) {
-
-            next(error);
-
-        }
-
-    }
-
-
-
-    async update(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-
-        try {
-
-            const result =
-                await this.usuarioService.updateSafe(
-                    Number(req.params.id),
-                    req.body
-                );
-
-
-            return res.json(result);
-
-
-        } catch (error) {
-
-            next(error);
-
-        }
-
-    }
-
-
-
-    async delete(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-
-        try {
-
-            const result =
-                await this.usuarioService.delete(
-                    Number(req.params.id)
-                );
-
-
-            return res.json({
-
-                "Quantidade deletados": result
-
+            const result = await this.usuarioService.findSafe({
+                page: pageNumber,
+                limit: limitValue,
+                orderBy: typeof orderBy === "string" ? orderBy : undefined,
+                order: order === "DESC" ? "DESC" : "ASC",
+                where: Object.keys(whereObject).length
+                    ? whereObject
+                    : undefined,
             });
 
-
+            return res.json(result);
         } catch (error) {
-
             next(error);
-
         }
-
     }
 
+    async findById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.usuarioService.findSafeById(
+                Number(req.params.id)
+            );
 
+            return res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
 
-    async login(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    async insert(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.usuarioService.create(req.body);
+
+            return res.status(201).json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async update(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.usuarioService.updateSafe(
+                Number(req.params.id),
+                req.body
+            );
+
+            return res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async delete(req: Request, res: Response, next: NextFunction) {
+        try {
+            const result = await this.usuarioService.delete(
+                Number(req.params.id)
+            );
+
+            return res.json({
+                "Quantidade deletados": result,
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async login(req: Request, res: Response, next: NextFunction) {
         try {
             const { LOGIN, SENHA } = req.body;
 
             this.loginAttemptService.check(LOGIN);
 
             try {
-                const result =
-                    await this.usuarioService.login(
-                        LOGIN,
-                        SENHA
-                    );
+                const result = await this.usuarioService.login(LOGIN, SENHA);
 
                 this.loginAttemptService.clear(LOGIN);
 
@@ -232,18 +123,16 @@ export class UsuarioController {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
                     sameSite: "strict",
-                    maxAge: 7 * 24 * 60 * 60 * 1000
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
                 });
 
                 return res.json({
-                    usuario: result.usuario
+                    usuario: result.usuario,
                 });
-
             } catch (error) {
                 this.loginAttemptService.registerFailure(LOGIN);
                 throw error;
             }
-
         } catch (error) {
             next(error);
         }
@@ -258,85 +147,55 @@ export class UsuarioController {
         }
     }
 
-    async unlock(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    async unlock(req: Request, res: Response, next: NextFunction) {
         try {
-
-            const result =
-                await this.usuarioService.unlock(
-                    req.user!.id,
-                    req.body.SENHA
-                );
+            const result = await this.usuarioService.unlock(
+                req.user!.id,
+                req.body.SENHA
+            );
 
             return res.json(result);
-
         } catch (error) {
             next(error);
         }
     }
 
-    async perfil(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    async perfil(req: Request, res: Response, next: NextFunction) {
         try {
-
-            const result =
-                await this.usuarioService.perfil(
-                    req.user!.id,
-                );
+            const result = await this.usuarioService.perfil(req.user!.id);
 
             return res.json(result);
-
         } catch (error) {
             next(error);
         }
     }
 
-    async atualizarNome(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    async atualizarNome(req: Request, res: Response, next: NextFunction) {
         try {
-
             const { NOME } = req.body;
 
-            const result =
-                await this.usuarioService.atualizarNome(
-                    req.user!.id,
-                    NOME
-                );
+            const result = await this.usuarioService.atualizarNome(
+                req.user!.id,
+                NOME
+            );
 
             return res.json(result);
-
         } catch (error) {
             next(error);
         }
     }
 
-    async atualizarSenha(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
+    async atualizarSenha(req: Request, res: Response, next: NextFunction) {
         try {
-
             const { SENHA_ATUAL, NOVA_SENHA } = req.body;
 
-            const result =
-                await this.usuarioService.atualizarSenha(
-                    req.user!.id,
-                    SENHA_ATUAL,
-                    NOVA_SENHA
-                );
+            const result = await this.usuarioService.atualizarSenha(
+                req.user!.id,
+                SENHA_ATUAL,
+                NOVA_SENHA
+            );
 
             return res.json(result);
-
         } catch (error) {
             next(error);
         }

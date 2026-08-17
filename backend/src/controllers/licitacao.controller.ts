@@ -6,14 +6,10 @@ import { LicitacaoService } from "../services/licitacao.service";
 
 @injectable()
 export class LicitacaoController extends BaseController<Licitacao> {
-
     constructor(
         @inject(LicitacaoService)
         licitacaoService: LicitacaoService
     ) {
-
         super(licitacaoService);
-
     }
-
 }

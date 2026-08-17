@@ -25,10 +25,9 @@ const ConcorrentesDetalhes: React.FC<ConcorrentesDetalhesProps> = ({
 }) => {
     const id = useRef(nanoid());
 
-    const [enderecoSelecionado, setEnderecoSelecionado] = useState<any>();
     const [enderecoAtualState, setEnderecoAtualState] = useState<any>();
 
-    const [contatoSelecionado, setContatoSelecionado] = useState<any>();
+
     const [contatoAtualState, setContatoAtualState] = useState<any>();
 
     const { modalDispash } = useModalContext();
@@ -46,12 +45,20 @@ const ConcorrentesDetalhes: React.FC<ConcorrentesDetalhesProps> = ({
         COMPLEMENTO: dadosAtuais.COMPLEMENTO
     } : undefined);
 
+    const temEndereco = enderecoAtual && Object.values(enderecoAtual).some(
+        valor => valor !== null && valor !== undefined && valor !== ""
+    );
+
     const contatoAtual = contatoAtualState ?? (dadosAtuais ? {
         ID: dadosAtuais.ID,
         EMAIL: dadosAtuais.EMAIL,
         TELEFONE: dadosAtuais.TELEFONE,
         CELULAR: dadosAtuais.CELULAR
     } : undefined);
+
+    const temContato = contatoAtual && Object.values(contatoAtual).some(
+        valor => valor !== null && valor !== undefined && valor !== ""
+    );
 
     const atualizarEndereco = (endereco: any) => {
         setEnderecoAtualState(endereco);
@@ -168,65 +175,63 @@ const ConcorrentesDetalhes: React.FC<ConcorrentesDetalhesProps> = ({
                                 </div>
                             )}
 
-                            <DataTable
-                                key={JSON.stringify(enderecoAtual)}
-                                title="Endereço"
-                                columns={[
-                                    {
-                                        title: "Logradouro",
-                                        field: "LOGRADOURO",
-                                        width: 250,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Número",
-                                        field: "NUMERO",
-                                        width: 100,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Bairro",
-                                        field: "BAIRRO",
-                                        width: 180,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Cidade",
-                                        field: "CIDADE",
-                                        width: 180,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Estado",
-                                        field: "ESTADO",
-                                        width: 100,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "CEP",
-                                        field: "CEP",
-                                        width: 120,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Complemento",
-                                        field: "COMPLEMENTO",
-                                        width: 200,
-                                        type: "string"
-                                    }
-                                ]}
-                                data={enderecoAtual ? [enderecoAtual] : []}
-                                options={{
-                                    height: 200,
-                                    pagination: false,
-                                    layout: "fitDataFill",
-                                    selectable: 1
-                                }}
-                                useRowId
-                                onRowClick={(endereco: any) => {
-                                    setEnderecoSelecionado(endereco);
-                                }}
-                            />
+                            {temEndereco &&
+                                <DataTable
+                                    key={JSON.stringify(enderecoAtual)}
+                                    title="Endereço"
+                                    columns={[
+                                        {
+                                            title: "Logradouro",
+                                            field: "LOGRADOURO",
+                                            width: 250,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Número",
+                                            field: "NUMERO",
+                                            width: 100,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Bairro",
+                                            field: "BAIRRO",
+                                            width: 180,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Cidade",
+                                            field: "CIDADE",
+                                            width: 180,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Estado",
+                                            field: "ESTADO",
+                                            width: 100,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "CEP",
+                                            field: "CEP",
+                                            width: 120,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Complemento",
+                                            field: "COMPLEMENTO",
+                                            width: 200,
+                                            type: "string"
+                                        }
+                                    ]}
+                                    data={[enderecoAtual]}
+                                    options={{
+                                        height: 200,
+                                        pagination: false,
+                                        layout: "fitDataFill",
+                                        selectable: 1
+                                    }}
+                                    useRowId
+                                />}
                         </TabPanel>
 
                         <TabPanel
@@ -281,42 +286,40 @@ const ConcorrentesDetalhes: React.FC<ConcorrentesDetalhesProps> = ({
 
                                 </div>
                             )}
+                            {temContato &&
 
-                            <DataTable
-                                key={JSON.stringify(contatoAtual)}
-                                title="Contato"
-                                columns={[
-                                    {
-                                        title: "E-mail",
-                                        field: "EMAIL",
-                                        width: 300,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Telefone",
-                                        field: "TELEFONE",
-                                        width: 180,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Celular",
-                                        field: "CELULAR",
-                                        width: 180,
-                                        type: "string"
-                                    }
-                                ]}
-                                data={contatoAtual ? [contatoAtual] : []}
-                                options={{
-                                    height: 200,
-                                    pagination: false,
-                                    layout: "fitDataFill",
-                                    selectable: 1
-                                }}
-                                useRowId
-                                onRowClick={(contato: any) => {
-                                    setContatoSelecionado(contato);
-                                }}
-                            />
+                                <DataTable
+                                    key={JSON.stringify(contatoAtual)}
+                                    title="Contato"
+                                    columns={[
+                                        {
+                                            title: "E-mail",
+                                            field: "EMAIL",
+                                            width: 300,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Telefone",
+                                            field: "TELEFONE",
+                                            width: 180,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Celular",
+                                            field: "CELULAR",
+                                            width: 180,
+                                            type: "string"
+                                        }
+                                    ]}
+                                    data={[contatoAtual]}
+                                    options={{
+                                        height: 200,
+                                        pagination: false,
+                                        layout: "fitDataFill",
+                                        selectable: 1
+                                    }}
+                                    useRowId
+                                />}
                         </TabPanel>
 
                     </TabContent>

@@ -27,12 +27,7 @@ export async function authenticate(
     const token = req.cookies?.token;
 
     if (!token) {
-        return next(
-            new HttpError(
-                401,
-                "Token não informado."
-            )
-        );
+        return next(new HttpError(401, "Token não informado."));
     }
 
     try {
@@ -48,42 +43,25 @@ export async function authenticate(
         if (!usuario) {
             res.clearCookie("token");
 
-            return next(
-                new HttpError(
-                    401,
-                    "Usuário não encontrado."
-                )
-            );
+            return next(new HttpError(401, "Usuário não encontrado."));
         }
 
         if (usuario.ATIVO !== "A") {
             res.clearCookie("token");
 
-            return next(
-                new HttpError(
-                    403,
-                    "Usuário inativo."
-                )
-            );
+            return next(new HttpError(403, "Usuário inativo."));
         }
 
         req.user = payload;
 
         next();
-
     } catch (error) {
-
         if (error instanceof HttpError) {
             return next(error);
         }
 
         res.clearCookie("token");
 
-        next(
-            new HttpError(
-                401,
-                "Token inválido ou expirado."
-            )
-        );
+        next(new HttpError(401, "Token inválido ou expirado."));
     }
 }

@@ -1,240 +1,186 @@
 import { FirebirdDatabase } from "../database/firebird";
 
 export class BaseDAO<T> {
+    constructor(
+        protected db: FirebirdDatabase,
+        protected tableName: string,
+        protected allowedColumns: Set<string>,
+        protected likeColumns: Set<string> = new Set()
+    ) {}
 
-  constructor(
-    protected db: FirebirdDatabase,
-    protected tableName: string,
-    protected allowedColumns: Set<string>,
-    protected likeColumns: Set<string> = new Set()
-  ) { }
-
-  private validateColumns(columns: string[]) {
-
-    for (const column of columns) {
-
-      if (!this.allowedColumns.has(column)) {
-        throw new Error(`Coluna inválida: ${column}`);
-      }
-
+    private validateColumns(columns: string[]) {
+        for (const column of columns) {
+            if (!this.allowedColumns.has(column)) {
+                throw new Error(`Coluna inválida: ${column}`);
+            }
+        }
     }
 
-  }
+    async find(options?: {
+        page?: number;
+        limit?: number;
+        where?: Record<string, unknown>;
+        orderBy?: string;
+        order?: "ASC" | "DESC";
+    }) {
+        const page = options?.page && options.page > 0 ? options.page : 1;
 
-  async find(options?: {
-    page?: number;
-    limit?: number;
-    where?: Record<string, unknown>;
-    orderBy?: string;
-    order?: "ASC" | "DESC";
-  }) {
+        const limit = options?.limit && options.limit > 0 ? options.limit : 50;
 
-    const page =
-      options?.page && options.page > 0
-        ? options.page
-        : 1;
+        let whereSQL = "";
 
-    const limit =
-      options?.limit && options.limit > 0
-        ? options.limit
-        : 50;
+        const params: unknown[] = [];
 
-    let whereSQL = "";
+        if (options?.where && Object.keys(options.where).length > 0) {
+            const fields = Object.keys(options.where);
 
-    const params: unknown[] = [];
+            this.validateColumns(fields);
 
-    if (
-      options?.where &&
-      Object.keys(options.where).length > 0
-    ) {
+            const conditions = fields.map((field) => {
+                const value = options.where![field];
 
-      const fields = Object.keys(options.where);
+                if (this.likeColumns.has(field)) {
+                    params.push(`%${value}%`);
+                    return `${field} LIKE ?`;
+                }
 
-      this.validateColumns(fields);
+                params.push(value);
+                return `${field} = ?`;
+            });
 
-      const conditions = fields.map(field => {
-        const value = options.where![field];
-
-        if (this.likeColumns.has(field)) {
-          params.push(`%${value}%`);
-          return `${field} LIKE ?`;
+            whereSQL = `WHERE ${conditions.join(" AND ")}`;
         }
 
-        params.push(value);
-        return `${field} = ?`;
-      });
-
-      whereSQL = `WHERE ${conditions.join(" AND ")}`;
-    }
-
-
-    const totalResult =
-      await this.db.query<{ TOTAL: number }>(
-        `
+        const totalResult = await this.db.query<{ TOTAL: number }>(
+            `
         SELECT COUNT(ID) AS TOTAL
         FROM ${this.tableName}
         ${whereSQL}
         `,
-        [...params]
-      );
+            [...params]
+        );
 
-    const total =
-      Number(totalResult[0]?.TOTAL ?? 0);
+        const total = Number(totalResult[0]?.TOTAL ?? 0);
 
-
-    let sql = `
+        let sql = `
         SELECT *
         FROM ${this.tableName}
         ${whereSQL}
     `;
 
+        if (options?.orderBy) {
+            this.validateColumns([options.orderBy]);
 
-    if (options?.orderBy) {
-
-      this.validateColumns([
-        options.orderBy
-      ]);
-
-      sql += `
+            sql += `
             ORDER BY ${options.orderBy}
             ${options.order === "DESC" ? "DESC" : "ASC"}
         `;
+        }
 
-    }
+        const first = (page - 1) * limit + 1;
 
+        const last = page * limit;
 
-    const first =
-      ((page - 1) * limit) + 1;
-
-
-    const last =
-      page * limit;
-
-
-    sql += `
+        sql += `
         ROWS ${first} TO ${last}
     `;
 
+        const data = await this.db.query<T>(sql, [...params]);
 
-    const data =
-      await this.db.query<T>(
-        sql,
-        [...params]
-      );
+        return {
+            data,
+            pagination: {
+                page,
+                limit,
+                total,
+                pages: Math.ceil(total / limit),
+            },
+        };
+    }
 
-
-    return {
-      data,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
-    };
-
-  }
-
-  async findById(id: number): Promise<T | null> {
-
-    const result = await this.db.query<T>(`
+    async findById(id: number): Promise<T | null> {
+        const result = await this.db.query<T>(
+            `
       SELECT *
       FROM ${this.tableName}
       WHERE ID = ?
-    `, [id]);
+    `,
+            [id]
+        );
 
-    return result[0] ?? null;
-
-  }
-
-  async insert(data: Record<string, unknown>): Promise<number> {
-
-    const filtered = Object.fromEntries(
-      Object.entries(data)
-        .filter(([, value]) => value !== undefined)
-    );
-
-    const fields = Object.keys(filtered);
-
-    if (fields.length === 0) {
-      throw new Error("Nenhum campo informado.");
+        return result[0] ?? null;
     }
 
-    this.validateColumns(fields);
+    async insert(data: Record<string, unknown>): Promise<number> {
+        const filtered = Object.fromEntries(
+            Object.entries(data).filter(([, value]) => value !== undefined)
+        );
 
-    const values = Object.values(filtered);
+        const fields = Object.keys(filtered);
 
-    const sql = `
+        if (fields.length === 0) {
+            throw new Error("Nenhum campo informado.");
+        }
+
+        this.validateColumns(fields);
+
+        const values = Object.values(filtered);
+
+        const sql = `
         INSERT INTO ${this.tableName}
         (${fields.join(",")})
         VALUES (${fields.map(() => "?").join(",")})
         RETURNING ID
     `;
 
-    const result = await this.db.queryOne<{ ID: number }>(
-      sql,
-      values
-    );
+        const result = await this.db.queryOne<{ ID: number }>(sql, values);
 
-    if (!result) {
-      throw new Error(
-        "Não foi possível recuperar o ID inserido."
-      );
+        if (!result) {
+            throw new Error("Não foi possível recuperar o ID inserido.");
+        }
+
+        return result.ID;
     }
 
-    return result.ID;
-  }
+    async update(id: number, data: Record<string, unknown>) {
+        const filtered = Object.fromEntries(
+            Object.entries(data).filter(([, value]) => value !== undefined)
+        );
 
-  async update(id: number, data: Record<string, unknown>) {
+        const fields = Object.keys(filtered);
 
-    const filtered = Object.fromEntries(
-      Object.entries(data)
-        .filter(([, value]) => value !== undefined)
-    );
+        if (fields.length === 0) {
+            throw new Error("Nenhum campo informado.");
+        }
 
-    const fields = Object.keys(filtered);
+        this.validateColumns(fields);
 
-    if (fields.length === 0) {
-      throw new Error("Nenhum campo informado.");
-    }
+        const values = Object.values(filtered);
 
-    this.validateColumns(fields);
-
-    const values = Object.values(filtered);
-
-    const sql = `
+        const sql = `
       UPDATE ${this.tableName}
-      SET ${fields.map(field => `${field} = ?`).join(",")}
+      SET ${fields.map((field) => `${field} = ?`).join(",")}
       WHERE ID = ?
     `;
 
-    return this.db.query(sql, [
-      ...values,
-      id
-    ]);
-
-  }
-
-  async delete(id: number): Promise<number> {
-
-    const existente = await this.findById(id);
-
-    if (!existente) {
-      return 0;
+        return this.db.query(sql, [...values, id]);
     }
 
+    async delete(id: number): Promise<number> {
+        const existente = await this.findById(id);
 
-    await this.db.query(
-      `
+        if (!existente) {
+            return 0;
+        }
+
+        await this.db.query(
+            `
         DELETE FROM ${this.tableName}
         WHERE ID = ?
         `,
-      [id]
-    );
+            [id]
+        );
 
-
-    return 1;
-
-  }
-
+        return 1;
+    }
 }

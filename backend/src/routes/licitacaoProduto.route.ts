@@ -5,30 +5,18 @@ import { LicitacaoProdutoController } from "../controllers/licitacaoProduto.cont
 
 import {
     createLicitacaoProdutoSchema,
-    updateLicitacaoProdutoSchema
+    updateLicitacaoProdutoSchema,
 } from "../schemas/licitacaoProduto.schema";
 
 import { createCrudRoutes } from "../utils/createCrudRoutes";
 
-
 const licitacaoProdutoRouter = Router();
 
+const controller = container.get(LicitacaoProdutoController);
 
-const controller =
-    container.get(LicitacaoProdutoController);
-
-
-
-createCrudRoutes(
-    licitacaoProdutoRouter,
-    "licitacao-produtos",
-    controller,
-    {
-        create: createLicitacaoProdutoSchema,
-        update: updateLicitacaoProdutoSchema
-    }
-);
-
-
+createCrudRoutes(licitacaoProdutoRouter, "licitacao-produtos", controller, {
+    create: createLicitacaoProdutoSchema,
+    update: updateLicitacaoProdutoSchema,
+});
 
 export default licitacaoProdutoRouter;

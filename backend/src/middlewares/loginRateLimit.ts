@@ -7,7 +7,7 @@ export const loginRateLimit = rateLimit({
     legacyHeaders: false,
     handler: (req, res) => {
         return res.status(429).json({
-            error: "Muitas tentativas de login. Tente novamente mais tarde."
+            error: "Muitas tentativas de login. Tente novamente mais tarde.",
         });
-    }
+    },
 });

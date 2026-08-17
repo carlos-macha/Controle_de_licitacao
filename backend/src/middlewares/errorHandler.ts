@@ -1,8 +1,4 @@
-import {
-    Request,
-    Response,
-    NextFunction
-} from "express";
+import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 
 const errorHandler = (
@@ -11,24 +7,21 @@ const errorHandler = (
     res: Response,
     next: NextFunction
 ) => {
-
     console.error(error);
 
     if (error instanceof ZodError) {
-
         return res.status(400).json({
             error: "Erro de validação.",
-            details: error.issues.map(issue => ({
+            details: error.issues.map((issue) => ({
                 campo: issue.path.join("."),
-                mensagem: issue.message
-            }))
+                mensagem: issue.message,
+            })),
         });
     }
 
     if (error instanceof SyntaxError && "body" in error) {
-
         return res.status(400).json({
-            error: "JSON malformado."
+            error: "JSON malformado.",
         });
     }
 
@@ -37,7 +30,7 @@ const errorHandler = (
     const message = error.message || "Internal Server Error";
 
     return res.status(status).json({
-        error: message
+        error: message,
     });
 };
 

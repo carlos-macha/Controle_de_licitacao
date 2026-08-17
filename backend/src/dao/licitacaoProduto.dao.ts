@@ -6,7 +6,6 @@ import { LicitacaoProduto } from "../schemas/licitacaoProduto.schema";
 
 @injectable()
 export class LicitacaoProdutoDAO extends BaseDAO<LicitacaoProduto> {
-
     constructor(
         @inject(FirebirdDatabase)
         db: FirebirdDatabase
@@ -20,9 +19,8 @@ export class LicitacaoProdutoDAO extends BaseDAO<LicitacaoProduto> {
                 "CODIGO_PRODUTO",
                 "QUANTIDADE",
                 "VALOR_UNITARIO_REFERENCIA",
-                "VALOR_TOTAL_REFERENCIA"
+                "VALOR_TOTAL_REFERENCIA",
             ])
         );
     }
-
 }

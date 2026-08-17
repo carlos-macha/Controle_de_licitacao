@@ -6,7 +6,6 @@ import { Produto } from "../models/Produto";
 
 @injectable()
 export class ProdutoDAO extends BaseDAO<Produto> {
-
     constructor(
         @inject(FirebirdDatabase)
         db: FirebirdDatabase
@@ -21,14 +20,9 @@ export class ProdutoDAO extends BaseDAO<Produto> {
                 "MARCA",
                 "MODELO",
                 "PRECO_BASE",
-                "OBSERVACAO"
+                "OBSERVACAO",
             ]),
-            new Set([
-                "MARCA",
-                "DESCRICAO",
-                "MODELO"
-            ])
+            new Set(["MARCA", "DESCRICAO", "MODELO"])
         );
     }
-
 }

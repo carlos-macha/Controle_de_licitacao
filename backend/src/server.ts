@@ -21,6 +21,6 @@ db.connect()
             console.log(`Server is running on port ${PORT}`);
         });
     })
-    .catch(err => {
+    .catch((err) => {
         console.error("Erro ao conectar ao banco:", err);
     });

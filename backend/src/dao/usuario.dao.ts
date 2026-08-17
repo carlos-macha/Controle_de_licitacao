@@ -6,7 +6,6 @@ import { Usuario } from "../models/Usuario";
 
 @injectable()
 export class UsuarioDAO extends BaseDAO<Usuario> {
-
     constructor(
         @inject(FirebirdDatabase)
         db: FirebirdDatabase
@@ -22,37 +21,21 @@ export class UsuarioDAO extends BaseDAO<Usuario> {
                 "ATIVO",
                 "PERFIL",
                 "DATA_CADASTRO",
-                "DATA_ALTERACAO"
+                "DATA_ALTERACAO",
             ]),
-            new Set([
-                "LOGIN",
-                "NOME"
-            ])
+            new Set(["LOGIN", "NOME"])
         );
     }
 
+    async findByLogin(login: string): Promise<Usuario | null> {
+        const result = await this.find({
+            where: {
+                LOGIN: login,
+            },
 
-
-    async findByLogin(
-        login: string
-    ): Promise<Usuario | null> {
-
-
-        const result =
-            await this.find({
-
-                where: {
-                    LOGIN: login
-                },
-
-                limit: 1
-
-            });
-
-
+            limit: 1,
+        });
 
         return result.data[0] ?? null;
-
     }
-
 }

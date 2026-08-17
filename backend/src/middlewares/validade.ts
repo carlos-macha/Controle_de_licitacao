@@ -8,19 +8,16 @@ interface ValidationSchemas {
 }
 
 export function validate(schemas: ValidationSchemas) {
-    return (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) => {
+    return (req: Request, res: Response, next: NextFunction) => {
         try {
-
             if (schemas.body) {
                 req.body = schemas.body.parse(req.body);
             }
 
             if (schemas.params) {
-                req.params = schemas.params.parse(req.params) as typeof req.params;
+                req.params = schemas.params.parse(
+                    req.params
+                ) as typeof req.params;
             }
 
             if (schemas.query) {
@@ -28,7 +25,6 @@ export function validate(schemas: ValidationSchemas) {
             }
 
             next();
-
         } catch (error) {
             next(error);
         }

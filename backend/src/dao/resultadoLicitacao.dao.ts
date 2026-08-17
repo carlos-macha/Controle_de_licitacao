@@ -6,7 +6,6 @@ import { ResultadoLicitacao } from "../schemas/resultadoLicitacao.schema";
 
 @injectable()
 export class ResultadoLicitacaoDAO extends BaseDAO<ResultadoLicitacao> {
-
     constructor(
         @inject(FirebirdDatabase)
         db: FirebirdDatabase
@@ -20,9 +19,8 @@ export class ResultadoLicitacaoDAO extends BaseDAO<ResultadoLicitacao> {
                 "CODIGO_CONCORRENTE",
                 "CODIGO_PRODUTO",
                 "PRECO_GANHO",
-                "DATA_RESULTADO"
-            ]),
+                "DATA_RESULTADO",
+            ])
         );
     }
-
 }

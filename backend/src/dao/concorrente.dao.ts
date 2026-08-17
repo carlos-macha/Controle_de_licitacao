@@ -6,7 +6,6 @@ import { Concorrente } from "../models/Concorrente";
 
 @injectable()
 export class ConcorrenteDAO extends BaseDAO<Concorrente> {
-
     constructor(
         @inject(FirebirdDatabase)
         db: FirebirdDatabase
@@ -27,12 +26,9 @@ export class ConcorrenteDAO extends BaseDAO<Concorrente> {
                 "CIDADE",
                 "ESTADO",
                 "CEP",
-                "COMPLEMENTO"
+                "COMPLEMENTO",
             ]),
-            new Set([
-                "NOME"
-            ])
+            new Set(["NOME"])
         );
     }
-
 }

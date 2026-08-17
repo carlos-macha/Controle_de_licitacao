@@ -8,14 +8,11 @@ interface LoginAttempt {
 
 @injectable()
 export class LoginAttemptService {
-
     private attempts = new Map<string, LoginAttempt>();
 
     check(login: string) {
         const key = login.toUpperCase();
         const attempt = this.attempts.get(key);
-
-
 
         if (!attempt) {
             return;
@@ -37,7 +34,7 @@ export class LoginAttemptService {
 
             throw new HttpError(
                 429,
-                `Muitas tentativas de login. Tente novamente em ${segundos} segundos.`,
+                `Muitas tentativas de login. Tente novamente em ${segundos} segundos.`
             );
         }
     }
@@ -47,29 +44,14 @@ export class LoginAttemptService {
 
         const attempt = this.attempts.get(key) ?? {
             attempts: 0,
-            blockedUntil: 0
+            blockedUntil: 0,
         };
 
         attempt.attempts++;
 
-        const delays = [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            30_000,
-            60_000,
-            300_000
-        ];
+        const delays = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30_000, 60_000, 300_000];
 
-        const delay =
-            delays[Math.min(attempt.attempts, delays.length - 1)];
+        const delay = delays[Math.min(attempt.attempts, delays.length - 1)];
 
         attempt.blockedUntil = Date.now() + delay;
 

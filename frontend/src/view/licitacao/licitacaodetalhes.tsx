@@ -26,7 +26,6 @@ const LicitacaoDetalhes: React.FC<LicitacaoDetalhesProps> = ({
 
     const id = useRef(nanoid());
 
-    const [enderecoSelecionado, setEnderecoSelecionado] = useState<any>();
     const [enderecoAtualState, setEnderecoAtualState] = useState<any>();
 
     const { modalDispash } = useModalContext();
@@ -45,6 +44,10 @@ const LicitacaoDetalhes: React.FC<LicitacaoDetalhesProps> = ({
         CEP: dadosAtuais.CEP,
         COMPLEMENTO: dadosAtuais.COMPLEMENTO
     } : undefined);
+
+    const temEndereco = enderecoAtual && Object.values(enderecoAtual).some(
+        valor => valor !== null && valor !== undefined && valor !== ""
+    );
 
 
 
@@ -191,78 +194,74 @@ const LicitacaoDetalhes: React.FC<LicitacaoDetalhesProps> = ({
                             )}
 
 
+                            {temEndereco &&
+                                <DataTable
 
-                            <DataTable
+                                    key={JSON.stringify(enderecoAtual)}
 
-                                key={JSON.stringify(enderecoAtual)}
+                                    title="Endereço"
 
-                                title="Endereço"
+                                    columns={[
+                                        {
+                                            title: "Logradouro",
+                                            field: "LOGRADOURO",
+                                            width: 250,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Número",
+                                            field: "NUMERO",
+                                            width: 100,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Bairro",
+                                            field: "BAIRRO",
+                                            width: 180,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Cidade",
+                                            field: "CIDADE",
+                                            width: 180,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Estado",
+                                            field: "ESTADO",
+                                            width: 100,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "CEP",
+                                            field: "CEP",
+                                            width: 120,
+                                            type: "string"
+                                        },
+                                        {
+                                            title: "Complemento",
+                                            field: "COMPLEMENTO",
+                                            width: 200,
+                                            type: "string"
+                                        }
+                                    ]}
 
-                                columns={[
-                                    {
-                                        title: "Logradouro",
-                                        field: "LOGRADOURO",
-                                        width: 250,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Número",
-                                        field: "NUMERO",
-                                        width: 100,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Bairro",
-                                        field: "BAIRRO",
-                                        width: 180,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Cidade",
-                                        field: "CIDADE",
-                                        width: 180,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Estado",
-                                        field: "ESTADO",
-                                        width: 100,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "CEP",
-                                        field: "CEP",
-                                        width: 120,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Complemento",
-                                        field: "COMPLEMENTO",
-                                        width: 200,
-                                        type: "string"
+                                    data={
+                                        enderecoAtual
+                                            ? [enderecoAtual]
+                                            : []
                                     }
-                                ]}
 
-                                data={
-                                    enderecoAtual
-                                        ? [enderecoAtual]
-                                        : []
-                                }
+                                    options={{
+                                        height: 200,
+                                        pagination: false,
+                                        layout: "fitDataFill",
+                                        selectable: 1
+                                    }}
 
-                                options={{
-                                    height: 200,
-                                    pagination: false,
-                                    layout: "fitDataFill",
-                                    selectable: 1
-                                }}
+                                    useRowId
 
-                                useRowId
-
-                                onRowClick={(endereco: any) => {
-                                    setEnderecoSelecionado(endereco);
-                                }}
-
-                            />
+                                />}
 
 
                         </TabPanel>
