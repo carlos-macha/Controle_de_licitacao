@@ -1,8 +1,13 @@
 export interface ResultadoLicitacao {
-  ID: number;
-  CODIGO_LICITACAO: number;
-  CODIGO_CONCORRENTE: number;
-  CODIGO_PRODUTO: number;
+  ID?: number;
+  ITEM_LICITACAO_ID: number;
+  CONCORRENTE_ID: number;
   PRECO_GANHO: number;
-  DATA_RESULTADO: Date;
+  VALOR_TOTAL_LANCE: number;
+  VALOR_ORCADO: number;
+  VALOR_TOTAL_ORCADO: number;
+  ECONOMIA_PERCENTUAL: number;
+  ECONOMIA_REAIS: number;
+  DATA_RELATORIO: string;
+  HORA_RELATORIO: string;
 }
