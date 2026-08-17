@@ -11,5 +11,5 @@ export interface IModelConcorrente {
     CIDADE: string;
     ESTADO: string;
     CEP: string;
-    COMPLEMENTO?: string;
+    COMPLEMENTO: string;
 }

@@ -3,15 +3,13 @@ import { EnumCrudStateRecordType } from "../../base/components/crud/enums";
 import Crudmanutencao, { ManutencaoProps } from "../../base/components/crud/manutencao/crudmanutencao";
 import { InputDataValue } from "../../base/types/types";
 import { IModelResultadoLicitacao } from "../../models/modelResultadoLicitacao";
-import Button, { Input, InputNumber, InputDateTime } from "../../base/components/form/form";
+import Button, { Input, InputNumber } from "../../base/components/form/form";
 import Card, { CardBody, CardHeader } from "../../base/components/card/card";
 import Custommodal from "../../base/components/modal/custommodal";
 import DAO from "../../base/daos/dao";
-import { IModelLicitacao } from "../../models/modellicitacao";
-import { IModelProduto } from "../../models/modelProduto";
-import LicitacaoContainer from "../licitacao/licitacaoContainer";
-import ProdutosContainer from "../produtos/produtosContainer";
+import { IModelItemLicitacao } from "../../models/modelItemLicitacao";
 import { IModelConcorrente } from "../../models/modelConcorrente";
+//import ItemLicitacaoContainer from "../itemLicitacao/itemLicitacaoContainer";
 import ConcorrentesContainer from "../concorrentes/concorrentesContainer";
 
 interface ResultadoLicitacaoManutencaoProps extends ManutencaoProps { }
@@ -19,13 +17,14 @@ interface ResultadoLicitacaoManutencaoProps extends ManutencaoProps { }
 const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> = (props) => {
     const { events } = props;
 
-    const viewModalLicitacaoRef = useRef<any>(null);
-    const viewModalProdutoRef = useRef<any>(null);
+    const viewModalItemRef = useRef<any>(null);
     const viewModalConcorrenteRef = useRef<any>(null);
 
-    const [licitacaoSelecionada, setLicitacaoSelecionada] = useState<IModelLicitacao>();
-    const [produtoSelecionado, setProdutoSelecionado] = useState<IModelProduto>();
-    const [concorrenteSelecionado, setConcorrenteSelecionado] = useState<IModelConcorrente>();
+    const [itemSelecionado, setItemSelecionado] =
+        useState<IModelItemLicitacao>();
+
+    const [concorrenteSelecionado, setConcorrenteSelecionado] =
+        useState<IModelConcorrente>();
 
     const dao = new DAO();
 
@@ -34,142 +33,110 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
         state: EnumCrudStateRecordType
     ) => {
         if (state === EnumCrudStateRecordType.INCLUIR) {
-            data.CODIGO_LICITACAO = 0;
-            data.CODIGO_CONCORRENTE = 0;
-            data.CODIGO_PRODUTO = 0;
+            data.ITEM_LICITACAO_ID = 0;
+            data.CONCORRENTE_ID = 0;
             data.PRECO_GANHO = 0;
-            data.DATA_RESULTADO = "";
+            data.VALOR_TOTAL_LANCE = 0;
+            data.VALOR_ORCADO = 0;
+            data.VALOR_TOTAL_ORCADO = 0;
+            data.ECONOMIA_PERCENTUAL = 0;
+            data.ECONOMIA_REAIS = 0;
+            data.DATA_RELATORIO = "";
+            data.HORA_RELATORIO = "";
         }
 
-        if (state === EnumCrudStateRecordType.ALTERAR) {
-            if (data.DATA_RESULTADO) {
-                (data as any).DATA_RESULTADO = String(data.DATA_RESULTADO).substring(0, 10);
-            }
+        if (
+            state === EnumCrudStateRecordType.ALTERAR &&
+            data.DATA_RELATORIO
+        ) {
+            data.DATA_RELATORIO =
+                String(data.DATA_RELATORIO).substring(0, 10);
         }
 
-        if (state === EnumCrudStateRecordType.ALTERAR && data.CODIGO_LICITACAO) {
+        if (
+            state === EnumCrudStateRecordType.ALTERAR &&
+            data.ITEM_LICITACAO_ID
+        ) {
             try {
-                const licitacao = await dao.List(
-                    `/licitacoes/${data.CODIGO_LICITACAO}`
-                ) as unknown as IModelLicitacao;
+                const item = await dao.List(
+                    `/item-licitacoes/${data.ITEM_LICITACAO_ID}`
+                ) as unknown as IModelItemLicitacao;
 
-                if (licitacao) {
-                    data.LICITACAO = `${licitacao.ID} - ${licitacao.DESCRICAO}`;
-                }
+                /*if (item) {
+                    data.ITEM_LICITACAO =
+                        `${item.ID} - ${item.DESCRICAO}`;
+                }*/
             } catch (error) {
-                console.error("Erro ao carregar licitação:", error);
+                console.error(
+                    "Erro ao carregar item da licitação:",
+                    error
+                );
             }
         }
 
-        if (state === EnumCrudStateRecordType.ALTERAR && data.CODIGO_PRODUTO) {
-            try {
-                const produto = await dao.List(
-                    `/produtos/${data.CODIGO_PRODUTO}`
-                ) as unknown as IModelProduto;
-
-                if (produto) {
-                    data.PRODUTO = `${produto.ID} - ${produto.DESCRICAO}`;
-                }
-            } catch (error) {
-                console.error("Erro ao carregar produto:", error);
-            }
-        }
-
-        if (state === EnumCrudStateRecordType.ALTERAR && data.CODIGO_CONCORRENTE) {
+        if (
+            state === EnumCrudStateRecordType.ALTERAR &&
+            data.CONCORRENTE_ID
+        ) {
             try {
                 const concorrente = await dao.List(
-                    `/concorrentes/${data.CODIGO_CONCORRENTE}`
+                    `/concorrentes/${data.CONCORRENTE_ID}`
                 ) as unknown as IModelConcorrente;
 
                 if (concorrente) {
-                    data.CONCORRENTE = `${concorrente.ID} - ${concorrente.NOME}`;
+                    data.CONCORRENTE_ID =
+                        `${concorrente.ID} - ${concorrente.NOME}`;
                 }
             } catch (error) {
-                console.error("Erro ao carregar concorrente:", error);
+                console.error(
+                    "Erro ao carregar concorrente:",
+                    error
+                );
             }
         }
     };
 
-    const viewModalLicitacoes = (
-        dataModel: InputDataValue<IModelResultadoLicitacao>
-    ): JSX.Element => {
-        return (
-            <Custommodal ref={viewModalLicitacaoRef} largeType="extra-large">
-                <Card>
-                    <CardHeader
-                        title="Licitações"
-                        showSelectButton
-                        showCancelButton
-                        onSelectButtonClick={() => {
-                            if (!licitacaoSelecionada) {
-                                return;
-                            }
-
-                            dataModel.setData({
-                                ...dataModel.data,
-                                CODIGO_LICITACAO: licitacaoSelecionada.ID,
-                                LICITACAO: `${licitacaoSelecionada.ID} - ${licitacaoSelecionada.DESCRICAO}`
-                            });
-
-                            viewModalLicitacaoRef.current?.close();
-                        }}
-                        onCancelButtonClick={() => {
-                            viewModalLicitacaoRef.current?.close();
-                        }}
-                    />
-
-                    <CardBody>
-                        <LicitacaoContainer
-                            params={{
-                                isModal: true,
-                                onSelecionar: (licitacao: IModelLicitacao) => {
-                                    setLicitacaoSelecionada(licitacao);
-                                }
-                            }}
-                        />
-                    </CardBody>
-                </Card>
-            </Custommodal>
-        );
-    };
-
-    const viewModalProdutos = (
+    const viewModalItens = (
         dataModel: InputDataValue<IModelResultadoLicitacao>
     ): JSX.Element => {
         return (
             <Custommodal
-                ref={viewModalProdutoRef}
+                ref={viewModalItemRef}
                 largeType="extra-large"
-                showOverlay={false}
             >
-                <Card className="iq-card mb-0">
+                <Card>
                     <CardHeader
-                        title="Produtos"
+                        title="Itens da Licitação"
                         showSelectButton
                         showCancelButton
                         onSelectButtonClick={() => {
-                            if (!produtoSelecionado) {
+                            if (!itemSelecionado) {
                                 return;
                             }
 
                             dataModel.setData({
                                 ...dataModel.data,
-                                CODIGO_PRODUTO: produtoSelecionado.ID,
-                                PRODUTO: `${produtoSelecionado.ID} - ${produtoSelecionado.DESCRICAO}`
+                                ITEM_LICITACAO_ID:
+                                    itemSelecionado.ID,
+                                /*ITEM_LICITACAO:
+                                    `${itemSelecionado.ID} - ${itemSelecionado.DESCRICAO}`*/
                             });
 
-                            viewModalProdutoRef.current?.close();
+                            viewModalItemRef.current?.close();
                         }}
                         onCancelButtonClick={() => {
-                            viewModalProdutoRef.current?.close();
+                            viewModalItemRef.current?.close();
                         }}
                     />
+
                     <CardBody>
-                        <ProdutosContainer
+                        <ItemLicitacaoContainer
                             params={{
                                 isModal: true,
-                                onSelecionar: (produto: IModelProduto) => {
-                                    setProdutoSelecionado(produto);
+                                onSelecionar: (
+                                    item: IModelItemLicitacao
+                                ) => {
+                                    setItemSelecionado(item);
                                 }
                             }}
                         />
@@ -183,7 +150,10 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
         dataModel: InputDataValue<IModelResultadoLicitacao>
     ): JSX.Element => {
         return (
-            <Custommodal ref={viewModalConcorrenteRef} largeType="extra-large">
+            <Custommodal
+                ref={viewModalConcorrenteRef}
+                largeType="extra-large"
+            >
                 <Card>
                     <CardHeader
                         title="Concorrentes"
@@ -196,8 +166,10 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
 
                             dataModel.setData({
                                 ...dataModel.data,
-                                CODIGO_CONCORRENTE: concorrenteSelecionado.ID,
-                                CONCORRENTE: `${concorrenteSelecionado.ID} - ${concorrenteSelecionado.NOME}`
+                                CONCORRENTE_ID:
+                                    concorrenteSelecionado.ID,
+                                CONCORRENTE:
+                                    `${concorrenteSelecionado.ID} - ${concorrenteSelecionado.NOME}`
                             });
 
                             viewModalConcorrenteRef.current?.close();
@@ -211,8 +183,12 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                         <ConcorrentesContainer
                             params={{
                                 isModal: true,
-                                onSelecionar: (concorrente: IModelConcorrente) => {
-                                    setConcorrenteSelecionado(concorrente);
+                                onSelecionar: (
+                                    concorrente: IModelConcorrente
+                                ) => {
+                                    setConcorrenteSelecionado(
+                                        concorrente
+                                    );
                                 }
                             }}
                         />
@@ -226,7 +202,10 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
         <Crudmanutencao
             events={events}
             onInit={onInit}
-            urlPutMount={(url, data: IModelResultadoLicitacao) => {
+            urlPutMount={(
+                url,
+                data: IModelResultadoLicitacao
+            ) => {
                 if (!data.ID) {
                     return url;
                 }
@@ -234,7 +213,8 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                 return `${url}/${data.ID}`;
             }}
             onBody={(params) => {
-                const dataModel: InputDataValue<IModelResultadoLicitacao> =
+                const dataModel:
+                    InputDataValue<IModelResultadoLicitacao> =
                     params.dataModel;
 
                 return (
@@ -242,15 +222,20 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                         <div className="row">
                             <div className="col-12 col-md-6 mb-3">
                                 <label className="form-label">
-                                    Licitação <span className="text-danger">*</span>
+                                    Item da Licitação{" "}
+                                    <span className="text-danger">
+                                        *
+                                    </span>
                                 </label>
 
                                 <div className="input-group">
                                     <div className="flex-grow-1">
                                         <Input
-                                            id="LICITACAO"
+                                            id="ITEM_LICITACAO"
                                             dataModel={dataModel}
-                                            validator={params.validateFields}
+                                            validator={
+                                                params.validateFields
+                                            }
                                             validations={{
                                                 required: true
                                             }}
@@ -260,24 +245,26 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
 
                                     <div className="input-group-append">
                                         <Button
-                                            classIcon="mdi mdi-account-search m-1"
+                                            classIcon="mdi mdi-magnify m-1"
                                             className="btn btn-primary"
-                                            title="Consultar licitação"
+                                            title="Consultar item"
                                             overlayProps={{
                                                 placement: "top"
                                             }}
                                             onClick={() => {
-                                                viewModalLicitacaoRef.current?.open();
+                                                viewModalItemRef.current?.open();
                                             }}
                                         />
                                     </div>
-
                                 </div>
                             </div>
 
                             <div className="col-12 col-md-6 mb-3">
                                 <label className="form-label">
-                                    Concorrente <span className="text-danger">*</span>
+                                    Concorrente{" "}
+                                    <span className="text-danger">
+                                        *
+                                    </span>
                                 </label>
 
                                 <div className="input-group">
@@ -285,7 +272,9 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                         <Input
                                             id="CONCORRENTE"
                                             dataModel={dataModel}
-                                            validator={params.validateFields}
+                                            validator={
+                                                params.validateFields
+                                            }
                                             validations={{
                                                 required: true
                                             }}
@@ -295,7 +284,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
 
                                     <div className="input-group-append">
                                         <Button
-                                            classIcon="mdi mdi-account-search m-1"
+                                            classIcon="mdi mdi-magnify m-1"
                                             className="btn btn-primary"
                                             title="Consultar concorrente"
                                             overlayProps={{
@@ -306,41 +295,6 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                             }}
                                         />
                                     </div>
-
-                                </div>
-                            </div>
-
-                            <div className="col-12 col-md-6 mb-3">
-                                <label className="form-label">
-                                    Produto <span className="text-danger">*</span>
-                                </label>
-
-                                <div className="input-group">
-                                    <div className="flex-grow-1">
-                                        <Input
-                                            id="PRODUTO"
-                                            dataModel={dataModel}
-                                            validator={params.validateFields}
-                                            validations={{
-                                                required: true
-                                            }}
-                                            readOnly
-                                        />
-                                    </div>
-
-                                    <div className="input-group-append">
-                                        <Button
-                                            classIcon="mdi mdi-account-search m-1"
-                                            className="btn btn-primary"
-                                            title="Consultar produto"
-                                            overlayProps={{
-                                                placement: "top"
-                                            }}
-                                            onClick={() => {
-                                                viewModalProdutoRef.current?.open();
-                                            }}
-                                        />
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -348,10 +302,12 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                         <div className="row">
                             <div className="col-12 col-md-6 mb-3">
                                 <InputNumber
-                                    label="Preço ganho"
+                                    label="Preço Ganho"
                                     id="PRECO_GANHO"
                                     dataModel={dataModel}
-                                    validator={params.validateFields}
+                                    validator={
+                                        params.validateFields
+                                    }
                                     validations={{
                                         required: true
                                     }}
@@ -366,12 +322,140 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                             </div>
 
                             <div className="col-12 col-md-6 mb-3">
+                                <InputNumber
+                                    label="Valor Total do Lance"
+                                    id="VALOR_TOTAL_LANCE"
+                                    dataModel={dataModel}
+                                    validator={
+                                        params.validateFields
+                                    }
+                                    validations={{
+                                        required: true
+                                    }}
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    allowNegative={false}
+                                    prefix="R$ "
+                                    decimalSeparator=","
+                                    thousandSeparator="."
+                                    maxLength={20}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-12 col-md-6 mb-3">
+                                <InputNumber
+                                    label="Valor Orçado"
+                                    id="VALOR_ORCADO"
+                                    dataModel={dataModel}
+                                    validator={
+                                        params.validateFields
+                                    }
+                                    validations={{
+                                        required: true
+                                    }}
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    allowNegative={false}
+                                    prefix="R$ "
+                                    decimalSeparator=","
+                                    thousandSeparator="."
+                                    maxLength={20}
+                                />
+                            </div>
+
+                            <div className="col-12 col-md-6 mb-3">
+                                <InputNumber
+                                    label="Valor Total Orçado"
+                                    id="VALOR_TOTAL_ORCADO"
+                                    dataModel={dataModel}
+                                    validator={
+                                        params.validateFields
+                                    }
+                                    validations={{
+                                        required: true
+                                    }}
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    allowNegative={false}
+                                    prefix="R$ "
+                                    decimalSeparator=","
+                                    thousandSeparator="."
+                                    maxLength={20}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-12 col-md-6 mb-3">
+                                <InputNumber
+                                    label="Economia Percentual"
+                                    id="ECONOMIA_PERCENTUAL"
+                                    dataModel={dataModel}
+                                    validator={
+                                        params.validateFields
+                                    }
+                                    validations={{
+                                        required: true
+                                    }}
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    allowNegative={false}
+                                    suffix="%"
+                                    decimalSeparator=","
+                                    thousandSeparator="."
+                                    maxLength={6}
+                                />
+                            </div>
+
+                            <div className="col-12 col-md-6 mb-3">
+                                <InputNumber
+                                    label="Economia em Reais"
+                                    id="ECONOMIA_REAIS"
+                                    dataModel={dataModel}
+                                    validator={
+                                        params.validateFields
+                                    }
+                                    validations={{
+                                        required: true
+                                    }}
+                                    decimalScale={2}
+                                    fixedDecimalScale
+                                    allowNegative={false}
+                                    prefix="R$ "
+                                    decimalSeparator=","
+                                    thousandSeparator="."
+                                    maxLength={20}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-12 col-md-6 mb-3">
                                 <Input
-                                    label="Data do Resultado"
+                                    label="Data do Relatório"
+                                    id="DATA_RELATORIO"
                                     dataModel={dataModel as any}
-                                    id="DATA_RESULTADO"
                                     type="date"
-                                    validator={params.validateFields}
+                                    validator={
+                                        params.validateFields
+                                    }
+                                    validations={{
+                                        required: true
+                                    }}
+                                />
+                            </div>
+
+                            <div className="col-12 col-md-6 mb-3">
+                                <Input
+                                    label="Hora do Relatório"
+                                    id="HORA_RELATORIO"
+                                    dataModel={dataModel as any}
+                                    type="time"
+                                    validator={
+                                        params.validateFields
+                                    }
                                     validations={{
                                         required: true
                                     }}
@@ -379,8 +463,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                             </div>
                         </div>
 
-                        {viewModalLicitacoes(dataModel)}
-                        {viewModalProdutos(dataModel)}
+                        {viewModalItens(dataModel)}
                         {viewModalConcorrentes(dataModel)}
                     </Fragment>
                 );
@@ -390,3 +473,4 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
 };
 
 export default ResultadoLicitacaoManutencao;
+

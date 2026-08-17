@@ -1,12 +1,13 @@
 export interface IModelResultadoLicitacao {
     ID: number;
-    CODIGO_LICITACAO: number;
-    CODIGO_CONCORRENTE: number;
-    CODIGO_PRODUTO: number;
-    PRODUTO?: string;
-    LICITACAO?: string;
-    CONCORRENTE?: string;
+    ITEM_LICITACAO_ID: number;
+    CONCORRENTE_ID: number;
     PRECO_GANHO: number;
-    DATA_RESULTADO: string;
-    
+    VALOR_TOTAL_LANCE: number;
+    VALOR_ORCADO: number;
+    VALOR_TOTAL_ORCADO: number;
+    ECONOMIA_PERCENTUAL: number;
+    ECONOMIA_REAIS: number;
+    DATA_RELATORIO: string;
+    HORA_RELATORIO: string;
 }

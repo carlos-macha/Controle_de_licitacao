@@ -6,7 +6,7 @@ import Tabs, { TabContent, TabItem, TabPanel } from "../../base/components/tab/t
 import { nanoid } from "nanoid";
 import DataTable from "../../base/components/datatable/datatable";
 import DAO from "../../base/daos/dao";
-import { IModelProduto } from "../../models/modelProduto";
+//import { IModelProduto } from "../../models/modelProduto";
 import { IModelLicitacao } from "../../models/modellicitacao";
 import { IModelConcorrente } from "../../models/modelConcorrente";
 
@@ -34,31 +34,17 @@ const ResultadoLicitacaoDetalhes: React.FC<ResultadoLicitacaoDetalhesProps> = ({
             }
 
             try {
-                const licitacao = await dao.List(
-                    `/licitacoes/${data.CODIGO_LICITACAO}`
-                ) as unknown as IModelLicitacao;
-
-                const produto = await dao.List(
-                    `/produtos/${data.CODIGO_PRODUTO}`
-                ) as unknown as IModelProduto;
 
                 const concorrente = await dao.List(
-                    `/concorrentes/${data.CODIGO_CONCORRENTE}`
+                    `/concorrentes/${data.CONCORRENTE_ID}`
                 ) as unknown as IModelConcorrente;
 
                 setDetalhe([
                     {
-                        LICITACAO: licitacao
-                            ? `${licitacao.ID} - ${licitacao.NOME}`
-                            : "",
-                        PRODUTO: produto
-                            ? `${produto.ID} - ${produto.DESCRICAO}`
-                            : "",
                         CONCORRENTE: concorrente
                             ? `${concorrente.ID} - ${concorrente.NOME}`
                             : "",
                         PRECO_GANHO: data.PRECO_GANHO,
-                        DATA_RESULTADO: data.DATA_RESULTADO
                     }
                 ]);
             } catch (error) {
@@ -96,18 +82,6 @@ const ResultadoLicitacaoDetalhes: React.FC<ResultadoLicitacaoDetalhesProps> = ({
                                 key={JSON.stringify(detalhe)}
                                 title="Resultado da Licitação"
                                 columns={[
-                                    {
-                                        title: "Licitação",
-                                        field: "LICITACAO",
-                                        width: 300,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Produto",
-                                        field: "PRODUTO",
-                                        width: 300,
-                                        type: "string"
-                                    },
                                     {
                                         title: "Concorrente",
                                         field: "CONCORRENTE",

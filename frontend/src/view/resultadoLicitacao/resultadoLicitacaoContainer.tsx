@@ -42,8 +42,8 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Licitação",
-                field: "CODIGO_LICITACAO",
+                title: "Item Licitação",
+                field: "ITEM_LICITACAO_ID",
                 width: 200,
                 type: 'integer',
                 visible: true,
@@ -54,18 +54,7 @@ class ResultadoLicitacaoContainer extends CrudContainer {
             },
             {
                 title: "Concorrente",
-                field: "CODIGO_CONCORRENTE",
-                width: 200,
-                type: 'integer',
-                visible: true,
-                search: {
-                    width: 300,
-                    type: "DEFAULT"
-                }
-            },
-            {
-                title: "Produto",
-                field: "CODIGO_PRODUTO",
+                field: "CONCORRENTE_ID",
                 width: 200,
                 type: 'integer',
                 visible: true,
@@ -88,12 +77,88 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Data resultado",
-                field: "DATA_RESULTADO",
+                title: "Valor Total do Lance",
+                field: "VALOR_TOTAL_LANCE",
+                width: 200,
+                type: 'float',
+                formatter: Formatters.formatterNumber,
+                formatterParams: Formatters.money("R$"),
+                visible: true,
+                search: {
+                    width: 300,
+                    type: "DEFAULT"
+                }
+            },
+            {
+                title: "Valor Orçado",
+                field: "VALOR_ORCADO",
+                width: 200,
+                type: 'float',
+                formatter: Formatters.formatterNumber,
+                formatterParams: Formatters.money("R$"),
+                visible: true,
+                search: {
+                    width: 300,
+                    type: "DEFAULT"
+                }
+            },
+            {
+                title: "Valor Total Orçado",
+                field: "VALOR_TOTAL_ORCADO",
+                width: 200,
+                type: 'float',
+                formatter: Formatters.formatterNumber,
+                formatterParams: Formatters.money("R$"),
+                visible: true,
+                search: {
+                    width: 300,
+                    type: "DEFAULT"
+                }
+            },
+            {
+                title: "Economia Percentual",
+                field: "ECONOMIA_PERCENTUAL",
+                width: 200,
+                type: 'float',
+                formatter: Formatters.formatterNumber,
+                formatterParams: Formatters.money("R$"),
+                visible: true,
+                search: {
+                    width: 300,
+                    type: "DEFAULT"
+                }
+            },
+            {
+                title: "Economia Reais",
+                field: "ECONOMIA_REAIS",
+                width: 200,
+                type: 'float',
+                formatter: Formatters.formatterNumber,
+                formatterParams: Formatters.money("R$"),
+                visible: true,
+                search: {
+                    width: 300,
+                    type: "DEFAULT"
+                }
+            },
+            {
+                title: "Data do Relatório",
+                field: "DATA_RELATORIO",
                 width: 200,
                 type: 'date',
                 visible: true,
                 formatter: Formatters.dateISO,
+                search: {
+                    width: 300,
+                    type: "DEFAULT"
+                }
+            },
+            {
+                title: "Hora do Relatório",
+                field: "HORA_RELATORIO",
+                width: 200,
+                type: 'string',
+                visible: true,
                 search: {
                     width: 300,
                     type: "DEFAULT"

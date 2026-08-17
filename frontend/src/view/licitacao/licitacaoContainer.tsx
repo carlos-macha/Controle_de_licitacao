@@ -48,14 +48,7 @@ class LicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Número do Edital", field: "NUMERO_EDITAL", width: 100, type: 'string', visible: true,
-                search: {
-                    width: 300,
-                    type: "DEFAULT",
-                }
-            },
-            {
-                title: "Nome", field: "NOME", width: 300, type: 'string', visible: true,
+                title: "Pregão", field: "PREGAO", width: 250, type: 'string', visible: true,
                 search: {
                     width: 300,
                     type: "DEFAULT",
@@ -63,14 +56,7 @@ class LicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Código da Licitação", field: "CODIGO_LICITACAO", width: 150, type: 'string', visible: true,
-                search: {
-                    width: 300,
-                    type: "DEFAULT",
-                }
-            },
-            {
-                title: "Orgão Competente", field: "ORGAO_COMPETENTE", width: 300, type: 'string', visible: true,
+                title: "Processo Licitatório", field: "PROCESSO_LICITATORIO", width: 200, type: 'string', visible: true,
                 search: {
                     width: 300,
                     type: "DEFAULT",
@@ -78,7 +64,23 @@ class LicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Data do Certame", field: "DATA_CERTAME", formatter: Formatters.dateISO, width: 100, type: 'date', visible: true,
+                title: "Município", field: "MUNICIPIO", width: 250, type: 'string', visible: true,
+                search: {
+                    width: 300,
+                    type: "DEFAULT",
+                    charCase: EnumCharcasetypes.UPPERCASE
+                }
+            },
+            {
+                title: "Estado", field: "ESTADO", width: 300, type: 'string', visible: true,
+                search: {
+                    width: 300,
+                    type: "DEFAULT",
+                    charCase: EnumCharcasetypes.UPPERCASE
+                }
+            },
+            {
+                title: "Data do Certame", field: "DATA_CERTAME", formatter: Formatters.dateISO, width: 150, type: 'date', visible: true,
                 search: {
                     width: 300,
                     type: "DEFAULT",

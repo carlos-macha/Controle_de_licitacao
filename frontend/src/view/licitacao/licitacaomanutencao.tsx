@@ -4,7 +4,7 @@ import Crudmanutencao, { ManutencaoProps } from "../../base/components/crud/manu
 import { InputDataValue } from "../../base/types/types";
 import { IModelLicitacao } from "../../models/modellicitacao";
 import { EnumCharcasetypes, Input } from "../../base/components/form/form";
-import LicitacaoDetalhes from "./licitacaoDetalhes";
+import LicitacaoDetalhes from "./licitacaodetalhes";
 
 interface LicitacaoManutencaoProps extends ManutencaoProps { }
 
@@ -13,10 +13,10 @@ const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
 
     const onInit = (data: IModelLicitacao, state: EnumCrudStateRecordType) => {
         if (state === EnumCrudStateRecordType.INCLUIR) {
-            data.NUMERO_EDITAL = '';
-            data.NOME = '';
-            data.CODIGO_LICITACAO = '';
-            data.ORGAO_COMPETENTE = '';
+            data.PREGAO= '';
+            data.PROCESSO_LICITATORIO = '';
+            data.MUNICIPIO = '';
+            data.ESTADO = '';
             data.DATA_CERTAME = undefined as any;
         }
 
@@ -50,9 +50,9 @@ const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
 
                             <div className="col-12 col-md-4 mb-3">
                                 <Input
-                                    label="Número do Edital"
+                                    label="Pregão"
                                     dataModel={dataModel}
-                                    id="NUMERO_EDITAL"
+                                    id="PREGAO"
                                     validator={params.validateFields}
                                     validations={{
                                         required: true
@@ -63,9 +63,9 @@ const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
 
                             <div className="col-12 col-md-8 mb-3">
                                 <Input
-                                    label="Nome"
+                                    label="Processo Licitatório"
                                     dataModel={dataModel}
-                                    id="NOME"
+                                    id="PROCESSO_LICITATORIO"
                                     charCase={EnumCharcasetypes.UPPERCASE}
                                     validator={params.validateFields}
                                     validations={{
@@ -82,9 +82,9 @@ const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
 
                             <div className="col-12 col-md-4 mb-3">
                                 <Input
-                                    label="Código da Licitação"
+                                    label="Município"
                                     dataModel={dataModel}
-                                    id="CODIGO_LICITACAO"
+                                    id="MUNICIPIO"
                                     validator={params.validateFields}
                                     validations={{
                                         required: true
@@ -96,9 +96,9 @@ const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
 
                             <div className="col-12 col-md-5 mb-3">
                                 <Input
-                                    label="Órgão Competente"
+                                    label="Estado"
                                     dataModel={dataModel}
-                                    id="ORGAO_COMPETENTE"
+                                    id="ESTADO"
                                     charCase={EnumCharcasetypes.UPPERCASE}
                                     validator={params.validateFields}
                                     validations={{

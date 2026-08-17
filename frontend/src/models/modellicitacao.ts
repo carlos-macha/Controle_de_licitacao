@@ -1,16 +1,14 @@
 export interface IModelLicitacao {
     ID: number;
-    NUMERO_EDITAL: string;
-    NOME: string;
-    DESCRICAO: string;
-    CODIGO_LICITACAO: string;
-    ORGAO_COMPETENTE: string;
+    PREGAO: string;
+    PROCESSO_LICITATORIO: string;
+    MUNICIPIO: string;
+    ESTADO: string;
     DATA_CERTAME: string;
     LOGRADOURO: string;
     NUMERO: string;
     BAIRRO: string;
     CIDADE: string;
-    ESTADO: string;
     CEP: string;
-    COMPLEMENTO?: string;
+    COMPLEMENTO: string;
 }

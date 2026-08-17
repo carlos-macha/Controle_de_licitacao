@@ -92,14 +92,6 @@ const LicitacaoDetalhes: React.FC<LicitacaoDetalhesProps> = ({
                             Endereço
                         </TabItem>
 
-                        <TabItem
-                            className="nav-item"
-                            classNameLink="nav-link"
-                            tabPanelRef={`descricao-${id.current}`}
-                        >
-                            Descrição
-                        </TabItem>
-
                     </Tabs>
 
                 </CardHeader>
@@ -266,74 +258,6 @@ const LicitacaoDetalhes: React.FC<LicitacaoDetalhesProps> = ({
 
 
                         </TabPanel>
-
-
-
-                        <TabPanel
-                            className="tab-pane fade"
-                            id={`descricao-${id.current}`}
-                        >
-
-                            {isManutencao && dataModel ? (
-
-                                <div className="row">
-
-                                    <div className="col-12 mb-3">
-
-                                        <label className="form-label">
-                                            Descrição <span className="text-danger">*</span>
-                                        </label>
-
-
-                                        <textarea
-                                            className="form-control"
-                                            rows={6}
-                                            value={dataModel.data.DESCRICAO || ""}
-
-                                            onChange={(e) => {
-
-                                                dataModel.setData({
-
-                                                    ...dataModel.data,
-
-                                                    DESCRICAO: e.target.value
-
-                                                });
-
-                                            }}
-
-                                        />
-
-                                    </div>
-
-                                </div>
-
-                            ) : (
-
-                                <div className="row">
-
-                                    <div className="col-12 mb-3">
-
-                                        <label className="form-label">
-                                            Descrição
-                                        </label>
-
-
-                                        <textarea
-                                            className="form-control"
-                                            rows={6}
-                                            value={data?.DESCRICAO || ""}
-                                            readOnly
-                                        />
-
-                                    </div>
-
-                                </div>
-
-                            )}
-
-                        </TabPanel>
-
 
                     </TabContent>
 
