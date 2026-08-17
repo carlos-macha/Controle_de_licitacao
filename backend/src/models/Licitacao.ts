@@ -5,4 +5,10 @@ export interface Licitacao {
   MUNICIPIO: string;
   ESTADO?: string;
   DATA_CERTAME?: string;
+  LOGRADOURO?: string;
+  NUMERO?: string;
+  BAIRRO?: string;
+  CIDADE?: string;
+  CEP?: string;
+  COMPLEMENTO?: string;
 }

@@ -7,4 +7,5 @@ export interface ItemLicitacao {
     MODELO?: string;
     QUANTIDADE: number;
     UNIDADE: string;
+    OBSERVACAO: string;
 }

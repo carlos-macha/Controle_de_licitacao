@@ -4,6 +4,10 @@ import express from "express";
 import usuarioRouter from "./routes/usuario.route";
 import healthRouter from "./routes/health.route";
 import importacaoLicitacaoRouter from "./routes/importacaoLicitacao.route";
+import concorrenteRouter from "./routes/concorrente.route";
+import resultadoLicitacaoRouter from "./routes/resultadoLicitacao.route";
+import itemLicitacaoRouter from "./routes/itemLicitacao.route";
+import licitacaoRouter from "./routes/licitacao.route";
 import errorHandler from "./middlewares/errorHandler";
 
 const app = express();
@@ -19,6 +23,10 @@ app.use(cors({
 app.use(usuarioRouter);
 app.use(healthRouter);
 app.use(importacaoLicitacaoRouter);
+app.use(concorrenteRouter);
+app.use(resultadoLicitacaoRouter);
+app.use(itemLicitacaoRouter);
+app.use(licitacaoRouter);
 
 app.use(errorHandler);
 
