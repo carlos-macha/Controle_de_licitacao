@@ -60,6 +60,16 @@ const ResultadoLicitacaoPesquisa: React.FC<ResultadoLicitacaoPesquisaProps> = (p
                             }
                         }
 
+                        if (key === 'SEARCH_HORA_RELATORIO') {
+                            if (Number(value) === 0) {
+                                return;
+                            }
+
+                            if (typeof value === 'number') {
+                                value = momentUtils.fromOADate(value).format('HH:mm:ss');
+                            }
+                        }
+
                         params.append(key, String(value));
                     });
                 }

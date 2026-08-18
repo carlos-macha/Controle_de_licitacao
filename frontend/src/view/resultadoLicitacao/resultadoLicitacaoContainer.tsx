@@ -156,7 +156,7 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 title: "Hora do Relatório",
                 field: "HORA_RELATORIO",
                 width: 200,
-                type: 'string',
+                type: 'time',
                 visible: true,
                 formatter: Formatters.timeISO,
                 search: {
