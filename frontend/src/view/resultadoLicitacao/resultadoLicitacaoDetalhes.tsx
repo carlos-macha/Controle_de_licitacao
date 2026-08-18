@@ -9,6 +9,7 @@ import DAO from "../../base/daos/dao";
 //import { IModelProduto } from "../../models/modelProduto";
 import { IModelLicitacao } from "../../models/modellicitacao";
 import { IModelConcorrente } from "../../models/modelConcorrente";
+import { IModelItemLicitacao } from "../../models/modelItemLicitacao";
 
 interface ResultadoLicitacaoDetalhesProps {
     dataModel?: InputDataValue<IModelResultadoLicitacao>;
@@ -34,13 +35,19 @@ const ResultadoLicitacaoDetalhes: React.FC<ResultadoLicitacaoDetalhesProps> = ({
             }
 
             try {
-
                 const concorrente = await dao.List(
                     `/concorrentes/${data.CONCORRENTE_ID}`
                 ) as unknown as IModelConcorrente;
 
+                const itemLicitacao = await dao.List(
+                    `/itens-licitacao/${data.ITEM_LICITACAO_ID}`
+                ) as unknown as IModelItemLicitacao;
+
                 setDetalhe([
                     {
+                        ITEM_LICITACAO: itemLicitacao
+                            ? `${itemLicitacao.ID} - ${itemLicitacao.DESCRICAO}`
+                            : "",
                         CONCORRENTE: concorrente
                             ? `${concorrente.ID} - ${concorrente.NOME}`
                             : "",
@@ -83,11 +90,17 @@ const ResultadoLicitacaoDetalhes: React.FC<ResultadoLicitacaoDetalhesProps> = ({
                                 title="Resultado da Licitação"
                                 columns={[
                                     {
+                                        title: "Item da Licitação",
+                                        field: "ITEM_LICITACAO",
+                                        width: 300,
+                                        type: "string"
+                                    },
+                                    {
                                         title: "Concorrente",
                                         field: "CONCORRENTE",
                                         width: 300,
                                         type: "string"
-                                    },
+                                    }
                                 ]}
                                 data={detalhe}
                                 options={{

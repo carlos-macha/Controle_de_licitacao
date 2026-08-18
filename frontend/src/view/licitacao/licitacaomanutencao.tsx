@@ -4,7 +4,7 @@ import Crudmanutencao, { ManutencaoProps } from "../../base/components/crud/manu
 import { InputDataValue } from "../../base/types/types";
 import { IModelLicitacao } from "../../models/modellicitacao";
 import { EnumCharcasetypes, Input } from "../../base/components/form/form";
-import LicitacaoDetalhes from "./licitacaodetalhes";
+import LicitacaoDetalhes from "./licitacaoDetalhes";
 
 interface LicitacaoManutencaoProps extends ManutencaoProps { }
 

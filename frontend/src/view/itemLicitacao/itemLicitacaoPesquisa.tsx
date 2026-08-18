@@ -1,20 +1,16 @@
 import { Fragment, useState } from "react";
 import Crudpesquisa, { PesquisaProps } from "../../base/components/crud/pesquisa/crudpesquisa";
-import { IModelLicitacao } from "../../models/modellicitacao";
-import LicitacaoDetalhe from "./licitacaoDetalhes";
-import { momentUtils } from "../../base/utils/momentutils";
+import { IModelItemLicitacao } from "../../models/modelItemLicitacao";
+import ItemLicitacaoDetalhe from "./itemLicitacaoDetalhe";
+//import ItemLicitacaoDetalhe from "./itemLicitacaoDetalhe";
 
-interface LicitacaoPesquisaProps extends PesquisaProps {
-    onBtnSelecionar?: (produto: IModelLicitacao) => void;
+interface ItemLicitacaoPesquisaProps extends PesquisaProps {
+    onBtnSelecionar?: (item: IModelItemLicitacao) => void;
     isModal?: boolean;
 }
 
-const LicitacaoPesquisa: React.FC<LicitacaoPesquisaProps> = (props) => {
-    const [licitacaoSelecionada, setLicitacaoSelecionada] = useState<IModelLicitacao>();
-
-    const limparSelecionada = () => {
-        setLicitacaoSelecionada(undefined);
-    };
+const ItemLicitacaoPesquisa: React.FC<ItemLicitacaoPesquisaProps> = (props) => {
+    const [itemSelecionado, setItemSelecionado] = useState<IModelItemLicitacao>();
 
     return (
         <Crudpesquisa
@@ -23,24 +19,23 @@ const LicitacaoPesquisa: React.FC<LicitacaoPesquisaProps> = (props) => {
             showDeleteButton={!props.isModal}
             autoLoad
             onDataChange={(data) => {
-                setLicitacaoSelecionada(data);
+                setItemSelecionado(data);
 
                 if (data && props.onBtnSelecionar) {
                     props.onBtnSelecionar(data);
                 }
             }}
             containerBottom={() => {
-                if (!licitacaoSelecionada) {
+                if (!itemSelecionado) {
                     return <Fragment />;
                 }
 
                 return (
-                    <LicitacaoDetalhe
-                        data={licitacaoSelecionada}
+                    <ItemLicitacaoDetalhe
+                        data={itemSelecionado}
                     />
                 );
             }}
-
             urlGetMount={(
                 url: string,
                 id: string | number,
@@ -58,20 +53,14 @@ const LicitacaoPesquisa: React.FC<LicitacaoPesquisaProps> = (props) => {
 
                 if (data) {
                     Object.keys(data).forEach(key => {
-                        let value = data[key];
+                        const value = data[key];
 
-                        if (value === undefined || value === null || value === '') {
+                        if (
+                            value === undefined ||
+                            value === null ||
+                            value === ''
+                        ) {
                             return;
-                        }
-
-                        if (key === 'SEARCH_DATA_CERTAME') {
-                            if (Number(value) === 0) {
-                                return;
-                            }
-
-                            if (typeof value === 'number') {
-                                value = momentUtils.fromOADate(value).format('YYYY-MM-DD');
-                            }
                         }
 
                         params.append(key, String(value));
@@ -83,11 +72,9 @@ const LicitacaoPesquisa: React.FC<LicitacaoPesquisaProps> = (props) => {
 
                 return `${url}?${params.toString()}`;
             }}
-
-
             events={props.events}
         />
     );
 }
 
-export default LicitacaoPesquisa;
+export default ItemLicitacaoPesquisa;

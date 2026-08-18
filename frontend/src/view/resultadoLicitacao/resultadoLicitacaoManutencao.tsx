@@ -9,7 +9,7 @@ import Custommodal from "../../base/components/modal/custommodal";
 import DAO from "../../base/daos/dao";
 import { IModelItemLicitacao } from "../../models/modelItemLicitacao";
 import { IModelConcorrente } from "../../models/modelConcorrente";
-//import ItemLicitacaoContainer from "../itemLicitacao/itemLicitacaoContainer";
+import ItemLicitacaoContainer from "../itemLicitacao/itemLicitacaoContainer";
 import ConcorrentesContainer from "../concorrentes/concorrentesContainer";
 
 interface ResultadoLicitacaoManutencaoProps extends ManutencaoProps { }
@@ -43,55 +43,52 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
             data.ECONOMIA_REAIS = 0;
             data.DATA_RELATORIO = "";
             data.HORA_RELATORIO = "";
+            data.ITEM_LICITACAO = "";
+            data.CONCORRENTE = "";
         }
 
-        if (
-            state === EnumCrudStateRecordType.ALTERAR &&
-            data.DATA_RELATORIO
-        ) {
-            data.DATA_RELATORIO =
-                String(data.DATA_RELATORIO).substring(0, 10);
-        }
-
-        if (
-            state === EnumCrudStateRecordType.ALTERAR &&
-            data.ITEM_LICITACAO_ID
-        ) {
-            try {
-                const item = await dao.List(
-                    `/item-licitacoes/${data.ITEM_LICITACAO_ID}`
-                ) as unknown as IModelItemLicitacao;
-
-                /*if (item) {
-                    data.ITEM_LICITACAO =
-                        `${item.ID} - ${item.DESCRICAO}`;
-                }*/
-            } catch (error) {
-                console.error(
-                    "Erro ao carregar item da licitação:",
-                    error
-                );
+        if (state === EnumCrudStateRecordType.ALTERAR) {
+            if (data.DATA_RELATORIO) {
+                data.DATA_RELATORIO = String(data.DATA_RELATORIO).substring(0, 10);
             }
-        }
 
-        if (
-            state === EnumCrudStateRecordType.ALTERAR &&
-            data.CONCORRENTE_ID
-        ) {
-            try {
-                const concorrente = await dao.List(
-                    `/concorrentes/${data.CONCORRENTE_ID}`
-                ) as unknown as IModelConcorrente;
+            if (data.HORA_RELATORIO) {
+                const hora = new Date(data.HORA_RELATORIO);
+                data.HORA_RELATORIO = hora.toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false
+                });
+            }
 
-                if (concorrente) {
-                    data.CONCORRENTE_ID =
-                        `${concorrente.ID} - ${concorrente.NOME}`;
+            if (data.ITEM_LICITACAO_ID) {
+                try {
+                    const item = await dao.List(
+                        `/itens-licitacao/${data.ITEM_LICITACAO_ID}`
+                    ) as unknown as IModelItemLicitacao;
+
+                    if (item) {
+                        data.ITEM_LICITACAO_ID = item.ID;
+                        data.ITEM_LICITACAO = `${item.ID} - ${item.DESCRICAO}`;
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar item da licitação:", error);
                 }
-            } catch (error) {
-                console.error(
-                    "Erro ao carregar concorrente:",
-                    error
-                );
+            }
+
+            if (data.CONCORRENTE_ID) {
+                try {
+                    const concorrente = await dao.List(
+                        `/concorrentes/${data.CONCORRENTE_ID}`
+                    ) as unknown as IModelConcorrente;
+
+                    if (concorrente) {
+                        data.CONCORRENTE_ID = concorrente.ID;
+                        data.CONCORRENTE = `${concorrente.ID} - ${concorrente.NOME}`;
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar concorrente:", error);
+                }
             }
         }
     };
@@ -118,8 +115,8 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                 ...dataModel.data,
                                 ITEM_LICITACAO_ID:
                                     itemSelecionado.ID,
-                                /*ITEM_LICITACAO:
-                                    `${itemSelecionado.ID} - ${itemSelecionado.DESCRICAO}`*/
+                                ITEM_LICITACAO:
+                                    `${itemSelecionado.ID} - ${itemSelecionado.DESCRICAO}`
                             });
 
                             viewModalItemRef.current?.close();
@@ -212,6 +209,15 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
 
                 return `${url}/${data.ID}`;
             }}
+            beforeSave={
+                (data: IModelResultadoLicitacao) => {
+                    if (data.HORA_RELATORIO) {
+                        data.HORA_RELATORIO = `1970-01-01T${data.HORA_RELATORIO}:00.000Z`;
+                    }
+
+                    return data;
+                }
+            }
             onBody={(params) => {
                 const dataModel:
                     InputDataValue<IModelResultadoLicitacao> =
@@ -305,9 +311,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     label="Preço Ganho"
                                     id="PRECO_GANHO"
                                     dataModel={dataModel}
-                                    validator={
-                                        params.validateFields
-                                    }
+                                    validator={params.validateFields}
                                     validations={{
                                         required: true
                                     }}
@@ -326,9 +330,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     label="Valor Total do Lance"
                                     id="VALOR_TOTAL_LANCE"
                                     dataModel={dataModel}
-                                    validator={
-                                        params.validateFields
-                                    }
+                                    validator={params.validateFields}
                                     validations={{
                                         required: true
                                     }}
@@ -349,9 +351,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     label="Valor Orçado"
                                     id="VALOR_ORCADO"
                                     dataModel={dataModel}
-                                    validator={
-                                        params.validateFields
-                                    }
+                                    validator={params.validateFields}
                                     validations={{
                                         required: true
                                     }}
@@ -370,9 +370,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     label="Valor Total Orçado"
                                     id="VALOR_TOTAL_ORCADO"
                                     dataModel={dataModel}
-                                    validator={
-                                        params.validateFields
-                                    }
+                                    validator={params.validateFields}
                                     validations={{
                                         required: true
                                     }}
@@ -393,9 +391,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     label="Economia Percentual"
                                     id="ECONOMIA_PERCENTUAL"
                                     dataModel={dataModel}
-                                    validator={
-                                        params.validateFields
-                                    }
+                                    validator={params.validateFields}
                                     validations={{
                                         required: true
                                     }}
@@ -414,9 +410,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     label="Economia em Reais"
                                     id="ECONOMIA_REAIS"
                                     dataModel={dataModel}
-                                    validator={
-                                        params.validateFields
-                                    }
+                                    validator={params.validateFields}
                                     validations={{
                                         required: true
                                     }}
@@ -438,9 +432,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     id="DATA_RELATORIO"
                                     dataModel={dataModel as any}
                                     type="date"
-                                    validator={
-                                        params.validateFields
-                                    }
+                                    validator={params.validateFields}
                                     validations={{
                                         required: true
                                     }}
@@ -453,9 +445,7 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
                                     id="HORA_RELATORIO"
                                     dataModel={dataModel as any}
                                     type="time"
-                                    validator={
-                                        params.validateFields
-                                    }
+                                    validator={params.validateFields}
                                     validations={{
                                         required: true
                                     }}
@@ -473,4 +463,3 @@ const ResultadoLicitacaoManutencao: React.FC<ResultadoLicitacaoManutencaoProps> 
 };
 
 export default ResultadoLicitacaoManutencao;
-

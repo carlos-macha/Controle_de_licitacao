@@ -159,6 +159,7 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 width: 200,
                 type: 'string',
                 visible: true,
+                formatter: Formatters.timeISO,
                 search: {
                     width: 300,
                     type: "DEFAULT"

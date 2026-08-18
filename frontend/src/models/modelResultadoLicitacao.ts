@@ -10,4 +10,6 @@ export interface IModelResultadoLicitacao {
     ECONOMIA_REAIS: number;
     DATA_RELATORIO: string;
     HORA_RELATORIO: string;
+    ITEM_LICITACAO?: string;
+    CONCORRENTE?: string;
 }

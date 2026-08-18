@@ -121,17 +121,27 @@ export class Formatters {
    }
 
    static cnpj = (cell: any, formatterParams: {}, onRendered: EmptyCallback) => {
-    let strValue = String(cell.getValue() ?? '').replace(/\D/g, '');
+      let strValue = String(cell.getValue() ?? '').replace(/\D/g, '');
 
-    if (strValue.length === 14) {
-        strValue = strValue.replace(
+      if (strValue.length === 14) {
+         strValue = strValue.replace(
             /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
             '$1.$2.$3/$4-$5'
-        );
-    }
+         );
+      }
 
-    return strValue ? `<span title="${strValue}">${strValue}</span>` : '';
-}
+      return strValue ? `<span title="${strValue}">${strValue}</span>` : '';
+   }
+
+   static timeISO = (cell: any, formatterParams: {}, onRendered: EmptyCallback) => {
+      let strValue = cell.getValue();
+
+      if (strValue && strValue !== null) {
+         strValue = moment(strValue).format('HH:mm:ss');
+      }
+
+      return strValue ? `<span title="${strValue}">${strValue}</span>` : '';
+   }
 }
 
 export type DataTableColumns = Array<DataTableColumnDefinition>;

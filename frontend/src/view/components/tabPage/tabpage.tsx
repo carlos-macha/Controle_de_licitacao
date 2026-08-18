@@ -6,6 +6,7 @@ import Licitacao from '../../licitacao/licitacao';
 import Concorrentes from '../../concorrentes/concorrentes';
 import ResultadoLicitacao from '../../resultadoLicitacao/resultadoLicitacao';
 import Administracao from '../../administracao/administracao';
+import ItemLicitacao from '../../itemLicitacao/itemLicitacao';
 
 interface TabPageProps { };
 
@@ -26,6 +27,10 @@ const TabPage: React.FC<TabPageProps> = (props) => {
 
          case "concorrentes":
             el = <Concorrentes/>
+            break;
+
+         case "itemlicitacao":
+            el = <ItemLicitacao/>
             break;
             
          case "meucadastro":
