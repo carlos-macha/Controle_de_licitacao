@@ -50,7 +50,7 @@ const ResultadoLicitacaoPesquisa: React.FC<ResultadoLicitacaoPesquisaProps> = (p
                             return;
                         }
 
-                        if (key === 'SEARCH_DATA_RESULTADO') {
+                        if (key === 'SEARCH_DATA_RELATORIO') {
                             if (Number(value) === 0) {
                                 return;
                             }

@@ -43,7 +43,7 @@ const ItemLicitacaoDetalhe: React.FC<ItemLicitacaoDetalheProps> = ({ data, dataM
                                             onChange={(e) => {
                                                 dataModel.setData({
                                                     ...dataModel.data,
-                                                    DESCRICAO: e.target.value
+                                                    DESCRICAO: e.target.value.toUpperCase()
                                                 });
                                             }}
                                         />
@@ -71,7 +71,7 @@ const ItemLicitacaoDetalhe: React.FC<ItemLicitacaoDetalheProps> = ({ data, dataM
                                             onChange={(e) => {
                                                 dataModel.setData({
                                                     ...dataModel.data,
-                                                    OBSERVACAO: e.target.value
+                                                    OBSERVACAO: e.target.value.toUpperCase()
                                                 });
                                             }}
                                         />

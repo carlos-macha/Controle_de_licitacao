@@ -31,22 +31,22 @@ export class ImportacaoLicitacaoService {
                 .replace(/\D/g, "")
                 .slice(0, 14),
 
-            municipio: dado.municipio.trim(),
+            municipio: dado.municipio.trim().toUpperCase(),
 
-            pregao: dado.pregao.trim(),
+            pregao: dado.pregao.trim().toUpperCase(),
 
             processo_licitatorio:
-                dado.processo_licitatorio.trim(),
+                dado.processo_licitatorio.trim().toUpperCase(),
 
-            fornecedor: dado.fornecedor.trim(),
+            fornecedor: dado.fornecedor.trim().toUpperCase(),
 
-            descricao: dado.descricao.trim(),
+            descricao: dado.descricao.trim().toUpperCase(),
 
-            marca: dado.marca?.trim(),
+            marca: dado.marca?.trim().toUpperCase(),
 
-            modelo: dado.modelo?.trim(),
+            modelo: dado.modelo?.trim().toUpperCase(),
 
-            unidade: dado.unidade.trim()
+            unidade: dado.unidade.trim().toUpperCase()
         }));
 
         const licitacoes =

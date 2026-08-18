@@ -120,8 +120,7 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 field: "ECONOMIA_PERCENTUAL",
                 width: 200,
                 type: 'float',
-                formatter: Formatters.formatterNumber,
-                formatterParams: Formatters.money("R$"),
+                formatter: Formatters.formatterPercent,
                 visible: true,
                 search: {
                     width: 300,

@@ -17,8 +17,16 @@ export class ConcorrenteDAO extends BaseDAO<Concorrente> {
                 "ID",
                 "NOME",
                 "CNPJ",
-                "ENDERECO_ID",
-                "CONTATO_ID",
+                "EMAIL",
+                "TELEFONE",
+                "CELULAR",
+                "LOGRADOURO",
+                "NUMERO",
+                "BAIRRO",
+                "CIDADE",
+                "ESTADO",
+                "CEP",
+                "COMPLEMENTO"
             ]),
             new Set(["NOME"])
         );

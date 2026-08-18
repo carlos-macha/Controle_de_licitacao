@@ -94,21 +94,6 @@ const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
                             </div>
 
 
-                            <div className="col-12 col-md-5 mb-3">
-                                <Input
-                                    label="Estado"
-                                    dataModel={dataModel}
-                                    id="ESTADO"
-                                    charCase={EnumCharcasetypes.UPPERCASE}
-                                    validator={params.validateFields}
-                                    validations={{
-                                        required: true
-                                    }}
-                                    maxLength={200}
-                                />
-                            </div>
-
-
                             <div className="col-12 col-md-3 mb-3">
                                 <Input
                                     label="Data do Certame"

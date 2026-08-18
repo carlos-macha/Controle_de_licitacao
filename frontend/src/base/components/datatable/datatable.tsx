@@ -142,6 +142,16 @@ export class Formatters {
 
       return strValue ? `<span title="${strValue}">${strValue}</span>` : '';
    }
+
+   static formatterPercent: FormatterTypes = function (cell, formatterParams: FormatterMoney) {
+      let strValue = Number(cell.getValue()).toLocaleString('pt-BR', {
+         minimumFractionDigits: formatterParams.precision ?? 2,
+         maximumFractionDigits: formatterParams.precision ?? 2
+      });
+
+      return `${strValue}%`;
+   }
+
 }
 
 export type DataTableColumns = Array<DataTableColumnDefinition>;

@@ -25,48 +25,49 @@ export const licitacaoSchema = z.object({
         .string()
         .trim()
         .length(2, "Estado deve possuir exatamente 2 caracteres.")
+        .nullable()
         .optional(),
 
     DATA_CERTAME: z
         .string()
         .trim()
+        .nullable()
         .optional(),
 
     LOGRADOURO: z
         .string()
         .trim()
         .max(150, "Logradouro deve possuir no máximo 150 caracteres.")
+        .nullable()
         .optional(),
 
     NUMERO: z
         .string()
         .trim()
         .max(10, "Número deve possuir no máximo 10 caracteres.")
+        .nullable()
         .optional(),
 
     BAIRRO: z
         .string()
         .trim()
         .max(100, "Bairro deve possuir no máximo 100 caracteres.")
-        .optional(),
-
-    CIDADE: z
-        .string()
-        .trim()
-        .max(100, "Cidade deve possuir no máximo 100 caracteres.")
+        .nullable()
         .optional(),
 
     CEP: z
         .string()
         .trim()
         .max(9, "CEP deve possuir no máximo 9 caracteres.")
+        .nullable()
         .optional(),
 
     COMPLEMENTO: z
         .string()
         .trim()
         .max(100, "Complemento deve possuir no máximo 100 caracteres.")
-        .optional()
+        .nullable()
+        .optional(),
 });
 
 export type Licitacao = z.infer<typeof licitacaoSchema>;

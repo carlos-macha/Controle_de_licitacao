@@ -72,14 +72,6 @@ class LicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Estado", field: "ESTADO", width: 300, type: 'string', visible: true,
-                search: {
-                    width: 300,
-                    type: "DEFAULT",
-                    charCase: EnumCharcasetypes.UPPERCASE
-                }
-            },
-            {
                 title: "Data do Certame", field: "DATA_CERTAME", formatter: Formatters.dateISO, width: 150, type: 'date', visible: true,
                 search: {
                     width: 300,
