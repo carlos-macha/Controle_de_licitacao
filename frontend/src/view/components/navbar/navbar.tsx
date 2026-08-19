@@ -97,11 +97,24 @@ const Navbar: React.FC = () => {
          );
 
       try {
+
          const controller = new ControllerImportacao();
 
          await controller.Importar(dados);
 
          console.log('Importação realizada com sucesso.');
+
+         sweetAlertdispatch({
+            type: "show",
+            props: {
+               title: "Sucesso",
+               type: "success",
+               onConfirm: () => {
+                  sweetAlertdispatch({ type: "close" });
+               }
+            },
+            msg: "Arquivo importado com sucesso."
+         });
 
       } catch (error: any) {
          sweetAlertdispatch({

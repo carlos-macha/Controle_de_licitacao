@@ -12,6 +12,12 @@ type ModalAction =
         onSave: (data: any) => void;
     }
     | {
+        type: "licitacaoItemManutencaoModal";
+        item?: any;
+        state: EnumCrudStateRecordType;
+        onSave: (data: any) => void;
+    }
+    | {
         type: "concorrentesEnderecoManutencaoModal";
         endereco?: any;
         state: EnumCrudStateRecordType;
@@ -30,10 +36,12 @@ type ModalState = {
     type:
         | "close"
         | "licitacaoEnderecoManutencaoModal"
+        | "licitacaoItemManutencaoModal"
         | "concorrentesEnderecoManutencaoModal"
         | "concorrentesContatoManutencaoModal";
 
     endereco?: any;
+    item?: any;
     contato?: any;
     state?: EnumCrudStateRecordType;
     onSave?: (data: any) => void;
@@ -62,6 +70,14 @@ const ModalReducer = (
             return {
                 type: "licitacaoEnderecoManutencaoModal",
                 endereco: action.endereco,
+                state: action.state,
+                onSave: action.onSave
+            };
+
+        case "licitacaoItemManutencaoModal":
+            return {
+                type: "licitacaoItemManutencaoModal",
+                item: action.item,
                 state: action.state,
                 onSave: action.onSave
             };

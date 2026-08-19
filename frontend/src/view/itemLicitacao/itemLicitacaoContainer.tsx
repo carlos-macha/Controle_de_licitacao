@@ -33,7 +33,7 @@ class ItemLicitacaoContainer extends CrudContainer {
             {
                 title: "Código",
                 field: "ID",
-                width: 100,
+                width: 60,
                 isKey: true,
                 type: "integer",
                 visible: true,
@@ -43,9 +43,20 @@ class ItemLicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Licitação",
+                title: "Código da Licitação",
                 field: "LICITACAO_ID",
                 width: 150,
+                type: "integer",
+                visible: false,
+                search: {
+                    width: 200,
+                    type: "DEFAULT",
+                }
+            },
+            {
+                title: "Licitação",
+                field: "LICITACAO",
+                width: 240,
                 type: "integer",
                 visible: true,
                 search: {
@@ -56,7 +67,7 @@ class ItemLicitacaoContainer extends CrudContainer {
             {
                 title: "Item",
                 field: "ITEM",
-                width: 100,
+                width: 60,
                 type: "integer",
                 visible: true,
                 search: {
@@ -67,7 +78,7 @@ class ItemLicitacaoContainer extends CrudContainer {
             {
                 title: "Marca",
                 field: "MARCA",
-                width: 200,
+                width: 180,
                 type: "string",
                 visible: true,
                 search: {
@@ -79,7 +90,7 @@ class ItemLicitacaoContainer extends CrudContainer {
             {
                 title: "Modelo",
                 field: "MODELO",
-                width: 200,
+                width: 180,
                 type: "string",
                 visible: true,
                 search: {
@@ -91,7 +102,7 @@ class ItemLicitacaoContainer extends CrudContainer {
             {
                 title: "Quantidade",
                 field: "QUANTIDADE",
-                width: 150,
+                width: 60,
                 type: "float",
                 formatter: Formatters.formatterNumber,
                 visible: true,
@@ -103,7 +114,7 @@ class ItemLicitacaoContainer extends CrudContainer {
             {
                 title: "Unidade",
                 field: "UNIDADE",
-                width: 150,
+                width: 60,
                 type: "string",
                 visible: true,
                 search: {

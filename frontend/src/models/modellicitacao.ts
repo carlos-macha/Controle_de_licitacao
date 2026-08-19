@@ -8,7 +8,6 @@ export interface IModelLicitacao {
     LOGRADOURO: string;
     NUMERO: string;
     BAIRRO: string;
-    CIDADE: string;
     CEP: string;
     COMPLEMENTO: string;
 }

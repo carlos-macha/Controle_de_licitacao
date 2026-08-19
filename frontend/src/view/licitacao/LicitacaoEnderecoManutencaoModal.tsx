@@ -23,7 +23,6 @@ const LicitacaoEnderecoManutencaoModal: React.FC<LicitacaoEnderecoManutencaoModa
         LOGRADOURO: "",
         NUMERO: "",
         BAIRRO: "",
-        CIDADE: "",
         ESTADO: "",
         COMPLEMENTO: ""
     });

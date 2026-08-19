@@ -5,7 +5,7 @@ import Tabs, { TabContent, TabItem, TabPanel } from "../../base/components/tab/t
 import { InputDataValue } from "../../base/types/types";
 import { IModelConcorrente } from "../../models/modelConcorrente";
 import { useModalContext } from "../../hooks/useModalContext";
-import Button from "../../base/components/form/form";
+import Button, { Input } from "../../base/components/form/form";
 import { EnumCrudStateRecordType } from "../../base/components/crud/enums";
 import DataTable from "../../base/components/datatable/datatable";
 
@@ -25,10 +25,8 @@ const ConcorrentesDetalhes: React.FC<ConcorrentesDetalhesProps> = ({
 }) => {
     const id = useRef(nanoid());
 
-    const [enderecoSelecionado, setEnderecoSelecionado] = useState<any>();
     const [enderecoAtualState, setEnderecoAtualState] = useState<any>();
 
-    const [contatoSelecionado, setContatoSelecionado] = useState<any>();
     const [contatoAtualState, setContatoAtualState] = useState<any>();
 
     const { modalDispash } = useModalContext();
@@ -168,65 +166,101 @@ const ConcorrentesDetalhes: React.FC<ConcorrentesDetalhesProps> = ({
                                 </div>
                             )}
 
-                            <DataTable
-                                key={JSON.stringify(enderecoAtual)}
-                                title="Endereço"
-                                columns={[
-                                    {
-                                        title: "Logradouro",
-                                        field: "LOGRADOURO",
-                                        width: 250,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Número",
-                                        field: "NUMERO",
-                                        width: 100,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Bairro",
-                                        field: "BAIRRO",
-                                        width: 180,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Cidade",
-                                        field: "CIDADE",
-                                        width: 180,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Estado",
-                                        field: "ESTADO",
-                                        width: 100,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "CEP",
-                                        field: "CEP",
-                                        width: 120,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Complemento",
-                                        field: "COMPLEMENTO",
-                                        width: 200,
-                                        type: "string"
-                                    }
-                                ]}
-                                data={enderecoAtual ? [enderecoAtual] : []}
-                                options={{
-                                    height: 200,
-                                    pagination: false,
-                                    layout: "fitDataFill",
-                                    selectable: 1
-                                }}
-                                useRowId
-                                onRowClick={(endereco: any) => {
-                                    setEnderecoSelecionado(endereco);
-                                }}
-                            />
+                            <div className="row">
+
+                                <div className="col-md-8 mb-3">
+                                    <Input
+                                        label="Logradouro"
+                                        id="LOGRADOURO"
+                                        dataModel={{
+                                            data: enderecoAtual ?? {},
+                                            setData: () => { }
+                                        }}
+                                        disabled
+                                    />
+                                </div>
+
+                                <div className="col-md-4 mb-3">
+                                    <Input
+                                        label="Número"
+                                        id="NUMERO"
+                                        dataModel={{
+                                            data: enderecoAtual ?? {},
+                                            setData: () => { }
+                                        }}
+                                        disabled
+                                    />
+                                </div>
+
+                            </div>
+
+                            <div className="row">
+
+                                <div className="col-md-5 mb-3">
+                                    <Input
+                                        label="Bairro"
+                                        id="BAIRRO"
+                                        dataModel={{
+                                            data: enderecoAtual ?? {},
+                                            setData: () => { }
+                                        }}
+                                        disabled
+                                    />
+                                </div>
+
+                                <div className="col-md-5 mb-3">
+                                    <Input
+                                        label="Cidade"
+                                        id="CIDADE"
+                                        dataModel={{
+                                            data: enderecoAtual ?? {},
+                                            setData: () => { }
+                                        }}
+                                        disabled
+                                    />
+                                </div>
+
+                                <div className="col-md-2 mb-3">
+                                    <Input
+                                        label="Estado"
+                                        id="ESTADO"
+                                        dataModel={{
+                                            data: enderecoAtual ?? {},
+                                            setData: () => { }
+                                        }}
+                                        disabled
+                                    />
+                                </div>
+
+                            </div>
+
+                            <div className="row">
+
+                                <div className="col-md-4 mb-3">
+                                    <Input
+                                        label="CEP"
+                                        id="CEP"
+                                        dataModel={{
+                                            data: enderecoAtual ?? {},
+                                            setData: () => { }
+                                        }}
+                                        disabled
+                                    />
+                                </div>
+
+                                <div className="col-md-8 mb-3">
+                                    <Input
+                                        label="Complemento"
+                                        id="COMPLEMENTO"
+                                        dataModel={{
+                                            data: enderecoAtual ?? {},
+                                            setData: () => { }
+                                        }}
+                                        disabled
+                                    />
+                                </div>
+
+                            </div>
                         </TabPanel>
 
                         <TabPanel
@@ -282,41 +316,63 @@ const ConcorrentesDetalhes: React.FC<ConcorrentesDetalhesProps> = ({
                                 </div>
                             )}
 
-                            <DataTable
-                                key={JSON.stringify(contatoAtual)}
-                                title="Contato"
-                                columns={[
-                                    {
-                                        title: "E-mail",
-                                        field: "EMAIL",
-                                        width: 300,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Telefone",
-                                        field: "TELEFONE",
-                                        width: 180,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Celular",
-                                        field: "CELULAR",
-                                        width: 180,
-                                        type: "string"
-                                    }
-                                ]}
-                                data={contatoAtual ? [contatoAtual] : []}
-                                options={{
-                                    height: 200,
-                                    pagination: false,
-                                    layout: "fitDataFill",
-                                    selectable: 1
-                                }}
-                                useRowId
-                                onRowClick={(contato: any) => {
-                                    setContatoSelecionado(contato);
-                                }}
-                            />
+                            <div className="row">
+
+                                <div className="col-md-5 mb-3">
+
+                                    <Input
+                                        label="E-mail"
+                                        id="EMAIL"
+                                        dataModel={{
+                                            data: contatoAtual ?? {
+                                                EMAIL: "",
+                                                TELEFONE: "",
+                                                CELULAR: ""
+                                            },
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+
+                                </div>
+
+                                <div className="col-md-3 mb-3">
+
+                                    <Input
+                                        label="Telefone"
+                                        id="TELEFONE"
+                                        dataModel={{
+                                            data: contatoAtual ?? {
+                                                EMAIL: "",
+                                                TELEFONE: "",
+                                                CELULAR: ""
+                                            },
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+
+                                </div>
+
+                                <div className="col-md-3 mb-3">
+
+                                    <Input
+                                        label="Celular"
+                                        id="CELULAR"
+                                        dataModel={{
+                                            data: contatoAtual ?? {
+                                                EMAIL: "",
+                                                TELEFONE: "",
+                                                CELULAR: ""
+                                            },
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+
+                                </div>
+
+                            </div>
                         </TabPanel>
 
                     </TabContent>

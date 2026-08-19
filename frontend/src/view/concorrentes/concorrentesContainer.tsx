@@ -29,7 +29,7 @@ class ConcorrentesContainer extends CrudContainer {
             {
                 title: "Código",
                 field: "ID",
-                width: 100,
+                width: 70,
                 isKey: true,
                 type: 'integer',
                 visible: true,
@@ -53,7 +53,7 @@ class ConcorrentesContainer extends CrudContainer {
             {
                 title: "CNPJ",
                 field: "CNPJ",
-                width: 200,
+                width: 150,
                 type: 'integer',
                 formatter: Formatters.cnpj,
                 visible: true,

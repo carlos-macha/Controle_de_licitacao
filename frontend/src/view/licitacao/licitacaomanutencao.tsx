@@ -102,7 +102,7 @@ const LicitacaoManutencao: React.FC<LicitacaoManutencaoProps> = (props) => {
                                     type="date"
                                     validator={params.validateFields}
                                     validations={{
-                                        required: true
+                                        required: false
                                     }}
                                 />
                             </div>

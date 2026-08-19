@@ -174,19 +174,28 @@ export class ImportacaoLicitacaoService {
                                 item.ID;
                         }
 
-                        await this.dao.insertResultadoLicitacao(
-                            itemId,
-                            concorrenteId,
-                            dado.valor_lance,
-                            dado.total_lance,
-                            dado.valor_orcado,
-                            dado.total_orcado,
-                            dado.economia_percentual,
-                            dado.economia_reais,
-                            dado.data_relatorio,
-                            dado.hora_relatorio,
-                            transaction
-                        );
+                        const resultadoExistente =
+                            await this.dao.findResultadoLicitacao(
+                                itemId,
+                                concorrenteId,
+                                transaction
+                            );
+
+                        if (!resultadoExistente[0]) {
+                            await this.dao.insertResultadoLicitacao(
+                                itemId,
+                                concorrenteId,
+                                dado.valor_lance,
+                                dado.total_lance,
+                                dado.valor_orcado,
+                                dado.total_orcado,
+                                dado.economia_percentual,
+                                dado.economia_reais,
+                                dado.data_relatorio,
+                                dado.hora_relatorio,
+                                transaction
+                            );
+                        }
 
                     } catch (error) {
 

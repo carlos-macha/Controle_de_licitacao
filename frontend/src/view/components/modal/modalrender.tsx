@@ -2,6 +2,7 @@ import { useModalContext } from "../../../hooks/useModalContext";
 import LicitacaoEnderecoManutencaoModal from "../../licitacao/LicitacaoEnderecoManutencaoModal";
 import ConcorrentesEnderecoManutencaoModal from "../../concorrentes/concorrentesEnderecoManutencaoModal";
 import ConcorrentesContatoManutencaoModal from "../../concorrentes/concorrentesContatoManutencaoModal";
+import ItemLicitacaoManutencaoModal from "../../licitacao/ItemLicitacaoManutencaoModal";
 
 const ModalRender = () => {
 
@@ -11,6 +12,9 @@ const ModalRender = () => {
 
         case "licitacaoEnderecoManutencaoModal":
             return <LicitacaoEnderecoManutencaoModal />;
+
+        case "licitacaoItemManutencaoModal":
+            return <ItemLicitacaoManutencaoModal />;
 
         case "concorrentesEnderecoManutencaoModal":
             return <ConcorrentesEnderecoManutencaoModal />;

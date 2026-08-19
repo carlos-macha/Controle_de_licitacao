@@ -41,7 +41,7 @@ class LicitacaoContainer extends CrudContainer {
 
         const columns: DataTableColumns = [
             {
-                title: "Código", field: "ID", width: 100, isKey: true, type: 'integer', visible: true,
+                title: "Código", field: "ID", width: 70, isKey: true, type: 'integer', visible: true,
                 search: {
                     width: 150,
                     type: "DEFAULT",

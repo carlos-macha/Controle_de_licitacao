@@ -188,6 +188,28 @@ export class ImportacaoLicitacaoDAO {
 
     }
 
+    async findResultadoLicitacao(
+        itemLicitacaoId: number,
+        concorrenteId: number,
+        transaction?: FirebirdTransaction
+    ) {
+        const database: FirebirdDatabase | FirebirdTransaction =
+            transaction ?? this.db;
+
+        return database.query<{ ID: number }>(
+            `
+        SELECT ID
+        FROM RESULTADO_LICITACAO
+        WHERE ITEM_LICITACAO_ID = ?
+        AND CONCORRENTE_ID = ?
+        `,
+            [
+                itemLicitacaoId,
+                concorrenteId
+            ]
+        );
+    }
+
     async insertResultadoLicitacao(
         itemLicitacaoId: number,
         concorrenteId: number,

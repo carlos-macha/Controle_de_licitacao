@@ -6,10 +6,10 @@ import Tabs, { TabContent, TabItem, TabPanel } from "../../base/components/tab/t
 import { nanoid } from "nanoid";
 import DataTable from "../../base/components/datatable/datatable";
 import DAO from "../../base/daos/dao";
-//import { IModelProduto } from "../../models/modelProduto";
-import { IModelLicitacao } from "../../models/modellicitacao";
 import { IModelConcorrente } from "../../models/modelConcorrente";
 import { IModelItemLicitacao } from "../../models/modelItemLicitacao";
+import { Input, InputCPFCNPJ, TextArea } from "../../base/components/form/form";
+import { IModelLicitacao } from "../../models/modellicitacao";
 
 interface ResultadoLicitacaoDetalhesProps {
     dataModel?: InputDataValue<IModelResultadoLicitacao>;
@@ -19,14 +19,19 @@ interface ResultadoLicitacaoDetalhesProps {
 }
 
 const ResultadoLicitacaoDetalhes: React.FC<ResultadoLicitacaoDetalhesProps> = ({
-    data,
-    dataModel,
-    isManutencao = false,
-    validateFields
+    data
 }) => {
     const id = useRef(nanoid());
     const dao = new DAO();
-    const [detalhe, setDetalhe] = useState<any[]>([]);
+
+    const [licitacao, setLicitacao] =
+        useState<IModelLicitacao>();
+
+    const [itemLicitacao, setItemLicitacao] =
+        useState<IModelItemLicitacao>();
+
+    const [concorrente, setConcorrente] =
+        useState<IModelConcorrente>();
 
     useEffect(() => {
         const carregarDetalhe = async () => {
@@ -35,27 +40,30 @@ const ResultadoLicitacaoDetalhes: React.FC<ResultadoLicitacaoDetalhesProps> = ({
             }
 
             try {
-                const concorrente = await dao.List(
-                    `/concorrentes/${data.CONCORRENTE_ID}`
-                ) as unknown as IModelConcorrente;
+                const itemLicitacao =
+                    await dao.List(
+                        `/itens-licitacao/${data.ITEM_LICITACAO_ID}`
+                    ) as unknown as IModelItemLicitacao;
 
-                const itemLicitacao = await dao.List(
-                    `/itens-licitacao/${data.ITEM_LICITACAO_ID}`
-                ) as unknown as IModelItemLicitacao;
+                const concorrente =
+                    await dao.List(
+                        `/concorrentes/${data.CONCORRENTE_ID}`
+                    ) as unknown as IModelConcorrente;
 
-                setDetalhe([
-                    {
-                        ITEM_LICITACAO: itemLicitacao
-                            ? `${itemLicitacao.ID} - ${itemLicitacao.DESCRICAO}`
-                            : "",
-                        CONCORRENTE: concorrente
-                            ? `${concorrente.ID} - ${concorrente.NOME}`
-                            : "",
-                        PRECO_GANHO: data.PRECO_GANHO,
-                    }
-                ]);
+                const licitacao =
+                    await dao.List(
+                        `/licitacoes/${itemLicitacao.LICITACAO_ID}`
+                    ) as unknown as IModelLicitacao;
+
+                setItemLicitacao(itemLicitacao);
+                setConcorrente(concorrente);
+                setLicitacao(licitacao);
+
             } catch (error) {
-                console.error("Erro ao carregar detalhe:", error);
+                console.error(
+                    "Erro ao carregar detalhe:",
+                    error
+                );
             }
         };
 
@@ -65,55 +73,252 @@ const ResultadoLicitacaoDetalhes: React.FC<ResultadoLicitacaoDetalhesProps> = ({
     return (
         <Fragment>
             <Card className="iq-card">
+
                 <CardHeader className="iq-card-header p-2 border">
+
                     <Tabs className="nav nav-pills">
+
                         <TabItem
                             className="nav-item"
                             classNameLink="nav-link"
-                            tabPanelRef={`detalhe-${id.current}`}
+                            tabPanelRef={`item-${id.current}`}
                             selected={true}
                         >
-                            Detalhe
+                            Item
                         </TabItem>
+
+                        <TabItem
+                            className="nav-item"
+                            classNameLink="nav-link"
+                            tabPanelRef={`concorrente-${id.current}`}
+                        >
+                            Concorrente
+                        </TabItem>
+
+                        <TabItem
+                            className="nav-item"
+                            classNameLink="nav-link"
+                            tabPanelRef={`licitacao-${id.current}`}
+                        >
+                            Licitação
+                        </TabItem>
+
                     </Tabs>
+
                 </CardHeader>
 
                 <CardBody className="border iq-card-body">
+
                     <TabContent className="tab-content">
+
                         <TabPanel
                             className="tab-pane fade"
                             show={true}
-                            id={`detalhe-${id.current}`}
+                            id={`item-${id.current}`}
                         >
-                            <DataTable
-                                key={JSON.stringify(detalhe)}
-                                title="Resultado da Licitação"
-                                columns={[
-                                    {
-                                        title: "Item da Licitação",
-                                        field: "ITEM_LICITACAO",
-                                        width: 300,
-                                        type: "string"
-                                    },
-                                    {
-                                        title: "Concorrente",
-                                        field: "CONCORRENTE",
-                                        width: 300,
-                                        type: "string"
-                                    }
-                                ]}
-                                data={detalhe}
-                                options={{
-                                    height: 200,
-                                    pagination: false,
-                                    layout: "fitDataFill",
-                                    selectable: 1
-                                }}
-                                useRowId
-                            />
+                            <div className="row">
+
+                                <div className="col-md-2 mb-3">
+                                    <Input
+                                        label="Código"
+                                        id="ID"
+                                        dataModel={{
+                                            data: itemLicitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-10 mb-3">
+                                    <TextArea
+                                        label="Descrição"
+                                        id="DESCRICAO"
+                                        dataModel={{
+                                            data: itemLicitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                            </div>
+
+                            <div className="row">
+
+                                <div className="col-md-4 mb-3">
+                                    <Input
+                                        label="Marca"
+                                        id="MARCA"
+                                        dataModel={{
+                                            data: itemLicitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-4 mb-3">
+                                    <Input
+                                        label="Modelo"
+                                        id="MODELO"
+                                        dataModel={{
+                                            data: itemLicitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-2 mb-3">
+                                    <Input
+                                        label="Quantidade"
+                                        id="QUANTIDADE"
+                                        dataModel={{
+                                            data: itemLicitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-2 mb-3">
+                                    <Input
+                                        label="Unidade"
+                                        id="UNIDADE"
+                                        dataModel={{
+                                            data: itemLicitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-10 mb-3">
+                                    <TextArea
+                                        label="Observação"
+                                        id="OBSERVACAO"
+                                        dataModel={{
+                                            data: itemLicitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+                            </div>
                         </TabPanel>
+
+                        <TabPanel
+                            className="tab-pane fade"
+                            show={false}
+                            id={`concorrente-${id.current}`}
+                        >
+                            <div className="row">
+
+                                <div className="col-md-2 mb-3">
+                                    <Input
+                                        label="Código"
+                                        id="ID"
+                                        dataModel={{
+                                            data: concorrente ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-6 mb-3">
+                                    <Input
+                                        label="Nome"
+                                        id="NOME"
+                                        dataModel={{
+                                            data: concorrente ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-4 mb-3">
+                                    <InputCPFCNPJ
+                                        label="CNPJ"
+                                        id="CNPJ"
+                                        dataModel={{
+                                            data: concorrente ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                            </div>
+                        </TabPanel>
+
+                        <TabPanel
+                            className="tab-pane fade"
+                            show={false}
+                            id={`licitacao-${id.current}`}
+                        >
+                            <div className="row">
+
+                                <div className="col-md-2 mb-3">
+                                    <Input
+                                        label="Código"
+                                        id="ID"
+                                        dataModel={{
+                                            data: licitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-3 mb-3">
+                                    <Input
+                                        label="Pregão"
+                                        id="PREGAO"
+                                        dataModel={{
+                                            data: licitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-4 mb-3">
+                                    <Input
+                                        label="Processo Licitatório"
+                                        id="PROCESSO_LICITATORIO"
+                                        dataModel={{
+                                            data: licitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div className="col-md-4 mb-3">
+                                    <Input
+                                        label="Município"
+                                        id="MUNICIPIO"
+                                        dataModel={{
+                                            data: licitacao ?? {},
+                                            setData: () => { }
+                                        }}
+                                        readOnly
+                                    />
+                                </div>
+
+                            </div>
+                        </TabPanel>
+
                     </TabContent>
+
                 </CardBody>
+
             </Card>
         </Fragment>
     );

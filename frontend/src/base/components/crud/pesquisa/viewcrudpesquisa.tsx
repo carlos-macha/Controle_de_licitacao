@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Card, { CardBody, CardFooter, CardHeader } from '../../card/card';
 import DataSearch, { SearchEvent } from '../../datasearch/datasearch';
 import DataTable, { DataTableColumns } from '../../datatable/datatable';
@@ -34,6 +34,7 @@ const ViewCrudPesquisa: React.FC<ViewCrudPesquisaProps> = (props) => {
       numberOfRecordsPerDemand, heightGrid, initialSort, headerSortElement, rowSelected, addData, delData, uptData, useRowId, prefixCss, prefixId, idHelp } = props;
    const { onChangeButtonClick, onDeleteButtonClick, onNewButtonClick, onViewButtonClick, onSearch, onDemand, containerBottom, containerData,
       onHelp, titleOnHelp } = props;
+   const [showSearch, setShowSearch] = useState(false);
 
    useEffect(() => {
       let el: HTMLElement | null = document.querySelector('.buttons-scrollbar');
@@ -75,14 +76,24 @@ const ViewCrudPesquisa: React.FC<ViewCrudPesquisaProps> = (props) => {
                            </Tippy>
                         </div>
                      }
-                     <div className="float-left">
-                        <DataSearch
-                           prefixId={prefixId}
-                           autoLoad={autoLoad}
-                           loading={loading}
-                           columns={columns}
-                           onSearch={onSearch}
-                        />
+                     <div className="search-container">
+                        <div className="d-flex justify-content-end mb-2">
+                           <Button
+                              classIcon={showSearch ? "mdi mdi-chevron-up" : "mdi mdi-chevron-down"}
+                              caption={showSearch ? "Ocultar pesquisa" : "Mostrar pesquisa"}
+                              onClick={() => setShowSearch(!showSearch)}
+                           />
+                        </div>
+
+                        <div className={`search-content ${showSearch ? 'show' : ''}`}>
+                           <DataSearch
+                              prefixId={prefixId}
+                              autoLoad={autoLoad}
+                              loading={loading}
+                              columns={columns}
+                              onSearch={onSearch}
+                           />
+                        </div>
                      </div>
                   </div>
                   {onHelp &&

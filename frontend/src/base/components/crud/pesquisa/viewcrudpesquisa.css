@@ -14,3 +14,20 @@
 .btn-options-dropdown>button::after {
    display: none;
 }
+
+.search-content {
+   max-height: 0;
+   opacity: 0;
+   transform: translateY(-8px);
+   overflow: hidden;
+   transition:
+      max-height 0.5s ease,
+      opacity 0.4s ease,
+      transform 0.4s ease;
+}
+
+.search-content.show {
+   max-height: 1000px;
+   opacity: 1;
+   transform: translateY(0);
+}
