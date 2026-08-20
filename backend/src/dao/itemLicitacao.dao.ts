@@ -122,7 +122,7 @@ export class ItemLicitacaoDAO extends BaseDAO<ItemLicitacao> {
         let sql = `
             SELECT
                 I.*,
-                L.PREGAO AS LICITACAO
+                L.ID || ' - ' || L.PREGAO AS LICITACAO
             FROM ITEM_LICITACAO I
             INNER JOIN LICITACAO L
                 ON L.ID = I.LICITACAO_ID

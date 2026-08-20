@@ -78,7 +78,7 @@ class ItemLicitacaoContainer extends CrudContainer {
             {
                 title: "Marca",
                 field: "MARCA",
-                width: 180,
+                width: 120,
                 type: "string",
                 visible: true,
                 search: {
@@ -90,7 +90,7 @@ class ItemLicitacaoContainer extends CrudContainer {
             {
                 title: "Modelo",
                 field: "MODELO",
-                width: 180,
+                width: 120,
                 type: "string",
                 visible: true,
                 search: {

@@ -41,9 +41,9 @@ class LicitacaoContainer extends CrudContainer {
 
         const columns: DataTableColumns = [
             {
-                title: "Código", field: "ID", width: 70, isKey: true, type: 'integer', visible: true,
+                title: "Código", field: "ID", width: 60, isKey: true, type: 'integer', visible: true,
                 search: {
-                    width: 150,
+                    width: 100,
                     type: "DEFAULT",
                 }
             },
@@ -72,9 +72,9 @@ class LicitacaoContainer extends CrudContainer {
                 }
             },
             {
-                title: "Data do Certame", field: "DATA_CERTAME", formatter: Formatters.dateISO, width: 150, type: 'date', visible: true,
+                title: "Data do Certame", field: "DATA_CERTAME", formatter: Formatters.dateISO, width: 100, type: 'date', visible: true,
                 search: {
-                    width: 300,
+                    width: 150,
                     type: "DEFAULT",
                 }
             },

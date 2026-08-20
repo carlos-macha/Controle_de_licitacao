@@ -67,6 +67,16 @@ export class ResultadoLicitacaoDAO
                 return;
             }
 
+            if (field === "ITEM") {
+                conditions.push(
+                    "I.ITEM = ?"
+                );
+
+                params.push(value);
+
+                return;
+            }
+
             if (field === "ITEM_LICITACAO") {
                 conditions.push(
                     "I.DESCRICAO LIKE ?"
@@ -118,16 +128,16 @@ export class ResultadoLicitacaoDAO
         const totalResult =
             await this.db.query<{ TOTAL: number }>(
                 `
-        SELECT COUNT(R.ID) AS TOTAL
-        FROM RESULTADO_LICITACAO R
-        INNER JOIN ITEM_LICITACAO I
-            ON I.ID = R.ITEM_LICITACAO_ID
-        INNER JOIN LICITACAO L
-            ON L.ID = I.LICITACAO_ID
-        INNER JOIN CONCORRENTE C
-            ON C.ID = R.CONCORRENTE_ID
-        ${whereSQL}
-        `,
+                SELECT COUNT(R.ID) AS TOTAL
+                FROM RESULTADO_LICITACAO R
+                INNER JOIN ITEM_LICITACAO I
+                    ON I.ID = R.ITEM_LICITACAO_ID
+                INNER JOIN LICITACAO L
+                    ON L.ID = I.LICITACAO_ID
+                INNER JOIN CONCORRENTE C
+                    ON C.ID = R.CONCORRENTE_ID
+                ${whereSQL}
+                `,
                 params
             );
 
@@ -143,6 +153,7 @@ export class ResultadoLicitacaoDAO
         let sql = `
             SELECT
                 R.*,
+                I.ITEM AS ITEM,
                 I.ID || ' - ' || I.DESCRICAO AS ITEM_LICITACAO,
                 C.ID || ' - ' || C.NOME AS CONCORRENTE,
                 L.PREGAO AS LICITACAO
@@ -174,6 +185,7 @@ export class ResultadoLicitacaoDAO
         const data =
             await this.db.query<
                 ResultadoLicitacao & {
+                    ITEM: number;
                     LICITACAO: string;
                     ITEM_LICITACAO: string;
                     CONCORRENTE: string;

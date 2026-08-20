@@ -55,6 +55,18 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 }
             },
             {
+                title: "Número do Item",
+                field: "ITEM",
+                width: 50,
+                type: 'integer',
+                visible: true,
+                search: {
+                    width: 135,
+                    type: "DEFAULT",
+                    charCase: EnumCharcasetypes.UPPERCASE
+                }
+            },
+            {
                 title: "Descrição do Item",
                 field: "ITEM_LICITACAO",
                 width: 200,
