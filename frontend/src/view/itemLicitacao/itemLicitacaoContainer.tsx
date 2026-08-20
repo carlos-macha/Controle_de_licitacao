@@ -57,7 +57,7 @@ class ItemLicitacaoContainer extends CrudContainer {
                 title: "Licitação",
                 field: "LICITACAO",
                 width: 240,
-                type: "integer",
+                type: "string",
                 visible: true,
                 search: {
                     width: 200,
