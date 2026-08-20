@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import * as XLSX from 'xlsx';
 import { useAuthContext } from '../../../hooks/useAuthContext';
 import { DataRoutesHome } from '../../../routes/dataroutes';
@@ -9,6 +9,7 @@ import ControllerUsuario from '../../../controllers/controllerusuario';
 import ControllerImportacao from '../../../controllers/controllerimportacao';
 import { IModelImportacaoLicitacao } from '../../../models/modelImportacaoLicitacao';
 import { useSweetAlertContext } from '../../../base/hooks/useSweetAlertContext';
+import Spinners from '../../../base/components/spinners/spinners';
 
 interface NavbarControllerProps { }
 
@@ -16,6 +17,7 @@ const Navbar: React.FC = () => {
    const { itemMenu, dispatch } = useMenuContext();
    const { authState, authDispatch } = useAuthContext();
    const { sweetAlertdispatch } = useSweetAlertContext();
+   const [loadingImportacao, setLoadingImportacao] = useState(false);
 
    const onToggleDarkLigth = () => {
       let isDark: boolean = storageGetDark();
@@ -87,22 +89,26 @@ const Navbar: React.FC = () => {
          return;
       }
 
-      const buffer = await arquivo.arrayBuffer();
-      const workbook = XLSX.read(buffer);
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-
-      const dados =
-         XLSX.utils.sheet_to_json<IModelImportacaoLicitacao>(
-            sheet
-         );
+      setLoadingImportacao(true);
 
       try {
+
+         const buffer = await arquivo.arrayBuffer();
+         const workbook = XLSX.read(buffer);
+         const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+         const dados =
+            XLSX.utils.sheet_to_json<IModelImportacaoLicitacao>(
+               sheet
+            );
 
          const controller = new ControllerImportacao();
 
          await controller.Importar(dados);
 
          console.log('Importação realizada com sucesso.');
+
+         setLoadingImportacao(false);
 
          sweetAlertdispatch({
             type: "show",
@@ -117,6 +123,8 @@ const Navbar: React.FC = () => {
          });
 
       } catch (error: any) {
+         setLoadingImportacao(false);
+
          sweetAlertdispatch({
             type: "show",
             props: {
@@ -135,6 +143,8 @@ const Navbar: React.FC = () => {
 
    return (
       <Fragment>
+
+
          <input
             id="input-importar-excel"
             type="file"
@@ -155,17 +165,32 @@ const Navbar: React.FC = () => {
             isDark={authState.isDark}
             optionsDropdownNavbar={optionsDropdownNavbar}
             optionsNavbar={[
-               <li key="importar-excel">
-                  <a
-                     href="#"
-                     className="search-toggle iq-waves-effect"
-                     onClick={(e) => {
-                        e.preventDefault();
-                        onImportarExcel();
-                     }}
-                  >
-                     <i className="mdi mdi-file-excel"></i>
-                  </a>
+               <li
+                  key="importar-excel"
+                  style={{
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center',
+                     height: '100%'
+                  }}
+               >
+                  {loadingImportacao ? (
+                     <Spinners
+                        size={25}
+                        loading={loadingImportacao}
+                     />
+                  ) : (
+                     <a
+                        href="#"
+                        className="search-toggle iq-waves-effect"
+                        onClick={(e) => {
+                           e.preventDefault();
+                           onImportarExcel();
+                        }}
+                     >
+                        <i className="mdi mdi-file-excel"></i>
+                     </a>
+                  )}
                </li>
             ]}
          />

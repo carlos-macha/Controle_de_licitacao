@@ -53,7 +53,7 @@ export interface DataSearchType {
    tooltip?: string,
    readOnly?: boolean,
    isMulti?: boolean,
-   onChange?: (e: OptionInputSelect | string | number) => void, 
+   onChange?: (e: OptionInputSelect | string | number) => void,
    isClearable?: boolean
 }
 
@@ -84,7 +84,33 @@ const DataSearch: React.FC<DataSearchProps> = (props) => {
    const [validateFields] = useState<ValidateFields>(new ValidateFields());
    const [internalAutoLoad, setInternalAutoLoad] = useState<boolean | undefined>();
    const [filter, setFilter] = useState<any>({});
+   const [searchKey, setSearchKey] = useState(0);
    const dataModel: InputDataValue<any> = { data: filter, setData: setFilter };
+   const clearSearch = () => {
+      const data: any = {};
+
+      columns?.forEach(col => {
+         if (!col.search)
+            return;
+
+         data[prefixField + col.field!] = undefined;
+
+         if (col.search.type === 'BETWEEN') {
+            data[`${prefixField + col.field}_GE`] = undefined;
+            data[`${prefixField + col.field}_LE`] = undefined;
+         }
+      });
+
+      validateFields.cleanMessage();
+      setFilter(data);
+      setSearchKey(prev => prev + 1);
+
+      onSearch({
+         data,
+         where: '',
+         whereBase64: ''
+      });
+   };
    // console.log(dataModel.data)
    const renderFieldsSearch = (): Array<JSX.Element> => {
       const fieldsSearch: Array<JSX.Element> = [];
@@ -557,17 +583,27 @@ const DataSearch: React.FC<DataSearchProps> = (props) => {
       <Fragment>
          <div className="row">
             <div className="col-12">
-               <div className="datasearch-containner">
+               <div className="datasearch-containner" key={searchKey}>
                   {elRenderSearch}
                   {elRenderSearch && elRenderSearch.length > 0 &&
-                     <div>
+                     <div className="d-flex">
                         <Button
                            id={prefixId && `btn-data-search-${prefixId}`}
                            style={{ height: 45 }}
                            loading={loading}
                            classIcon="mdi mdi-magnify btn-icon mr-0"
                            onClick={search}
-                           title='Pesquisar'
+                           title="Pesquisar"
+                           overlayProps={{
+                              placement: "top"
+                           }}
+                        />
+
+                        <Button
+                           style={{ height: 45 }}
+                           classIcon="mdi mdi-close btn-icon mr-0"
+                           onClick={clearSearch}
+                           title="Limpar"
                            overlayProps={{
                               placement: "top"
                            }}
