@@ -55,6 +55,18 @@ class ResultadoLicitacaoContainer extends CrudContainer {
                 }
             },
             {
+                title: "Município",
+                field: "MUNICIPIO",
+                width: 240,
+                type: 'string',
+                visible: true,
+                search: {
+                    width: 180,
+                    type: "DEFAULT",
+                    charCase: EnumCharcasetypes.UPPERCASE
+                }
+            },
+            {
                 title: "Número do Item",
                 field: "ITEM",
                 width: 50,

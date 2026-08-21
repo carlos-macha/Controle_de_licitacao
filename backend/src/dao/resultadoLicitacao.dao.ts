@@ -97,6 +97,16 @@ export class ResultadoLicitacaoDAO
                 return;
             }
 
+            if (field === "MUNICIPIO") {
+                conditions.push(
+                    "L.MUNICIPIO LIKE ?"
+                );
+
+                params.push(`%${value}%`);
+
+                return;
+            }
+
             if (field === "LICITACAO") {
                 conditions.push(
                     "(L.PREGAO LIKE ? OR L.PROCESSO_LICITATORIO LIKE ? OR L.MUNICIPIO LIKE ?)"
@@ -156,7 +166,8 @@ export class ResultadoLicitacaoDAO
                 I.ITEM AS ITEM,
                 I.ID || ' - ' || I.DESCRICAO AS ITEM_LICITACAO,
                 C.ID || ' - ' || C.NOME AS CONCORRENTE,
-                L.PREGAO AS LICITACAO
+                L.PREGAO AS LICITACAO,
+                L.MUNICIPIO AS MUNICIPIO
             FROM RESULTADO_LICITACAO R
             INNER JOIN ITEM_LICITACAO I
                 ON I.ID = R.ITEM_LICITACAO_ID
@@ -189,6 +200,7 @@ export class ResultadoLicitacaoDAO
                     LICITACAO: string;
                     ITEM_LICITACAO: string;
                     CONCORRENTE: string;
+                    MUNICIPIO: string;
                 }
             >(
                 sql,
